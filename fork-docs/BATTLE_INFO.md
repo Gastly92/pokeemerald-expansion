@@ -3,7 +3,7 @@
 In Frontier facilities the bag is disabled, so its action slot is dead space. This
 fork turns it into **INFO**: a read-only, six-page reference screen showing field
 state, both sides' conditions and stat changes, a foe speed-tier comparison, and the
-foe's revealed party data, base stats and innates.
+foe's revealed party data and innates, and both sides' base stats.
 
 Its whole design problem is **what the player is allowed to know**. The battle engine
 holds far more about the foe than the player has witnessed, and most of the code here
@@ -45,7 +45,7 @@ path.
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
 | **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, `FNT` when fainted, moves/PP/ability/held item |
-| **Base Stats** | The same foe's base spread as a table, plus a row per Mega/Primal form its species can reach |
+| **Base Stats** | Your active mon(s) and the selected foe as a stat table, each with the Mega/Primal form(s) it can reach |
 | **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
 
 The whole-field row (`BuildFieldEffectLine`) lists effects that belong to neither
@@ -219,40 +219,76 @@ ability — so an innate reveal never leaks the chosen one.
 
 ## The Base Stats page
 
-The foe's base spread, as a right-aligned table so two forms can be compared down the
-column: `HP Atk Def SpA SpD Spe BST`, one row for the mon itself and one for each
-Mega/Primal form its species can reach.
+Base spreads as a table, right-aligned so forms compare straight down the column:
+`HP Atk Def SpA SpD Spe BST`. **Your active mon(s) come first, then the selected foe**,
+each followed by the Mega/Primal form rows it can reach.
 
-- **It is foe-scoped and shares `tFoeIndex`** with the Foe and Innates pages, so `<>`
-  cycles mons here too and an L/R step between the three stays on the same mon. It sits
-  directly after the Foe page.
+```
+BATTLE INFO  -  BASE STATS 1/3
+                HP  Atk  Def  SpA  SpD  Spe  BST
+You Salamence   95  135   80  110   80  100  600
+  Mega          95  145  130  120   90  120  700
+Foe Charizard   78   84   78  109   85  100  534
+  Mega X        78  130  111  130   85  100  634
+  Mega Y        78  104   78  159  115  100  634
+```
+
+Nothing else in the game surfaces this. The summary screen shows *computed* stats — the
+numbers after IVs, EVs, nature and level — and neither it nor anything else shows what a
+Mega form would turn a mon into. That matters most in the Factory, where the rentals
+aren't yours to begin with.
+
+### The two halves are asymmetric on purpose
+
+The same split the Speed Tiers page draws: **your side is fact, the foe's is
+possibility.**
+
+- **Your row is a projection.** `CanMegaEvolve` applies the real eligibility rules (your
+  side's one-per-trainer gimmick budget, and — with `FEATURE_FREE_GIMMICKS` off — the
+  held stone), and `GetBattleFormChangeTargetSpecies` resolves the stat-based X/Y/Z pick
+  that `GetMegaStoneForBattler` makes from *this* battler's Attack/Sp. Atk. So you get
+  one row for what you **will** become, and a mon that can't Mega this battle correctly
+  shows none. A mon that has already transformed says so (`(Mega)`), rather than leaving
+  a missing row to mean both "already Mega" and "can't Mega".
+- **The foe's rows are its species' whole list**, because its spread and item are hidden.
+
+### Reveal gating
+
 - **Base stats are not reveal-gated**, for the same reason innates aren't (below): they
   are a static property of the *species*, fully determined the moment it is known. The
-  Speed Tiers page already exposes the foe's base Speed this way. The gates that do
-  apply are the Foe page's — nothing at all for a slot that has not been sent out, and
-  every species read goes through `GetFoeDisplayMon`, so a disguised Zoroark reports the
-  spread of the mon the player believes they are facing.
-- **The Mega/Primal rows come from the species' form-change table, never from the foe's
-  held item.** "Charizard has Mega forms" is dex knowledge; "this Charizard holds
-  Charizardite Y" is not, and reading the stone would leak the very item the Foe page
-  deliberately prints as `?`. Under `FEATURE_FREE_GIMMICKS` (on in real builds) no stone
-  is needed at all, so every row is a form the foe may genuinely turn into.
-- **Both X and Y are listed** for Charizard and Mewtwo, because `GetMegaStoneForBattler`
-  picks between them from the battler's hidden Attack/Sp. Atk spread. Every Mega shares
-  its base form's species *name*, so the X/Y row label is derived from the Mega Stone
-  that produces the form — that names the form, it does not read the foe's item.
-- **A foe that has already transformed** carries the Mega/Primal species in its party
-  slot, so its own row is labelled `Mega`/`Primal` rather than `Base`.
-- **Gigantamax is deliberately excluded**: Dynamax multiplies HP rather than swapping in
-  a new base spread, so a row for it would just repeat the one above.
-- **The row budget is a data invariant.** It is exported as
-  `INFO_MAX_DISPLAYED_ALT_FORMS`, and a table guard in
-  `test/fork/frontier_battle_info_reveal.c` fails if any species declares more
-  Mega/Primal form changes than the page can list — otherwise a reachable form would be
-  silently dropped.
+  Speed Tiers page already exposes the foe's base Speed this way. The Foe page's gates
+  still apply to the foe half — nothing for a slot that has not been sent out, and every
+  species read goes through `GetFoeDisplayMon`, so a disguised Zoroark reports the spread
+  of the mon the player believes they are facing.
+- **The foe's form rows come from the species' form-change table, never from its held
+  item.** "Charizard has Mega forms" is dex knowledge; "this Charizard holds Charizardite
+  Y" is not, and reading the stone would leak the very item the Foe page deliberately
+  prints as `?`. Under `FEATURE_FREE_GIMMICKS` (on in real builds) no stone is needed at
+  all, so every row is a form the foe may genuinely turn into.
 
-**Only the foe is shown.** The player's own spreads are a summary-screen away and the
-page's `<>` navigation is foe-indexed; adding a player side would need a second page.
+### Details
+
+- **It is foe-scoped and shares `tFoeIndex`** with the Foe and Innates pages, so `<>`
+  cycles foes here too and an L/R step between the three stays on the same mon. It sits
+  directly after the Foe page.
+- **Form labels are built from the Mega Stone that produces the form.** Every Mega shares
+  its base form's species *name* ("Charizard" for both X and Y, "Absol" for both Mega and
+  Mega Z), so the suffix is taken from the stone — Charizardite **X**, Raichunite **Y**,
+  Absolite **Z** — which keeps working as upstream adds Mega lines (the Gen 9 `_Z` megas
+  under `P_GEN_9_MEGA_EVOLUTIONS` arrived exactly that way). This names the *form*; the
+  stone is never read off the mon.
+- **Rayquaza's move-based Mega counts**, via `FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE`.
+  **Gigantamax does not**: Dynamax multiplies HP rather than replacing the spread, so a
+  row for it would repeat the one above.
+- **Only your *active* mon(s) are shown**, matching the Speed Tiers, Conditions and Stat
+  Changes pages, which are all on-field-only.
+- **The row budget is proved, not hoped.** `INFO_MAX_DISPLAYED_ALT_FORMS` caps the foe's
+  form rows, and a `STATIC_ASSERT` proves the worst case — a doubles battle, both of your
+  mons projecting a form, against a two-Mega foe — fits the page exactly. A sweep in
+  `test/fork/frontier_battle_info_reveal.c` fails if any species declares more reachable
+  forms than that, because the fix there is to rework the layout, not to silently drop a
+  form the player can be hit by. Only an over-long *species name* is ever clipped, and
+  nothing in the current dex reaches that.
 
 ## The Innates page
 

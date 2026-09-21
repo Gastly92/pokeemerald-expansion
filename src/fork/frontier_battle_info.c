@@ -1020,33 +1020,57 @@ static void DrawStatsPage(u8 windowId)
 // ---------------------------------------------------------------------------
 // FORK: base stats are a static property of the SPECIES - like the type line and the
 // innate list - so by the same reasoning as "Innates are not reveal-gated" in
-// fork-docs/BATTLE_INFO.md they are shown in full the moment the mon is seen. The
-// Speed Tiers page already exposes the foe's base Speed exactly this way. The gates
-// that DO apply are the Foe page's: nothing at all for a slot that has not been sent
-// out, and every species read goes through GetFoeDisplayMon, so a disguised
+// fork-docs/BATTLE_INFO.md they are shown in full the moment a mon is seen. The Speed
+// Tiers page already exposes the foe's base Speed exactly this way. The gates that DO
+// apply to the foe half are the Foe page's: nothing at all for a slot that has not been
+// sent out, and every species read goes through GetFoeDisplayMon, so a disguised
 // Zoroark/Zorua reports the spread of the mon the player believes they are facing.
 //
-// The Mega/Primal rows come from the species' own form-change table, NEVER from the
-// foe's held item. "Charizard has Mega forms" is dex knowledge; "this Charizard holds
-// Charizardite Y" is not, and reading the stone would leak the very item the Foe page
-// deliberately prints as `?`. Under FEATURE_FREE_GIMMICKS (on in real builds) no stone
-// is needed at all - any species with a Mega form can use it - so each row is a form
-// the foe may genuinely turn into. Both X and Y are listed for the two-Mega species,
-// because GetMegaStoneForBattler() picks between them from the battler's hidden
-// Attack/Sp. Atk spread, which the player cannot see.
+// The page shows YOUR active mon(s) above the selected foe, because nothing in the game
+// surfaces a base spread otherwise - the summary screen shows computed stats, and neither
+// it nor anything else shows what a Mega form would turn them into.
+//
+// The two halves are asymmetric ON PURPOSE, and it is the same asymmetry the Speed Tiers
+// page draws: your side is shown as fact, the foe's as possibility.
+//
+//   - For YOUR mon the engine can say exactly which form it would take, so there is one
+//     projected row. GetBattleFormChangeTargetSpecies resolves the stat-based X/Y/Z pick
+//     under FEATURE_FREE_GIMMICKS (or your actual held stone without it), and CanMegaEvolve
+//     knows whether your side still has the gimmick available at all - so a mon that cannot
+//     Mega this battle correctly shows no projected row.
+//   - For the FOE, every Mega/Primal row comes from the species' own form-change table,
+//     NEVER from its held item. "Charizard has Mega forms" is dex knowledge; "this
+//     Charizard holds Charizardite Y" is not, and reading the stone would leak the very
+//     item the Foe page deliberately prints as `?`. Under FEATURE_FREE_GIMMICKS (on in real
+//     builds) no stone is needed at all, so each row is a form it may genuinely become. Every
+//     alternative is listed because the pick is made from the battler's hidden Attack/Sp. Atk
+//     spread, which the player cannot see.
 //
 // Layout is a table: a label column, then NUM_STATS + 1 right-aligned numeric columns.
-// Right-aligning digits is what makes two forms comparable at a glance, so the columns
-// are fixed x positions rather than a built string.
-#define BST_COL_W          26                                     // 3 narrow digits are 15px wide, so this leaves a clear gutter
-#define BST_FIRST_COL_R    66                                     // right edge of the HP column; the row label owns everything left of it
-#define BST_COL_R(k)       (BST_FIRST_COL_R + (BST_COL_W * (k)))  // k = 0..NUM_STATS, the last column being the BST
-// Mega X + Mega Y + Primal is the most any species declares, with a slot spare. It lives in the
-// header so the table guard in test/fork/frontier_battle_info_reveal.c can assert against it.
-#define BST_MAX_ALT_FORMS  INFO_MAX_DISPLAYED_ALT_FORMS
+// Right-aligning the digits is what makes two forms comparable down the column, so the
+// columns are fixed x positions rather than a built string. The species name shares the
+// row with its own stats rather than taking a header row of its own - that is what makes
+// the worst case (a doubles battle, both of your mons projecting a form, against a
+// two-Mega foe) fit the page exactly.
+#define BST_COL_W          20   // 3 narrow digits are 15px wide, leaving a 5px gutter
+#define BST_LABEL_W        80   // fits the widest "Foe <species>" label in FONT_NARROW across the current dex
+#define BST_COL_R(k)       (BST_LABEL_W + (BST_COL_W * ((k) + 1)))   // right edge of stat column k = 0..NUM_STATS-1
+#define BST_TOTAL_R        (BST_COL_R(NUM_STATS - 1) + BST_COL_W + 2) // the BST column, 2px wider so a four-digit total still clears Spe
+#define BST_FORM_INDENT    6    // form rows sit indented under their species' row
+
+// Body rows that clear the pinned footer, less the title and the column header.
+#define BST_TOTAL_ROWS     (((INFO_WIN_HEIGHT * 8) - 14) / LINE_H)
+#define BST_ENTITY_ROWS    (BST_TOTAL_ROWS - 2)
 
 // The BST column must not run off the right edge of the window.
-STATIC_ASSERT(BST_COL_R(NUM_STATS) <= INFO_WIN_WIDTH * 8, BaseStatColumnsFitTheInfoWindow);
+STATIC_ASSERT(BST_TOTAL_R <= INFO_WIN_WIDTH * 8, BaseStatColumnsFitTheInfoWindow);
+
+// The page must fit its own worst case without clipping: every player battler showing a
+// species row plus a projected-form row, then the foe's species row plus every alternative
+// form it can reach. If this ever fails, the layout needs reworking - not a silent drop,
+// which would hide a form the player can actually be hit by.
+STATIC_ASSERT((MAX_BATTLERS_COUNT / 2) * 2 + 1 + INFO_MAX_DISPLAYED_ALT_FORMS <= BST_ENTITY_ROWS,
+              BaseStatPageFitsItsWorstCase);
 
 // Conventional display order (HP/Atk/Def/SpA/SpD/Spe), not the internal STAT_* order,
 // which puts Speed fourth.
@@ -1059,39 +1083,99 @@ static void PrintStatCell(u8 windowId, const u8 *str, u32 colRight, u32 y)
     PrintLine(windowId, str, colRight - GetStringWidth(FONT_NARROW, str, 0), y);
 }
 
-// Every Mega shares its base form's species NAME ("Charizard" for both Mega X and
-// Mega Y), so an X/Y row is named from the Mega Stone that produces it (Charizardite X,
-// Mewtwonite Y). That names the FORM; it says nothing about what the foe is holding,
-// and the stone is never read off the mon. A species with a single Mega is just "Mega",
-// and an unrecognised suffix degrades to that too rather than guessing.
-static const u8 *MegaRowLabel(enum Item megaStone, bool32 speciesHasTwoMegas)
+// Draw a row label, clipped to what the label column can actually show. Only a handful of
+// 12-character species names come anywhere near the budget, and a clipped NAME is a
+// cosmetic loss - the full one is on the Foe page and the health box - unlike a dropped
+// form row, which the STATIC_ASSERT above exists to make impossible.
+static void PrintRowLabel(u8 windowId, const u8 *label, u32 x, u32 y)
 {
-    if (speciesHasTwoMegas)
+    u8 buf[32];
+    u32 len = 0;
+
+    while (len < sizeof(buf) - 1 && label[len] != EOS)
+    {
+        buf[len] = label[len];
+        len++;
+    }
+    buf[len] = EOS;
+
+    while (len != 0 && GetStringWidth(FONT_NARROW, buf, 0) > (s32)(BST_LABEL_W - x - 2))
+        buf[--len] = EOS;
+
+    PrintLine(windowId, buf, x, y);
+}
+
+static void DrawBaseStatRow(u8 windowId, const u8 *label, u32 labelX, enum Species species, u32 y)
+{
+    u8 num[8];
+
+    PrintRowLabel(windowId, label, labelX, y);
+    for (u32 k = 0; k < NUM_STATS; k++)
+    {
+        ConvertIntToDecimalStringN(num, GetSpeciesBaseStat(species, sBaseStatOrder[k]), STR_CONV_MODE_LEFT_ALIGN, 3);
+        PrintStatCell(windowId, num, BST_COL_R(k), y);
+    }
+    ConvertIntToDecimalStringN(num, GetSpeciesBaseStatTotal(species), STR_CONV_MODE_LEFT_ALIGN, 4);
+    PrintStatCell(windowId, num, BST_TOTAL_R, y);
+}
+
+// Draw a "<side> <species>" row for a mon, and return the y for the row after it.
+static u32 DrawSpeciesRow(u8 windowId, const u8 *sidePrefix, enum Species species, u32 y)
+{
+    u8 label[32];
+
+    StringCopy(StringCopy(label, sidePrefix), GetSpeciesName(species));
+    DrawBaseStatRow(windowId, label, 0, species, y);
+    return y + LINE_H;
+}
+
+// FORK: a Mega's species NAME is just its base form's ("Charizard" for both Mega X and
+// Mega Y, "Absol" for both Mega and Mega Z), so a species with more than one Mega needs the
+// forms told apart some other way. The suffix is taken from the Mega Stone that produces the
+// form - Charizardite X, Raichunite Y, Absolite Z all end in " <letter>" - which keeps
+// working as upstream adds Mega lines (the Gen 9 `_Z` megas under P_GEN_9_MEGA_EVOLUTIONS
+// arrived exactly this way). This names the FORM; the stone is never read off the mon, so it
+// says nothing about what the foe is holding. A species with one Mega is plain "Mega", and an
+// unrecognised item name degrades to that rather than guessing.
+static void BuildMegaLabel(u8 *dst, enum Item megaStone, bool32 needsSuffix)
+{
+    u8 *p = StringCopy(dst, COMPOUND_STRING("Mega"));
+
+    if (needsSuffix)
     {
         const u8 *name = GetItemName(megaStone);
         u32 len = StringLength(name);
 
-        if (len != 0 && name[len - 1] == CHAR_X)
-            return COMPOUND_STRING("Mega X");
-        if (len != 0 && name[len - 1] == CHAR_Y)
-            return COMPOUND_STRING("Mega Y");
+        if (len >= 2 && name[len - 2] == CHAR_SPACE && name[len - 1] >= CHAR_A && name[len - 1] <= CHAR_Z)
+        {
+            *p++ = CHAR_SPACE;
+            *p++ = name[len - 1];
+            *p = EOS;
+        }
     }
-    return COMPOUND_STRING("Mega");
 }
 
-// Collect the Mega/Primal forms the species can reach, with the label each row gets.
-// Only these two methods qualify: they are the transformations that change the stat
-// spread mid-battle off nothing but the species. Gigantamax is excluded on purpose -
-// Dynamax multiplies HP rather than swapping in a new base spread, so a row for it
-// would be duplicating this one.
-static u32 CollectAltFormRows(enum Species species, enum Species *outSpecies, const u8 **outLabels)
+// The transformations that swap in a whole new base spread off nothing but the species.
+// Gigantamax is excluded on purpose - Dynamax multiplies HP rather than replacing the
+// spread, so a row for it would just repeat the one above.
+static bool32 IsAltFormMethod(enum FormChanges method)
+{
+    return method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM
+        || method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE   // Rayquaza, via Dragon Ascent
+        || method == FORM_CHANGE_BATTLE_PRIMAL_REVERSION;
+}
+
+// Every Mega/Primal form the species can reach, as rows under its own. Bounded by
+// INFO_MAX_DISPLAYED_ALT_FORMS, which test/fork/frontier_battle_info_reveal.c guards the
+// form-change tables against.
+static u32 DrawAltFormRows(u8 windowId, enum Species species, u32 y)
 {
     const struct FormChange *formChanges = GetSpeciesFormChanges(species);
     u32 megaCount = 0;
     u32 n = 0;
 
     if (formChanges == NULL)
-        return 0;
+        return y;
 
     for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
     {
@@ -1099,51 +1183,102 @@ static u32 CollectAltFormRows(enum Species species, enum Species *outSpecies, co
             megaCount++;
     }
 
-    for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR && n < BST_MAX_ALT_FORMS; i++)
+    for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR && n < INFO_MAX_DISPLAYED_ALT_FORMS; i++)
     {
-        switch (formChanges[i].method)
-        {
-        case FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM:
-            outLabels[n] = MegaRowLabel(formChanges[i].param1, megaCount > 1);
-            break;
-        case FORM_CHANGE_BATTLE_PRIMAL_REVERSION:
-            outLabels[n] = COMPOUND_STRING("Primal");
-            break;
-        default:
+        u8 label[32];
+
+        if (!IsAltFormMethod(formChanges[i].method))
             continue;
-        }
-        outSpecies[n] = formChanges[i].targetSpecies;
+
+        if (formChanges[i].method == FORM_CHANGE_BATTLE_PRIMAL_REVERSION)
+            StringCopy(label, COMPOUND_STRING("Primal"));
+        else
+            BuildMegaLabel(label, formChanges[i].param1, megaCount > 1);
+
+        DrawBaseStatRow(windowId, label, BST_FORM_INDENT, formChanges[i].targetSpecies, y);
+        y += LINE_H;
         n++;
     }
-    return n;
+    return y;
 }
 
-// The foe's own row. A mon that has already Mega Evolved or undergone Primal Reversion
-// carries that species in its party slot (activeGimmick persists the form), so labelling
-// its row "Base" there would be a lie - name the form the player is actually looking at.
-static const u8 *CurrentFormRowLabel(enum Species species)
+// FORK: the form YOUR mon would actually take, or SPECIES_NONE if it has none available.
+// Unlike the foe's possibility list this is a projection of fact: CanMegaEvolve applies the
+// real eligibility rules (your side's one-per-trainer gimmick budget, and - with
+// FEATURE_FREE_GIMMICKS off - the held stone), and GetBattleFormChangeTargetSpecies resolves
+// the stat-based X/Y/Z pick that GetMegaStoneForBattler makes from this battler's own
+// Attack/Sp. Atk. Primal Reversion is checked too, though a holder reverts on switch-in and
+// so is normally already in its Primal form by the time the viewer can be opened.
+static enum Species GetPlayerProjectedForm(enum BattlerId battler)
+{
+    enum Species species = gBattleMons[battler].species;
+    enum Ability ability = GetBattlerAbility(battler);
+    enum Species target;
+
+    if (CanMegaEvolve(battler))
+    {
+        target = GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM, ability);
+        if (target != species)
+            return target;
+        target = GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE, ability);
+        if (target != species)
+            return target;
+    }
+
+    target = GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_PRIMAL_REVERSION, ability);
+    if (target != species)
+        return target;
+
+    return SPECIES_NONE;
+}
+
+// A mon that has already Mega Evolved or undergone Primal Reversion carries that species
+// itself, so its projected row would just repeat its own - name what it already is instead.
+static const u8 *AlreadyTransformedLabel(enum Species species)
 {
     if (gSpeciesInfo[species].isMegaEvolution)
-        return COMPOUND_STRING("Mega");
+        return COMPOUND_STRING("(Mega)");
     if (gSpeciesInfo[species].isPrimalReversion)
-        return COMPOUND_STRING("Primal");
-    return COMPOUND_STRING("Base");
+        return COMPOUND_STRING("(Primal)");
+    return NULL;
 }
 
-static void DrawBaseStatRow(u8 windowId, const u8 *label, enum Species species, u32 y)
+static u32 DrawPlayerBaseStats(u8 windowId, u32 y)
 {
-    u8 num[8];
-
-    PrintLine(windowId, label, 0, y);
-    for (u32 k = 0; k < NUM_STATS; k++)
+    for (u32 battler = 0; battler < gBattlersCount; battler++)
     {
-        ConvertIntToDecimalStringN(num, GetSpeciesBaseStat(species, sBaseStatOrder[k]), STR_CONV_MODE_LEFT_ALIGN, 3);
-        PrintStatCell(windowId, num, BST_COL_R(k), y);
+        enum Species species, projected;
+        const u8 *transformed;
+
+        if (!IsOnPlayerSide(battler) || !IsBattlerAlive(battler))
+            continue;
+
+        species = gBattleMons[battler].species;
+        y = DrawSpeciesRow(windowId, COMPOUND_STRING("You "), species, y);
+
+        // Say so explicitly when a mon is already transformed, rather than leaving the
+        // absence of a second row to mean both "already Mega" and "cannot Mega".
+        transformed = AlreadyTransformedLabel(species);
+        if (transformed != NULL)
+        {
+            PrintRowLabel(windowId, transformed, BST_FORM_INDENT, y);
+            y += LINE_H;
+            continue;
+        }
+
+        projected = GetPlayerProjectedForm(battler);
+        if (projected != SPECIES_NONE)
+        {
+            u8 label[32];
+
+            // The projection is a single known form, so it needs no X/Y/Z suffix to tell it
+            // from a sibling - the engine has already made that pick from this mon's stats.
+            StringCopy(label, gSpeciesInfo[projected].isPrimalReversion ? COMPOUND_STRING("Primal") : COMPOUND_STRING("Mega"));
+            DrawBaseStatRow(windowId, label, BST_FORM_INDENT, projected, y);
+            y += LINE_H;
+        }
     }
-    // Eternamax's 1125 is the only total that needs a fourth digit, and the BST column
-    // is the widest, so it still clears the window edge.
-    ConvertIntToDecimalStringN(num, GetSpeciesBaseStatTotal(species), STR_CONV_MODE_LEFT_ALIGN, 4);
-    PrintStatCell(windowId, num, BST_COL_R(NUM_STATS), y);
+    return y;
 }
 
 static void DrawBaseStatsPage(u8 windowId, u32 foeIndex)
@@ -1162,38 +1297,25 @@ static void DrawBaseStatsPage(u8 windowId, u32 foeIndex)
     PrintTitle(windowId, line);
     y += LINE_H;
 
+    for (u32 k = 0; k < NUM_STATS; k++)
+        PrintStatCell(windowId, GetStatAbbr(sBaseStatOrder[k]), BST_COL_R(k), y);
+    PrintStatCell(windowId, COMPOUND_STRING("BST"), BST_TOTAL_R, y);
+    y += LINE_H;
+
+    y = DrawPlayerBaseStats(windowId, y);
+
     if (!seen)
     {
-        PrintLine(windowId, COMPOUND_STRING("Not yet seen."), 0, y);
+        PrintRowLabel(windowId, COMPOUND_STRING("Foe: not yet seen."), 0, y);
         PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
         return;
     }
 
     struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
     enum Species displaySpecies = GetMonData(displayMon, MON_DATA_SPECIES, NULL);
-    enum Species altForms[BST_MAX_ALT_FORMS];
-    const u8 *altLabels[BST_MAX_ALT_FORMS];
-    u32 altCount = CollectAltFormRows(displaySpecies, altForms, altLabels);
 
-    PrintLine(windowId, GetSpeciesName(displaySpecies), 0, y);
-    y += LINE_H;
-
-    for (u32 k = 0; k < NUM_STATS; k++)
-        PrintStatCell(windowId, GetStatAbbr(sBaseStatOrder[k]), BST_COL_R(k), y);
-    PrintStatCell(windowId, COMPOUND_STRING("BST"), BST_COL_R(NUM_STATS), y);
-    y += LINE_H;
-
-    DrawBaseStatRow(windowId, CurrentFormRowLabel(displaySpecies), displaySpecies, y);
-    y += LINE_H;
-
-    // At most BST_MAX_ALT_FORMS rows follow a title, a species header, a column header
-    // and the base row - five rows against the page's nine, so this cannot overrun the
-    // footer no matter what a species declares.
-    for (u32 i = 0; i < altCount; i++)
-    {
-        DrawBaseStatRow(windowId, altLabels[i], altForms[i], y);
-        y += LINE_H;
-    }
+    y = DrawSpeciesRow(windowId, COMPOUND_STRING("Foe "), displaySpecies, y);
+    DrawAltFormRows(windowId, displaySpecies, y);
 
     PrintFooter(windowId, COMPOUND_STRING("<>: Mon  L/R: Page  B: Close"));
 }

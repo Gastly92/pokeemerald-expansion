@@ -22,10 +22,13 @@ bool32 ShouldReplaceBagWithInfo(void);
 #define INFO_MAX_DISPLAYED_INNATES 14
 
 // FORK: B_FRONTIER_BATTLE_INFO -- how many Mega/Primal rows the viewer's Base Stats page can
-// list beneath a foe's own spread (its row budget). A species declaring more reachable forms
-// than this would have one the page silently drops, so test/fork/frontier_battle_info_reveal.c
-// guards the form-change tables against it.
-#define INFO_MAX_DISPLAYED_ALT_FORMS 4
+// list beneath the foe's own spread. It is both a display budget and a layout one: the page
+// draws your active mon(s) above the foe, and a STATIC_ASSERT in src/fork/frontier_battle_info.c
+// proves the worst case (doubles, both of your mons projecting a form) still fits. A species
+// declaring more reachable forms than this would have one silently dropped, so the sweep in
+// test/fork/frontier_battle_info_reveal.c guards the form-change tables against it -- if it
+// ever fires, the page layout needs reworking, not just a bigger number here.
+#define INFO_MAX_DISPLAYED_ALT_FORMS 2
 
 void CB2_FrontierBattleInfo(void);
 

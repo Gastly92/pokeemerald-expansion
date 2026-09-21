@@ -112,7 +112,9 @@ TEST("Frontier INFO: no species declares more Mega/Primal forms than the Base St
 
         for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
         {
+            // The same three methods DrawAltFormRows() draws a row for.
             if (formChanges[i].method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM
+                || formChanges[i].method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE
                 || formChanges[i].method == FORM_CHANGE_BATTLE_PRIMAL_REVERSION)
                 n++;
         }
@@ -126,7 +128,7 @@ TEST("Frontier INFO: no species declares more Mega/Primal forms than the Base St
         if (n > INFO_MAX_DISPLAYED_ALT_FORMS)
         {
             offenders++;
-            Test_MgbaPrintf("%S declares %d Mega/Primal forms, more than the Base Stats page's %d rows -- raise INFO_MAX_DISPLAYED_ALT_FORMS",
+            Test_MgbaPrintf("%S declares %d Mega/Primal forms, more than the Base Stats page's %d rows -- the Base Stats page layout needs reworking, not just a bigger INFO_MAX_DISPLAYED_ALT_FORMS",
                             gSpeciesInfo[species].speciesName, n, INFO_MAX_DISPLAYED_ALT_FORMS);
         }
     }
