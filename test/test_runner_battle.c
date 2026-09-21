@@ -974,7 +974,9 @@ void TestRunner_Battle_RecordItemPopUp(enum BattlerId battlerId, enum Item item)
             if (DATA.queuedEvents[DATA.queuedEventsFailIndex].as.item.item == ITEM_NONE)
                 Test_MgbaPrintf("%s:%d: Did you mean: ITEM_POPUP(%s)", filename, line, BattlerIdentifier(battlerId));
             else
-                Test_MgbaPrintf("%s:%d: Did you mean: ITEM_POPUP(%s, ITEM_%C)", filename, line, BattlerIdentifier(battlerId), gAbilitiesInfo[item].name);
+                // UPSTREAM: this indexed gAbilitiesInfo with an item id, printing a garbage
+                // (or out-of-bounds) ability name for a mismatched ITEM_POPUP.
+                Test_MgbaPrintf("%s:%d: Did you mean: ITEM_POPUP(%s, ITEM_%C)", filename, line, BattlerIdentifier(battlerId), GetItemName(item));
         }
         break;
     case QUEUE_GROUP_NONE_OF:
