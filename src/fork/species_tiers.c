@@ -197,6 +197,8 @@ static const u16 sPseudoSpecies[] =
     SPECIES_METAGROSS,             // 0376
     SPECIES_GARCHOMP,              // 0445
     SPECIES_LUCARIO,               // 0448
+    SPECIES_DARMANITAN,            // 0555
+    SPECIES_DARMANITAN_GALAR_STANDARD,
     SPECIES_HYDREIGON,             // 0635
     SPECIES_GRENINJA_BATTLE_BOND,  // 0658
     SPECIES_KOMMO_O,               // 0784
