@@ -3021,6 +3021,12 @@ static enum CancelerResult CancelerPreAnimActivations(struct BattleCalcValues *c
             }
 
             gBattleScripting.battler = battlerDef;
+            // UPSTREAM: BattleScript_BerryReduceAnimation shows an item pop-up, and the pop-up
+            // prints gLastUsedItem. Nothing set it on this path, so it named whatever item had
+            // activated earlier in the battle -- "????" (GetItemName's ITEM_NONE fallback) when
+            // nothing had. MoveEndResistBerryMessage assigns it too, but that runs later, for the
+            // message. Regression test: test/fork/resist_berry_popup.c.
+            gLastUsedItem = gBattleMons[battlerDef].item;
             BattleScriptCall(BattleScript_BerryReduceAnimation);
             return CANCELER_RESULT_RUN_SCRIPT;
         }
