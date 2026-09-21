@@ -27,10 +27,10 @@
 // The table is keyed by EXACT species id, so each forme is classified on its own
 // merits rather than inheriting a single tier from its base species' Pokedex
 // number. This lets a powerful forme outrank its base — Shaymin-Sky is
-// TIER_LEGENDARY while ordinary Shaymin is TIER_NORMAL (simply absent from the
-// table) — and a weak base sit below its formes — base Calyrex is TIER_NORMAL
-// while its Ice/Shadow riders are TIER_MYTHICAL. List every forme you want
-// classified; anything not listed is TIER_NORMAL.
+// TIER_MYTHICAL while ordinary Shaymin is TIER_LEGENDARY — and a weak base sit
+// below its formes — base Calyrex is TIER_LEGENDARY while its Ice/Shadow riders
+// are TIER_MYTHICAL. List every forme you want classified; anything not listed
+// is TIER_NORMAL.
 //
 // CAVEAT — an omitted forme is not "inherits its base's tier", it is TIER_NORMAL,
 // i.e. draftable into any party slot with no quota. Every forme of a restricted

@@ -30,8 +30,8 @@ TEST("Species tiers: no species is listed more than once")
 // future change collapsed formes to their base species, this would catch it.
 TEST("Species tiers: a forme resolves independently of its base species")
 {
-    EXPECT_EQ(GetSpeciesTier(SPECIES_SHAYMIN), TIER_PSEUDO);
-    EXPECT_EQ(GetSpeciesTier(SPECIES_SHAYMIN_SKY), TIER_LEGENDARY);
+    EXPECT_EQ(GetSpeciesTier(SPECIES_SHAYMIN), TIER_LEGENDARY);
+    EXPECT_EQ(GetSpeciesTier(SPECIES_SHAYMIN_SKY), TIER_MYTHICAL);
 }
 
 // FORK: the three tier arrays are maintained in ascending National Dex order
