@@ -4,7 +4,7 @@
 #include "pokemon.h"
 #include "constants/form_change_types.h"
 
-// FORK (FEATURE_FREE_GIMMICKS): Mega Evolution is item-free, so for a species with more
+// FORK: (FEATURE_FREE_GIMMICKS) Mega Evolution is item-free, so for a species with more
 // than one Mega form there is no stone to say which one you get. We pick it from the mon's
 // own offensive stats and return the Mega Stone that yields it, to feed into the held-item
 // driven form change machinery. The chosen form is the physical one when the mon's

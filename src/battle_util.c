@@ -9923,6 +9923,12 @@ enum Species GetBattleFormChangeTargetSpecies(enum BattlerId battler, enum FormC
 
     // FORK: with item-free gimmicks, resolve Mega Evolution by the mon's stats
     // instead of its held stone by pretending it holds the stat-appropriate stone.
+    // The stat-based pick itself lives in include/fork/free_gimmicks.h
+    // (FindMegaStoneForStats); it was GetMegaStoneForBattler() right above this function
+    // until the INFO viewer's Base Stats page needed the same answer for a *benched* party
+    // mon, which has no gBattleMons entry. Both callers must agree, which is why it is one
+    // function -- on conflict, re-apply this block to upstream's version of the function
+    // rather than inlining the helper back into this file.
     if (GetConfig(FEATURE_FREE_GIMMICKS) && method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM)
     {
         u16 megaStone = FindMegaStoneForStats(species, gBattleMons[battler].attack, gBattleMons[battler].spAttack);
