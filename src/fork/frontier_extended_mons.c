@@ -12195,7 +12195,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGICE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ELECTRIC_GEM,
+        .heldItem = ITEM_CHESTO_BERRY,
         .moves =
         {
             MOVE_ICE_BEAM,
@@ -12204,11 +12204,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST
         },
         .ability = ABILITY_SNOW_WARNING,
-        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spa = 4,
-            .spd = 252
+            .def = 252,
+            .spa = 4
         ),
         .teraType = TYPE_WATER,
     },
@@ -12221,7 +12221,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT,
             MOVE_FOCUS_BLAST,
-            MOVE_FLASH_CANNON
+            MOVE_EARTH_POWER
         },
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -12231,6 +12231,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_ICE,
+    },
+    {
+        .species = SPECIES_REGICE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_COVERT_CLOAK,
+        .moves =
+        {
+            MOVE_ICY_WIND,
+            MOVE_ICE_BEAM,
+            MOVE_HELPING_HAND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spa = 4
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0379
