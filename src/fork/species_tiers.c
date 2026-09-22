@@ -207,6 +207,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_DRACOVISH,             // 0882
     SPECIES_ARCTOVISH,             // 0883
     SPECIES_URSALUNA,              // 0901
+    SPECIES_SNEASLER,              // 0903
     SPECIES_GHOLDENGO,             // 1000
     SPECIES_ARCHALUDON,            // 1018
 };
