@@ -936,6 +936,24 @@ Beartic carries BOTH Swift Swim (primary) and Slush Rush (HA), so it takes the c
 species already carry other innates (the Bulbasaur/Tangela/Bellossom/Cottonee/Psyduck/Relicanth/...
 lines), so they take a combined `INNATES(...)` list with the speed-doubler added.
 
+**No species may set its own matching weather.** A weather speed-doubler is a *conditional* boon — it is
+priced on somebody having to spend a turn, a slot or a teammate on the weather. A mon that ALSO sets that
+weather on entry pays nothing: it switches in at x2 Speed, every battle, unconditionally, and the innate
+stops being a weather payoff and becomes a flat stat line. So no species may hold one of these four innates
+alongside a chosen ability (real slot OR `species_ability_overrides.c` row) that sets the matching weather
+on switch-in — Drizzle / Primordial Sea, Drought / Desolate Land / Orichalcum Pulse, Sand Stream, or Snow
+Warning. The pairing is fine *across* a team: drafting Torkoal beside a Chlorophyll sweeper is the intended
+weather-team play, and the AI heuristics above exist precisely to reward it.
+
+This is a rule about what the FORK grants, not about vanilla legality, and it was applied in both directions:
+where the fork granted the *setter* (an override row), the row was re-pointed at a non-weather ability
+(Excadrill → Earth Eater, Sandslash → Well-Baked Body, Kingdra → Storm Drain, Bellossom → Solar Power, …);
+where the fork granted the *speed-doubler* on a species whose setter is vanilla and un-droppable, the innate
+was removed instead (Kyogre and Kyogre-Primal and Politoed lose Swift Swim, Vanilluxe loses Slush Rush).
+Note the coverage gate forces that split: for a species whose speed-doubler is one of its own vanilla
+abilities (Excadrill's Sand Rush, Kingdra's Swift Swim, Sunflora's Chlorophyll, …) the innate MUST stay, so
+the override is the only lever.
+
 ### ABILITY_FILTER
 
 Reduces the damage the holder takes from supereffective moves by 25%, handled
@@ -1211,9 +1229,12 @@ line and Froslass's Levitate, the Sandshrew-Alola line / Cubchoo / Beartic's Slu
 a combined `INNATES(...)` list with the evasion ability added. Frontier roster sets that hardcoded a
 chosen Sand Veil / Snow Cloak are freed (Step 3.5): Glaceon → Ice Body, Froslass → Cursed Body and
 Wugtrio → Gooey each take a real complementary slot, while the species whose ALL relevant real
-abilities are now innate take a fork-owned chosen override (`species_ability_overrides.c`) — Sandslash
-and Donphan → Sand Stream, Sandslash-Alola / Articuno / Beartic → Snow Warning — each a stable `:x:`
-weather-setter that also turns on the mon's own evasion innate.
+abilities are now innate take a fork-owned chosen override (`species_ability_overrides.c`) — Donphan →
+Sand Stream and Articuno → Snow Warning, each a stable `:x:` weather-setter that also turns on the mon's
+own evasion innate. Sandslash (→ Well-Baked Body), Sandslash-Alola (→ Screen Cleaner) and Beartic
+(→ Sheer Force) were re-pointed off their weather-setters: each also carries a matching weather
+speed-doubler innate, which the self-set weather turned into a free x2 Speed every switch-in. See the
+"no self-enabling weather" rule under the speed-doubler section above.
 
 ### ABILITY_COMPOUND_EYES / ABILITY_KEEN_EYE / ABILITY_ILLUMINATE
 
@@ -1401,8 +1422,10 @@ ability (the Wailmer/Wailord whale line — insulated by thick blubber against h
 sets that hardcoded Thick Fat are freed (Step 3.5): Raticate-Alola → Gluttony (eats its Sitrus early),
 Dewgong/Walrein → Ice Body, Snorlax → Gluttony (Immunity also innate), Miltank → Sap Sipper, Hariyama/Cetitan
 → Sheer Force, Grumpig → Own Tempo, Purugly → Defiant, Appletun → Ripen, and the Mamoswine sets — whose three
-real abilities (Oblivious/Snow Cloak/Thick Fat) are ALL now innate — take a fork-owned chosen Snow Warning
-override (`species_ability_overrides.c`), self-synergistic with their innate Snow Cloak.
+real abilities (Oblivious/Snow Cloak/Thick Fat) are ALL now innate — take a fork-owned chosen Sap Sipper
+override (`species_ability_overrides.c`), the grazing mammoth's answer to its Grass coverage. (That row was
+a chosen Snow Warning until the self-enabling-weather sweep: Mamoswine also has innate Slush Rush, so its
+own snow doubled its Speed for free.)
 
 ### ABILITY_TECHNICIAN
 
@@ -1481,7 +1504,8 @@ Kleavor's Sharpness → chosen Sheer Force, Dracovish's Strong Jaw → chosen Wa
 Fist → chosen Inner Focus); sets whose only complementary slots are themselves already innate are left as-is
 (still correct — the chosen booster provides the boost). Three sole-real-ability species take a
 fork-owned chosen-ability override (`species_ability_overrides.c`): Clawitzer (sole Mega Launcher) → Water
-Absorb, Melmetal (sole Iron Fist) → Filter, Lycanroc-Dusk (sole Tough Claws) → Sand Rush.
+Absorb, Melmetal (sole Iron Fist) → Filter, Lycanroc-Dusk (sole Tough Claws) → Rivalry (it was a chosen
+Sand Stream until the self-enabling-weather sweep — Lycanroc-Dusk also has innate Sand Rush).
 
 ### ABILITY_SERENE_GRACE
 
