@@ -12195,7 +12195,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGICE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ELECTRIC_GEM,
+        .heldItem = ITEM_CHESTO_BERRY,
         .moves =
         {
             MOVE_ICE_BEAM,
@@ -12204,11 +12204,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_REST
         },
         .ability = ABILITY_SNOW_WARNING,
-        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spa = 4,
-            .spd = 252
+            .def = 252,
+            .spa = 4
         ),
         .teraType = TYPE_WATER,
     },
@@ -12221,7 +12221,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_THUNDERBOLT,
             MOVE_FOCUS_BLAST,
-            MOVE_FLASH_CANNON
+            MOVE_EARTH_POWER
         },
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -29526,7 +29526,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGIELEKI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_ELECTRIC_GEM,
         .moves =
         {
             MOVE_THUNDERBOLT,

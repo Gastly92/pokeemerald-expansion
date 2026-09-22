@@ -4886,6 +4886,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGIROCK,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_PRESSURE,
             ABILITY_REGENERATOR,
             ABILITY_SAND_FORCE,
             ABILITY_STURDY
@@ -4896,6 +4897,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CLEAR_BODY,
             ABILITY_ICE_BODY,
+            ABILITY_PRESSURE,
+            ABILITY_REGENERATOR,
             ABILITY_SNOW_CLOAK,
             ABILITY_STURDY
         )
@@ -4906,6 +4909,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CLEAR_BODY,
             ABILITY_LIGHT_METAL,
             ABILITY_LIMBER,
+            ABILITY_PRESSURE,
             ABILITY_STURDY
         )
     },
