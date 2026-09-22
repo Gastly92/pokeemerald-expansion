@@ -29526,7 +29526,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_REGIELEKI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_ELECTRIC_GEM,
         .moves =
         {
             MOVE_THUNDERBOLT,
