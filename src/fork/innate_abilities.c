@@ -2445,8 +2445,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_GOOEY,
             ABILITY_LIMBER,
             ABILITY_QUEENLY_MAJESTY,
-            ABILITY_RAIN_DISH,
-            ABILITY_SWIFT_SWIM
+            ABILITY_RAIN_DISH
         )
     },
     { // 0187
@@ -4951,16 +4950,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KYOGRE,
         INNATES(
             ABILITY_HYDRATION,
-            ABILITY_RAIN_DISH,
-            ABILITY_SWIFT_SWIM
+            ABILITY_RAIN_DISH
         )
     },
     { // 0382
         SPECIES_KYOGRE_PRIMAL,
         INNATES(
             ABILITY_HYDRATION,
-            ABILITY_RAIN_DISH,
-            ABILITY_SWIFT_SWIM
+            ABILITY_RAIN_DISH
         )
     },
     { // 0383
@@ -7179,7 +7176,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ICE_BODY,
             ABILITY_LEVITATE,
-            ABILITY_SLUSH_RUSH,
             ABILITY_SNOW_CLOAK
         )
     },

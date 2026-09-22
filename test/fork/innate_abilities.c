@@ -5475,6 +5475,75 @@ TEST("Innate abilities: no ability override or frontier set names an innate-capa
     EXPECT_EQ(offenders, 0);
 }
 
+// (6b) Self-enabling weather: a weather speed-doubler innate (Swift Swim / Chlorophyll / Sand Rush /
+// Slush Rush) is priced on somebody having to SPEND something on the weather -- a turn, a move slot,
+// a teammate. A species that also brings the matching weather on switch-in pays nothing: it enters at
+// x2 Speed every battle, unconditionally, and the innate stops being a weather payoff and becomes a
+// flat stat line. So no species may pair one of the four with a chosen ability that sets its weather.
+//
+// This sweeps the EFFECTIVE slots via GetSpeciesAbility(), so it catches both halves of the hazard:
+// an override row that hands the species a setter, AND a vanilla slot that already held one. Frontier
+// sets need no separate sweep -- a set's ability must resolve to a real slot, so no slot can hold a
+// setter means no set can name one.
+//
+// Fixing an offender: where the FORK granted the setter (an override row), re-point the row at a
+// non-weather never-an-innate ability. Where the setter is vanilla and the speed-doubler is the fork's
+// own addition, drop the innate instead. Note the coverage gate in (3) forces that split -- a species
+// whose speed-doubler is one of its OWN vanilla abilities must keep it as an innate, so there the
+// override is the only lever.
+static enum Ability WeatherSetterForSpeedInnate(enum Ability speedInnate, u32 index)
+{
+    switch (speedInnate)
+    {
+    case ABILITY_SWIFT_SWIM:   return (const enum Ability[]){ ABILITY_DRIZZLE, ABILITY_PRIMORDIAL_SEA, ABILITY_NONE }[index];
+    case ABILITY_CHLOROPHYLL:  return (const enum Ability[]){ ABILITY_DROUGHT, ABILITY_DESOLATE_LAND, ABILITY_ORICHALCUM_PULSE, ABILITY_NONE }[index];
+    case ABILITY_SAND_RUSH:    return (const enum Ability[]){ ABILITY_SAND_STREAM, ABILITY_NONE }[index];
+    case ABILITY_SLUSH_RUSH:   return (const enum Ability[]){ ABILITY_SNOW_WARNING, ABILITY_NONE }[index];
+    default:                   return ABILITY_NONE;
+    }
+}
+
+TEST("Innate abilities: no species sets the weather its own speed-doubler innate exploits")
+{
+    static const enum Ability sSpeedInnates[] =
+    {
+        ABILITY_SWIFT_SWIM, ABILITY_CHLOROPHYLL, ABILITY_SAND_RUSH, ABILITY_SLUSH_RUSH,
+    };
+    u32 species, slot, i, j;
+    u32 offenders = 0;
+
+    // GetSpeciesAbilityOverride returns ABILITY_NONE for every species while the flag is off
+    // (TestInitConfigData force-disables it), which would make the override half of the sweep vacuous.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        for (i = 0; i < ARRAY_COUNT(sSpeedInnates); i++)
+        {
+            if (!SpeciesHasInnate(species, sSpeedInnates[i]))
+                continue;
+
+            for (j = 0; WeatherSetterForSpeedInnate(sSpeedInnates[i], j) != ABILITY_NONE; j++)
+            {
+                enum Ability setter = WeatherSetterForSpeedInnate(sSpeedInnates[i], j);
+
+                for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+                {
+                    if (GetSpeciesAbility(species, slot) != setter)
+                        continue;
+
+                    offenders++;
+                    Test_MgbaPrintf("%S: innate %S + slot %d %S -- free x2 Speed on switch-in; re-point the slot or drop the innate",
+                                    gSpeciesInfo[species].speciesName, gAbilitiesInfo[sSpeedInnates[i]].name,
+                                    slot, gAbilitiesInfo[setter].name);
+                }
+            }
+        }
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
 // (7) Reserved abilities: an ability welded to one species line, which the fork's own data may
 // never hand to anybody else. This is a SEPARATE gate from (6) — a reserved ability is typically
 // never-an-innate, so (6) is perfectly happy with it; what disqualifies it is identity, not
@@ -5495,6 +5564,14 @@ TEST("Innate abilities: no ability override or frontier set names an innate-capa
 static const enum Ability sReservedAbilities[] =
 {
     ABILITY_ILLUSION,
+    // The Paradox signatures. Protosynthesis is welded to the ten ANCIENT Paradox mons and
+    // Quark Drive to the ten FUTURE ones -- they are what those creatures ARE, and handing
+    // either to an ordinary species reads as that species being a Paradox form. Both are
+    // never-an-innate, so the (6) gate is perfectly happy with them; what disqualifies them
+    // is identity, which is exactly what this list is for. The canon carriers keep theirs
+    // through the SpeciesHasVanillaAbility exemption below.
+    ABILITY_PROTOSYNTHESIS,
+    ABILITY_QUARK_DRIVE,
 };
 
 static bool32 IsReservedAbility(enum Ability ability)
@@ -5537,6 +5614,11 @@ TEST("Innate abilities: no ability override or frontier set names a reserved abi
     EXPECT(!IsReservedAbility(ABILITY_MUMMY));
     EXPECT(SpeciesHasVanillaAbility(SPECIES_ZOROARK, ABILITY_ILLUSION)); // the canon-carrier exemption is live
     EXPECT(!SpeciesHasVanillaAbility(SPECIES_GENGAR, ABILITY_ILLUSION));
+    EXPECT(IsReservedAbility(ABILITY_PROTOSYNTHESIS));
+    EXPECT(IsReservedAbility(ABILITY_QUARK_DRIVE));
+    EXPECT(SpeciesHasVanillaAbility(SPECIES_GREAT_TUSK, ABILITY_PROTOSYNTHESIS)); // Paradox carriers keep theirs
+    EXPECT(SpeciesHasVanillaAbility(SPECIES_IRON_TREADS, ABILITY_QUARK_DRIVE));
+    EXPECT(!SpeciesHasVanillaAbility(SPECIES_SUNFLORA, ABILITY_PROTOSYNTHESIS));
 
     for (i = 0; i < ARRAY_COUNT(sReservedAbilities); i++)
     {

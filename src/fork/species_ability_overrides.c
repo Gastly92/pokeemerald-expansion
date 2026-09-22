@@ -51,7 +51,9 @@ struct SpeciesAbilityOverride
 // LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
 // *implemented* :white_check_mark: innate — that's the row's whole premise.)
 //
-// SOME ABILITIES ARE RESERVED TO ONE LINE and no row may name them, ILLUSION (Zorua/Zoroark) first.
+// SOME ABILITIES ARE RESERVED TO ONE LINE (or one family) and no row may name them: ILLUSION
+// (Zorua/Zoroark) first, plus PROTOSYNTHESIS and QUARK_DRIVE, welded to the ancient and future
+// Paradox mons respectively.
 // The never-an-innate rule above does not catch these -- Illusion is never-an-innate, so that gate is
 // happy with it; what disqualifies it is identity. The disguise is that line's whole design, and the
 // roster machinery assumes it (IllusionMonRejectsSlot in src/fork/frontier_draft.c, the INFO viewer's
@@ -181,11 +183,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0028
         SPECIES_SANDSLASH, 1,
-        ABILITY_SAND_STREAM
+        ABILITY_WELL_BAKED_BODY
     },
     { // 0028
         SPECIES_SANDSLASH_ALOLA, 1,
-        ABILITY_SNOW_WARNING
+        ABILITY_SCREEN_CLEANER
     },
     { // 0036
         SPECIES_CLEFABLE, 1,
@@ -221,7 +223,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0051
         SPECIES_DUGTRIO, 2,
-        ABILITY_SAND_STREAM
+        ABILITY_TRACE
     },
     { // 0051
         SPECIES_DUGTRIO_ALOLA, 0,
@@ -305,7 +307,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0087
         SPECIES_DEWGONG, 2,
-        ABILITY_SNOW_WARNING
+        ABILITY_WATER_ABSORB
     },
     { // 0091
         SPECIES_CLOYSTER, 2,
@@ -585,7 +587,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0182
         SPECIES_BELLOSSOM, 1,
-        ABILITY_DROUGHT
+        ABILITY_SOLAR_POWER
     },
     { // 0185
         SPECIES_SUDOWOODO, 1,
@@ -597,7 +599,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0192
         SPECIES_SUNFLORA, 0,
-        ABILITY_DROUGHT
+        ABILITY_SEED_SOWER
     },
     { // 0199
         SPECIES_SLOWKING, 2,
@@ -697,7 +699,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0230
         SPECIES_KINGDRA, 0,
-        ABILITY_DRIZZLE
+        ABILITY_STORM_DRAIN
     },
     { // 0232
         SPECIES_DONPHAN, 1,
@@ -1153,7 +1155,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0395
         SPECIES_EMPOLEON, 1,
-        ABILITY_SNOW_WARNING
+        ABILITY_LIGHTNING_ROD
     },
     { // 0398
         SPECIES_STARAPTOR, 1,
@@ -1383,7 +1385,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0473
         SPECIES_MAMOSWINE, 2,
-        ABILITY_SNOW_WARNING
+        ABILITY_SAP_SIPPER
     },
     { // 0474
         SPECIES_PORYGON_Z, 2,
@@ -1415,7 +1417,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0478
         SPECIES_GLALIE, 0,
-        ABILITY_SNOW_WARNING
+        ABILITY_REFRIGERATE
     },
     {
         SPECIES_FROSLASS, 1,
@@ -1559,19 +1561,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0530
         SPECIES_EXCADRILL, 2,
-        ABILITY_SAND_STREAM
+        ABILITY_EARTH_EATER
     },
     { // 0530
         SPECIES_EXCADRILL_MEGA, 0,
-        ABILITY_SAND_STREAM
+        ABILITY_EARTH_EATER
     },
     { // 0530
         SPECIES_EXCADRILL_MEGA, 1,
-        ABILITY_SAND_STREAM
+        ABILITY_EARTH_EATER
     },
     { // 0530
         SPECIES_EXCADRILL_MEGA, 2,
-        ABILITY_SAND_STREAM
+        ABILITY_EARTH_EATER
     },
     { // 0531
         SPECIES_AUDINO, 1,
@@ -1727,7 +1729,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0614
         SPECIES_BEARTIC, 1,
-        ABILITY_SNOW_WARNING
+        ABILITY_SHEER_FORCE
     },
     {
         SPECIES_BEARTIC, 2,
@@ -2042,11 +2044,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0745
         SPECIES_LYCANROC_DUSK, 1,
-        ABILITY_SAND_STREAM
+        ABILITY_RIVALRY
     },
     { // 0745
         SPECIES_LYCANROC, 1,
-        ABILITY_SAND_STREAM
+        ABILITY_WEAK_ARMOR
     },
     { // 0748
         SPECIES_TOXAPEX, 2,
@@ -2294,7 +2296,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0866
         SPECIES_MR_RIME, 2,
-        ABILITY_SNOW_WARNING
+        ABILITY_MIMICRY
     },
     { // 0869
         SPECIES_ALCREMIE, 1,
@@ -2330,11 +2332,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0881
         SPECIES_ARCTOZOLT, 2,
-        ABILITY_SNOW_WARNING
+        ABILITY_HUSTLE
     },
     { // 0883
         SPECIES_ARCTOVISH, 1,
-        ABILITY_SNOW_WARNING
+        ABILITY_DRY_SKIN
     },
     { // 0887
         SPECIES_DRAGAPULT, 2,
@@ -2502,7 +2504,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0998
         SPECIES_BAXCALIBUR, 1,
-        ABILITY_SNOW_WARNING
+        ABILITY_NO_GUARD
     },
     { // 1000
         SPECIES_GHOLDENGO, 1,
