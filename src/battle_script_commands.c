@@ -12368,18 +12368,21 @@ void BS_TryDefiantRattled(void)
     // Rattled (FEATURE_INNATE_ABILITIES) so the holder reacts to a foe-caused stat drop exactly like the
     // real ability — a pure boon, 1:1 copy. Defiant / Competitive raise Attack / Sp. Atk +2 on ANY foe-caused
     // stat drop (a regular move, Intimidate, or Sticky Web); Rattled raises Speed +1 but ONLY on Intimidate
-    // (its switch case below gates on gBattleStruct->intimidateActivated). Overwrite the pop-up to the innate
-    // since CreateAbilityPopUp reads the primary slot. The real-ability path (chosen Defiant / Competitive /
-    // Rattled) is byte-for-byte unchanged. (Rattled's other trigger — being hit by a Dark/Ghost/Bug move —
-    // is handled by the on-hit driver at the ABILITYEFFECT_MOVE_END site, not here.)
+    // (its switch case below gates on gBattleStruct->intimidateActivated). The pop-up must be overwritten to
+    // the innate since CreateAbilityPopUp reads the primary slot — but ONLY once the reaction is committed:
+    // see the activation branches below. The real-ability path (chosen Defiant / Competitive / Rattled) is
+    // byte-for-byte unchanged. (Rattled's other trigger — being hit by a Dark/Ghost/Bug move — is handled by
+    // the on-hit driver at the ABILITYEFFECT_MOVE_END site, not here.)
+    enum Ability innate = ABILITY_NONE;
+
     if (ability != ABILITY_DEFIANT && ability != ABILITY_COMPETITIVE && ability != ABILITY_RATTLED)
     {
         if (IsInnateActive(battler, ABILITY_DEFIANT))
-            gBattleScripting.abilityPopupOverwrite = ability = ABILITY_DEFIANT;
+            innate = ability = ABILITY_DEFIANT;
         else if (IsInnateActive(battler, ABILITY_COMPETITIVE))
-            gBattleScripting.abilityPopupOverwrite = ability = ABILITY_COMPETITIVE;
+            innate = ability = ABILITY_COMPETITIVE;
         else if (IsInnateActive(battler, ABILITY_RATTLED))
-            gBattleScripting.abilityPopupOverwrite = ability = ABILITY_RATTLED;
+            innate = ability = ABILITY_RATTLED;
     }
 
     switch (ability)
@@ -12392,6 +12395,15 @@ void BS_TryDefiantRattled(void)
                 SetStatChange2(battler, STAT_ATK, 2);
             else
                 SetStatChange2(battler, STAT_SPATK, 2);
+            // FORK: name the innate in the pop-up. Set here, not above, because gBattleScripting
+            // .abilityPopupOverwrite is only cleared by `sethword sABILITY_OVERWRITE, 0` inside
+            // BattleScript_AbilityPopUp — setting it on a path that never reaches a pop-up leaves it
+            // stale, and the next pop-up ANYWHERE in the battle renders under this name (and
+            // RecordAbilityBattle reveals it to B_FRONTIER_BATTLE_INFO). Regression test:
+            // "an innate reaction that doesn't fire leaves the next pop-up alone" in
+            // test/fork/innate_abilities.c.
+            if (innate != ABILITY_NONE)
+                gBattleScripting.abilityPopupOverwrite = innate;
             gBattlerAbility = battler;
             RecordAbilityBattle(battler, ability);
             BattleScriptPush(cmd->nextInstr);
@@ -12403,6 +12415,9 @@ void BS_TryDefiantRattled(void)
         if (GetConfig(B_UPDATED_INTIMIDATE) >= GEN_8 && gBattleStruct->intimidateActivated)
         {
             SetStatChange2(battler, STAT_SPEED, 1);
+            // FORK: as above — only overwrite the pop-up once the reaction is committed.
+            if (innate != ABILITY_NONE)
+                gBattleScripting.abilityPopupOverwrite = innate;
             gBattlerAbility = battler;
             RecordAbilityBattle(battler, ability);
             BattleScriptPush(cmd->nextInstr);
