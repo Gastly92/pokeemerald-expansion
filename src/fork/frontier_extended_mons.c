@@ -6524,7 +6524,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_SLUDGE_BOMB
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

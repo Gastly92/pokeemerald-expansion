@@ -5564,6 +5564,14 @@ TEST("Innate abilities: no species sets the weather its own speed-doubler innate
 static const enum Ability sReservedAbilities[] =
 {
     ABILITY_ILLUSION,
+    // The Paradox signatures. Protosynthesis is welded to the ten ANCIENT Paradox mons and
+    // Quark Drive to the ten FUTURE ones -- they are what those creatures ARE, and handing
+    // either to an ordinary species reads as that species being a Paradox form. Both are
+    // never-an-innate, so the (6) gate is perfectly happy with them; what disqualifies them
+    // is identity, which is exactly what this list is for. The canon carriers keep theirs
+    // through the SpeciesHasVanillaAbility exemption below.
+    ABILITY_PROTOSYNTHESIS,
+    ABILITY_QUARK_DRIVE,
 };
 
 static bool32 IsReservedAbility(enum Ability ability)
@@ -5606,6 +5614,11 @@ TEST("Innate abilities: no ability override or frontier set names a reserved abi
     EXPECT(!IsReservedAbility(ABILITY_MUMMY));
     EXPECT(SpeciesHasVanillaAbility(SPECIES_ZOROARK, ABILITY_ILLUSION)); // the canon-carrier exemption is live
     EXPECT(!SpeciesHasVanillaAbility(SPECIES_GENGAR, ABILITY_ILLUSION));
+    EXPECT(IsReservedAbility(ABILITY_PROTOSYNTHESIS));
+    EXPECT(IsReservedAbility(ABILITY_QUARK_DRIVE));
+    EXPECT(SpeciesHasVanillaAbility(SPECIES_GREAT_TUSK, ABILITY_PROTOSYNTHESIS)); // Paradox carriers keep theirs
+    EXPECT(SpeciesHasVanillaAbility(SPECIES_IRON_TREADS, ABILITY_QUARK_DRIVE));
+    EXPECT(!SpeciesHasVanillaAbility(SPECIES_SUNFLORA, ABILITY_PROTOSYNTHESIS));
 
     for (i = 0; i < ARRAY_COUNT(sReservedAbilities); i++)
     {

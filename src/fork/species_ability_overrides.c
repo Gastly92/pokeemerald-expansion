@@ -51,7 +51,9 @@ struct SpeciesAbilityOverride
 // LIGHTNING_ROD is the model. (Separately, the slot a row *frees* must already be redundant via an
 // *implemented* :white_check_mark: innate — that's the row's whole premise.)
 //
-// SOME ABILITIES ARE RESERVED TO ONE LINE and no row may name them, ILLUSION (Zorua/Zoroark) first.
+// SOME ABILITIES ARE RESERVED TO ONE LINE (or one family) and no row may name them: ILLUSION
+// (Zorua/Zoroark) first, plus PROTOSYNTHESIS and QUARK_DRIVE, welded to the ancient and future
+// Paradox mons respectively.
 // The never-an-innate rule above does not catch these -- Illusion is never-an-innate, so that gate is
 // happy with it; what disqualifies it is identity. The disguise is that line's whole design, and the
 // roster machinery assumes it (IllusionMonRejectsSlot in src/fork/frontier_draft.c, the INFO viewer's
@@ -597,7 +599,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0192
         SPECIES_SUNFLORA, 0,
-        ABILITY_PROTOSYNTHESIS
+        ABILITY_SEED_SOWER
     },
     { // 0199
         SPECIES_SLOWKING, 2,

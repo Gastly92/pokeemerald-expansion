@@ -676,6 +676,21 @@ the last party slot so its disguise can form, and the INFO viewer reads the disg
 species so a foe never leaks. Those rows now carry ordinary picks (Mummy, Sap Sipper,
 Synchronize ×2, Contrary, Trace, Fluffy).
 
+**`ABILITY_PROTOSYNTHESIS` and `ABILITY_QUARK_DRIVE` are the second and third
+entries**, reserved to the **Paradox mons** — Protosynthesis to the ten ancient ones
+(Great Tusk, Flutter Mane, Roaring Moon, Sandy Shocks, Scream Tail, Slither Wing,
+Brute Bonnet, Walking Wake, Gouging Fire, Raging Bolt) and Quark Drive to the ten
+future ones (Iron Treads, Iron Valiant, Iron Moth, Iron Hands, Iron Jugulis, Iron
+Thorns, Iron Bundle, Iron Leaves, Iron Boulder, Iron Crown). Like Illusion these are
+never-an-innate, so the innate-capable gate waves them through; what disqualifies
+them is identity. The pair *is* what a Paradox mon is — a Booster-Energy/weather
+stat spike on the creature's highest stat — so giving either to an ordinary species
+reads as that species being a Paradox form, which is a claim the fork should not
+make by accident. One override row had borrowed Protosynthesis (Sunflora, for its
+"convert solar energy into nutrition" dex line, which is exactly the tempting
+misread); it now carries Seed Sower. The twenty canon carriers keep theirs through
+the vanilla-carrier exemption, so all 42 of their frontier sets are unaffected.
+
 The list lives in `sReservedAbilities[]` in `test/fork/innate_abilities.c`, next to
 the gate that enforces it:
 
