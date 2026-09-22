@@ -12232,26 +12232,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ICE,
     },
-    {
-        .species = SPECIES_REGICE,
-        .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_COVERT_CLOAK,
-        .moves =
-        {
-            MOVE_ICY_WIND,
-            MOVE_ICE_BEAM,
-            MOVE_HELPING_HAND,
-            MOVE_PROTECT
-        },
-        .ability = ABILITY_SNOW_WARNING,
-        .nature = NATURE(DEF_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .def = 252,
-            .spa = 4
-        ),
-        .teraType = TYPE_WATER,
-    },
 
     // 0379
     {
