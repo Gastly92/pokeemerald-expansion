@@ -7895,6 +7895,37 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate D
     }
 }
 
+// Regression (field report: a Jumpluff that got hit showed a "Defiant" pop-up it has no claim to,
+// and the NEXT pop-ups that battle were correct). BS_TryDefiantRattled runs off the shared
+// stat-drop message, so it fires on EVERY stat drop of every battler -- and it used to stamp
+// gBattleScripting.abilityPopupOverwrite with the credited innate BEFORE testing whether the
+// reaction would actually activate. Only BattleScript_AbilityPopUp clears that field
+// (`sethword sABILITY_OVERWRITE, 0`), so a credited-but-silent innate -- an innate Rattled taking a
+// non-Intimidate drop, an innate Defiant at +6 Attack, any drop with gBattleStruct->ignoreDefiant --
+// parked the name in gBattleScripting until the next pop-up ANYWHERE in the battle rendered under
+// it (and RecordAbilityBattle handed it to B_FRONTIER_BATTLE_INFO as the witnessed ability). The
+// overwrite is now set only on the paths that go on to show the pop-up.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate reaction that doesn't fire leaves the next pop-up alone")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_WHISMUR, ABILITY_RATTLED)); // credited, but Rattled needs Intimidate
+        ASSUME(!SpeciesHasInnate(SPECIES_WHISMUR, ABILITY_DEFIANT));
+        ASSUME(!SpeciesHasInnate(SPECIES_WHISMUR, ABILITY_COMPETITIVE));
+        ASSUME(gSpeciesInfo[SPECIES_WHISMUR].abilities[0] == ABILITY_SOUNDPROOF);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WHISMUR) { Ability(ABILITY_SOUNDPROOF); }
+        OPPONENT(SPECIES_JUMPLUFF) { Ability(ABILITY_COTTON_DOWN); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_STRING_SHOT); } // foe-caused drop; innate Rattled is credited but silent
+        TURN { MOVE(player, MOVE_SWIFT); }         // Jumpluff is damaged -> its own Cotton Down pop-up
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player); // String Shot lowers Speed
+        NONE_OF { ABILITY_POPUP(player, ABILITY_RATTLED); }        // no Intimidate -> no reaction
+        ABILITY_POPUP(opponent, ABILITY_COTTON_DOWN);              // not the stale "Rattled"
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_RATTLED); }
+    }
+}
+
 // AI innate-awareness: the Intimidate-cycling switch heuristic (ShouldSwitchIfIntimidateBenefit,
 // src/battle_ai_switch.c) is a DEDICATED read, not the shared calc, so it had to be wired. The AI
 // won't switch out to re-fire Intimidate at a foe whose innate Defiant would just bank a +2 from it.
