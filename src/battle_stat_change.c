@@ -625,8 +625,9 @@ static bool32 IsFlowerVeilBlocked(struct BattleCalcValues *cv, struct StatChange
         gBattlerAbility = flowerVeilBattler;
         gLastUsedAbility = ABILITY_FLOWER_VEIL;
         // FORK: when an innate Flower Veil (the protector's chosen ability differs) blocks the drop,
-        // overwrite the pop-up so it shows Flower Veil, not the chosen ability (Batch U).
-        if (GetBattlerAbility(flowerVeilBattler) != ABILITY_FLOWER_VEIL)
+        // overwrite the pop-up so it shows Flower Veil, not the chosen ability (Batch U). Not on a
+        // silent failure: see the matching note in IsAbilityBlocked.
+        if (GetBattlerAbility(flowerVeilBattler) != ABILITY_FLOWER_VEIL && !st->silentFailure)
             gBattleScripting.abilityPopupOverwrite = ABILITY_FLOWER_VEIL;
         MarkStatsAsDone(st, NUM_BATTLE_STATS);
         RecordAbilityBattle(gBattlerAbility, ABILITY_FLOWER_VEIL);
@@ -805,7 +806,14 @@ static bool32 IsAbilityBlocked(struct BattleCalcValues *cv, struct StatChange *s
                 gLastUsedAbility = innate;
                 gBattlerAbility = cv->battlerDef;
                 gBattleScripting.battler = cv->battlerDef;
-                gBattleScripting.abilityPopupOverwrite = innate;
+                // FORK: a silent failure (a damaging move's secondary drop, STAT_CHANGE_SILENT_FAILURE)
+                // makes TryStatChange skip st->script, so no pop-up runs to clear the overwrite
+                // (`sethword sABILITY_OVERWRITE, 0` in BattleScript_AbilityPopUp is the only reset) and
+                // the NEXT pop-up anywhere in the battle would render under this innate's name. Regression
+                // test: "a silent innate stat-drop block leaves the next pop-up alone" in
+                // test/fork/innate_abilities.c.
+                if (!st->silentFailure)
+                    gBattleScripting.abilityPopupOverwrite = innate;
                 RecordAbilityBattle(cv->battlerDef, innate);
             }
             return TRUE;

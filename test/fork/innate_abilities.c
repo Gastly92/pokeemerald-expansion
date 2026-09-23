@@ -8008,6 +8008,55 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate reaction that doesn't fi
     }
 }
 
+// Regression (field report: a Golurk -- innate Clear Body -- took Chilling Water, then an Excadrill switching
+// in showed "Clear Body" where its Sand Stream pop-up belonged). A damaging move's secondary stat drop runs
+// with STAT_CHANGE_SILENT_FAILURE, so when an ability blocks it TryStatChange skips the block's script and no
+// pop-up plays -- the upstream behaviour for the chosen ability. The innate branch of IsAbilityBlocked still
+// stamped gBattleScripting.abilityPopupOverwrite, which only BattleScript_AbilityPopUp clears, so the name sat
+// there until the next pop-up anywhere in the battle rendered under it. Same class as the test above.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a silent innate stat-drop block leaves the next pop-up alone")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GOLURK, ABILITY_CLEAR_BODY));
+        ASSUME(MoveHasAdditionalEffect(MOVE_CHILLING_WATER, MOVE_EFFECT_STAT_MINUS));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SLOWBRO) { HP(1); Speed(10); }
+        PLAYER(SPECIES_HIPPOWDON) { Ability(ABILITY_SAND_STREAM); Speed(10); }
+        OPPONENT(SPECIES_GOLURK) { Ability(ABILITY_NO_GUARD); Speed(50); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_CELEBRATE); MOVE(player, MOVE_CHILLING_WATER); } // Clear Body silently blocks the drop
+        TURN { MOVE(opponent, MOVE_SHADOW_BALL); SEND_OUT(player, 1); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CHILLING_WATER, player);
+        NONE_OF { ABILITY_POPUP(opponent, ABILITY_CLEAR_BODY); } // secondary effect: no pop-up
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SHADOW_BALL, opponent);
+        NONE_OF { ABILITY_POPUP(player, ABILITY_CLEAR_BODY); }  // not the stale "Clear Body"
+        ABILITY_POPUP(player, ABILITY_SAND_STREAM);
+    }
+}
+
+// The innate Flower Veil block in IsFlowerVeilBlocked had the same silent-failure leak.
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a silent innate Flower Veil block leaves the next pop-up alone")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_FLORGES, ABILITY_FLOWER_VEIL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_FLORGES) { Ability(ABILITY_SYMBIOSIS); } // Flower Veil via the innate only
+        PLAYER(SPECIES_TANGELA); // Grass ally
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_JUMPLUFF) { Ability(ABILITY_COTTON_DOWN); }
+    } WHEN {
+        TURN { MOVE(opponentLeft, MOVE_CHILLING_WATER, target: playerRight); } // Flower Veil silently blocks the drop
+        TURN { MOVE(playerLeft, MOVE_SWIFT); } // Jumpluff is damaged -> its own Cotton Down pop-up
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_CHILLING_WATER, opponentLeft);
+        NONE_OF { ABILITY_POPUP(playerLeft, ABILITY_FLOWER_VEIL); } // secondary effect: no pop-up
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SWIFT, playerLeft);
+        NONE_OF { ABILITY_POPUP(opponentRight, ABILITY_FLOWER_VEIL); } // not the stale "Flower Veil"
+        ABILITY_POPUP(opponentRight, ABILITY_COTTON_DOWN);
+    }
+}
+
 // AI innate-awareness: the Intimidate-cycling switch heuristic (ShouldSwitchIfIntimidateBenefit,
 // src/battle_ai_switch.c) is a DEDICATED read, not the shared calc, so it had to be wired. The AI
 // won't switch out to re-fire Intimidate at a foe whose innate Defiant would just bank a +2 from it.
