@@ -5909,6 +5909,28 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Overcoat blocks powder move
     }
 }
 
+// The block used to print the Safety Goggles message with the held item's name ("...thanks to its Leftovers!"),
+// because BattleScript_PowderMoveNoEffect's jumpifability only saw the chosen ability.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Overcoat blocking a powder move shows Overcoat, not the held item")
+{
+    GIVEN {
+        ASSUME(IsPowderMove(MOVE_SPORE));
+        ASSUME(SpeciesHasInnate(SPECIES_REUNICLUS, ABILITY_OVERCOAT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_REUNICLUS) { Ability(ABILITY_MAGIC_GUARD); Item(ITEM_LEFTOVERS); } // innate Overcoat
+        OPPONENT(SPECIES_SMEARGLE) { Moves(MOVE_SPORE); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SPORE); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_OVERCOAT);
+        MESSAGE("It doesn't affect Reuniclus…");
+        NONE_OF {
+            MESSAGE("Reuniclus is not affected thanks to its Leftovers!");
+            STATUS_ICON(player, sleep: TRUE);
+        }
+    }
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Overcoat ignores sandstorm chip damage")
 {
     bool32 enabled;
