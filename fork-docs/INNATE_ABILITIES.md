@@ -2268,7 +2268,9 @@ the already-done Limber / Immunity / Insomnia — so no pure-boon divergence.
   sun ⇒ no immunity.
 - **Overcoat** — `IsAffectedByPowderMove` (powder immunity) and the sandstorm/hail end-turn block
   (`src/battle_end_turn.c`); the AI's sand/hail damage predictors + switch-in weather impact +
-  powder-absorb switch heuristic (`src/battle_ai_util.c` / `src/battle_ai_switch.c`).
+  powder-absorb switch heuristic (`src/battle_ai_util.c` / `src/battle_ai_switch.c`). The per-battler
+  `Cmd_jumpifability` allowlist includes Overcoat so the powder-block message shows the Overcoat pop-up
+  rather than falling through to the Safety Goggles text with the holder's item name.
 
 **Intimidate immunity (Inner Focus + Own Tempo).** Both are also unaffected by Intimidate (GEN_8+),
 wired beside the Oblivious/Scrappy innate detection in `IsIntimidateBlocked`

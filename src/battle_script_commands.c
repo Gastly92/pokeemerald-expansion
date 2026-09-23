@@ -2012,8 +2012,9 @@ static void Cmd_jumpifability(void)
         // Corrosive Gas / a Pickpocket steal, and an innate Own Tempo's confuse-block shows its pop-up. Restricted
         // to this allowlist because the same command also drives Comatose's COST sites (Nightmare / Bad Dreams /
         // own Rest), which must stay chosen-slot-only (its deliberate pure-boon divergence). IsInnateActive is a
-        // no-op with the feature off.
-        else if ((ability == ABILITY_STICKY_HOLD || ability == ABILITY_OWN_TEMPO)
+        // no-op with the feature off. Overcoat is here for BattleScript_PowderMoveNoEffect: without it an
+        // innate-Overcoat target falls through to the Safety Goggles text naming whatever item it holds.
+        else if ((ability == ABILITY_STICKY_HOLD || ability == ABILITY_OWN_TEMPO || ability == ABILITY_OVERCOAT)
               && IsInnateActive(battler, ability))
         {
             hasAbility = TRUE;
