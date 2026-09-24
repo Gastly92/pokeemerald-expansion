@@ -95,6 +95,7 @@ static const u16 sLegendarySpecies[] =
     SPECIES_LATIOS,                // 0381
     SPECIES_JIRACHI,               // 0385
     SPECIES_HEATRAN,               // 0485
+    SPECIES_CRESSELIA,             // 0488
     SPECIES_MANAPHY,               // 0490
     SPECIES_SHAYMIN,               // 0492
     SPECIES_VICTINI,               // 0494
