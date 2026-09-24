@@ -113,6 +113,24 @@ candidate set **before** move scoring, using the tunable `AI_GIMMICK_PREFERENCE_
 list — persistent gimmicks first, one-shot Z-Move last. Ultra Burst is left alone when
 available, since it only unlocks Necrozma's Z-Move.
 
+### It picks its moment
+
+Z-Moves and Tera already wait for a good turn (`ShouldUseZMove`, `DecideTerastal`), but
+Mega and Dynamax had no such check, so the lead fired whichever it was assigned on turn 1
+of every battle. A Mega or Dynamax picked by the preference list now commits only on a
+per-turn roll, and is otherwise held (the turn is scored as if no gimmick existed):
+
+- **Always commits** when the gimmick turns this turn into a KO, when a foe threatens to
+  KO the mon this turn, or when no teammate is left who could use it later.
+- **Mega** otherwise commits `AI_FREE_MEGA_COMMIT_CHANCE` (60%) of the time. It belongs to
+  one species, so there is nobody to save it for; this is only a short hesitation.
+- **Dynamax** is shared by the team, so it is held `AI_FREE_DYNAMAX_HOLD_CHANCE_PER_MON`
+  (15%) per teammate that could still use it: 25% to commit with five in reserve, 85%
+  with one. It tends to come out mid-to-late battle, often on whichever mon is in trouble.
+
+Both chances live in `include/fork/battle_ai_gimmick.h`. Tests:
+`test/fork/ai_gimmick_timing.c`.
+
 ### Knock Off keeps its utility
 
 `ShouldUseZMove` no longer upgrades Knock Off into Black Hole Eclipse when the target
@@ -131,7 +149,8 @@ letting any priority move Dynamax. Regression test in `test/battle/gimmick/dynam
 
 - **Ultra Burst is out of scope** — Necrozma still needs to hold Ultranecrozium Z.
 - **The AI's gimmick choice is a fixed preference order** (`AI_GIMMICK_PREFERENCE_ORDER`),
-  not situationally scored.
+  not situationally scored; only its *timing* varies. A Mega-capable mon still always
+  picks Mega over Dynamax/Tera — it just may not fire it on turn 1.
 - **The extended frontier roster still carries its now-inert Mega Stones and
   Z-Crystals** as held items. Re-itemizing those tuned sets is open balance work.
 - **The draft restriction `TeamHasGimmickItemConflict` is neutralized** under the flag
