@@ -32204,7 +32204,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_SIMPLE,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32224,7 +32224,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_ROOST
         },
-        .ability = ABILITY_SIMPLE,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32244,7 +32244,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_SLAM,
             MOVE_HIGH_HORSEPOWER
         },
-        .ability = ABILITY_SIMPLE,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
