@@ -2496,7 +2496,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0982
         SPECIES_DUDUNSPARCE, 0,
-        ABILITY_SIMPLE
+        ABILITY_EARTH_EATER
     },
     { // 0983
         SPECIES_KINGAMBIT, 2,
