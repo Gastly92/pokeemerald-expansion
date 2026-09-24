@@ -26,6 +26,19 @@
     GIMMICK_TERA,                   \
     GIMMICK_Z_MOVE
 
+// FORK: when the persistent gimmicks fire. Z-Move and Tera already wait for a good moment
+// (ShouldUseZMove, DecideTerastal); Mega and Dynamax had no such check, so the lead fired
+// whichever it was assigned on turn 1, every battle. Each turn a picked Mega or Dynamax now
+// commits only on a roll, unless it is forced: the gimmick turns this turn into a KO, a foe
+// threatens to KO the mon this turn, or no teammate is left to use it later.
+//
+// Mega is bound to its species, so there is nobody to save it for - it only gets a short,
+// fixed hesitation. Dynamax is shared by the whole team, so, like upstream's
+// AI_CONSERVE_TERA_CHANCE_PER_MON, it is held more often the more teammates could still
+// use it: with five in reserve it commits 25% of the time, with one 85%.
+#define AI_FREE_MEGA_COMMIT_CHANCE          60 // % per turn to Mega Evolve when not forced
+#define AI_FREE_DYNAMAX_HOLD_CHANCE_PER_MON 15 // % held per healthy teammate that could Dynamax instead
+
 void AI_SelectGimmicksForTurn(void);
 
 // FORK: the move the engine will really execute for `move`, given battlerAtk's *active*

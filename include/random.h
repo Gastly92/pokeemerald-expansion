@@ -258,6 +258,9 @@ enum RandomTag
     RNG_DAYCARE_ABILITY_INHERITANCE,
     RNG_DEXNAV_RANDOM_EGG_MOVE,
     RNG_RANDOM_BALL,
+    // FORK: src/fork/battle_ai_gimmick.c
+    RNG_AI_COMMIT_MEGA,
+    RNG_AI_COMMIT_DYNAMAX,
 };
 
 #define RandomWeighted(tag, ...) \
