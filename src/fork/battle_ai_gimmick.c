@@ -149,7 +149,6 @@ static void SetGimmickForTurn(enum BattlerId battler, enum Gimmick gimmick, bool
 static void AI_SelectBestGimmick(enum BattlerId battler)
 {
     u32 candidates = GetGimmickCandidates(battler);
-    enum Gimmick current = gBattleStruct->gimmick.usableGimmick[battler];
 
     if (candidates == 0 || (candidates & (1u << GIMMICK_ULTRA_BURST)))
         return;
@@ -159,6 +158,7 @@ static void AI_SelectBestGimmick(enum BattlerId battler)
     // still decide *when* it fires.
     if (TestRunner_Battle_GetChosenGimmick(GetBattlerTrainer(battler), gBattlerPartyIndexes[battler]) != GIMMICK_NONE)
     {
+        enum Gimmick current = gBattleStruct->gimmick.usableGimmick[battler];
         if (IsGimmickAvailable(battler, current))
             SetGimmickForTurn(battler, current, GimmickSecuresKO(battler, current));
         return;
