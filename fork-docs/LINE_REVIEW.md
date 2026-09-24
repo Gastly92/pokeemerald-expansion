@@ -999,13 +999,23 @@ than one whose existing set is about to be rewritten.
       `B_UPDATED_MOVE_DATA >= GEN_4 ? TARGET_FOES_AND_ALLY : TARGET_BOTH`, so a
       text search for the constant misses it while the build resolves to the
       ally-hitting branch. Do not trust a grep — ask `GetMoveTarget`.
-      Usual repairs: **Earthquake → High Horsepower** (same coverage,
-      single-target, −5 BP), **Surf → Muddy Water** (both 90 BP; Muddy Water is
+      Usual repairs: **Earthquake → a single-target Ground move that fits the
+      species** (see the Earthquake note below), **Surf → Muddy Water** (both 90 BP; Muddy Water is
       `TARGET_BOTH`, foes only), **Sludge Wave → Sludge Bomb**, **Discharge →
       Thunderbolt**, **Boomburst → Hyper Voice**; on a *special* set the Ground
       slot usually wants **Earth Power**, which fixes the stat mismatch at the
       same time. The alternative repair — retagging to `FORMAT_SINGLES` — is
       legitimate but shrinks the doubles pool, so prefer the move swap.
+      **Earthquake's replacement is a flavor call, not a default.** High
+      Horsepower reads as a hoofed or charging animal, so keep it for those
+      (Mudsdale, Tauros, Donphan, Copperajah, Revavroom's engine). Elsewhere pick
+      the Ground move that fits the species: **Drill Run** for drills and
+      diggers, **Headlong Rush** for reckless chargers, **Land's Wrath /
+      Thousand Waves / Thousand Arrows** (all `TARGET_BOTH`) where the land or
+      sand itself is the theme, and **Stomping Tantrum** otherwise. Serpents,
+      flyers and floaters (Gyarados, Salamence, Glalie) usually read best as a
+      `FORMAT_SINGLES` Earthquake set, as long as the species keeps a doubles
+      set; if retagging leaves it without one, write a doubles set for it.
       **Exempt:** Explosion, Self-Destruct and Misty Explosion. Hitting everything
       adjacent is what they are, and pressing one is a deliberate last act.
 
