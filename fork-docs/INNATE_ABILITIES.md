@@ -1598,7 +1598,8 @@ signature survives whichever slot a build picks), plus a tight flavor extension 
 line or theme: Heatproof adds the rest of Rolycoly's coal/lava line (Carkol, Coalossal, Coalossal-Gmax), and
 Friend Guard adds the support fairies that complete the Clefairy / Jigglypuff / Chansey lines (Clefable,
 Wigglytuff, Chansey, Blissey) alongside the canon pre-evos. The potent reducers (Multiscale, Solid Rock, Fur
-Coat, Ice Scales, Water Bubble) stay canon only so far. Several species already carry other innates, so they take a
+Coat, Ice Scales, Water Bubble) stay canon only, with one legendary buff: Multiscale on Cresselia, a full-HP
+wall that recovers with Moonlight. Several species already carry other innates, so they take a
 combined `INNATES(...)` list. Frontier roster sets that hardcoded these are freed (Step 3.5) to a complementary
 REAL slot where one exists (Dragonite's Multiscale → chosen Inner Focus; Camerupt's Solid Rock → Magma Armor;
 Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhyperior's Solid Rock → Lightning Rod;

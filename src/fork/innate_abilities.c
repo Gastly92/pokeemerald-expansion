@@ -6096,7 +6096,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HEALER,
             ABILITY_LEVITATE,
-            ABILITY_SERENE_GRACE
+            ABILITY_SERENE_GRACE,
+            ABILITY_MULTISCALE
         )
     },
     { // 0491

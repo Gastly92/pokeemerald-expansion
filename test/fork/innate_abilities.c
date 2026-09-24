@@ -3995,6 +3995,27 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Multiscale halves damage at
     }
 }
 
+// Cresselia's Multiscale is a fork buff rather than a canon pick; it sits alongside Healer / Levitate /
+// Serene Grace, so this also pins that a fourth innate on a list is live.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Cresselia's innate Multiscale halves damage at full HP", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CRESSELIA, ABILITY_MULTISCALE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRESSELIA);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_BODY_SLAM); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_BODY_SLAM); } // lands while the holder is at full HP
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x at full HP
+    }
+}
+
 // Suppression parity: Gastro Acid turns off the innate, so the same hit lands at full power.
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Multiscale", s16 damage)
 {
