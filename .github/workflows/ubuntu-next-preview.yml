@@ -1,0 +1,50 @@
+name: Ubuntu 26.04 preview
+
+# FORK: temporary, fork-owned (no upstream counterpart, so it never conflicts).
+# `ubuntu-latest` moves to Ubuntu 26.04 from Oct 19 2026, which brings a newer
+# gcc-arm-none-eabi; with -Werror always on, any new warning breaks the build.
+# This runs the same Emerald build + test suite on the new image ahead of time.
+# It is NOT part of the `build` gate in build.yml, so a failure here is a
+# heads-up and never blocks a merge. Delete this file once ubuntu-latest has
+# migrated and CI is green on it.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  GAME_REVISION: 0
+  GAME_LANGUAGE: ENGLISH
+  COMPARE: 0
+  UNUSED_ERROR: 1
+  DEPRECATED_ERROR: 1
+
+jobs:
+  emerald-and-tests:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install binutils
+        uses: ./.github/actions/install-binutils
+        timeout-minutes: 30
+
+      - name: Toolchain versions
+        run: |
+          . /etc/os-release && echo "$PRETTY_NAME"
+          arm-none-eabi-gcc --version | head -1
+          gcc --version | head -1
+          python3 --version
+
+      - name: ROM (Emerald)
+        env:
+          GAME_VERSION: EMERALD
+        run: make -j$(nproc) -O all
+
+      - name: Test
+        env:
+          GAME_VERSION: EMERALD
+          TEST: 1
+        run: make -j$(nproc) check
