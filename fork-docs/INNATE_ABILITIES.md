@@ -751,7 +751,7 @@ of going ability by ability.
 Run through this every time — it exists because Step 3.5 and the full test run are
 the two things easiest to skip:
 
-- [ ] **Step 1** — species rows added (merged into existing rows where the species already has an innate).
+- [ ] **Step 1** — species rows added (merged into existing rows where the species already has an innate), each row alphabetical by in-game ability name (`.claude/skills/line-review/tools/inn.py` does this; CI-enforced by `each species' innates are in alphabetical order`).
 - [ ] **Step 2** — allowlist comment in `src/fork/innate_abilities.c` + SCOPE note in `include/fork/innate_abilities.h` updated, **AND** `ABILITY_X` added to the CI-enforced `sImplementedInnates[]` array in `test/fork/innate_abilities.c` (the most-forgotten line — its own test is `every declared innate is on the implemented allowlist`).
 - [ ] **Step 3** — effect wired at *every* site (`grep -n ABILITY_X src/`), including the AI's *effect* reads (`grep src/battle_ai_*.c`) **and the `DETERMINISTIC_*` reroutes** (PP-economy taxes, would-it-land consume mirrors, gated additional effects — grep `DETERMINISTIC` around each effect site); new battle-state fields zero-init with `gBattleStruct` and reset per battle.
 - [ ] **Step 3.5 — ran `grep -n ABILITY_X src/fork/frontier_extended_mons.c`** and freed every hardcoded set (override-table rows for ability-locked / all-abilities-innate species). *This is the step that gets forgotten.*

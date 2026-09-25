@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 #include "config_changes.h"
+#include "constants/characters.h" // EOS, for CompareAbilityNames
 #include "fork/innate_abilities.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/species_ability_overrides.h"
@@ -10956,5 +10957,60 @@ TEST("Innate abilities: no species declares more innates than the INFO viewer ca
 
     // Guard against a vacuous pass if the raw-table accessors ever break.
     EXPECT_GT(fullest, 1);
+    EXPECT_EQ(offenders, 0);
+}
+
+// Orders two in-game ability names the way a reader would: character by character, with the shorter
+// name first when one is a prefix of the other. StringCompare alone would put the prefix LAST, since
+// EOS (0xFF) sorts above every letter.
+static s32 CompareAbilityNames(enum Ability a, enum Ability b)
+{
+    const u8 *x = gAbilitiesInfo[a].name;
+    const u8 *y = gAbilitiesInfo[b].name;
+
+    while (*x == *y && *x != EOS)
+    {
+        x++;
+        y++;
+    }
+    if (*x == *y)
+        return 0;
+    if (*x == EOS)
+        return -1;
+    if (*y == EOS)
+        return 1;
+    return (s32)*x - (s32)*y;
+}
+
+// Every row lists its innates alphabetically by in-game name, so a list reads the same in the table,
+// on the summary page and in the INFO viewer, and a hand-added innate cannot land out of place. Strict
+// ordering also rejects a duplicate innate on one row. Sorted by the displayed name, not the constant:
+// ROCKY_PAYLOAD sorts before ROCK_HEAD, but "Rock Head" comes before "Rocky Payload".
+TEST("Innate abilities: each species' innates are in alphabetical order")
+{
+    u32 row;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (row = 0; row < GetSpeciesInnatesEntryCount(); row++)
+    {
+        u16 species;
+        const enum Ability *innates = GetSpeciesInnatesEntry(row, &species);
+        u32 i;
+
+        for (i = 0; innates[i] != ABILITY_NONE && innates[i + 1] != ABILITY_NONE; i++)
+        {
+            checked++;
+            if (CompareAbilityNames(innates[i], innates[i + 1]) >= 0)
+            {
+                offenders++;
+                Test_MgbaPrintf("innate order: %S lists %S before %S -- keep each row alphabetical by in-game name",
+                                gSpeciesInfo[species].speciesName, gAbilitiesInfo[innates[i]].name, gAbilitiesInfo[innates[i + 1]].name);
+            }
+        }
+    }
+
+    // Guard against a vacuous pass if the row accessor ever breaks.
+    EXPECT_GT(checked, 100);
     EXPECT_EQ(offenders, 0);
 }

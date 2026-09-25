@@ -41,6 +41,8 @@ struct SpeciesInnates
 // A species with SEVERAL innates lists them inline at its row with INNATES(...) instead of needing a
 // named combination array per pairing (which doesn't scale as the allowlist grows). The compound
 // literal has static storage at file scope; the terminator is appended automatically.
+// Each list is in alphabetical order of the in-game ability name (the order the summary and INFO pages
+// show), enforced by the "each species' innates are in alphabetical order" test in test/fork/innate_abilities.c.
 #define INNATES(...) (const enum Ability[]){ __VA_ARGS__, ABILITY_NONE }
 
 static const struct SpeciesInnates sSpeciesInnates[] =
@@ -1587,8 +1589,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_MOLD_BREAKER,
             ABILITY_RECKLESS,
-            ABILITY_ROCKY_PAYLOAD,
             ABILITY_ROCK_HEAD,
+            ABILITY_ROCKY_PAYLOAD,
             ABILITY_SOLID_ROCK
         )
     },
@@ -4690,10 +4692,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FOREWARN,
             ABILITY_JUSTIFIED,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_PRESSURE,
             ABILITY_SHARPNESS,
-            ABILITY_SUPER_LUCK,
-            ABILITY_MAGIC_BOUNCE
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0359
@@ -4701,10 +4703,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FOREWARN,
             ABILITY_JUSTIFIED,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_PRESSURE,
             ABILITY_SHARPNESS,
-            ABILITY_SUPER_LUCK,
-            ABILITY_MAGIC_BOUNCE
+            ABILITY_SUPER_LUCK
         )
     },
     { // 0360
@@ -5808,8 +5810,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_MOLD_BREAKER,
             ABILITY_RECKLESS,
-            ABILITY_ROCKY_PAYLOAD,
             ABILITY_ROCK_HEAD,
+            ABILITY_ROCKY_PAYLOAD,
             ABILITY_SOLID_ROCK
         )
     },
@@ -6094,12 +6096,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0488
         SPECIES_CRESSELIA,
         INNATES(
+            ABILITY_FILTER,
             ABILITY_HEALER,
             ABILITY_LEVITATE,
-            ABILITY_SERENE_GRACE,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_MULTISCALE,
-            ABILITY_FILTER,
-            ABILITY_MAGIC_BOUNCE
+            ABILITY_SERENE_GRACE
         )
     },
     { // 0491
