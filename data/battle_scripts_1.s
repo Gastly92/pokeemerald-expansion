@@ -4125,6 +4125,8 @@ BattleScript_AftermathDmg::
 	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_AftermathDmgRet
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER, ASSURANCE_DOUBLE
+	@ UPSTREAM: no message, so wait for the pop-up (see BattleScript_SolarPowerActivates)
+	waitabilitypopup
 	tryfaintmon BS_ATTACKER
 BattleScript_AftermathDmgRet:
 	return
@@ -4185,6 +4187,8 @@ BattleScript_PoisonHealActivates::
 	waitanimation
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER, ASSURANCE_DOUBLE
+	@ UPSTREAM: no message, so wait for the pop-up (see BattleScript_SolarPowerActivates)
+	waitabilitypopup
 	return
 
 BattleScript_BurnTurnDmg::
@@ -4656,6 +4660,8 @@ BattleScript_AbilityHpHeal::
 	waitanimation
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER, ASSURANCE_DOUBLE
+	@ UPSTREAM: no message, so wait for the pop-up (see BattleScript_SolarPowerActivates)
+	waitabilitypopup
 	return
 
 BattleScript_CheekPouchActivates::
@@ -4706,6 +4712,9 @@ BattleScript_SolarPowerActivates::
 	call BattleScript_AbilityPopUp
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER, ASSURANCE_DOUBLE
+	@ UPSTREAM: no message follows, so without this the pop-up lingers over the next end-turn event
+	@ (e.g. "healed by the grassy terrain!"). Same pattern as BattleScript_RoughSkinActivates.
+	waitabilitypopup
 	tryfaintmon BS_ATTACKER
 	return
 
