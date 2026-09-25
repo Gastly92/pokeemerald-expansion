@@ -32,13 +32,32 @@ runs:
     # and downloads only what genuinely changed; the post step still saves under
     # the new exact key. Caches from the default branch are visible to PR
     # branches, so this covers merges to master too.
+    #
+    # The key carries the Ubuntu release (e.g. 24.04), not just `runner.os`
+    # (which is only "Linux"). Without it, the `ubuntu-latest` move to a new
+    # release keeps hitting the old release's cache EXACTLY: its .debs are the
+    # wrong versions so apt downloads everything from the mirror again, and an
+    # exact hit means the post step never saves a fresh cache -- so every job
+    # would be back on the flaky mirror indefinitely, silently.
+    - name: Detect Ubuntu release
+      id: os
+      shell: bash
+      run: |
+        . /etc/os-release
+        echo "release=${VERSION_ID}" >> "$GITHUB_OUTPUT"
+
     - name: Cache apt toolchain packages
       id: apt-cache
       uses: actions/cache@v5
       with:
         path: /tmp/apt-debs
-        key: apt-binutils-${{ runner.os }}-${{ hashFiles('.github/actions/install-binutils/action.yml') }}
+        key: apt-binutils-${{ runner.os }}-${{ steps.os.outputs.release }}-${{ hashFiles('.github/actions/install-binutils/action.yml') }}
+        # The second, release-less prefix also matches caches saved before the
+        # release was added to the key, so this change doesn't start every job
+        # cold. On a new release it may restore the old release's .debs; the
+        # `autoclean` after install drops those, so they don't ride along.
         restore-keys: |
+          apt-binutils-${{ runner.os }}-${{ steps.os.outputs.release }}-
           apt-binutils-${{ runner.os }}-
 
     - name: Install binutils
@@ -70,7 +89,7 @@ runs:
       # benefit -- and because update is `&&`-chained ahead of install, a stalled
       # mirror killed the attempt before the cached .debs were ever used. The
       # runner image ships a populated /var/lib/apt/lists (visible as `Hit:` lines
-      # for noble in any run's log), so `apt-get install` resolves these five
+      # for the image's release in any run's log), so `apt-get install` resolves these five
       # packages from the on-disk index alone; combined with the cached .debs it
       # completes without contacting the mirror at all. Try that first on a cache
       # hit, and fall back to the update+install loop if anything is missing.
@@ -100,6 +119,7 @@ runs:
         if compgen -G '/tmp/apt-debs/*.deb' >/dev/null && \
            sudo timeout -k 10 120 apt-get install -y --no-install-recommends \
              "${apt_opts[@]}" "${packages[@]}"; then
+          sudo apt-get autoclean "${apt_opts[@]}" || true
           sudo chmod -R a+rX /tmp/apt-debs || true
           echo "binutils toolchain installed from cached .debs (no apt-get update)"
           exit 0
@@ -112,6 +132,9 @@ runs:
           if sudo timeout -k 10 120 apt-get update "${apt_opts[@]}" && \
              sudo timeout -k 10 360 apt-get install -y --no-install-recommends \
                "${apt_opts[@]}" "${packages[@]}"; then
+            # Drop .debs the current indexes no longer offer (e.g. a previous
+            # release's, restored via the release-less restore-key).
+            sudo apt-get autoclean "${apt_opts[@]}" || true
             # Let the runner user read the root-owned .debs so the cache can save them.
             sudo chmod -R a+rX /tmp/apt-debs || true
             echo "binutils toolchain installed (attempt ${attempt}/3)"
