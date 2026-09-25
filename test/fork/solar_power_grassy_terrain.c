@@ -47,3 +47,23 @@ SINGLE_BATTLE_TEST("Dry Skin's sun HP loss resolves before the Grassy Terrain he
         EXPECT_EQ(player->hp, 150);
     }
 }
+
+// Same fix in BattleScript_AbilityHpHeal (Rain Dish, Dry Skin in rain), whose pop-up likewise has
+// no message and sat over the Grassy Terrain heal.
+SINGLE_BATTLE_TEST("Rain Dish's heal resolves before the Grassy Terrain heal")
+{
+    GIVEN {
+        PLAYER(SPECIES_LUDICOLO) { Ability(ABILITY_RAIN_DISH); MaxHP(160); HP(80); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GRASSY_TERRAIN); MOVE(player, MOVE_RAIN_DANCE); }
+    } SCENE {
+        MESSAGE("Ludicolo used Rain Dance!");
+        ABILITY_POPUP(player, ABILITY_RAIN_DISH);
+        HP_BAR(player, damage: -10);
+        MESSAGE("Ludicolo is healed by the grassy terrain!");
+        HP_BAR(player, damage: -10);
+    } THEN {
+        EXPECT_EQ(player->hp, 100);
+    }
+}
