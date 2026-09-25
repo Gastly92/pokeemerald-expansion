@@ -120,8 +120,11 @@ Mega and Dynamax had no such check, so the lead fired whichever it was assigned 
 of every battle. A Mega or Dynamax picked by the preference list now commits only on a
 per-turn roll, and is otherwise held (the turn is scored as if no gimmick existed):
 
-- **Always commits** when the gimmick turns this turn into a KO, when a foe threatens to
-  KO the mon this turn, or when no teammate is left who could use it later.
+- **Always commits** when the gimmick turns this turn into a KO the plain moves could not
+  get, when a foe threatens to KO the mon this turn and the gimmick would stop it, or when no
+  teammate is left who could use it later. For Dynamax "would stop it" means the raised HP
+  outlasts every such hit; a mon that falls either way does not spend the team's Dynamax.
+  Mega is used whenever the mon is threatened, since it is lost with the mon.
 - **Mega** otherwise commits `AI_FREE_MEGA_COMMIT_CHANCE` (60%) of the time. It belongs to
   one species, so there is nobody to save it for; this is only a short hesitation.
 - **Dynamax** is shared by the team, so it is held `AI_FREE_DYNAMAX_HOLD_CHANCE_PER_MON`
