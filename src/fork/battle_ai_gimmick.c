@@ -19,7 +19,10 @@ static bool32 IsGimmickAvailable(enum BattlerId battler, enum Gimmick gimmick)
         && !HasTrainerUsedGimmick(battler, gimmick);
 }
 
-// Whether any of this battler's moves would KO a foe outright with `gimmick` active.
+// Whether `gimmick` is what turns this turn into a KO: some foe falls to one of this
+// battler's moves with the gimmick active, but to none of them without it. A foe the plain
+// moves already KO does not count - spending the gimmick there buys nothing this turn, and
+// counting it made every "I can KO anyway" turn force a Mega or Dynamax.
 // usableGimmick is what AI_CalcDamage reads to decide which gimmick to simulate, so the
 // candidate is swapped in around the calc and restored afterwards.
 static bool32 GimmickSecuresKO(enum BattlerId battler, enum Gimmick gimmick)
@@ -32,33 +35,49 @@ static bool32 GimmickSecuresKO(enum BattlerId battler, enum Gimmick gimmick)
 
     for (enum BattlerId target = 0; target < gBattlersCount && !securesKO; target++)
     {
+        bool32 koWithGimmick = FALSE, koWithout = FALSE;
+
         if (!IsBattlerAlive(target) || GetBattlerSide(target) == GetBattlerSide(battler))
             continue;
 
-        for (u32 moveIndex = 0; moveIndex < MAX_MON_MOVES; moveIndex++)
+        for (u32 moveIndex = 0; moveIndex < MAX_MON_MOVES && !koWithout; moveIndex++)
         {
             uq4_12_t effectiveness;
-            struct SimulatedDamage dmg;
 
             if (moves[moveIndex] == MOVE_NONE || GetMovePower(moves[moveIndex]) == 0)
                 continue;
 
-            dmg = AI_CalcDamageSaveBattlers(moves[moveIndex], battler, target, &effectiveness, gimmick, GIMMICK_NONE);
-            if (dmg.minimum >= gBattleMons[target].hp)
-            {
-                securesKO = TRUE;
-                break;
-            }
+            if (AI_CalcDamageSaveBattlers(moves[moveIndex], battler, target, &effectiveness, GIMMICK_NONE, GIMMICK_NONE).minimum >= gBattleMons[target].hp)
+                koWithout = TRUE;
+            else if (!koWithGimmick
+                  && AI_CalcDamageSaveBattlers(moves[moveIndex], battler, target, &effectiveness, gimmick, GIMMICK_NONE).minimum >= gBattleMons[target].hp)
+                koWithGimmick = TRUE;
         }
+
+        securesKO = koWithGimmick && !koWithout;
     }
 
     gBattleStruct->gimmick.usableGimmick[battler] = saved;
     return securesKO;
 }
 
-// Whether any foe could KO this battler this turn with a move the AI knows about.
-static bool32 IsThreatenedWithKO(enum BattlerId battler)
+// Whether a foe threatens to KO this battler this turn, with a move the AI knows about,
+// and `gimmick` would stop it. Mega is spent when threatened at all: it is bound to this
+// mon, so it is now or never. Dynamax is shared by the team, so it only counts when the
+// raised HP actually outlasts every such hit - otherwise it would burn the team's one
+// Dynamax on a mon about to faint anyway.
+static bool32 GimmickSavesFromKO(enum BattlerId battler, enum Gimmick gimmick)
 {
+    u32 hp = gBattleMons[battler].hp;
+    u32 hpWithGimmick = UINT32_MAX; // Mega: no hit is survived "because of" it; any threat counts
+    bool32 threatened = FALSE;
+
+    if (gimmick == GIMMICK_DYNAMAX)
+    {
+        uq4_12_t mult = GetDynamaxLevelHPMultiplier(GetMonData(GetBattlerMon(battler), MON_DATA_DYNAMAX_LEVEL), FALSE);
+        hpWithGimmick = UQ_4_12_TO_INT((hp * mult) + UQ_4_12_ROUND);
+    }
+
     for (enum BattlerId foe = 0; foe < gBattlersCount; foe++)
     {
         enum Move *moves;
@@ -70,16 +89,20 @@ static bool32 IsThreatenedWithKO(enum BattlerId battler)
         for (u32 moveIndex = 0; moveIndex < MAX_MON_MOVES; moveIndex++)
         {
             uq4_12_t effectiveness;
+            u32 damage;
 
             if (moves[moveIndex] == MOVE_NONE || GetMovePower(moves[moveIndex]) == 0)
                 continue;
 
-            if (AI_CalcDamageSaveBattlers(moves[moveIndex], foe, battler, &effectiveness, GIMMICK_NONE, GIMMICK_NONE).median >= gBattleMons[battler].hp)
-                return TRUE;
+            damage = AI_CalcDamageSaveBattlers(moves[moveIndex], foe, battler, &effectiveness, GIMMICK_NONE, GIMMICK_NONE).median;
+            if (damage >= hpWithGimmick)
+                return FALSE;
+            if (damage >= hp)
+                threatened = TRUE;
         }
     }
 
-    return FALSE;
+    return threatened;
 }
 
 // Teammates that could still use a shared gimmick after this battler: the healthy reserves,
@@ -96,8 +119,8 @@ static u32 CountLaterGimmickUsers(enum BattlerId battler)
 
 // FORK: decide whether a picked Mega or Dynamax fires this turn or is held for a later one.
 // See AI_FREE_MEGA_COMMIT_CHANCE for the rationale. The caller has already established
-// whether the gimmick secures a KO, which always commits. The rolls are phrased as "commit"
-// so a battle test that does not rig them sees the gimmick used, as before this existed.
+// whether the gimmick secures a KO (GimmickSecuresKO), which always commits. The rolls are
+// phrased as "commit" so a battle test that does not rig them sees the gimmick used, as before this existed.
 static bool32 ShouldCommitGimmickNow(enum BattlerId battler, enum Gimmick gimmick, bool32 securesKO)
 {
     u32 laterUsers, holdChance, commitChance;
@@ -108,7 +131,7 @@ static bool32 ShouldCommitGimmickNow(enum BattlerId battler, enum Gimmick gimmic
         return TRUE;
 
     laterUsers = CountLaterGimmickUsers(battler);
-    if (laterUsers == 0 || IsThreatenedWithKO(battler))
+    if (laterUsers == 0 || GimmickSavesFromKO(battler, gimmick))
         return TRUE;
 
     if (gimmick == GIMMICK_MEGA)

@@ -29,8 +29,9 @@
 // FORK: when the persistent gimmicks fire. Z-Move and Tera already wait for a good moment
 // (ShouldUseZMove, DecideTerastal); Mega and Dynamax had no such check, so the lead fired
 // whichever it was assigned on turn 1, every battle. Each turn a picked Mega or Dynamax now
-// commits only on a roll, unless it is forced: the gimmick turns this turn into a KO, a foe
-// threatens to KO the mon this turn, or no teammate is left to use it later.
+// commits only on a roll, unless it is forced: the gimmick turns this turn into a KO the
+// plain moves could not get (GimmickSecuresKO), it saves the mon from a KO this turn
+// (GimmickSavesFromKO), or no teammate is left to use it later.
 //
 // Mega is bound to its species, so there is nobody to save it for - it only gets a short,
 // fixed hesitation. Dynamax is shared by the whole team, so, like upstream's
