@@ -9886,7 +9886,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HEAD_SMASH,
             MOVE_HEAVY_SLAM,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEADLONG_RUSH,
             MOVE_AVALANCHE
         },
         .ability = ABILITY_BULLETPROOF,
@@ -9947,7 +9947,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WIDE_GUARD,
             MOVE_HEAVY_SLAM,
             MOVE_ROCK_SLIDE,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(ATK_UP, SPE_DOWN),
@@ -14472,7 +14472,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_LANDS_WRATH,
             MOVE_STEALTH_ROCK,
             MOVE_SLACK_OFF,
             MOVE_WHIRLWIND
@@ -23249,7 +23249,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AVALANCHE,
             MOVE_BODY_PRESS,
             MOVE_RECOVER,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPE_DOWN),
@@ -23292,7 +23292,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_FANG,
             MOVE_CRUNCH,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -31943,7 +31943,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ICICLE_CRASH,
             MOVE_LIQUIDATION,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ICE_SHARD
         },
         .ability = ABILITY_WATER_AFFINITY,
@@ -33175,7 +33175,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_LANDS_WRATH,
             MOVE_RUINATION,
             MOVE_THROAT_CHOP,
             MOVE_PROTECT
