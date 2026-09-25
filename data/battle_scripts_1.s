@@ -4706,6 +4706,9 @@ BattleScript_SolarPowerActivates::
 	call BattleScript_AbilityPopUp
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER, ASSURANCE_DOUBLE
+	@ UPSTREAM: no message follows, so without this the pop-up lingers over the next end-turn event
+	@ (e.g. "healed by the grassy terrain!"). Same pattern as BattleScript_RoughSkinActivates.
+	waitabilitypopup
 	tryfaintmon BS_ATTACKER
 	return
 
