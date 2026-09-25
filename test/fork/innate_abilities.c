@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 #include "config_changes.h"
+#include "constants/characters.h" // EOS, for CompareAbilityNames
 #include "fork/innate_abilities.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/species_ability_overrides.h"
@@ -3992,6 +3993,83 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Multiscale halves damage at
         HP_BAR(player, captureDamage: &results[i].damage);
     } FINALLY {
         EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x at full HP
+    }
+}
+
+// Cresselia's Multiscale / Filter / Magic Bounce are a fork legendary buff rather than canon picks; they sit
+// alongside Healer / Levitate / Serene Grace, so these also pin that innates past the third on a list are live.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Cresselia's innate Multiscale halves damage at full HP", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CRESSELIA, ABILITY_MULTISCALE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRESSELIA);
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_BODY_SLAM); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_BODY_SLAM); } // lands while the holder is at full HP
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x at full HP
+    }
+}
+
+// Multiscale and Filter are separate GetDefenderAbilitiesModifier clauses, so a super-effective first hit takes both.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Cresselia's innate Multiscale and Filter stack on a super-effective hit", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CRESSELIA, ABILITY_MULTISCALE));
+        ASSUME(SpeciesHasInnate(SPECIES_CRESSELIA, ABILITY_FILTER));
+        ASSUME(GetMoveType(MOVE_X_SCISSOR) == TYPE_BUG);
+        ASSUME(gTypeEffectivenessTable[TYPE_BUG][TYPE_PSYCHIC] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRESSELIA) { Ability(ABILITY_CLOUD_NINE); } // the Frontier sets' chosen ability
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_X_SCISSOR); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_X_SCISSOR); } // lands while the holder is at full HP
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+        MESSAGE("It's super effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.375), results[1].damage); // off: full; on: 0.5 x 0.75
+    }
+}
+
+// Magic Bounce is what keeps the stay-in Calm Mind set working: a Taunt goes back to its user.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Cresselia's innate Magic Bounce reflects Taunt")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TAUNT) == EFFECT_TAUNT);
+        ASSUME(SpeciesHasInnate(SPECIES_CRESSELIA, ABILITY_MAGIC_BOUNCE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRESSELIA) { Ability(ABILITY_CLOUD_NINE); }
+        OPPONENT(SPECIES_WYNAUT);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TAUNT); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_MAGIC_BOUNCE);
+        else
+            NOT ABILITY_POPUP(player, ABILITY_MAGIC_BOUNCE);
+    } THEN {
+        if (enabled)
+        {
+            EXPECT(player->volatiles.tauntTimer == 0);
+            EXPECT(opponent->volatiles.tauntTimer != 0);
+        }
+        else
+        {
+            EXPECT(player->volatiles.tauntTimer != 0);
+        }
     }
 }
 
@@ -10879,5 +10957,60 @@ TEST("Innate abilities: no species declares more innates than the INFO viewer ca
 
     // Guard against a vacuous pass if the raw-table accessors ever break.
     EXPECT_GT(fullest, 1);
+    EXPECT_EQ(offenders, 0);
+}
+
+// Orders two in-game ability names the way a reader would: character by character, with the shorter
+// name first when one is a prefix of the other. StringCompare alone would put the prefix LAST, since
+// EOS (0xFF) sorts above every letter.
+static s32 CompareAbilityNames(enum Ability a, enum Ability b)
+{
+    const u8 *x = gAbilitiesInfo[a].name;
+    const u8 *y = gAbilitiesInfo[b].name;
+
+    while (*x == *y && *x != EOS)
+    {
+        x++;
+        y++;
+    }
+    if (*x == *y)
+        return 0;
+    if (*x == EOS)
+        return -1;
+    if (*y == EOS)
+        return 1;
+    return (s32)*x - (s32)*y;
+}
+
+// Every row lists its innates alphabetically by in-game name, so a list reads the same in the table,
+// on the summary page and in the INFO viewer, and a hand-added innate cannot land out of place. Strict
+// ordering also rejects a duplicate innate on one row. Sorted by the displayed name, not the constant:
+// ROCKY_PAYLOAD sorts before ROCK_HEAD, but "Rock Head" comes before "Rocky Payload".
+TEST("Innate abilities: each species' innates are in alphabetical order")
+{
+    u32 row;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (row = 0; row < GetSpeciesInnatesEntryCount(); row++)
+    {
+        u16 species;
+        const enum Ability *innates = GetSpeciesInnatesEntry(row, &species);
+        u32 i;
+
+        for (i = 0; innates[i] != ABILITY_NONE && innates[i + 1] != ABILITY_NONE; i++)
+        {
+            checked++;
+            if (CompareAbilityNames(innates[i], innates[i + 1]) >= 0)
+            {
+                offenders++;
+                Test_MgbaPrintf("innate order: %S lists %S before %S -- keep each row alphabetical by in-game name",
+                                gSpeciesInfo[species].speciesName, gAbilitiesInfo[innates[i]].name, gAbilitiesInfo[innates[i + 1]].name);
+            }
+        }
+    }
+
+    // Guard against a vacuous pass if the row accessor ever breaks.
+    EXPECT_GT(checked, 100);
     EXPECT_EQ(offenders, 0);
 }
