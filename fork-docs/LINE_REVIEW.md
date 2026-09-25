@@ -929,7 +929,8 @@ than one whose existing set is about to be rewritten.
       drafted opponent is holding one — which makes it a 110 BP Ghost STAB rather
       than a gamble, and strictly better than Shadow Claw's 70. And a **rental's
       friendship is `MAX_FRIENDSHIP`** (`src/battle_frontier.c`), so `Return` is
-      always at full 102 BP while `Frustration` is always at its floor.
+      always at full 102 BP. Write `Return`, never `Frustration`: with
+      `B_FRONTIER_PREFER_RETURN` the builder turns any `Frustration` into `Return`.
    c. **Held item — is it still doing anything, and is it too crowded?** Re-check
       it against the set's moves and ability, and against the fork's changes
       (`BUFF_*`, `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently

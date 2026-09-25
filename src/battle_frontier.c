@@ -407,6 +407,13 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
         move = fmon->moves[j];
         if (flags & FLAG_FRONTIER_MON_FACTORY && move == MOVE_RETURN)
             move = MOVE_FRUSTRATION;
+#if B_FRONTIER_PREFER_RETURN
+        // FORK: facility mons use Return at max friendship rather than Frustration
+        // at zero; this also reverts the Factory swap just above. Keep it after that
+        // swap on conflict. Guarded by test/fork/frontier_extended_roster.c.
+        if (move == MOVE_FRUSTRATION)
+            move = MOVE_RETURN;
+#endif
 
         SetMonMoveSlot(dst, move, j);
         if (GetMoveEffect(move) == EFFECT_FRUSTRATION)

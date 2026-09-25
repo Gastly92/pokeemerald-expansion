@@ -2,6 +2,7 @@
 #include "test/test.h"
 #include "data.h"
 #include "battle_frontier.h"
+#include "constants/battle_frontier.h" // FORK: FLAG_FRONTIER_MON_FACTORY
 #include "config_changes.h"
 #include "item.h" // FORK: gItemsInfo (accuracy-item redundancy test)
 #include "fork/frontier_extended_mons.h"
@@ -416,6 +417,24 @@ TEST("Frontier extended roster: drafted mon gets the maximum Dynamax Level by de
 
     CreateFacilityMon(&explicitSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_DYNAMAX_LEVEL), 5);
+}
+
+// FORK: B_FRONTIER_PREFER_RETURN -- facility mons carry Return at max friendship,
+// never Frustration at zero, including the Battle Factory whose vanilla builder
+// swaps Return for Frustration.
+TEST("Frontier extended roster: drafted mon uses Return at max friendship instead of Frustration")
+{
+    struct Pokemon mon;
+    const struct TrainerMon frustrationSet = { .species = SPECIES_SNORLAX, .moves = { MOVE_FRUSTRATION, MOVE_TACKLE } };
+    const struct TrainerMon returnSet = { .species = SPECIES_SNORLAX, .moves = { MOVE_RETURN, MOVE_TACKLE } };
+
+    CreateFacilityMon(&frustrationSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_MOVE1), MOVE_RETURN);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_FRIENDSHIP), MAX_FRIENDSHIP);
+
+    CreateFacilityMon(&returnSet, 50, MAX_PER_STAT_IVS, 0, FLAG_FRONTIER_MON_FACTORY, &mon);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_MOVE1), MOVE_RETURN);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_FRIENDSHIP), MAX_FRIENDSHIP);
 }
 
 // ============================================================================
