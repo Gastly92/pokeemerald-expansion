@@ -52,6 +52,15 @@
 // Battle Tent, and multi-battle partners.
 #define B_FRONTIER_MAX_PP   TRUE
 
+// If TRUE, facility mons always carry Return at max friendship instead of
+// Frustration at zero friendship. Both hit 102 BP at their extreme, so this is a
+// presentation choice, not a power change: every set listing Frustration is built
+// with Return instead, and the Battle Factory's vanilla Return -> Frustration swap
+// is undone, so the friendship CreateFacilityMon assigns stays at MAX_FRIENDSHIP.
+// Applied inside CreateFacilityMon, so it covers every facility that routes
+// through it (rentals, opponents, Tower/Dome/Tent trainers, multi partners).
+#define B_FRONTIER_PREFER_RETURN    TRUE
+
 // If TRUE, Frontier mons are generated with max IVs (31) in every stat instead
 // of the vanilla per-challenge IV ramp. Gated in GetFactoryMonFixedIV (the one
 // Battle-Factory IV source), so it covers the player's rentals, the opposing
