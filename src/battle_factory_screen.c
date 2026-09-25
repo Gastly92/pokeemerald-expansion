@@ -31,6 +31,7 @@
 #include "constants/battle_tent.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
+#include "fork/frontier_draft.h"
 
 // Select_ refers to the first Pokémon selection screen where you choose your initial 3 rental Pokémon.
 // Swap_   refers to the subsequent selection screens where you can swap a Pokémon with one from the beaten trainer
@@ -2423,6 +2424,11 @@ static void CopySwappedMonData(void)
 
     friendship = 0;
     SetMonData(&gParties[B_TRAINER_PLAYER][sFactorySwapScreen->playerMonId], MON_DATA_FRIENDSHIP, &friendship);
+    // FORK: upstream zeroes a swapped-in mon's friendship because the Factory builds
+    // every Return as Frustration. Under B_FRONTIER_PREFER_RETURN it carries Return
+    // instead, so the zero would leave it at 1 BP. Keep this call after the upstream
+    // zeroing on conflict. Guarded by test/fork/frontier_extended_roster.c.
+    ApplySwappedMonFriendship(&gParties[B_TRAINER_PLAYER][sFactorySwapScreen->playerMonId]);
     gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].monId = gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->enemyMonId + FRONTIER_PARTY_SIZE].monId;
     gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].ivs = gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->enemyMonId + FRONTIER_PARTY_SIZE].ivs;
     gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].personality = GetMonData(&gParties[B_TRAINER_OPPONENT_A][sFactorySwapScreen->enemyMonId], MON_DATA_PERSONALITY);

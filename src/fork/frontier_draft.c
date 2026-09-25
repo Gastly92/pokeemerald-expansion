@@ -114,3 +114,19 @@ void ApplyDraftGimmickReadiness(const struct TrainerMon *fmon, struct Pokemon *d
         SetMonData(dst, MON_DATA_GIGANTAMAX_FACTOR, &gigantamaxFactor);
     }
 }
+
+// The Battle Factory swap screen (CopySwappedMonData, src/battle_factory_screen.c)
+// zeroes the swapped-in mon's friendship, because upstream builds every Factory
+// Return as Frustration. B_FRONTIER_PREFER_RETURN makes CreateFacilityMon build
+// Return at max friendship instead, so a zeroed swap-in would carry a 1 BP Return
+// until the party is next rebuilt (only on resuming a saved challenge). Put it back
+// to MAX_FRIENDSHIP, matching what CreateFacilityMon gives every other facility mon.
+void ApplySwappedMonFriendship(struct Pokemon *mon)
+{
+#if B_FRONTIER_PREFER_RETURN
+    u32 friendship = MAX_FRIENDSHIP;
+    SetMonData(mon, MON_DATA_FRIENDSHIP, &friendship);
+#else
+    (void)mon;
+#endif
+}

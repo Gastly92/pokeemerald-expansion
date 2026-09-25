@@ -6,6 +6,7 @@
 #include "config_changes.h"
 #include "item.h" // FORK: gItemsInfo (accuracy-item redundancy test)
 #include "fork/frontier_extended_mons.h"
+#include "fork/frontier_draft.h" // FORK: ApplySwappedMonFriendship
 #include "fork/innate_abilities.h"
 #include "fork/species_ability_overrides.h"
 #include "constants/abilities.h"
@@ -433,6 +434,23 @@ TEST("Frontier extended roster: drafted mon uses Return at max friendship instea
     EXPECT_EQ(GetMonData(&mon, MON_DATA_FRIENDSHIP), MAX_FRIENDSHIP);
 
     CreateFacilityMon(&returnSet, 50, MAX_PER_STAT_IVS, 0, FLAG_FRONTIER_MON_FACTORY, &mon);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_MOVE1), MOVE_RETURN);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_FRIENDSHIP), MAX_FRIENDSHIP);
+}
+
+// FORK: B_FRONTIER_PREFER_RETURN -- the Factory swap screen (CopySwappedMonData) zeroes
+// a swapped-in mon's friendship, assuming upstream's Frustration. This replays that
+// step on a Factory-built Return mon: without ApplySwappedMonFriendship it would
+// battle with a 1 BP Return until the party is next rebuilt.
+TEST("Frontier extended roster: a Factory swapped-in mon keeps max friendship for Return")
+{
+    struct Pokemon mon;
+    u32 zero = 0;
+    const struct TrainerMon returnSet = { .species = SPECIES_LOPUNNY, .moves = { MOVE_RETURN, MOVE_FAKE_OUT } };
+
+    CreateFacilityMon(&returnSet, 100, MAX_PER_STAT_IVS, 0, FLAG_FRONTIER_MON_FACTORY, &mon);
+    SetMonData(&mon, MON_DATA_FRIENDSHIP, &zero); // what CopySwappedMonData does upstream
+    ApplySwappedMonFriendship(&mon);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_MOVE1), MOVE_RETURN);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_FRIENDSHIP), MAX_FRIENDSHIP);
 }
