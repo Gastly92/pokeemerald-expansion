@@ -9,7 +9,7 @@ on:
 jobs:
   label:
     if: ${{ github.actor != 'allcontributors[bot]' && github.event.review.state == 'approved' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
     steps:
       - name: check labels
         uses: mheap/github-action-required-labels@v5
@@ -32,7 +32,7 @@ jobs:
             type: documentation
   allcontributors:
     if: github.actor == 'allcontributors[bot]'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
     needs: []
     steps:
       - name: Automatically pass for allcontributors

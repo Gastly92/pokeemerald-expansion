@@ -89,7 +89,7 @@ runs:
       # benefit -- and because update is `&&`-chained ahead of install, a stalled
       # mirror killed the attempt before the cached .debs were ever used. The
       # runner image ships a populated /var/lib/apt/lists (visible as `Hit:` lines
-      # for noble in any run's log), so `apt-get install` resolves these five
+      # for the image's release in any run's log), so `apt-get install` resolves these five
       # packages from the on-disk index alone; combined with the cached .debs it
       # completes without contacting the mirror at all. Try that first on a cache
       # hit, and fall back to the update+install loop if anything is missing.
