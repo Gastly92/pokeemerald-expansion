@@ -987,7 +987,8 @@ KO-flipping immunity like Levitate/Sturdy). Canon only so far (no flavor picks y
 to attribute beyond its real users): every species whose ability data carries Filter in any slot
 (Mr. Mime and Mime Jr.'s slot-1 Filter, Revavroom's HA, Mega Aggron whose Mega ability data is
 Filter), so the signature survives whichever slot a build picks. Mega Aggron already carries innate
-Sturdy (persisting from base Aggron), so it takes the combined `INNATES(STURDY, FILTER)` list.
+Sturdy (persisting from base Aggron), so it takes the combined `INNATES(STURDY, FILTER)` list. One flavor pick as a legendary buff: **Cresselia**, whose wings shed shining particles "like a veil"; it
+stacks with her innate Multiscale on a super-effective first hit.
 
 ### ABILITY_PRESSURE
 
@@ -1599,7 +1600,7 @@ line or theme: Heatproof adds the rest of Rolycoly's coal/lava line (Carkol, Coa
 Friend Guard adds the support fairies that complete the Clefairy / Jigglypuff / Chansey lines (Clefable,
 Wigglytuff, Chansey, Blissey) alongside the canon pre-evos. The potent reducers (Multiscale, Solid Rock, Fur
 Coat, Ice Scales, Water Bubble) stay canon only, with one legendary buff: Multiscale on Cresselia, a full-HP
-wall that recovers with Moonlight. Several species already carry other innates, so they take a
+wall that recovers with Moonlight (alongside innate Filter and Magic Bounce). Several species already carry other innates, so they take a
 combined `INNATES(...)` list. Frontier roster sets that hardcoded these are freed (Step 3.5) to a complementary
 REAL slot where one exists (Dragonite's Multiscale → chosen Inner Focus; Camerupt's Solid Rock → Magma Armor;
 Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhyperior's Solid Rock → Lightning Rod;
@@ -4086,7 +4087,7 @@ two sites the real ability already uses.
 clause. (There is no shared-calc path here — copying a boost isn't part of damage/turn-order calc — so these two
 reads are the whole AI surface.)
 
-**Species (Step 1) — canon only so far** (free stat-mirroring off any foe boost is strong utility, kept tight, matching
+**Species (Step 1) — canon, plus one legendary buff** (free stat-mirroring off any foe boost is strong utility, kept tight, matching
 the Purifying Salt / Comatose / Magic Guard / Mold Breaker canon only so far decisions). The **sole** carrier is **Espathra**
 (`SPECIES_ESPATHRA`, its primary ability), which already carried innate **Frisk / Speed Boost** — Opportunist is
 added to that row. Because Opportunist is Espathra's natural slot-0 ability, it stays **observable as the chosen
@@ -4236,7 +4237,8 @@ Opportunist / Mold Breaker / Purifying Salt). The non-Mega canon carriers — **
 (merged with innate Early Bird), and the **Hatenna / Hattrem / Hatterene / Hatterene-Gmax** line (merged with innate
 Anticipation / Healer) — take it, and it is *observable* there (their chosen slot can be Synchronize / Early Bird /
 Healer / Anticipation). The Mega carriers whose real ability **is** Magic Bounce — **Sableye / Absol (+ Mega-Z) /
-Diancie / Clefable** Megas — get it as a pure-boon Mega row on top of the base creature's inherited innates.
+Diancie / Clefable** Megas — get it as a pure-boon Mega row on top of the base creature's inherited innates. The one
+non-canon pick is **Cresselia**, a legendary buff for her stay-in Calm Mind set, whose usual answers are Taunt and Toxic.
 
 **Step 3.5 — partial free, partial defer.** `grep -n ABILITY_MAGIC_BOUNCE src/fork/frontier_extended_mons.c` hit six
 sets. The **Xatu** set and **both Espeon** sets have a real, non-innate complementary slot (Synchronize, `:x:`

@@ -3995,8 +3995,8 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Multiscale halves damage at
     }
 }
 
-// Cresselia's Multiscale is a fork buff rather than a canon pick; it sits alongside Healer / Levitate /
-// Serene Grace, so this also pins that a fourth innate on a list is live.
+// Cresselia's Multiscale / Filter / Magic Bounce are a fork legendary buff rather than canon picks; they sit
+// alongside Healer / Levitate / Serene Grace, so these also pin that innates past the third on a list are live.
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Cresselia's innate Multiscale halves damage at full HP", s16 damage)
 {
     bool32 enabled;
@@ -4013,6 +4013,62 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Cresselia's innate Multiscale halv
         HP_BAR(player, captureDamage: &results[i].damage);
     } FINALLY {
         EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5), results[1].damage); // off: full; on: 0.5x at full HP
+    }
+}
+
+// Multiscale and Filter are separate GetDefenderAbilitiesModifier clauses, so a super-effective first hit takes both.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Cresselia's innate Multiscale and Filter stack on a super-effective hit", s16 damage)
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = FALSE; }
+    PARAMETRIZE { enabled = TRUE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_CRESSELIA, ABILITY_MULTISCALE));
+        ASSUME(SpeciesHasInnate(SPECIES_CRESSELIA, ABILITY_FILTER));
+        ASSUME(GetMoveType(MOVE_X_SCISSOR) == TYPE_BUG);
+        ASSUME(gTypeEffectivenessTable[TYPE_BUG][TYPE_PSYCHIC] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRESSELIA) { Ability(ABILITY_CLOUD_NINE); } // the Frontier sets' chosen ability
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_X_SCISSOR); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_X_SCISSOR); } // lands while the holder is at full HP
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+        MESSAGE("It's super effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.375), results[1].damage); // off: full; on: 0.5 x 0.75
+    }
+}
+
+// Magic Bounce is what keeps the stay-in Calm Mind set working: a Taunt goes back to its user.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Cresselia's innate Magic Bounce reflects Taunt")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TAUNT) == EFFECT_TAUNT);
+        ASSUME(SpeciesHasInnate(SPECIES_CRESSELIA, ABILITY_MAGIC_BOUNCE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_CRESSELIA) { Ability(ABILITY_CLOUD_NINE); }
+        OPPONENT(SPECIES_WYNAUT);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_TAUNT); }
+    } SCENE {
+        if (enabled)
+            ABILITY_POPUP(player, ABILITY_MAGIC_BOUNCE);
+        else
+            NOT ABILITY_POPUP(player, ABILITY_MAGIC_BOUNCE);
+    } THEN {
+        if (enabled)
+        {
+            EXPECT(player->volatiles.tauntTimer == 0);
+            EXPECT(opponent->volatiles.tauntTimer != 0);
+        }
+        else
+        {
+            EXPECT(player->volatiles.tauntTimer != 0);
+        }
     }
 }
 
