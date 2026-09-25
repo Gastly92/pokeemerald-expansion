@@ -58,7 +58,9 @@
 // with Return instead, and the Battle Factory's vanilla Return -> Frustration swap
 // is undone, so the friendship CreateFacilityMon assigns stays at MAX_FRIENDSHIP.
 // Applied inside CreateFacilityMon, so it covers every facility that routes
-// through it (rentals, opponents, Tower/Dome/Tent trainers, multi partners).
+// through it (rentals, opponents, Tower/Dome/Tent trainers, multi partners). The
+// Factory swap screen, which zeroes a swapped-in mon's friendship for Frustration,
+// restores it through ApplySwappedMonFriendship (src/fork/frontier_draft.c).
 #define B_FRONTIER_PREFER_RETURN    TRUE
 
 // If TRUE, Frontier mons are generated with max IVs (31) in every stat instead

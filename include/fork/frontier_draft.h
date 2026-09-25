@@ -21,5 +21,8 @@ bool32 IllusionMonRejectsSlot(u32 slot, u32 partySize, const struct TrainerMon *
 // from CreateFacilityMon; each grant honors an explicit per-entry override.
 struct Pokemon;
 void ApplyDraftGimmickReadiness(const struct TrainerMon *fmon, struct Pokemon *dst);
+// Restore max friendship on a Battle Factory swapped-in mon (upstream zeroes it for
+// Frustration). No-op unless B_FRONTIER_PREFER_RETURN. Called from CopySwappedMonData.
+void ApplySwappedMonFriendship(struct Pokemon *mon);
 
 #endif // GUARD_FRONTIER_DRAFT_H
