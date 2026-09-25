@@ -8977,7 +8977,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ILLUMINATE,
             ABILITY_INFILTRATOR,
-            ABILITY_LEVITATE,
             ABILITY_SUCTION_CUPS
         )
     },
@@ -8986,7 +8985,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ILLUMINATE,
             ABILITY_INFILTRATOR,
-            ABILITY_LEVITATE,
             ABILITY_SUCTION_CUPS
         )
     },
@@ -8995,7 +8993,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ILLUMINATE,
             ABILITY_INFILTRATOR,
-            ABILITY_LEVITATE,
             ABILITY_SUCTION_CUPS
         )
     },
