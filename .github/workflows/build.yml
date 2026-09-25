@@ -24,7 +24,7 @@ jobs:
   # jobs instead keeps the gate running and reporting.
   changes:
     if: github.actor != 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     outputs:
       code: ${{ steps.decide.outputs.code }}
     steps:
@@ -72,7 +72,7 @@ jobs:
   build-emerald:
     needs: changes
     if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -116,7 +116,7 @@ jobs:
   build-firered:
     needs: changes
     if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -158,7 +158,7 @@ jobs:
   build-leafgreen:
     needs: changes
     if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -200,7 +200,7 @@ jobs:
   release:
     needs: changes
     if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -254,7 +254,7 @@ jobs:
   test:
     needs: changes
     if: needs.changes.outputs.code == 'true' && github.actor != 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -308,7 +308,7 @@ jobs:
   # regardless and explicitly fail unless every dependency succeeded.
   build:
     if: always() && github.actor != 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     needs: [changes, build-emerald, build-firered, build-leafgreen, release, test]
     steps:
       # 'skipped' is an accepted result: the heavy jobs are intentionally
@@ -330,7 +330,7 @@ jobs:
 
   docs_validate:
     if: github.actor != 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -340,7 +340,7 @@ jobs:
 
   allcontributors:
     if: github.actor == 'allcontributors[bot]'
-    runs-on: ubuntu-26.04 # FORK: upstream uses ubuntu-latest; pinned ahead of its Oct 2026 move to 26.04. Taking upstream's line on conflict is fine once that move has happened.
+    runs-on: ubuntu-latest
     needs: []
     steps:
       - name: Automatically pass for allcontributors
