@@ -99,7 +99,7 @@ static const struct TrainerMon sTowerBrainTeam[2][TOWER_SPECIAL_TEAM_SIZE] =
         {
             .species = SPECIES_SNORLAX, .heldItem = ITEM_CHESTO_BERRY, .ability = ABILITY_THICK_FAT,
             .nature = NATURE_ADAMANT, .ev = TRAINER_PARTY_EVS(252, 252, 0, 0, 0, 4),
-            .moves = {MOVE_CURSE, MOVE_BODY_SLAM, MOVE_REST, MOVE_HIGH_HORSEPOWER},
+            .moves = {MOVE_CURSE, MOVE_BODY_SLAM, MOVE_REST, MOVE_EARTHQUAKE},
         },
         {
             .species = SPECIES_ALAKAZAM, .heldItem = ITEM_LIFE_ORB, .ability = ABILITY_MAGIC_GUARD,
@@ -308,7 +308,7 @@ static const struct TrainerMon sBossNorman[TOWER_SPECIAL_TEAM_SIZE] =
     {
         .species = SPECIES_SNORLAX, .heldItem = ITEM_LEFTOVERS, .ability = ABILITY_THICK_FAT,
         .nature = NATURE_CAREFUL, .ev = TRAINER_PARTY_EVS(252, 4, 0, 0, 0, 252),
-        .moves = {MOVE_BODY_SLAM, MOVE_CURSE, MOVE_REST, MOVE_HIGH_HORSEPOWER},
+        .moves = {MOVE_BODY_SLAM, MOVE_CURSE, MOVE_REST, MOVE_EARTHQUAKE},
     },
 };
 

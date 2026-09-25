@@ -208,7 +208,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
 - **Two set shapes are CI-gated, so check them in Part A.** A
   `TARGET_FOES_AND_ALLY` move (Earthquake, **Surf**, Sludge Wave, Discharge, Lava
   Plume, Boomburst …) on a `FORMAT_DOUBLES`/`FORMAT_BOTH` set damages the holder's
-  own partner — swap for the single-target twin (Earthquake → High Horsepower,
+  own partner — swap for a single-target twin (Earthquake → a Ground move that fits the
+  species — see `fork-docs/LINE_REVIEW.md`, High Horsepower only for hoofed/charging mons,
   Surf → Muddy Water, or Earth Power on a special set); Explosion and its two
   siblings are exempt. And a Choice item never coexists with a status move except
   Trick, Switcheroo or Transform.

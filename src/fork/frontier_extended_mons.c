@@ -686,12 +686,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0024
     {
         .species = SPECIES_ARBOK,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
             MOVE_GUNK_SHOT,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_KNOCK_OFF,
             MOVE_SUCKER_PUNCH
         },
@@ -964,7 +964,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_TRIPLE_AXEL,
             MOVE_IRON_HEAD,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_DRILL_RUN,
             MOVE_RAPID_SPIN
         },
         .ability = ABILITY_SCREEN_CLEANER,
@@ -1660,7 +1660,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SHELL_BELL,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_DRILL_RUN,
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH,
             MOVE_FISSURE
@@ -1678,11 +1678,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0051
     {
         .species = SPECIES_DUGTRIO_ALOLA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_IRON_HEAD,
             MOVE_STONE_EDGE,
             MOVE_SUCKER_PUNCH
@@ -1702,7 +1702,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_DRILL_RUN,
             MOVE_IRON_HEAD,
             MOVE_SWORDS_DANCE,
             MOVE_PROTECT
@@ -2480,11 +2480,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0076
     {
         .species = SPECIES_GOLEM,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_NORMAL_GEM,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE,
             MOVE_EXPLOSION,
             MOVE_DOUBLE_EDGE
@@ -2546,7 +2546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_WIDE_GUARD,
             MOVE_ROCK_SLIDE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEADLONG_RUSH,
             MOVE_EXPLOSION
         },
         .ability = ABILITY_SAND_STREAM,
@@ -2568,7 +2568,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DOUBLE_EDGE,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEADLONG_RUSH,
             MOVE_EXPLOSION
         },
         .ability = ABILITY_GALVANIZE,
@@ -2582,13 +2582,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_GOLEM_ALOLA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HARD_STONE,
         .moves =
         {
             MOVE_STONE_EDGE,
             MOVE_THUNDER_PUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_CURSE
         },
         .ability = ABILITY_LIGHTNING_ROD,
@@ -3746,7 +3746,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRAGON_HAMMER,
             MOVE_WOOD_HAMMER,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_FLAMETHROWER
         },
         .ability = ABILITY_SAP_SIPPER,
@@ -3767,7 +3767,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_THICK_CLUB,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_PROTECT,
             MOVE_STONE_EDGE,
             MOVE_KNOCK_OFF,
             MOVE_BONEMERANG
@@ -4064,7 +4064,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_REVERSAL,
             MOVE_SUCKER_PUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_ANGER_SHELL,
@@ -4084,7 +4084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_FAKE_OUT,
             MOVE_DOUBLE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_SUCKER_PUNCH
         },
         .ability = ABILITY_ANGER_SHELL,
@@ -4315,7 +4315,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_RETURN,
             MOVE_CLOSE_COMBAT,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_AERILATE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -4518,14 +4518,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0130
     {
         .species = SPECIES_GYARADOS,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_WATERFALL,
             MOVE_CRUNCH,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -4874,13 +4874,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0142
     {
         .species = SPECIES_AERODACTYL,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_KINGS_ROCK,
         .moves =
         {
             MOVE_ROCK_SLIDE,
             MOVE_DUAL_WINGBEAT,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_AQUA_TAIL
         },
         .ability = ABILITY_HUSTLE,
@@ -4891,6 +4891,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_AERODACTYL,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_ROCK_SLIDE,
+            MOVE_DUAL_WINGBEAT,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
     {
         .species = SPECIES_AERODACTYL,
@@ -4936,12 +4956,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_SNORLAX,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BODY_SLAM,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_CRUNCH,
             MOVE_HEAVY_SLAM
         },
@@ -4982,7 +5002,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_WIDE_GUARD,
             MOVE_BODY_SLAM,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_PROTECT
         },
         .ability = ABILITY_SAP_SIPPER,
@@ -5257,7 +5277,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_EXTREME_SPEED,
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_AERILATE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -5394,13 +5414,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_MEW,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_U_TURN,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ZEN_HEADBUTT
         },
         .ability = ABILITY_SYNCHRONIZE,
@@ -5440,14 +5460,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_MEGANIUM,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MIRACLE_SEED,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_HORN_LEECH,
             MOVE_PLAY_ROUGH,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -6349,12 +6369,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0185
     {
         .species = SPECIES_SUDOWOODO,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ZOOM_LENS,
         .moves =
         {
             MOVE_HEAD_SMASH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_WOOD_HAMMER,
             MOVE_SUCKER_PUNCH
         },
@@ -6395,7 +6415,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_WIDE_GUARD,
             MOVE_ROCK_SLIDE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_SUCKER_PUNCH
         },
         .ability = ABILITY_SAP_SIPPER,
@@ -6581,7 +6601,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_LIQUIDATION,
             MOVE_ICE_PUNCH,
             MOVE_KNOCK_OFF
@@ -6980,7 +7000,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_DRILL_RUN,
             MOVE_HEAVY_SLAM,
             MOVE_STEALTH_ROCK,
             MOVE_BODY_PRESS
@@ -7016,11 +7036,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_STEELIX,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_HEAVY_SLAM,
             MOVE_STONE_EDGE,
             MOVE_ICE_PUNCH
@@ -7044,7 +7064,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_PLAY_ROUGH,
             MOVE_CLOSE_COMBAT,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_HUSTLE,
@@ -7288,14 +7308,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0217
     {
         .species = SPECIES_URSARING,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FLAME_ORB,
         .moves =
         {
             MOVE_FACADE,
             MOVE_CLOSE_COMBAT,
             MOVE_CRUNCH,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -7315,7 +7335,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DOUBLE_EDGE,
             MOVE_CLOSE_COMBAT,
             MOVE_CRUNCH,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_HEADLONG_RUSH
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -8224,13 +8244,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0248
     {
         .species = SPECIES_TYRANITAR,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SMOOTH_ROCK,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_SAND_STREAM,
@@ -8250,7 +8270,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STONE_EDGE,
             MOVE_CRUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_SAND_STREAM,
@@ -8291,7 +8311,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_CRUNCH,
             MOVE_FIRE_BLAST,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPE_DOWN),
@@ -8348,13 +8368,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0250
     {
         .species = SPECIES_HO_OH,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_SACRED_FIRE,
             MOVE_BRAVE_BIRD,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_EXTREME_SPEED
         },
         .ability = ABILITY_FLAME_BODY,
@@ -8363,6 +8383,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spd = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_HO_OH,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SHARP_BEAK,
+        .moves =
+        {
+            MOVE_SACRED_FIRE,
+            MOVE_BRAVE_BIRD,
+            MOVE_TAILWIND,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLAME_BODY,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
         ),
         .teraType = TYPE_FIRE,
     },
@@ -8476,13 +8516,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_SCEPTILE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
             MOVE_LEAF_BLADE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_DRAGON_CLAW
         },
         .ability = ABILITY_LIGHTNING_ROD,
@@ -8620,12 +8660,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0260
     {
         .species = SPECIES_SWAMPERT,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_WATERFALL,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ICE_PUNCH,
             MOVE_SUPERPOWER
         },
@@ -8665,7 +8705,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FLIP_TURN,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ICE_BEAM,
             MOVE_POWER_GEM
         },
@@ -8686,7 +8726,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_RAIN_DANCE,
             MOVE_LIQUIDATION,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_DRY_SKIN,
@@ -9364,12 +9404,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0289
     {
         .species = SPECIES_SLAKING,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_RETURN,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_PLAY_ROUGH,
             MOVE_NIGHT_SLASH
         },
@@ -9409,7 +9449,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_DOUBLE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_NIGHT_SLASH,
             MOVE_HAMMER_ARM
         },
@@ -10610,11 +10650,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0330
     {
         .species = SPECIES_FLYGON,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_OUTRAGE,
             MOVE_U_TURN,
             MOVE_STONE_EDGE
@@ -10630,11 +10670,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_FLYGON,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ABILITY_SHIELD,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_DRAGON_CLAW,
             MOVE_U_TURN,
             MOVE_FIRE_PUNCH
@@ -10675,7 +10715,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_DEFOG,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_THOUSAND_WAVES,
             MOVE_U_TURN,
             MOVE_TOXIC
         },
@@ -10754,13 +10794,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0334
     {
         .species = SPECIES_ALTARIA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FAIRY_FEATHER,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_PLAY_ROUGH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
         .ability = ABILITY_CLOUD_NINE,
@@ -10984,14 +11024,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0338
     {
         .species = SPECIES_SOLROCK,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_WEAKNESS_POLICY,
         .moves =
         {
             MOVE_ROCK_POLISH,
             MOVE_STONE_EDGE,
             MOVE_ZEN_HEADBUTT,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_DROUGHT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -11734,13 +11774,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0362
     {
         .species = SPECIES_GLALIE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_NEVER_MELT_ICE,
         .moves =
         {
             MOVE_RETURN,
             MOVE_ICICLE_CRASH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ICE_SHARD
         },
         .ability = ABILITY_REFRIGERATE,
@@ -12028,13 +12068,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0373
     {
         .species = SPECIES_SALAMENCE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_DOUBLE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ROOST
         },
         .ability = ABILITY_ANGER_SHELL,
@@ -12048,12 +12088,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_SALAMENCE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_DRAGON_CLAW,
             MOVE_FIRE_BLAST
         },
@@ -12096,7 +12136,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_METEOR_MASH,
             MOVE_ZEN_HEADBUTT,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -12110,13 +12150,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_METAGROSS,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_METEOR_MASH,
             MOVE_BULLET_PUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_EXPLOSION
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -12178,7 +12218,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ROCK_POLISH,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_BODY_PRESS
         },
         .ability = ABILITY_SAND_STREAM,
@@ -12506,13 +12546,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0384
     {
         .species = SPECIES_RAYQUAZA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SHARP_BEAK,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_DRAGON_ASCENT,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_EXTREME_SPEED
         },
         .ability = ABILITY_AIR_LOCK,
@@ -12552,7 +12592,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRAGON_ASCENT,
             MOVE_EXTREME_SPEED,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_THOUSAND_ARROWS,
             MOVE_PROTECT
         },
         .ability = ABILITY_AIR_LOCK,
@@ -12780,13 +12820,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0389
     {
         .species = SPECIES_TORTERRA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MUSCLE_BAND,
         .moves =
         {
             MOVE_ROCK_POLISH,
             MOVE_WOOD_HAMMER,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE
         },
         .ability = ABILITY_GRASSY_SURGE,
@@ -12806,7 +12846,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STEALTH_ROCK,
             MOVE_WOOD_HAMMER,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_SYNTHESIS
         },
         .ability = ABILITY_GRASSY_SURGE,
@@ -12827,7 +12867,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WIDE_GUARD,
             MOVE_HELPING_HAND,
             MOVE_WOOD_HAMMER,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_LANDS_WRATH
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
@@ -13284,7 +13324,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_HEAD_SMASH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEADLONG_RUSH,
             MOVE_CLOSE_COMBAT,
             MOVE_ZEN_HEADBUTT
         },
@@ -13325,7 +13365,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_TRICK_ROOM,
             MOVE_HEAD_SMASH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEADLONG_RUSH,
             MOVE_ROCK_SLIDE
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -13450,7 +13490,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_TRICK_ROOM,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_THOUSAND_WAVES,
             MOVE_ROCK_SLIDE,
             MOVE_WIDE_GUARD
         },
@@ -14308,7 +14348,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_DRAGON_CLAW,
             MOVE_IRON_HEAD,
             MOVE_STONE_EDGE
@@ -14324,12 +14364,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_GARCHOMP,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_OUTRAGE,
             MOVE_FIRE_FANG
         },
@@ -14476,7 +14516,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_KNOCK_OFF,
             MOVE_CROSS_POISON,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_TAUNT
         },
         .ability = ABILITY_POISON_TOUCH,
@@ -14561,7 +14601,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -14600,7 +14640,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_POWER_WHIP,
             MOVE_CRUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_PROTECT
         },
         .ability = ABILITY_SEED_SOWER,
@@ -14660,13 +14700,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0460
     {
         .species = SPECIES_ABOMASNOW,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ICY_ROCK,
         .moves =
         {
             MOVE_BLIZZARD,
             MOVE_GIGA_DRAIN,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ICE_SHARD
         },
         .ability = ABILITY_SNOW_WARNING,
@@ -14873,7 +14913,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_RINDO_BERRY,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_DRILL_RUN,
             MOVE_STONE_EDGE,
             MOVE_STEALTH_ROCK,
             MOVE_ICE_PUNCH
@@ -14914,7 +14954,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_ROCK_WRECKER,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_DRILL_RUN,
             MOVE_ICE_PUNCH,
             MOVE_PROTECT
         },
@@ -14951,13 +14991,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_TANGROWTH,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
             MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ROCK_SLIDE
         },
         .ability = ABILITY_SAP_SIPPER,
@@ -14993,13 +15033,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0466
     {
         .species = SPECIES_ELECTIVIRE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_WILD_CHARGE,
             MOVE_ICE_PUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_CROSS_CHOP
         },
         .ability = ABILITY_ELECTRIC_SURGE,
@@ -15019,7 +15059,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_WILD_CHARGE,
             MOVE_ICE_PUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_VOLT_SWITCH
         },
         .ability = ABILITY_MOTOR_DRIVE,
@@ -15350,7 +15390,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SWORDS_DANCE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_KNOCK_OFF,
             MOVE_ROOST
         },
@@ -16312,13 +16352,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0487
     {
         .species = SPECIES_GIRATINA_ORIGIN,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_GRISEOUS_CORE,
         .moves =
         {
             MOVE_SHADOW_FORCE,
             MOVE_SUPERPOWER,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_DRAGON_CLAW
         },
         .ability = ABILITY_CONTRARY,
@@ -16329,6 +16369,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_DRAGON,
+    },
+    {
+        .species = SPECIES_GIRATINA_ORIGIN,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_GRISEOUS_CORE,
+        .moves =
+        {
+            MOVE_SHADOW_FORCE,
+            MOVE_DRAGON_CLAW,
+            MOVE_SUPERPOWER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_CONTRARY,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
     },
     {
         .species = SPECIES_GIRATINA_ORIGIN,
@@ -16751,7 +16811,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_EARTH_PLATE,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_EXTREME_SPEED,
             MOVE_COSMIC_POWER,
             MOVE_RECOVER
@@ -17163,7 +17223,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_FLARE_BLITZ,
             MOVE_CLOSE_COMBAT,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEADLONG_RUSH,
             MOVE_WILD_CHARGE
         },
         .ability = ABILITY_FLASH_FIRE,
@@ -17728,7 +17788,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STEALTH_ROCK,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_HEAVY_SLAM
         },
         .ability = ABILITY_SAND_STREAM,
@@ -17806,11 +17866,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0530
     {
         .species = SPECIES_EXCADRILL,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_IRON_HEAD,
             MOVE_ROCK_SLIDE,
             MOVE_RAPID_SPIN
@@ -18019,7 +18079,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRAIN_PUNCH,
             MOVE_ICE_PUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_PROTECT
         },
         .ability = ABILITY_WATER_ABSORB,
@@ -18077,14 +18137,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0539
     {
         .species = SPECIES_SAWK,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -18181,14 +18241,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0545
     {
         .species = SPECIES_SCOLIPEDE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
             MOVE_MEGAHORN,
             MOVE_POISON_JAB,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_POISON_POINT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -18451,11 +18511,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0553
     {
         .species = SPECIES_KROOKODILE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_KNOCK_OFF,
             MOVE_STONE_EDGE,
             MOVE_CLOSE_COMBAT
@@ -18496,7 +18556,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_KNOCK_OFF,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ROCK_SLIDE,
             MOVE_PROTECT
         },
@@ -18518,7 +18578,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FLARE_BLITZ,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEADLONG_RUSH,
             MOVE_ROCK_SLIDE,
             MOVE_U_TURN
         },
@@ -18533,12 +18593,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DARMANITAN,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FLARE_BLITZ,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_SUPERPOWER,
             MOVE_U_TURN
         },
@@ -18559,7 +18619,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_BELLY_DRUM,
             MOVE_FLARE_BLITZ,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_PROTECT
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -18575,13 +18635,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0555
     {
         .species = SPECIES_DARMANITAN_GALAR_STANDARD,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_ICICLE_CRASH,
             MOVE_FLARE_BLITZ,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_U_TURN
         },
         .ability = ABILITY_GORILLA_TACTICS,
@@ -18601,7 +18661,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ICICLE_CRASH,
             MOVE_FLARE_BLITZ,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ICE_SHARD
         },
         .ability = ABILITY_GORILLA_TACTICS,
@@ -18686,7 +18746,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHELL_SMASH,
             MOVE_STONE_EDGE,
             MOVE_X_SCISSOR,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_WEAK_ARMOR,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -18916,7 +18976,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ACROBATICS,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_U_TURN
         },
         .ability = ABILITY_DEFEATIST,
@@ -19879,13 +19939,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0612
     {
         .species = SPECIES_HAXORUS,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_POISON_GEM,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_POISON_JAB
         },
         .ability = ABILITY_ANGER_SHELL,
@@ -19904,7 +19964,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_CLOSE_COMBAT,
             MOVE_FIRST_IMPRESSION
         },
@@ -19925,7 +19985,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STONE_AXE,
             MOVE_DRAGON_CLAW,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_PROTECT
         },
         .ability = ABILITY_ANGER_SHELL,
@@ -20074,7 +20134,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SNAP_TRAP,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_THOUSAND_WAVES,
             MOVE_STEALTH_ROCK,
             MOVE_PAIN_SPLIT
         },
@@ -20089,11 +20149,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_STUNFISK_GALAR,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_STONE_EDGE,
             MOVE_YAWN,
             MOVE_FOUL_PLAY
@@ -20220,7 +20280,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_FIRE_PUNCH,
             MOVE_SUCKER_PUNCH
         },
@@ -20241,7 +20301,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_POLTERGEIST,
             MOVE_DYNAMIC_PUNCH,
             MOVE_ICE_PUNCH
@@ -21038,7 +21098,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_BOLT_STRIKE,
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -21051,13 +21111,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_ZEKROM,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_BOLT_STRIKE,
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_VOLT_SWITCH
         },
         .ability = ABILITY_MOTOR_DRIVE,
@@ -21119,7 +21179,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_LANDS_WRATH,
             MOVE_STONE_EDGE,
             MOVE_U_TURN,
             MOVE_KNOCK_OFF
@@ -21199,14 +21259,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0646
     {
         .species = SPECIES_KYUREM_BLACK,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ICICLE_CRASH,
             MOVE_FUSION_BOLT,
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -21226,7 +21286,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_ICICLE_CRASH,
             MOVE_FUSION_BOLT,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -21699,11 +21759,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0660
     {
         .species = SPECIES_DIGGERSBY,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_RETURN,
             MOVE_QUICK_ATTACK,
             MOVE_WILD_CHARGE
@@ -21724,7 +21784,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SWORDS_DANCE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_DRILL_RUN,
             MOVE_RETURN,
             MOVE_QUICK_ATTACK
         },
@@ -21745,7 +21805,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SUBSTITUTE,
             MOVE_SWORDS_DANCE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_RETURN
         },
         .ability = ABILITY_EARTH_EATER,
@@ -22623,7 +22683,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HEAD_SMASH,
             MOVE_DRAGON_CLAW,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEADLONG_RUSH,
             MOVE_CRUNCH
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -22637,14 +22697,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_TYRANTRUM,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_OUTRAGE,
             MOVE_HEAD_SMASH,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -23102,7 +23162,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_POLTERGEIST,
             MOVE_WOOD_HAMMER,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_SHADOW_SNEAK
         },
         .ability = ABILITY_SAP_SIPPER,
@@ -23812,14 +23872,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_INCINEROAR,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_BLACK_GLASSES,
         .moves =
         {
             MOVE_SWORDS_DANCE,
             MOVE_FLARE_BLITZ,
             MOVE_DARKEST_LARIAT,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -23998,13 +24058,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0735
     {
         .species = SPECIES_GUMSHOOS,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
             MOVE_BODY_SLAM,
             MOVE_CRUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_U_TURN
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -24083,13 +24143,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0740
     {
         .species = SPECIES_CRABOMINABLE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ICE_HAMMER
         },
         .ability = ABILITY_NO_GUARD,
@@ -24110,7 +24170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_ICE_PUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_THUNDER_PUNCH
         },
         .ability = ABILITY_NO_GUARD,
@@ -24370,14 +24430,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_LYCANROC_MIDNIGHT,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_STONE_EDGE,
             MOVE_CLOSE_COMBAT,
             MOVE_ACCELEROCK,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -24773,7 +24833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DOUBLE_EDGE,
             MOVE_CLOSE_COMBAT,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_ICE_PUNCH
         },
         .ability = ABILITY_FLUFFY,
@@ -24976,12 +25036,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_PASSIMIAN,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_CLOSE_COMBAT,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ROCK_SLIDE,
             MOVE_KNOCK_OFF
         },
@@ -25526,14 +25586,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0774
     {
         .species = SPECIES_MINIOR,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
             MOVE_SHELL_SMASH,
             MOVE_ACROBATICS,
             MOVE_ROCK_SLIDE,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SHIELDS_DOWN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -25568,13 +25628,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0775
     {
         .species = SPECIES_KOMALA,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_RETURN,
             MOVE_KNOCK_OFF,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_SUPERPOWER
         },
         .ability = ABILITY_HUSTLE,
@@ -25860,13 +25920,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0781
     {
         .species = SPECIES_DHELMISE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_ANCHOR_SHOT,
             MOVE_POWER_WHIP,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_SHADOW_CLAW
         },
         .ability = ABILITY_WATER_ABSORB,
@@ -26867,7 +26927,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_GYRO_BALL,
             MOVE_ROCK_SLIDE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_TRICK_ROOM
         },
         .ability = ABILITY_BULLETPROOF,
@@ -27014,7 +27074,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DOUBLE_IRON_BASH,
             MOVE_THUNDER_PUNCH,
             MOVE_SUPERPOWER,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_WELL_BAKED_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -27053,13 +27113,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_RILLABOOM,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_SWORDS_DANCE,
             MOVE_GRASSY_GLIDE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_DRAIN_PUNCH
         },
         .ability = ABILITY_GRASSY_SURGE,
@@ -27099,7 +27159,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_FAKE_OUT,
             MOVE_GRASSY_GLIDE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_PROTECT
         },
         .ability = ABILITY_GRASSY_SURGE,
@@ -27120,7 +27180,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_PYRO_BALL,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_U_TURN,
             MOVE_GUNK_SHOT
         },
@@ -27135,12 +27195,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CINDERACE,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_PYRO_BALL,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ZEN_HEADBUTT,
             MOVE_U_TURN
         },
@@ -27161,7 +27221,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_PYRO_BALL,
             MOVE_COURT_CHANGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_SUCKER_PUNCH
         },
         .ability = ABILITY_LIBERO,
@@ -27244,7 +27304,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_BODY_SLAM,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_SWORDS_DANCE,
             MOVE_BULLET_SEED
         },
@@ -27514,13 +27574,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0834
     {
         .species = SPECIES_DREDNAW,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LUM_BERRY,
         .moves =
         {
             MOVE_LIQUIDATION,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_SWORDS_DANCE
         },
         .ability = ABILITY_WATER_ABSORB,
@@ -27770,7 +27830,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_GLARE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_THOUSAND_WAVES,
             MOVE_ROCK_SLIDE,
             MOVE_PROTECT
         },
@@ -28545,7 +28605,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_TRICK_ROOM,
             MOVE_BODY_PRESS,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_WILL_O_WISP
         },
         .ability = ABILITY_WANDERING_SPIRIT,
@@ -28758,7 +28818,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STEALTH_ROCK,
             MOVE_ROCK_SLIDE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_HEAVY_SLAM
         },
         .ability = ABILITY_SAND_STREAM,
@@ -28987,7 +29047,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STEALTH_ROCK,
             MOVE_HEAVY_SLAM,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_WHIRLWIND
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -29009,7 +29069,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_BOLT_BEAK,
             MOVE_DRAGON_CLAW,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_FIRE_PUNCH
         },
         .ability = ABILITY_HUSTLE,
@@ -29023,13 +29083,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DRACOZOLT,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_BOLT_BEAK,
             MOVE_OUTRAGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ROCK_SLIDE
         },
         .ability = ABILITY_VOLT_ABSORB,
@@ -29107,13 +29167,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DRACOVISH,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_FISHIOUS_REND,
             MOVE_CRUNCH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_ICE_FANG
         },
         .ability = ABILITY_WATER_ABSORB,
@@ -29567,12 +29627,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0895
     {
         .species = SPECIES_REGIDRAGO,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_DRAGON_CLAW,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_OUTRAGE,
             MOVE_FIRE_FANG
         },
@@ -30196,12 +30256,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_ENAMORUS_THERIAN,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_PLAY_ROUGH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_DUAL_WINGBEAT,
             MOVE_U_TURN
         },
@@ -30222,7 +30282,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_TAILWIND,
             MOVE_PLAY_ROUGH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_PROTECT
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -30892,7 +30952,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SALT_CURE,
             MOVE_WIDE_GUARD,
             MOVE_RECOVER,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_STOMPING_TANTRUM
         },
         .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
@@ -31291,7 +31351,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_ROCK_SLIDE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_KNOCK_OFF,
             MOVE_PROTECT
         },
@@ -31482,7 +31542,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_WAVE_CRASH,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_AQUA_JET,
             MOVE_SUCKER_PUNCH
         },
@@ -31631,7 +31691,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_SPIKES,
             MOVE_PARTING_SHOT,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
@@ -31714,7 +31774,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SHED_TAIL,
             MOVE_IRON_HEAD,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_DRILL_RUN,
             MOVE_STEALTH_ROCK
         },
         .ability = ABILITY_EARTH_EATER,
@@ -31964,13 +32024,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DONDOZO,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_WAVE_CRASH,
             MOVE_BODY_PRESS,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_REST
         },
         .ability = ABILITY_WATER_ABSORB,
@@ -31981,6 +32041,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_DONDOZO,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_WAVE_CRASH,
+            MOVE_BODY_PRESS,
+            MOVE_CURSE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0978
@@ -32135,7 +32215,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_TOXIC_SPIKES,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_RECOVER,
             MOVE_PROTECT
         },
@@ -32242,7 +32322,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_COIL,
             MOVE_HYPER_DRILL,
             MOVE_BODY_SLAM,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_DRILL_RUN
         },
         .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -32807,7 +32887,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRAGON_DANCE,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_STOMPING_TANTRUM,
             MOVE_THUNDER_PUNCH
         },
         .ability = ABILITY_QUARK_DRIVE,
@@ -32827,7 +32907,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_STEALTH_ROCK,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_THUNDER_WAVE
         },
         .ability = ABILITY_QUARK_DRIVE,
@@ -32843,14 +32923,14 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0998
     {
         .species = SPECIES_BAXCALIBUR,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LOADED_DICE,
         .moves =
         {
             MOVE_DRAGON_DANCE,
             MOVE_ICICLE_SPEAR,
             MOVE_GLAIVE_RUSH,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -33175,13 +33255,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_ROARING_MOON,
-        .tags = FORMAT_BOTH,
+        .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_OUTRAGE,
             MOVE_KNOCK_OFF,
-            MOVE_HIGH_HORSEPOWER,
+            MOVE_EARTHQUAKE,
             MOVE_U_TURN
         },
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -33921,7 +34001,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MIGHTY_CLEAVE,
             MOVE_PSYCHO_CUT,
             MOVE_STONE_EDGE,
-            MOVE_HIGH_HORSEPOWER
+            MOVE_EARTHQUAKE
         },
         .ability = ABILITY_QUARK_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),

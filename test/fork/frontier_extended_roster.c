@@ -812,7 +812,7 @@ static bool32 SetIsDoublesCapable(const struct TrainerMon *set)
 // FORK: TARGET_FOES_AND_ALLY moves hit the holder's own partner. Nine sets were carrying one on a
 // doubles-tagged build in Gen 3 alone -- Earthquake mostly, plus Surf and Sludge Wave -- every one
 // of them damaging its own teammate for the whole format the tag exists to cover. The fix is
-// usually a single-target twin (Earthquake -> High Horsepower, Surf -> Muddy Water) or, on a
+// usually a single-target twin (Earthquake -> a species-fitting Ground move, Surf -> Muddy Water) or, on a
 // special set, the move on the right stat (-> Earth Power).
 //
 // The self-KO moves are exempt: hitting everything adjacent is what they are, and pressing one is a
@@ -847,7 +847,7 @@ TEST("Frontier extended roster: no doubles set carries a move that hits its own 
                 continue;
 
             offenders++;
-            Test_MgbaPrintf("roster[%d] %S: %S hits the holder's own partner (TARGET_FOES_AND_ALLY) on a doubles-capable set -- use a single-target twin (Earthquake -> High Horsepower, Surf -> Muddy Water) or retag to FORMAT_SINGLES",
+            Test_MgbaPrintf("roster[%d] %S: %S hits the holder's own partner (TARGET_FOES_AND_ALLY) on a doubles-capable set -- use a single-target twin (Earthquake -> Stomping Tantrum/Drill Run/etc., Surf -> Muddy Water) or retag to FORMAT_SINGLES",
                             i, gSpeciesInfo[set->species].speciesName, GetMoveName(move));
         }
     }
