@@ -1012,7 +1012,9 @@ than one whose existing set is about to be rewritten.
       the Ground move that fits the species: **Drill Run** for drills and
       diggers, **Headlong Rush** for reckless chargers, **Land's Wrath /
       Thousand Waves / Thousand Arrows** (all `TARGET_BOTH`) where the land or
-      sand itself is the theme, and **Stomping Tantrum** otherwise. Serpents,
+      sand itself is the theme (Hippowdon, Ting-Lu), and **Stomping Tantrum**
+      otherwise (Cetitan, Avalugg, Aggron). The rule covers every set carrying
+      High Horsepower, not only ones converted from Earthquake. Serpents,
       flyers and floaters (Gyarados, Salamence, Glalie) usually read best as a
       `FORMAT_SINGLES` Earthquake set, as long as the species keeps a doubles
       set; if retagging leaves it without one, write a doubles set for it.
