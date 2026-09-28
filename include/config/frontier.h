@@ -150,6 +150,17 @@
                                      | AI_FLAG_SMART_TERA | AI_FLAG_SMART_Z_MOVE \
                                      | AI_FLAG_ASSUMPTIONS)
 
+// The gimmicks FEATURE_FREE_GIMMICKS hands out that only BOSS Frontier opponents
+// (the Frontier Brain and the Battle Tower's gym-leader bosses — the same split
+// as the AI tiers above) may use. A regular Frontier opponent's mons never offer
+// these, so they never Dynamax or Z-Move; Mega Evolution and Terastallization
+// stay open to everyone. The player's side is never restricted. A bitmask of
+// (1u << GIMMICK_*); 0 restores "every opponent uses every gimmick". Only
+// expanded at the use site (src/fork/frontier_ai.c), which includes
+// battle_gimmick.h. Inert with FEATURE_FREE_GIMMICKS off (item-gated vanilla
+// rules apply to everyone then).
+#define B_FRONTIER_BOSS_ONLY_GIMMICKS ((1u << GIMMICK_Z_MOVE) | (1u << GIMMICK_DYNAMAX))
+
 // If TRUE, the post-battle Battle Factory rental-swap screen lets the player
 // open a Pokémon summary for the *opponent's* mons too, not just their own.
 // Vanilla only offers Summary/Swap/Rechoose when a player mon is selected; the

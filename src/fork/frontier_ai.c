@@ -3,6 +3,10 @@
 #include "fork/battle_ai_species_overrides.h" // AI_FLAG_SMART_SPECIES_LOGIC for B_FRONTIER_HARD_AI_FLAGS
 #include "fork/battle_ai_zmove.h"             // AI_FLAG_SMART_Z_MOVE for B_FRONTIER_HARD_AI_FLAGS
 #include "fork/battle_tower_trainers.h"       // IsTowerBossTrainerId
+#include "battle.h"
+#include "battle_controllers.h"               // GetBattlerTrainer
+#include "battle_gimmick.h"                   // enum Gimmick for B_FRONTIER_BOSS_ONLY_GIMMICKS
+#include "battle_setup.h"                    // TRAINER_BATTLE_PARAM
 #include "constants/battle_ai.h"
 #include "constants/trainers.h"
 
@@ -33,4 +37,28 @@ u64 GetFrontierAiFlags(u16 trainerId)
         return B_FRONTIER_HARD_AI_FLAGS;
 
     return B_FRONTIER_REGULAR_AI_FLAGS;
+}
+
+bool32 FrontierOpponentMayUseGimmick(u16 trainerId, enum Gimmick gimmick)
+{
+    if (IsFrontierBossTrainer(trainerId))
+        return TRUE;
+
+    return !(B_FRONTIER_BOSS_ONLY_GIMMICKS & (1u << gimmick));
+}
+
+bool32 IsGimmickWithheldFromFrontierOpponent(enum BattlerId battler, enum Gimmick gimmick)
+{
+    // Only free gimmicks are restricted: without the feature the item-gated
+    // vanilla rules already decide who can use what.
+    if (!GetConfig(FEATURE_FREE_GIMMICKS))
+        return FALSE;
+    if (!(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) || IsOnPlayerSide(battler))
+        return FALSE;
+
+    u16 trainerId = (GetBattlerTrainer(battler) == B_TRAINER_OPPONENT_B)
+                  ? TRAINER_BATTLE_PARAM.opponentB
+                  : TRAINER_BATTLE_PARAM.opponentA;
+
+    return !FrontierOpponentMayUseGimmick(trainerId, gimmick);
 }

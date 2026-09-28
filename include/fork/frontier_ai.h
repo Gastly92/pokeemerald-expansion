@@ -12,6 +12,8 @@
 // is gated on B_FRONTIER_HARD_AI. Live under B_FRONTIER_HARD_AI only; with the
 // flag off, callers keep their vanilla paths. See src/fork/frontier_ai.c.
 
+#include "battle_gimmick.h"
+#include "constants/battle.h"
 #include "constants/trainers.h"
 
 // TRUE for the opponents that get the boss tier: the Frontier Brain of any
@@ -21,5 +23,15 @@ bool32 IsFrontierBossTrainer(u16 trainerId);
 // The AI flag set for a Frontier opponent: the boss tier for the trainers above,
 // the regular tier for everyone else.
 u64 GetFrontierAiFlags(u16 trainerId);
+
+// FORK (FEATURE_FREE_GIMMICKS): whether a Frontier opponent may use a gimmick.
+// Bosses (above) may use them all; a regular opponent may use everything except
+// B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h: Z-Move and Dynamax).
+bool32 FrontierOpponentMayUseGimmick(u16 trainerId, enum Gimmick gimmick);
+
+// The battler-level check CanActivateGimmick uses: TRUE when this battler is a
+// regular Frontier opponent's mon and `gimmick` is boss-only. Never TRUE for the
+// player's side, outside the Frontier, or with FEATURE_FREE_GIMMICKS off.
+bool32 IsGimmickWithheldFromFrontierOpponent(enum BattlerId battler, enum Gimmick gimmick);
 
 #endif // GUARD_FORK_FRONTIER_AI_H
