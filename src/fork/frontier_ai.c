@@ -7,6 +7,7 @@
 #include "battle_controllers.h"               // GetBattlerTrainer
 #include "battle_gimmick.h"                   // enum Gimmick for B_FRONTIER_BOSS_ONLY_GIMMICKS
 #include "battle_setup.h"                    // TRAINER_BATTLE_PARAM
+#include "constants/battle_frontier.h"        // FRONTIER_STAGES_PER_CHALLENGE
 #include "constants/battle_ai.h"
 #include "constants/trainers.h"
 
@@ -47,6 +48,19 @@ bool32 FrontierOpponentMayUseGimmick(u16 trainerId, enum Gimmick gimmick)
     return !(B_FRONTIER_BOSS_ONLY_GIMMICKS & (1u << gimmick));
 }
 
+bool32 IsFactoryMilestoneBattle(void)
+{
+    if (!(gBattleTypeFlags & BATTLE_TYPE_FACTORY) || gSaveBlock2Ptr->frontier.lvlMode == FRONTIER_LVL_TENT)
+        return FALSE;
+
+    // The Factory's set-milestone opponent is a random facility trainer, not a boss id,
+    // so the battle's position in its set is the only thing that marks it. That is
+    // curChallengeBattleNum: GenerateOpponentMons writes it (derived from the win streak
+    // under B_FRONTIER_ENDLESS) right before it seeds the milestone's legendary, and the
+    // battle-room script only advances it after the win.
+    return gSaveBlock2Ptr->frontier.curChallengeBattleNum == FRONTIER_STAGES_PER_CHALLENGE - 1;
+}
+
 bool32 IsGimmickWithheldFromFrontierOpponent(enum BattlerId battler, enum Gimmick gimmick)
 {
     // Only free gimmicks are restricted: without the feature the item-gated
@@ -54,6 +68,9 @@ bool32 IsGimmickWithheldFromFrontierOpponent(enum BattlerId battler, enum Gimmic
     if (!GetConfig(FEATURE_FREE_GIMMICKS))
         return FALSE;
     if (!(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) || IsOnPlayerSide(battler))
+        return FALSE;
+
+    if (IsFactoryMilestoneBattle())
         return FALSE;
 
     u16 trainerId = (GetBattlerTrainer(battler) == B_TRAINER_OPPONENT_B)

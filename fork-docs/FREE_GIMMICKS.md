@@ -104,10 +104,12 @@ existing `ShouldUseZMove` / `DecideTerastal` reconsideration still applies).
 ### Boss-only gimmicks in the Frontier
 
 Regular Frontier opponents may **Mega Evolve and Terastallize but never Z-Move or
-Dynamax**. Those two are reserved for the fights meant to be a wall — the Frontier Brain
-and the Battle Tower's gym-leader bosses (every 10th win), the same `IsFrontierBossTrainer`
-split that picks the boss AI tier. The player's side is never restricted, and battles
-outside the Frontier are unaffected.
+Dynamax**. Those two are reserved for the fights meant to be a wall: the Frontier Brain,
+the Battle Tower's gym-leader bosses, and the Battle Factory's milestone opponent (both
+every 10th win). The Factory's milestone is a regular trainer id seeded with a legendary,
+so it is recognised by its slot in the set (`IsFactoryMilestoneBattle`) rather than by
+`IsFrontierBossTrainer`. The player's side is never restricted, and battles outside the
+Frontier are unaffected.
 
 The set is `B_FRONTIER_BOSS_ONLY_GIMMICKS` (`include/config/frontier.h`), a
 `(1u << GIMMICK_*)` mask; `0` gives every opponent every gimmick again. It is enforced in

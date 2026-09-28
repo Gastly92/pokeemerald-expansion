@@ -151,8 +151,8 @@
                                      | AI_FLAG_ASSUMPTIONS)
 
 // The gimmicks FEATURE_FREE_GIMMICKS hands out that only BOSS Frontier opponents
-// (the Frontier Brain and the Battle Tower's gym-leader bosses — the same split
-// as the AI tiers above) may use. A regular Frontier opponent's mons never offer
+// may use: the Frontier Brain, the Battle Tower's gym-leader bosses, and the
+// Battle Factory's milestone opponent (the legendary-seeded 10th, 20th, ... win). A regular Frontier opponent's mons never offer
 // these, so they never Dynamax or Z-Move; Mega Evolution and Terastallization
 // stay open to everyone. The player's side is never restricted. A bitmask of
 // (1u << GIMMICK_*); 0 restores "every opponent uses every gimmick". Only

@@ -6,12 +6,14 @@
 #include "fork/frontier_ai.h"
 #include "fork/battle_tower_trainers.h"
 #include "constants/battle.h"
+#include "constants/battle_frontier.h"
 #include "constants/trainers.h"
 
 // FORK: guards B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h). Under
 // FEATURE_FREE_GIMMICKS a regular Frontier opponent may Mega Evolve and
-// Terastallize but never Z-Move or Dynamax; the Frontier Brain and the Tower's
-// gym-leader bosses keep all four, and the player's side is never restricted.
+// Terastallize but never Z-Move or Dynamax; the Frontier Brain, the Tower's
+// gym-leader bosses and the Factory's milestone opponent (every 10th win) keep all
+// four, and the player's side is never restricted.
 // Battle tests can't put a battle in Frontier mode, so these drive the predicate
 // CanActivateGimmick consults directly, with the battle globals set by hand.
 
@@ -83,5 +85,39 @@ TEST("Frontier boss gimmicks: nothing is withheld outside the Frontier or withou
     EXPECT(!IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_Z_MOVE));
     EXPECT(!IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_DYNAMAX));
 
+    gBattleTypeFlags = 0;
+}
+
+// The Factory's 10th/20th/... battle is not a boss trainer id (it is a random facility
+// trainer seeded with a legendary), so it is recognised by its position in the set.
+TEST("Frontier boss gimmicks: the Battle Factory's milestone opponent may Z-Move and Dynamax")
+{
+    u8 savedBattleNum = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
+    u8 savedLvlMode = gSaveBlock2Ptr->frontier.lvlMode;
+
+    SetConfig(CONFIG_FEATURE_FREE_GIMMICKS, TRUE);
+    SetUpFrontierSingles(0);
+    gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_FACTORY;
+    gSaveBlock2Ptr->frontier.lvlMode = FRONTIER_LVL_OPEN;
+
+    // An ordinary Factory battle: withheld.
+    gSaveBlock2Ptr->frontier.curChallengeBattleNum = FRONTIER_STAGES_PER_CHALLENGE - 2;
+    EXPECT(!IsFactoryMilestoneBattle());
+    EXPECT(IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_Z_MOVE));
+    EXPECT(IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_DYNAMAX));
+
+    // The last battle of the set: allowed.
+    gSaveBlock2Ptr->frontier.curChallengeBattleNum = FRONTIER_STAGES_PER_CHALLENGE - 1;
+    EXPECT(IsFactoryMilestoneBattle());
+    EXPECT(!IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_Z_MOVE));
+    EXPECT(!IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_DYNAMAX));
+
+    // The same slot in another facility is not a Factory milestone.
+    gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_BATTLE_TOWER;
+    EXPECT(!IsFactoryMilestoneBattle());
+    EXPECT(IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_Z_MOVE));
+
+    gSaveBlock2Ptr->frontier.curChallengeBattleNum = savedBattleNum;
+    gSaveBlock2Ptr->frontier.lvlMode = savedLvlMode;
     gBattleTypeFlags = 0;
 }
