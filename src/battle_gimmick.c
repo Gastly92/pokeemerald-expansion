@@ -13,6 +13,7 @@
 #include "sprite.h"
 #include "util.h"
 #include "test_runner.h"
+#include "fork/frontier_ai.h" // FORK: IsGimmickWithheldFromFrontierOpponent
 
 #include "data/gimmicks.h"
 
@@ -160,6 +161,11 @@ void RefreshGimmickTriggerSprite(enum BattlerId battler)
 // Returns whether a battler is able to use a gimmick. Checks consumption and gimmick specific functions.
 bool32 CanActivateGimmick(enum BattlerId battler, enum Gimmick gimmick)
 {
+    // FORK (FEATURE_FREE_GIMMICKS): regular Frontier opponents don't get the boss-only
+    // gimmicks (B_FRONTIER_BOSS_ONLY_GIMMICKS). Gated here, the one place candidates are
+    // built, so the AI's picker never sees them. See src/fork/frontier_ai.c.
+    if (IsGimmickWithheldFromFrontierOpponent(battler, gimmick))
+        return FALSE;
     return gGimmicksInfo[gimmick].CanActivate != NULL && gGimmicksInfo[gimmick].CanActivate(battler);
 }
 

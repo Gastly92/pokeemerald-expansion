@@ -96,9 +96,27 @@ spent. Z-Move, Dynamax and Tera stay available to a transformed Ditto.
 ### It uses everything
 
 `ShouldTrainerBattlerUseGimmick` returns TRUE for all gimmicks for AI battlers, so Tera
-and Dynamax are no longer opt-in and every eligible AI mon gimmicks. With the
+and Dynamax are no longer opt-in and every eligible AI mon gimmicks (except regular
+Frontier opponents, below). With the
 per-type-once tracking, the team spreads its gimmicks across mons by priority (the
 existing `ShouldUseZMove` / `DecideTerastal` reconsideration still applies).
+
+### Boss-only gimmicks in the Frontier
+
+Regular Frontier opponents may **Mega Evolve and Terastallize but never Z-Move or
+Dynamax**. Those two are reserved for the fights meant to be a wall: the Frontier Brain,
+the Battle Tower's gym-leader bosses, and the Battle Factory's milestone opponent (both
+every 10th win). The Factory's milestone is a regular trainer id seeded with a legendary,
+so it is recognised by its slot in the set (`IsFactoryMilestoneBattle`) rather than by
+`IsFrontierBossTrainer`. The player's side is never restricted, and battles outside the
+Frontier are unaffected. The full per-battle balance (AI tier plus gimmicks) is tabled
+in [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md#opponent-tiers).
+
+The set is `B_FRONTIER_BOSS_ONLY_GIMMICKS` (`include/config/frontier.h`), a
+`(1u << GIMMICK_*)` mask; `0` gives every opponent every gimmick again. It is enforced in
+`CanActivateGimmick`, the one place the candidate set is built, via
+`IsGimmickWithheldFromFrontierOpponent` (`src/fork/frontier_ai.c`), so the AI's picker
+never sees a withheld gimmick. Tests: `test/fork/frontier_boss_gimmicks.c`.
 
 ### It picks among its candidates
 
