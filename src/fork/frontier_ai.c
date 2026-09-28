@@ -29,6 +29,12 @@ bool32 IsFrontierBossTrainer(u16 trainerId)
     // The Frontier Brain id is shared by every facility's Brain (the Factory
     // Head, the Salon Maiden, ...); the Tower's gym-leader bosses sit in the
     // fork-owned id range above TRAINER_PLAYER.
+    //
+    // The Battle Factory's milestone opponent (10th, 20th, ... win) is deliberately
+    // NOT a boss here, so it keeps the regular AI tier: the player fights it with
+    // rentals, whereas the Tower's gym leaders face a team the player built. It does
+    // count as a boss for gimmicks, via IsFactoryMilestoneBattle. The intended split
+    // is tabled in fork-docs/FRONTIER_ENDLESS.md, "Opponent tiers".
     return trainerId == TRAINER_FRONTIER_BRAIN || IsTowerBossTrainerId(trainerId);
 }
 

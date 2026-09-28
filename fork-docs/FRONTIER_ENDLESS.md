@@ -245,6 +245,31 @@ available" message. The code and scripts are kept fully intact behind the flag.
 - **The shared `trainerIds` dedup list** can briefly hold the other mode's trainers
   after a Singles↔Doubles switch.
 
+## Opponent tiers
+
+This is the intended balance, not an accident of implementation: a fight gets the smart
+AI when the player brings their own team, and bosses get the full gimmick set wherever
+they appear.
+
+| Battle | AI tier | Dynamax / Z-Moves | Mega / Tera |
+| --- | --- | --- | --- |
+| Regular opponent (Factory or Tower) | regular | no | yes |
+| Factory milestone (10th, 20th, ... win) | regular | yes | yes |
+| Tower gym-leader boss (10th, 20th, ... win) | smart | yes | yes |
+| Frontier Brain (any facility) | smart | yes | yes |
+
+The Factory milestone keeps the regular AI because the player is on rentals; the Tower's
+gym leaders face a team the player built, so they get the smart AI.
+
+- **AI tier:** `IsFrontierBossTrainer` → `GetFrontierAiFlags` (`src/fork/frontier_ai.c`),
+  presets `B_FRONTIER_HARD_AI_FLAGS` / `B_FRONTIER_REGULAR_AI_FLAGS`.
+- **Gimmicks:** `B_FRONTIER_BOSS_ONLY_GIMMICKS` (`config/frontier.h`), enforced through
+  `IsGimmickWithheldFromFrontierOpponent`. A boss here is `IsFrontierBossTrainer` *or*
+  `IsFactoryMilestoneBattle`, since the Factory milestone is a regular trainer id seeded
+  with a legendary. See [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md#boss-only-gimmicks-in-the-frontier).
+- The player's side is never restricted. Tests: `test/fork/frontier_ai_difficulty.c`,
+  `test/fork/frontier_boss_gimmicks.c`.
+
 ## Footguns (each cost real debugging — read these)
 
 1. **A `TRUE`/`FALSE` flag that feeds a numeric `#if`-computed constant scripts
@@ -279,11 +304,11 @@ available" message. The code and scripts are kept fully intact behind the flag.
 
 ## Known gaps shared by every conversion so far
 
-- **Hard AI** (`B_FRONTIER_HARD_AI`) is Factory-only. (Tower general opponents are
-  tier-gated like the Factory — no legendaries/mythicals, ≤1 pseudo, via
-  `frontier_draft.c`'s `TierRejectsCandidate`; the Tower uses **fixed gym-leader
-  boss teams** on the set-end marks, each carrying one legendary, rather than a
-  drafted one.)
+- **Set-end bosses differ by facility.** The Factory drafts its milestone opponent
+  with one seeded legendary; the Tower uses **fixed gym-leader boss teams** on the
+  set-end marks, each carrying one legendary. (Tower general opponents are tier-gated
+  like the Factory — no legendaries/mythicals, ≤1 pseudo, via `frontier_draft.c`'s
+  `TierRejectsCandidate`.) AI tiers now cover every facility; see "Opponent tiers".
 - **Boss polish** (Tower): bosses are pure-random (no immediate-repeat avoidance),
   and use the default frontier battle music.
 

@@ -109,7 +109,8 @@ the Battle Tower's gym-leader bosses, and the Battle Factory's milestone opponen
 every 10th win). The Factory's milestone is a regular trainer id seeded with a legendary,
 so it is recognised by its slot in the set (`IsFactoryMilestoneBattle`) rather than by
 `IsFrontierBossTrainer`. The player's side is never restricted, and battles outside the
-Frontier are unaffected.
+Frontier are unaffected. The full per-battle balance (AI tier plus gimmicks) is tabled
+in [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md#opponent-tiers).
 
 The set is `B_FRONTIER_BOSS_ONLY_GIMMICKS` (`include/config/frontier.h`), a
 `(1u << GIMMICK_*)` mask; `0` gives every opponent every gimmick again. It is enforced in
