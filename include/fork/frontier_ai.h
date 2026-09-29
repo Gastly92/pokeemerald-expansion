@@ -26,7 +26,7 @@ u64 GetFrontierAiFlags(u16 trainerId);
 
 // FORK (FEATURE_FREE_GIMMICKS): whether a Frontier opponent may use a gimmick.
 // Bosses (above) may use them all; a regular opponent may use everything except
-// B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h: Z-Move and Dynamax).
+// B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h: Mega, Z-Move, Dynamax and Tera).
 bool32 FrontierOpponentMayUseGimmick(u16 trainerId, enum Gimmick gimmick);
 
 // TRUE during the Battle Factory's set-milestone battle (the 10th, 20th, ... win of
