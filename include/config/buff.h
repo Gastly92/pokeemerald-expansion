@@ -276,7 +276,7 @@
 #define BUFF_FLAT_HP_DENOMINATOR 4
 
 // When TRUE, the self-hit a confused battler takes is raised from the stock 40 BP to
-// BUFF_CONFUSION_SELF_DAMAGE_POWER (80 by default). Nothing else about confusion moves:
+// BUFF_CONFUSION_SELF_DAMAGE_POWER (60 by default). Nothing else about confusion moves:
 // it is the same typeless, never-critical, no-random-factor physical hit calculated off the
 // battler's own Attack and Defense, with the same duration, messages and interactions
 // (Focus Sash, Ice Face, Disguise, Rage Fist, no Gem consumption).
@@ -288,15 +288,14 @@
 // left behind is a single 40-BP typeless hit: at the frontier's Level 50 that is roughly 8-12%
 // of a bulky target's HP, which a Sitrus Berry pays back in one turn. So a turn spent on
 // Confuse Ray, Supersonic, Swagger or Flatter bought almost nothing, and the AI's own valuation
-// was cut to WEAK_EFFECT to say so. At 80 BP the one guaranteed hit is worth the turn that
+// was cut to WEAK_EFFECT to say so. At 60 BP the one guaranteed hit is worth the turn that
 // applied it -- confusion becomes a damage tool with a delivery the target cannot dodge or
 // resist, rather than a status that no longer does what its name implies.
 //
-// Why doubling rather than restoring the lockout: the lockout is exactly what
+// Why a damage raise rather than restoring the lockout: the lockout is exactly what
 // DETERMINISTIC_STATUS exists to remove (a faster foe could chain confusion into an action
-// lock, decided by a coin flip). Paying for it in guaranteed damage keeps the determinism and
-// mirrors the "double the bonus" move BUFF_SHELL_BELL (1/8 -> 1/4), BUFF_TYPE_BOOST_ITEMS
-// (+20% -> +40%) and BUFF_GEMS (+30% -> +60%) all made.
+// lock, decided by a coin flip). Paying for it in guaranteed damage keeps the determinism.
+// Why +50% (60) rather than doubling (80): 80 was tried first and felt too strong in play.
 //
 // One interaction worth knowing: under DETERMINISTIC_STATUS a self-hit that WOULD KO falls back
 // to the stock behavior (the move is denied and the battler faints). A bigger self-hit reaches
@@ -316,8 +315,8 @@
 #define BUFF_CONFUSION_SELF_DAMAGE TRUE
 
 // Base power of the confusion self-hit when BUFF_CONFUSION_SELF_DAMAGE is on. Stock behavior
-// (flag off) is 40. Higher = more self-damage. Must fit in DamageContext's fixedBasePower,
+// (flag off) is 40; 80 was tried and found too strong. Higher = more self-damage. Must fit in DamageContext's fixedBasePower,
 // which is a u32:8 bitfield -- keep it <= 255. Ignored when BUFF_CONFUSION_SELF_DAMAGE is FALSE.
-#define BUFF_CONFUSION_SELF_DAMAGE_POWER 80
+#define BUFF_CONFUSION_SELF_DAMAGE_POWER 60
 
 #endif // GUARD_CONFIG_BUFF_H

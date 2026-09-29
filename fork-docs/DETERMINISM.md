@@ -374,7 +374,7 @@ sees a sleeping target on the wake turn, so sleep-gated moves (Dream Eater,
 Nightmare) get two windows per application rather than one.
 **Confusion** stops being a 2-5 turn chain of self-hit rolls (`CancelerConfused`):
 on its first confused action the battler takes **one** guaranteed typeless
-self-hit (40 BP, or 80 under `BUFF_CONFUSION_SELF_DAMAGE`, `config/buff.h`) but
+self-hit (40 BP, or 60 under `BUFF_CONFUSION_SELF_DAMAGE`, `config/buff.h`) but
 **still carries out its chosen move that turn** (the move is never denied); the
 volatile then **lingers until the battler's next action, when it
 snaps out**. Because the battler is never robbed of its action, a faster foe can't

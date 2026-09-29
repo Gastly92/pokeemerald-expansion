@@ -2,7 +2,7 @@
 #include "test/battle.h"
 
 // FORK: coverage for the BUFF_CONFUSION_SELF_DAMAGE flag (config/buff.h), which raises the
-// confusion self-hit from the stock 40 BP to BUFF_CONFUSION_SELF_DAMAGE_POWER (80). BUFF_* flags
+// confusion self-hit from the stock 40 BP to BUFF_CONFUSION_SELF_DAMAGE_POWER (60). BUFF_* flags
 // default off in the test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG(BUFF_CONFUSION_SELF_DAMAGE, TRUE/FALSE) explicitly, and the stock 40-BP behavior
 // stays covered by the inherited tests in test/battle/volatiles/confusion.c (buff off).
@@ -13,7 +13,7 @@
 // self-hit and a hit from the mirror match are the same calculation and the base power is the
 // only thing separating the runs.
 
-SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the one-time DETERMINISTIC_STATUS self-hit doubles", s16 damage)
+SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the one-time DETERMINISTIC_STATUS self-hit scales to the buffed power", s16 damage)
 {
     u32 buff;
 
@@ -33,11 +33,11 @@ SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the one-time DETERMINISTIC_STATU
         HP_BAR(player, captureDamage: &results[i].damage);
         MESSAGE("Wobbuffet used Celebrate!"); // still acts - the buff is damage, not a lockout
     } FINALLY {
-        EXPECT_MUL_EQ(results[1].damage, Q_4_12(2.0), results[0].damage);
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(BUFF_CONFUSION_SELF_DAMAGE_POWER / 40.0), results[0].damage);
     }
 }
 
-SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the stock per-action self-hit doubles too", s16 damage)
+SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the stock per-action self-hit scales too", s16 damage)
 {
     u32 buff;
 
@@ -58,14 +58,14 @@ SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the stock per-action self-hit do
         MESSAGE("It hurt itself in its confusion!");
         HP_BAR(player, captureDamage: &results[i].damage);
     } FINALLY {
-        EXPECT_MUL_EQ(results[1].damage, Q_4_12(2.0), results[0].damage);
+        EXPECT_MUL_EQ(results[1].damage, Q_4_12(BUFF_CONFUSION_SELF_DAMAGE_POWER / 40.0), results[0].damage);
     }
 }
 
-// The absolute check: with the buff on the self-hit is worth exactly two Scratches (40 BP each),
-// i.e. 80 BP. Mirrors "Confusion adds a 50/33% chance to hit self with 40 power" in
+// The absolute check: with the buff on the self-hit is worth BUFF_CONFUSION_SELF_DAMAGE_POWER / 40
+// Scratches (40 BP each), i.e. 60 BP at the default. Mirrors "Confusion adds a 50/33% chance to hit self with 40 power" in
 // test/battle/volatiles/confusion.c, which is the same assertion with the buff off.
-SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the buffed self-hit is worth 80 power")
+SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the buffed self-hit is worth BUFF_CONFUSION_SELF_DAMAGE_POWER")
 {
     s16 damage[2];
 
@@ -87,7 +87,7 @@ SINGLE_BATTLE_TEST("BUFF_CONFUSION_SELF_DAMAGE: the buffed self-hit is worth 80 
         MESSAGE("It hurt itself in its confusion!");
         HP_BAR(opponent, captureDamage: &damage[1]);
     } THEN {
-        EXPECT_MUL_EQ(damage[0], Q_4_12(2.0), damage[1]);
+        EXPECT_MUL_EQ(damage[0], Q_4_12(BUFF_CONFUSION_SELF_DAMAGE_POWER / 40.0), damage[1]);
     }
 }
 
