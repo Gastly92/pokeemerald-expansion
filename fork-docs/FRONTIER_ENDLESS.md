@@ -251,12 +251,12 @@ This is the intended balance, not an accident of implementation: a fight gets th
 AI when the player brings their own team, and bosses get the full gimmick set wherever
 they appear.
 
-| Battle | AI tier | Dynamax / Z-Moves | Mega / Tera |
-| --- | --- | --- | --- |
-| Regular opponent (Factory or Tower) | regular | no | yes |
-| Factory milestone (10th, 20th, ... win) | regular | yes | yes |
-| Tower gym-leader boss (10th, 20th, ... win) | smart | yes | yes |
-| Frontier Brain (any facility) | smart | yes | yes |
+| Battle | AI tier | Gimmicks (Mega / Z-Move / Dynamax / Tera) |
+| --- | --- | --- |
+| Regular opponent (Factory or Tower) | regular | none |
+| Factory milestone (10th, 20th, ... win) | regular | all |
+| Tower gym-leader boss (10th, 20th, ... win) | smart | all |
+| Frontier Brain (any facility) | smart | all |
 
 The Factory milestone keeps the regular AI because the player is on rentals; the Tower's
 gym leaders face a team the player built, so they get the smart AI.

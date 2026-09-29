@@ -153,13 +153,14 @@
 // The gimmicks FEATURE_FREE_GIMMICKS hands out that only BOSS Frontier opponents
 // may use: the Frontier Brain, the Battle Tower's gym-leader bosses, and the
 // Battle Factory's milestone opponent (the legendary-seeded 10th, 20th, ... win). A regular Frontier opponent's mons never offer
-// these, so they never Dynamax or Z-Move; Mega Evolution and Terastallization
-// stay open to everyone. The player's side is never restricted. A bitmask of
+// these, so by default they never Mega Evolve, Z-Move, Dynamax or Terastallize. The
+// player's side is never restricted. A bitmask of
 // (1u << GIMMICK_*); 0 restores "every opponent uses every gimmick". Only
 // expanded at the use site (src/fork/frontier_ai.c), which includes
 // battle_gimmick.h. Inert with FEATURE_FREE_GIMMICKS off (item-gated vanilla
 // rules apply to everyone then).
-#define B_FRONTIER_BOSS_ONLY_GIMMICKS ((1u << GIMMICK_Z_MOVE) | (1u << GIMMICK_DYNAMAX))
+#define B_FRONTIER_BOSS_ONLY_GIMMICKS ((1u << GIMMICK_MEGA) | (1u << GIMMICK_Z_MOVE) \
+                                     | (1u << GIMMICK_DYNAMAX) | (1u << GIMMICK_TERA))
 
 // If TRUE, the post-battle Battle Factory rental-swap screen lets the player
 // open a Pokémon summary for the *opponent's* mons too, not just their own.

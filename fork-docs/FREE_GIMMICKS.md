@@ -103,13 +103,14 @@ existing `ShouldUseZMove` / `DecideTerastal` reconsideration still applies).
 
 ### Boss-only gimmicks in the Frontier
 
-Regular Frontier opponents may **Mega Evolve and Terastallize but never Z-Move or
-Dynamax**. Those two are reserved for the fights meant to be a wall: the Frontier Brain,
+Regular Frontier opponents get **no free gimmicks at all** — no Mega Evolution, Z-Move,
+Dynamax or Terastallization. All four are reserved for the fights meant to be a wall: the Frontier Brain,
 the Battle Tower's gym-leader bosses, and the Battle Factory's milestone opponent (both
 every 10th win). The Factory's milestone is a regular trainer id seeded with a legendary,
 so it is recognised by its slot in the set (`IsFactoryMilestoneBattle`) rather than by
 `IsFrontierBossTrainer`. The player's side is never restricted, and battles outside the
-Frontier are unaffected. The full per-battle balance (AI tier plus gimmicks) is tabled
+Frontier are unaffected. A regular opponent's mon still carrying a now-inert Mega Stone or
+Z-Crystal is withheld too: the gate sits above the per-gimmick checks. The full per-battle balance (AI tier plus gimmicks) is tabled
 in [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md#opponent-tiers).
 
 The set is `B_FRONTIER_BOSS_ONLY_GIMMICKS` (`include/config/frontier.h`), a
