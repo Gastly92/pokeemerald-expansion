@@ -5852,7 +5852,9 @@ BattleScript_QuickDrawActivation::
 
 BattleScript_CustapBerryActivation::
 	flushtextbox
-	call BattleScript_ItemPopUp_Scripting
+	@ UPSTREAM: BS_ATTACKER, not BS_SCRIPTING -- CheckChangingTurnOrderEffects has already advanced
+	@ gBattleScripting.battler past the holder. Regression test: test/fork/custap_berry_popup.c
+	call BattleScript_ItemPopUp_Attacker
 	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_BERRY
 	waitanimation
 	printstring STRINGID_CANACTFASTERTHANKSTO
