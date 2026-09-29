@@ -8603,7 +8603,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LITLEO,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE,
             ABILITY_UNNERVE
         )
     },
@@ -8611,7 +8610,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PYROAR,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE,
             ABILITY_UNNERVE
         )
     },
@@ -8619,7 +8617,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PYROAR_MEGA,
         INNATES(
             ABILITY_INTIMIDATE,
-            ABILITY_MOXIE,
             ABILITY_UNNERVE
         )
     },

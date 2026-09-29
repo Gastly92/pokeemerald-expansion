@@ -3197,7 +3197,8 @@ not-on-field); none is `breakable`, so Mold Breaker never touches them.
   off-roster).** Every canon user in **any** real slot, keyed exactly per form (merged into an existing innate row
   where present), plus base creatures' **Megas** as pure-boon mirrors: the **Pinsir** (+ Mega), **Gyarados** (+ Mega),
   **Honchkrow**, **Heracross** (+ Mega), **Mightyena**, **Salamence** (+ Mega), **Sandile / Krokorok / Krookodile**,
-  **Scraggy / Scrafty**, **Litleo / Pyroar**, and **Quaxly / Quaxwell / Quaquaval** lines.
+  **Scraggy / Scrafty**, and **Quaxly / Quaxwell / Quaquaval** lines. **Litleo / Pyroar** are deliberately left
+  out: every Pyroar set is a special attacker, so an Attack boost per KO does nothing for it.
 - **Berserk (canon only so far).** Only **Drampa** — its non-Berserk slots (Sap Sipper / Cloud Nine) leave the innate
   **observable**. **Sole-Berserk species are OMITTED as redundant** (the Mega Lopunny / Scrappy precedent): **Galarian
   Moltres** (a frontier set that keeps its now-redundant chosen Berserk) and **Drampa-Mega** (a sole-Berserk Mega, so
