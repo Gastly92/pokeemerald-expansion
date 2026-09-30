@@ -141,7 +141,8 @@
 //     deterministic-crit regime can never cash in. See CriticalHitRatioUp().
 //   - Flinch items — King's Rock / Razor Fang (HOLD_EFFECT_FLINCH): the holder's
 //     FIRST attack that didn't itself flinch the target flinches it, then the item is
-//     consumed. This includes an attack whose own flinch was gated out by
+//     consumed — unless every target it flinched fainted before move end (a later hit
+//     of a multi-hit move KO'd it), in which case it stays unspent. This includes an attack whose own flinch was gated out by
 //     DETERMINISTIC_ADDITIONAL_EFFECTS (e.g. a non-super-effective Rock Slide): the rock
 //     fills the gap rather than bowing out just because the move *can* flinch. Like Fake
 //     Out, this flinch is set via SetMoveEffect (not the additional-effect path), so it

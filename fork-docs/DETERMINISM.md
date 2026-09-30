@@ -170,7 +170,8 @@ reached: the berry is consumed and the holder's next attack is a guaranteed crit
 reusing Laser Focus's volatile instead of a (dead-under-determinism) crit-stage
 boost (`CriticalHitRatioUp`). **Flinch items** — King's Rock / Razor Fang — flinch
 the target on the holder's **first attack that didn't itself flinch the target**,
-then are consumed; this includes an attack whose own flinch was **gated out by
+then are consumed — unless the flinched target faints before the move ends (e.g. a
+later hit of Triple Axel KOs it), in which case the item stays unspent; this includes an attack whose own flinch was **gated out by
 `DETERMINISTIC_ADDITIONAL_EFFECTS`** (e.g. a non-super-effective Rock Slide) — the
 rock fills the gap rather than bowing out just because the move *can* flinch
 (decided by the `!volatiles.flinched` check after the move's own effects resolve,

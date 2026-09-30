@@ -462,8 +462,8 @@ s32 DeterministicSpeedTieWins(enum BattlerId battlerAtk, enum BattlerId battlerD
 
 // FORK: DETERMINISTIC_HOLD_EFFECTS — consume the attacker's crit/flinch entry item
 // (Scope Lens / Razor Claw / Lucky Punch / Leek, King's Rock / Razor Fang) after the
-// move it fired on. IsCriticalHit()/TryKingsRock() set the pending flag; we run a
-// removeitem here once per move.
+// move it fired on. IsCriticalHit() sets the pending flag and TryKingsRock() records
+// the battlers it flinched; we run a removeitem here once per move.
 enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValues *cv)
 {
     enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
@@ -478,6 +478,17 @@ enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValues *cv)
     {
         if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(cv->battlerAtk))
             gBattleStruct->battlerState[i].facedFoeAction = TRUE;
+    }
+
+    // A flinch item is only spent if a battler it flinched survived the move: a multi-hit
+    // move (Triple Axel, Population Bomb) can flinch on an early hit and KO on a later one,
+    // and a flinch on a fainted foe achieved nothing.
+    u32 flinchTargets = gBattleStruct->battlerState[cv->battlerAtk].flinchItemTargets;
+    gBattleStruct->battlerState[cv->battlerAtk].flinchItemTargets = 0;
+    for (u32 i = 0; i < gBattlersCount; i++)
+    {
+        if ((flinchTargets & (1u << i)) && IsBattlerAlive(i) && gBattleMons[i].volatiles.flinched)
+            gBattleStruct->battlerState[cv->battlerAtk].deterministicHoldConsumePending = TRUE;
     }
 
     if (GetConfig(DETERMINISTIC_HOLD_EFFECTS)

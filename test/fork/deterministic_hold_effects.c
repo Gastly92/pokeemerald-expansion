@@ -396,6 +396,43 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinches the holder'
     }
 }
 
+// A multi-hit move triggers the flinch item on its first hit; if a later hit KOs the
+// target the flinch never mattered, so the item must stay unspent.
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock is not consumed when a later hit of a multi-hit move KOs the flinched target")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); HP(20); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TRIPLE_AXEL); SEND_OUT(opponent, 1); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TRIPLE_AXEL, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TRIPLE_AXEL, player);
+        MESSAGE("The opposing Wobbuffet fainted!");
+        NONE_OF { MESSAGE("The King's Rock was used up…"); }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_KINGS_ROCK);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock is consumed when a multi-hit move flinches a target that survives")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Item(ITEM_KINGS_ROCK); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(1); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TRIPLE_AXEL); }
+    } SCENE {
+        MESSAGE("The King's Rock was used up…");
+        MESSAGE("The opposing Wobbuffet flinched and couldn't move!");
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: King's Rock flinch is the first attack, not the first turn")
 {
     GIVEN {

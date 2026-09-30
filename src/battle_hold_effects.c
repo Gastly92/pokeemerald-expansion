@@ -230,8 +230,11 @@ static enum ItemEffect TryKingsRock(enum BattlerId battlerAtk, enum BattlerId ba
         // This item effect is independent of Sheer Force; moves that natively flinch were rejected above.
         SetMoveEffectHelper(battlerAtk, battlerDef, MOVE_EFFECT_FLINCH, gBattlescriptCurrInstr, EFFECT_BYPASS_SHEER_FORCE);
         effect = ITEM_EFFECT_OTHER;
+        // FORK: DETERMINISTIC_HOLD_EFFECTS — record the flinched target rather than
+        // consuming outright: a later hit of a multi-hit move (Triple Axel) can KO it, and
+        // a flinch on a fainted foe shouldn't spend the item (MoveEndDeterministicHoldConsume).
         if (GetConfig(DETERMINISTIC_HOLD_EFFECTS))
-            gBattleStruct->battlerState[battlerAtk].deterministicHoldConsumePending = TRUE;
+            gBattleStruct->battlerState[battlerAtk].flinchItemTargets |= 1u << battlerDef;
     }
 
     return effect;
