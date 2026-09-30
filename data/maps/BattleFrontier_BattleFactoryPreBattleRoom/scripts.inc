@@ -588,13 +588,14 @@ BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyForNextMatch:
 
 @ FORK: endless Factory, every 10th match. Hints that the opponent is strong without
 @ saying how (a legendary, free gimmicks); the player learns what the warning means.
+@ The last box stays up with the menu, so it carries the warning rather than the usual
+@ "Are you ready?" - a player mashing through the text still sees something different.
 BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyForToughMatch:
 	.string "Match No. {STR_VAR_1} is next!\p"
 	.string "Our scouts have been watching\n"
 	.string "your next opponent…\p"
-	.string "They're said to be quite formidable.\n"
-	.string "Please be on your guard!\p"
-	.string "Are you ready?$"
+	.string "A formidable foe awaits!\n"
+	.string "Please be on your guard!$"
 
 @ Vanilla ordinal strings, used by the non-endless prompt. The 2nd/3rd are also
 @ shared with the Slateport Battle Tent (SlateportCity_BattleTentCorridor).
