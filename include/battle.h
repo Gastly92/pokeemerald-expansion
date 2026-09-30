@@ -544,9 +544,10 @@ struct BattlerState
     u16 flinchedLastTurn:1; // FORK: DETERMINISTIC_FLINCH — was this battler flinched on the previous turn (anti flinch-lock)
     u16 deterministicHoldConsumePending:1; // FORK: DETERMINISTIC_HOLD_EFFECTS — a guaranteed crit/flinch entry item fired this move; consume at move end
     u16 facedFoeAction:1; // FORK: DETERMINISTIC_HOLD_EFFECTS — has a foe acted while this battler was on the field since it entered (closes the Focus Band entry-turn window); cleared on switch-in
-    // FORK: padding = upstream's value minus the 3 fork bits above (word must total 16).
+    u16 flinchItemTargets:4; // FORK: DETERMINISTIC_HOLD_EFFECTS — battlers this battler's King's Rock / Razor Fang flinched this move; the item is consumed at move end only if one is still alive
+    // FORK: padding = upstream's value minus the 7 fork bits above (word must total 16).
     // On conflict, recompute rather than taking either side's number verbatim.
-    u16 padding:5;
+    u16 padding:1;
     // End of Word
 };
 
