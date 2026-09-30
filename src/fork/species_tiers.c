@@ -94,8 +94,13 @@ static const u16 sLegendarySpecies[] =
     SPECIES_LATIAS,                // 0380
     SPECIES_LATIOS,                // 0381
     SPECIES_JIRACHI,               // 0385
+    SPECIES_UXIE,                  // 0480
+    SPECIES_MESPRIT,               // 0481
+    SPECIES_AZELF,                 // 0482
     SPECIES_HEATRAN,               // 0485
+    SPECIES_REGIGIGAS,             // 0486
     SPECIES_CRESSELIA,             // 0488
+    SPECIES_PHIONE,                // 0489
     SPECIES_MANAPHY,               // 0490
     SPECIES_SHAYMIN,               // 0492
     SPECIES_VICTINI,               // 0494
@@ -165,7 +170,9 @@ static const u16 sLegendarySpecies[] =
     SPECIES_IRON_MOTH,             // 0994
     SPECIES_IRON_THORNS,           // 0995
     SPECIES_BAXCALIBUR,            // 0998
+    SPECIES_WO_CHIEN,              // 1001
     SPECIES_CHIEN_PAO,             // 1002
+    SPECIES_TING_LU,               // 1003
     SPECIES_CHI_YU,                // 1004
     SPECIES_ROARING_MOON,          // 1005
     SPECIES_IRON_VALIANT,          // 1006

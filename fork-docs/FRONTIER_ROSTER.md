@@ -124,9 +124,9 @@ These are **this fork's own groupings, not the official Game Freak categories**:
 
 | Tier | Contents |
 |---|---|
-| `TIER_MYTHICAL` | The strongest "restricted" legends — box/cover legendaries (Groudon, Kyogre, Dialga, Zacian, Koraidon…), Mewtwo, Lugia/Ho-Oh — **plus** the official event Mythicals (Mew, Celebi, Jirachi, Arceus, Diancie, Magearna, Pecharunt…) |
-| `TIER_LEGENDARY` | The sub-legendaries — birds, beasts, lake trio, Regis, genies + Therian, musketeers, Tapus, Heatran, Cresselia, Urshifu, Ogerpon, the Loyal Three… |
-| `TIER_PSEUDO` | The 600-BST pseudo-legendaries (Dragonite, Garchomp, Dragapult…), Ultra Beasts, Paradox Pokémon, and Treasures of Ruin |
+| `TIER_MYTHICAL` | Restricted box/cover legends (Mewtwo, Lugia/Ho-Oh, weather trio, creation trio, Zacian/Zamazenta, Koraidon/Miraidon…) and their Origin/Crowned/fused formes, plus the strongest Mythicals (Arceus, Darkrai, Shaymin-Sky, Deoxys' battle formes) |
+| `TIER_LEGENDARY` | Everything else legend-grade: sub-legendaries (birds, beasts, lake trio, Regis, genies, musketeers, Tapus, Treasures of Ruin, Loyal Three, Ogerpon…), the other Mythicals (Mew, Celebi, Jirachi, Diancie, Magearna, Pecharunt…), Ultra Beasts, Paradox Pokémon, and Dragapult / Baxcalibur / Bloodmoon Ursaluna |
+| `TIER_PSEUDO` | Non-legendary standouts capped at one per team: some pseudo-legendaries (Dragonite, Garchomp, Metagross…) and other top picks (Gengar, Lucario, the fossil quartet, Gholdengo, Archaludon…) |
 | `TIER_NORMAL` | Everything else — species simply absent from the table |
 
 Derived from the upstream `isRestrictedLegendary` / `isSubLegendary` / `isMythical` /

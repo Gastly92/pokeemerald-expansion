@@ -9,19 +9,25 @@
 // legendary-only challenge). Kept in a fork-owned file rather than in gSpeciesInfo
 // so upstream syncs never touch it and the upstream species data stays untouched.
 //
-// The tiers use this fork's own definitions (NOT the official Game Freak
-// categories — e.g. Groudon is grouped with Arceus as TIER_MYTHICAL here):
-//   - TIER_MYTHICAL  : the strongest "restricted" legends — box/cover legendaries
-//                      (Groudon, Kyogre, Dialga, Zacian, Koraidon, ...), Mewtwo,
-//                      Lugia/Ho-Oh, plus the official event Mythicals (Mew, Celebi,
-//                      Jirachi, Arceus, Diancie, Magearna, Pecharunt, ...).
-//   - TIER_LEGENDARY : the sub-legendaries — legendary birds/beasts, the lake trio,
-//                      Regis, the genies (+Therian), musketeers, Tapus, Heatran,
-//                      Cresselia, Urshifu, Ogerpon, the Loyal Three, ...
-//   - TIER_PSEUDO    : non-legendary "almost-legendary" power tier — the 600-BST
-//                      pseudo-legendaries (Dragonite, Garchomp, Dragapult, ...),
-//                      the Ultra Beasts, the Paradox Pokemon, and the Treasures of
-//                      Ruin.
+// The tiers are this fork's own power bands, NOT the official Game Freak
+// categories — official Mythicals are split across both legend tiers by strength,
+// and the official pseudo-legendaries are not all TIER_PSEUDO:
+//   - TIER_MYTHICAL  : the restricted box/cover legends (Mewtwo, Lugia/Ho-Oh, the
+//                      weather trio, Dialga/Palkia/Giratina, Reshiram/Zekrom,
+//                      Zacian/Zamazenta, Koraidon/Miraidon, ...), their fused or
+//                      Origin/Crowned formes, plus the strongest Mythicals
+//                      (Arceus, Darkrai, Shaymin-Sky, Deoxys' battle formes).
+//   - TIER_LEGENDARY : everything else legend-grade — the sub-legendaries (birds,
+//                      beasts, lake trio, Regis, genies, musketeers, Tapus,
+//                      Treasures of Ruin, Loyal Three, Ogerpon, ...), the other
+//                      Mythicals (Mew, Celebi, Jirachi, Diancie, Magearna,
+//                      Pecharunt, ...), the Ultra Beasts, the Paradox Pokemon, and
+//                      a few non-legends strong enough to share the quota
+//                      (Dragapult, Baxcalibur, Bloodmoon Ursaluna).
+//   - TIER_PSEUDO    : non-legendary standouts capped at one per team — some
+//                      600-BST pseudo-legendaries (Dragonite, Garchomp, Metagross,
+//                      ...) alongside other top picks (Gengar, Lucario, the fossil
+//                      quartet, Gholdengo, Archaludon, ...).
 //   - TIER_NORMAL    : everything else (the default; not stored in the table).
 //
 // The table is keyed by EXACT species id, so each forme is classified on its own
