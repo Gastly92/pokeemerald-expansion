@@ -130,6 +130,7 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
 	call_if_eq VAR_RESULT, 5, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor6thOpponent
 	call_if_eq VAR_RESULT, 6, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor7thOpponent
 .endif
+@ FORK: entry point for WarnToughOpponent, which rejoins the shared menu here.
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskGoOnRecordRestRetire::
 	call BattleFrontier_EventScript_GetCantRecordBattle
 	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponentNoRecord
@@ -209,9 +210,6 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_SwapMons::
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_YourSwapIsComplete, MSGBOX_DEFAULT
 	goto BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom
 
-@ Vanilla ordinal prompts, used by the non-endless branch above (and kept verbatim
-@ for clean upstream syncs). The 2nd/3rd strings are also shared with the
-@ Slateport Battle Tent.
 .if B_FRONTIER_ENDLESS
 @ FORK: see AskReadyForRegularOpponent. STR_VAR_1 already holds the match number.
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_WarnToughOpponent::
@@ -222,6 +220,9 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_WarnToughOpponent::
 	goto BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskGoOnRecordRestRetire
 .endif
 
+@ Vanilla ordinal prompts, used by the non-endless branch above (and kept verbatim
+@ for clean upstream syncs). The 2nd/3rd strings are also shared with the
+@ Slateport Battle Tent.
 BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor2ndOpponent::
 	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyFor2ndOpponent
 	waitmessage
