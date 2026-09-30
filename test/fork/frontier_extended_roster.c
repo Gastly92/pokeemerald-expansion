@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/test.h"
 #include "data.h"
+#include "event_data.h" // FORK: VarSet (draft-weighting test)
 #include "battle_frontier.h"
 #include "constants/battle_frontier.h" // FORK: FLAG_FRONTIER_MON_FACTORY
 #include "config_changes.h"
@@ -1516,4 +1517,48 @@ TEST("Frontier extended roster: no set holds a signature type item its species c
     // Guard against a vacuous pass if the roster ever stops carrying these items at all.
     EXPECT_GT(signatureHolders, 30);
     EXPECT_EQ(offenders, 0);
+}
+
+// GetRandomFrontierExtendedMonId weighs every National Dex number equally by counting the
+// sets in the *contiguous* run around a drawn set. A dex number whose sets were split across
+// the list would have each fragment counted as its own run and be drafted more often, so
+// the sort order the roster's header documents is load-bearing -- check it.
+TEST("Frontier extended roster: every dex number's sets are contiguous")
+{
+    u32 i, j, offenders = 0;
+
+    for (i = 1; i < gFrontierExtendedMonsCount; i++)
+    {
+        enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[i].species);
+        if (dexNum == SpeciesToNationalPokedexNum(gFrontierExtendedMons[i - 1].species))
+            continue;
+        // i starts a new run: no earlier set may share its dex number.
+        for (j = 0; j < i - 1; j++)
+        {
+            if (SpeciesToNationalPokedexNum(gFrontierExtendedMons[j].species) == dexNum)
+            {
+                offenders++;
+                Test_MgbaPrintf("roster[%d] %S: dex #%d already appeared at roster[%d] -- move it next to its other sets so the draft weighs its dex number once",
+                                i, gSpeciesInfo[gFrontierExtendedMons[i].species].speciesName, dexNum, j);
+                break;
+            }
+        }
+    }
+    EXPECT_EQ(offenders, 0);
+}
+
+// The draft is uniform per dex number, not per set: Silvally's seventeen type forms must not
+// make it seventeen times as likely as a Pokémon with one set. Drawn per set, Silvally would
+// take ~17/1600 of all draws (~53 of 5000); drawn per dex number it takes ~1/600 (~8).
+TEST("Frontier extended roster: the draft weighs each dex number equally, not each set")
+{
+    u32 i, silvally = 0;
+
+    VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
+    for (i = 0; i < 5000; i++)
+    {
+        if (SpeciesToNationalPokedexNum(gFrontierExtendedMons[GetRandomFrontierExtendedMonId()].species) == NATIONAL_DEX_SILVALLY)
+            silvally++;
+    }
+    EXPECT_LT(silvally, 25);
 }

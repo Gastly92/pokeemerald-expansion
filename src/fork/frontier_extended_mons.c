@@ -2,6 +2,7 @@
 #include "fork/frontier_extended_mons.h"
 #include "fork/species_shorthand.h"
 #include "event_data.h"
+#include "pokemon.h"
 #include "random.h"
 #include "constants/abilities.h"
 #include "constants/battle.h"
@@ -4724,6 +4725,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_ELECTRIC,
     },
+    {
+        .species = SPECIES_JOLTEON,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_THUNDERBOLT,
+            MOVE_VOLT_SWITCH,
+            MOVE_SHADOW_BALL,
+            MOVE_SUBSTITUTE
+        },
+        .ability = ABILITY_VOLT_ABSORB,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
 
     // 0136
     {
@@ -4849,26 +4870,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
-    },
-    {
-        .species = SPECIES_JOLTEON,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_KINGS_ROCK,
-        .moves =
-        {
-            MOVE_THUNDERBOLT,
-            MOVE_VOLT_SWITCH,
-            MOVE_SHADOW_BALL,
-            MOVE_SUBSTITUTE
-        },
-        .ability = ABILITY_VOLT_ABSORB,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .spa = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_ELECTRIC,
     },
 
     // 0142
@@ -34142,20 +34143,50 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
 const u16 gFrontierExtendedMonsCount = ARRAY_COUNT(gFrontierExtendedMons);
 
+// Number of sets in the contiguous same-National-Dex run containing `id` that are
+// valid for `formatTag`. Relies on the ORDER invariant above (every build of one
+// dex number is contiguous), which TEST("Frontier extended roster: every dex
+// number's sets are contiguous") enforces.
+static u32 CountFormatSetsInDexRun(u16 id, u32 formatTag)
+{
+    enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[id].species);
+    u32 first = id, last = id, count = 0, i;
+
+    while (first > 0 && SpeciesToNationalPokedexNum(gFrontierExtendedMons[first - 1].species) == dexNum)
+        first--;
+    while (last + 1 < gFrontierExtendedMonsCount && SpeciesToNationalPokedexNum(gFrontierExtendedMons[last + 1].species) == dexNum)
+        last++;
+    for (i = first; i <= last; i++)
+    {
+        if (gFrontierExtendedMons[i].tags & formatTag)
+            count++;
+    }
+    return count;
+}
+
 // FORK: draw one random roster index whose set is valid for the current battle
-// format (singles/doubles). Uniform across the whole list (the roster has no
-// weak->strong tier ordering), so there is no difficulty scaling by streak.
-// Lives here, with the roster data, rather than in the upstream battle_factory.c,
-// and is shared so any facility (Battle Factory, Battle Tower) can field opponents
-// from the competitive list; callers handle their own species/held-item dedup.
+// format (singles/doubles). The draw is uniform per *National Dex number*, not per
+// set: a Pokémon with seventeen sets (Silvally, Arceus — one per type form) is no
+// more likely to be drafted than one with a single set. A uniformly drawn set is
+// kept with probability 1/n, where n is how many format-valid sets its dex number
+// has, so every dex number carries equal total weight and each of its sets 1/n
+// of it. There is no difficulty scaling by streak (the roster has no weak->strong
+// tier ordering). Lives here, with the roster data, rather than in the upstream
+// battle_factory.c, and is shared so any facility (Battle Factory, Battle Tower)
+// can field opponents from the competitive list; callers handle their own
+// species/held-item dedup and tier quotas on top of this.
 u16 GetRandomFrontierExtendedMonId(void)
 {
     u32 formatTag = (VarGet(VAR_FRONTIER_BATTLE_MODE) == FRONTIER_MODE_DOUBLES)
                   ? FORMAT_DOUBLES : FORMAT_SINGLES;
     u16 id;
 
-    do
+    for (;;)
+    {
         id = Random() % gFrontierExtendedMonsCount;
-    while (!(gFrontierExtendedMons[id].tags & formatTag));
-    return id;
+        if (!(gFrontierExtendedMons[id].tags & formatTag))
+            continue;
+        if (Random() % CountFormatSetsInDexRun(id, formatTag) == 0)
+            return id;
+    }
 }
