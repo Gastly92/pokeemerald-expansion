@@ -44,8 +44,7 @@ bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem)
 // Per-team tier quota, using the fork's species tier map (GetSpeciesTier /
 // species_tiers.h). Each party slot has a "slot tier":
 //   - TIER_NORMAL slot: ordinary draft pick — legendaries and mythicals are
-//     banned, and at most ONE pseudo (pseudo-legendary / Ultra Beast / Paradox /
-//     Treasure of Ruin) is allowed on the whole team.
+//     banned, and at most ONE TIER_PSEUDO mon is allowed on the whole team.
 //   - any other slot tier: a *forced* slot that must be filled by a mon of exactly
 //     that tier (used to seed a set-milestone opponent with a legendary, or the
 //     Frontier Brain with a legendary + a mythical).
