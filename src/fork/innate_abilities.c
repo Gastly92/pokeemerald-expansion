@@ -297,7 +297,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PIDGEOT,
         INNATES(
             ABILITY_BIG_PECKS,
-            ABILITY_CUTE_CHARM,
             ABILITY_KEEN_EYE,
             ABILITY_STAKEOUT,
             ABILITY_TANGLED_FEET,
@@ -308,7 +307,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PIDGEOT_MEGA,
         INNATES(
             ABILITY_BIG_PECKS,
-            ABILITY_CUTE_CHARM,
             ABILITY_KEEN_EYE,
             ABILITY_STAKEOUT,
             ABILITY_TANGLED_FEET,
@@ -423,7 +421,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RAICHU,
         INNATES(
             ABILITY_CHEEK_POUCH,
-            ABILITY_CUTE_CHARM,
             ABILITY_RECKLESS
         )
     },
@@ -1723,7 +1720,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0124
         SPECIES_JYNX,
         INNATES(
-            ABILITY_CUTE_CHARM,
             ABILITY_DANCER,
             ABILITY_FOREWARN,
             ABILITY_OBLIVIOUS
@@ -2740,7 +2736,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SCREAM_TAIL,
         INNATES(
             ABILITY_COMPETITIVE,
-            ABILITY_CUTE_CHARM,
             ABILITY_FRIEND_GUARD,
             ABILITY_THICK_FAT
         )
@@ -9671,28 +9666,24 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0741
         SPECIES_ORICORIO_BAILE,
         INNATES(
-            ABILITY_CUTE_CHARM,
             ABILITY_DANCER
         )
     },
     { // 0741
         SPECIES_ORICORIO_POM_POM,
         INNATES(
-            ABILITY_CUTE_CHARM,
             ABILITY_DANCER
         )
     },
     { // 0741
         SPECIES_ORICORIO_PAU,
         INNATES(
-            ABILITY_CUTE_CHARM,
             ABILITY_DANCER
         )
     },
     { // 0741
         SPECIES_ORICORIO_SENSU,
         INNATES(
-            ABILITY_CUTE_CHARM,
             ABILITY_DANCER
         )
     },
@@ -12650,7 +12641,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1016
         SPECIES_FEZANDIPITI,
         INNATES(
-            ABILITY_CUTE_CHARM,
             ABILITY_KEEN_EYE,
             ABILITY_TECHNICIAN
         )
