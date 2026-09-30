@@ -7,6 +7,7 @@
 #include "battle_controllers.h"               // GetBattlerTrainer
 #include "battle_gimmick.h"                   // enum Gimmick for B_FRONTIER_BOSS_ONLY_GIMMICKS
 #include "battle_setup.h"                    // TRAINER_BATTLE_PARAM
+#include "event_data.h"                      // gSpecialVar_Result
 #include "constants/battle_frontier.h"        // FRONTIER_STAGES_PER_CHALLENGE
 #include "constants/battle_ai.h"
 #include "constants/trainers.h"
@@ -65,6 +66,21 @@ bool32 IsFactoryMilestoneBattle(void)
     // under B_FRONTIER_ENDLESS) right before it seeds the milestone's legendary, and the
     // battle-room script only advances it after the win.
     return gSaveBlock2Ptr->frontier.curChallengeBattleNum == FRONTIER_STAGES_PER_CHALLENGE - 1;
+}
+
+void Script_IsNextFactoryBattleMilestone(void)
+{
+    // Mirrors how GenerateOpponentMons places the next battle in its set: from the win
+    // streak under B_FRONTIER_ENDLESS, else from curChallengeBattleNum (which the
+    // battle-room script has already advanced to the upcoming battle).
+#if B_FRONTIER_ENDLESS
+    u32 battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
+    u32 lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
+    u32 battleNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] % FRONTIER_STAGES_PER_CHALLENGE;
+#else
+    u32 battleNum = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
+#endif
+    gSpecialVar_Result = (battleNum == FRONTIER_STAGES_PER_CHALLENGE - 1);
 }
 
 bool32 IsGimmickWithheldFromFrontierOpponent(enum BattlerId battler, enum Gimmick gimmick)

@@ -34,6 +34,12 @@ bool32 FrontierOpponentMayUseGimmick(u16 trainerId, enum Gimmick gimmick);
 // a regular facility trainer id, so IsFrontierBossTrainer cannot see it.
 bool32 IsFactoryMilestoneBattle(void);
 
+// Script side of the same milestone, asked from the Factory's pre-battle room before
+// the battle exists (so it reads the win streak, not gBattleTypeFlags). Sets
+// VAR_RESULT to TRUE when the *upcoming* match is the milestone, so the attendant can
+// warn the player. Called via `callnative`.
+void Script_IsNextFactoryBattleMilestone(void);
+
 // The battler-level check CanActivateGimmick uses: TRUE when this battler is a
 // regular Frontier opponent's mon and `gimmick` is boss-only. Never TRUE for the
 // player's side, outside the Frontier, with FEATURE_FREE_GIMMICKS off, for a boss
