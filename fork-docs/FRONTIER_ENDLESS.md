@@ -239,7 +239,6 @@ available" message. The code and scripts are kept fully intact behind the flag.
 
 - **Bosses are pure-random** — no immediate-repeat avoidance. A mutable static would
   land in `.data`, which the linker script doesn't place for fork files.
-- **Boss and Brain battle music** is the default frontier track.
 - **Resting on exactly a Brain-threshold win** (49 or 99) can skip that Brain
   appearance.
 - **The shared `trainerIds` dedup list** can briefly hold the other mode's trainers
@@ -260,6 +259,15 @@ they appear.
 
 The Factory milestone keeps the regular AI because the player is on rentals; the Tower's
 gym leaders face a team the player built, so they get the smart AI.
+
+The Factory attendant warns before a milestone match: instead of the plain "Match No. N is
+next! Are you ready?" prompt, an alert sound plays and they say the scouts report a
+formidable opponent. The final box, which stays up with the menu, is the warning itself, so
+a player mashing through the text still sees it.
+It never says *why* (legendary, gimmicks). The Factory Head's 50th/100th match is also a
+milestone slot but branches to the Head's own intro first. Hook:
+`Script_IsNextFactoryBattleMilestone` via `callnative` in the pre-battle room script;
+test `test/fork/factory_tough_match_warning.c`.
 
 - **AI tier:** `IsFrontierBossTrainer` → `GetFrontierAiFlags` (`src/fork/frontier_ai.c`),
   presets `B_FRONTIER_HARD_AI_FLAGS` / `B_FRONTIER_REGULAR_AI_FLAGS`.
@@ -309,8 +317,9 @@ gym leaders face a team the player built, so they get the smart AI.
   set-end marks, each carrying one legendary. (Tower general opponents are tier-gated
   like the Factory — no legendaries/mythicals, ≤1 pseudo, via `frontier_draft.c`'s
   `TierRejectsCandidate`.) AI tiers now cover every facility; see "Opponent tiers".
-- **Boss polish** (Tower): bosses are pure-random (no immediate-repeat avoidance),
-  and use the default frontier battle music.
+- **Boss polish** (Tower): bosses are pure-random (no immediate-repeat avoidance).
+  They already play the Gym Leader theme, since `GetFrontierOpponentClass` reports
+  their linked gym leader's class.
 
 When you finish a facility, update the Status table above, add/refresh its
 `FORK.md` row, and tick the shared gaps if you closed any.

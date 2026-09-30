@@ -113,6 +113,12 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
 	factory_get FACTORY_DATA_WIN_STREAK
 	addvar VAR_RESULT, 1
 	buffernumberstring STR_VAR_1, VAR_RESULT
+	@ FORK: every 10th match (the set milestone, whose opponent is drafted with a
+	@ legendary and may use every gimmick) gets a warning instead of the plain
+	@ prompt. The Factory Head's match also lands on a milestone, but it branches
+	@ to AskReadyForHead before reaching here, so the Head keeps its own intro.
+	callnative Script_IsNextFactoryBattleMilestone
+	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_WarnToughOpponent
 	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyForNextMatch
 	waitmessage
 .else
@@ -124,6 +130,8 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForRegularOpponent
 	call_if_eq VAR_RESULT, 5, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor6thOpponent
 	call_if_eq VAR_RESULT, 6, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_ReadyFor7thOpponent
 .endif
+@ FORK: entry point for WarnToughOpponent, which rejoins the shared menu here.
+BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskGoOnRecordRestRetire::
 	call BattleFrontier_EventScript_GetCantRecordBattle
 	goto_if_eq VAR_RESULT, TRUE, BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskReadyForOpponentNoRecord
 	multichoice 19, 4, MULTI_GO_ON_RECORD_REST_RETIRE, TRUE
@@ -201,6 +209,16 @@ BattleFrontier_BattleFactoryPreBattleRoom_EventScript_SwapMons::
 	factory_setswapped
 	msgbox BattleFrontier_BattleFactoryPreBattleRoom_Text_YourSwapIsComplete, MSGBOX_DEFAULT
 	goto BattleFrontier_BattleFactoryPreBattleRoom_EventScript_EnterBattleRoom
+
+.if B_FRONTIER_ENDLESS
+@ FORK: see AskReadyForRegularOpponent. STR_VAR_1 already holds the match number.
+BattleFrontier_BattleFactoryPreBattleRoom_EventScript_WarnToughOpponent::
+	playse SE_PIN
+	waitse
+	message BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyForToughMatch
+	waitmessage
+	goto BattleFrontier_BattleFactoryPreBattleRoom_EventScript_AskGoOnRecordRestRetire
+.endif
 
 @ Vanilla ordinal prompts, used by the non-endless branch above (and kept verbatim
 @ for clean upstream syncs). The 2nd/3rd strings are also shared with the
@@ -568,6 +586,17 @@ BattleFrontier_BattleFactoryPreBattleRoom_Text_AwardedBattlePoints:
 BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyForNextMatch:
 	.string "Match No. {STR_VAR_1} is next!\n"
 	.string "Are you ready?$"
+
+@ FORK: endless Factory, every 10th match. Hints that the opponent is strong without
+@ saying how (a legendary, free gimmicks); the player learns what the warning means.
+@ The last box stays up with the menu, so it carries the warning rather than the usual
+@ "Are you ready?" - a player mashing through the text still sees something different.
+BattleFrontier_BattleFactoryPreBattleRoom_Text_ReadyForToughMatch:
+	.string "Match No. {STR_VAR_1} is next!\p"
+	.string "Our scouts have been watching\n"
+	.string "your next opponent…\p"
+	.string "A formidable foe awaits!\n"
+	.string "Please be on your guard!$"
 
 @ Vanilla ordinal strings, used by the non-endless prompt. The 2nd/3rd are also
 @ shared with the Slateport Battle Tent (SlateportCity_BattleTentCorridor).
