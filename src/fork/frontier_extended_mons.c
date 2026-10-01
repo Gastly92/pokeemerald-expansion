@@ -78,7 +78,8 @@
 // species' dex number, so cross-gen evolutions live at their own dex slot (e.g.
 // Magnezone/Electivire/Magmortar/Rhyperior/Tangrowth sit at #462/466/467/464/465,
 // not next to their Gen I pre-evolutions). Insert a new species at its correct dex
-// position. NOTE: saved rentals reference entries by array INDEX, so any mid-list
+// position. CI-gated by TEST("Frontier extended roster: sets are sorted by
+// National Dex number"); the draft's per-species weighting depends on it. NOTE: saved rentals reference entries by array INDEX, so any mid-list
 // insertion/removal invalidates an in-progress rented team in an existing save
 // (appending past the end is the only save-safe edit).
 
@@ -34145,8 +34146,8 @@ const u16 gFrontierExtendedMonsCount = ARRAY_COUNT(gFrontierExtendedMons);
 
 // Number of sets in the contiguous same-National-Dex run containing `id` that are
 // valid for `formatTag`. Relies on the ORDER invariant above (every build of one
-// dex number is contiguous), which TEST("Frontier extended roster: every dex
-// number's sets are contiguous") enforces.
+// dex number is contiguous), which TEST("Frontier extended roster: sets are
+// sorted by National Dex number") enforces.
 static u32 CountFormatSetsInDexRun(u16 id, u32 formatTag)
 {
     enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[id].species);

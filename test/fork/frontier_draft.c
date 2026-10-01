@@ -4,6 +4,9 @@
 #include "battle_factory.h"
 #include "battle_frontier.h"
 #include "event_data.h"
+#include "frontier_util.h"
+#include "pokemon.h"
+#include "constants/frontier_util.h"
 #include "fork/frontier_extended_mons.h"
 #include "constants/battle_factory.h"
 #include "constants/battle_frontier.h"
@@ -118,4 +121,29 @@ TEST("Frontier draft: Factory rentals and opponents obey the dex-number Species 
             EXPECT(!SpeciesListHasDexNum(team, i, team[i]));
         }
     }
+}
+
+// UPSTREAM: regression test for the player-side Species Clause in AppendIfValid
+// (src/frontier_util.c). Multis need two eligible Pokémon; two Rotom formes are only one,
+// so the entry check must report the party ineligible (gSpecialVar_0x8004 == TRUE). With
+// the old exact species-id comparison they counted as two and the party was let in.
+static bool32 PartyIsIneligibleForMultis(enum Species first, enum Species second)
+{
+    ZeroPlayerPartyMons();
+    CreateMon(&gParties[B_TRAINER_PLAYER][0], first, 50, 0, OTID_STRUCT_PRESET(0x12345678));
+    CreateMon(&gParties[B_TRAINER_PLAYER][1], second, 50, 0, OTID_STRUCT_PRESET(0x12345678));
+    VarSet(VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_TOWER);
+    VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_MULTIS);
+    gSpecialVar_Result = FRONTIER_LVL_50;
+    gSpecialVar_0x8004 = FRONTIER_UTIL_FUNC_CHECK_INELIGIBLE;
+    CallFrontierUtilFunc();
+    return gSpecialVar_0x8004;
+}
+
+TEST("Frontier draft: two formes of one Pokémon don't make a party eligible")
+{
+    EXPECT(PartyIsIneligibleForMultis(SPECIES_ROTOM_WASH, SPECIES_ROTOM_HEAT));
+    EXPECT(PartyIsIneligibleForMultis(SPECIES_NINETALES, SPECIES_NINETALES_ALOLA));
+    // Control: two different Pokémon are eligible.
+    EXPECT(!PartyIsIneligibleForMultis(SPECIES_ROTOM_WASH, SPECIES_NINETALES));
 }

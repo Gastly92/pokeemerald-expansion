@@ -7421,7 +7421,8 @@ static u8 CheckBattleEntriesAndGetMessage(void)
         {
             // UPSTREAM: Species Clause by National Dex number (formes count as one
             // Pokémon), matching AppendIfValid in frontier_util.c. Was an exact
-            // species-id test.
+            // species-id test. Not reachable from a test (party-menu UI); the
+            // AppendIfValid test covers the shared rule.
             if (SpeciesToNationalPokedexNum(species) == SpeciesToNationalPokedexNum(GetMonData(&party[order[j] - 1], MON_DATA_SPECIES)))
                 return PARTY_MSG_MONS_CANT_BE_SAME;
             if (item != ITEM_NONE && item == GetMonData(&party[order[j] - 1], MON_DATA_HELD_ITEM))

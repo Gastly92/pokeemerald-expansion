@@ -314,7 +314,7 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
                 continue;
             if (TeamHasGimmickItemConflict(heldItems, i, gFacilityTrainerMons[monId].heldItem))
                 continue;
-            // Species Clause by dex number: upstream's duplicate check below compares
+            // FORK: Species Clause by dex number: upstream's duplicate check below compares
             // exact species ids, so it lets two formes through (Silvally-Fire and
             // Silvally-Water). See SpeciesListHasDexNum.
             for (j = 0; j < i; j++)

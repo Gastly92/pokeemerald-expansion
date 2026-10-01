@@ -415,7 +415,7 @@ static void GenerateOpponentMons(void)
             continue;
 
     #if B_FRONTIER_EXTENDED_MONS
-        // Species Clause by dex number: no forme of a Pokémon the player is renting,
+        // FORK: Species Clause by dex number: no forme of a Pokémon the player is renting,
         // and no second forme of one already on this team (see helper).
         if (FactoryRentalsHaveDexNum(gFacilityTrainerMons[monId].species)
          || SpeciesListHasDexNum(&species[firstMonId], i, gFacilityTrainerMons[monId].species))
@@ -598,8 +598,9 @@ static void GenerateInitialRentalMons(void)
         // The vanilla currSpecies logic above intentionally lets ONE same-species
         // pair through; with several builds per species in the competitive roster
         // that would hand the player two copies of the same mon, so forbid any
-        // duplicate species outright (matching the opponent/Brain dedup). Compared
-        // by dex number, so two formes (Silvally-Fire / Silvally-Water) count too.
+        // duplicate species outright (matching the opponent/Brain dedup).
+        // FORK: compared by dex number, so two formes (Silvally-Fire /
+        // Silvally-Water) count too.
         if (SpeciesListHasDexNum(&species[firstMonId], i, gFacilityTrainerMons[monId].species))
             continue;
     #endif
@@ -908,7 +909,7 @@ void FillFactoryBrainParty(void)
             continue;
 
     #if B_FRONTIER_EXTENDED_MONS
-        // Species Clause by dex number. Upstream's check above only skips the exact
+        // FORK: Species Clause by dex number. Upstream's check above only skips the exact
         // sets the player rented, so the Brain could field another set (or forme) of
         // a rented Pokémon; with several sets per species that's a mirror match.
         if (FactoryRentalsHaveDexNum(gFacilityTrainerMons[monId].species)

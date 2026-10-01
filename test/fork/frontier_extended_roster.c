@@ -1519,29 +1519,24 @@ TEST("Frontier extended roster: no set holds a signature type item its species c
     EXPECT_EQ(offenders, 0);
 }
 
-// GetRandomFrontierExtendedMonId weighs every National Dex number equally by counting the
-// sets in the *contiguous* run around a drawn set. A dex number whose sets were split across
-// the list would have each fragment counted as its own run and be drafted more often, so
-// the sort order the roster's header documents is load-bearing -- check it.
-TEST("Frontier extended roster: every dex number's sets are contiguous")
+// The roster is sorted by National Dex number (see its ORDER note). Two things lean on that:
+// GetRandomFrontierExtendedMonId weighs every dex number equally by counting the sets in the
+// *contiguous* run around a drawn set, so a dex number split across the list would be
+// drafted more often; and authors find a species' sets, and insert new ones, by dex position.
+// Non-decreasing order implies contiguity, so this one check guards both.
+TEST("Frontier extended roster: sets are sorted by National Dex number")
 {
-    u32 i, j, offenders = 0;
+    u32 i, offenders = 0;
 
     for (i = 1; i < gFrontierExtendedMonsCount; i++)
     {
+        enum NationalDexOrder prev = SpeciesToNationalPokedexNum(gFrontierExtendedMons[i - 1].species);
         enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[i].species);
-        if (dexNum == SpeciesToNationalPokedexNum(gFrontierExtendedMons[i - 1].species))
-            continue;
-        // i starts a new run: no earlier set may share its dex number.
-        for (j = 0; j < i - 1; j++)
+        if (dexNum < prev)
         {
-            if (SpeciesToNationalPokedexNum(gFrontierExtendedMons[j].species) == dexNum)
-            {
-                offenders++;
-                Test_MgbaPrintf("roster[%d] %S: dex #%d already appeared at roster[%d] -- move it next to its other sets so the draft weighs its dex number once",
-                                i, gSpeciesInfo[gFrontierExtendedMons[i].species].speciesName, dexNum, j);
-                break;
-            }
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S (dex #%d) sits after dex #%d -- move it to its dex position, next to any other sets it has",
+                            i, gSpeciesInfo[gFrontierExtendedMons[i].species].speciesName, dexNum, prev);
         }
     }
     EXPECT_EQ(offenders, 0);
