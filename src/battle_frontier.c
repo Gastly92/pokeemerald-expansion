@@ -314,6 +314,17 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
                 continue;
             if (TeamHasGimmickItemConflict(heldItems, i, gFacilityTrainerMons[monId].heldItem))
                 continue;
+            // Species Clause by dex number: upstream's duplicate check below compares
+            // exact species ids, so it lets two formes through (Silvally-Fire and
+            // Silvally-Water). See SpeciesListHasDexNum.
+            for (j = 0; j < i; j++)
+            {
+                if (SpeciesToNationalPokedexNum(GetMonData(&gParties[trainer][j], MON_DATA_SPECIES))
+                 == SpeciesToNationalPokedexNum(gFacilityTrainerMons[monId].species))
+                    break;
+            }
+            if (j != i)
+                continue;
             // No legendaries or mythicals on ordinary Tower opponents, and at most
             // one pseudo on the team (every slot is a normal slot). Bosses/Brain
             // return earlier, so their fixed legendaries are unaffected.

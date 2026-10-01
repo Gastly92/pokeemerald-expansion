@@ -7419,7 +7419,10 @@ static u8 CheckBattleEntriesAndGetMessage(void)
         enum Item item = GetMonData(&party[order[i] - 1], MON_DATA_HELD_ITEM);
         for (j = i + 1; j < maxBattlers; j++)
         {
-            if (species == GetMonData(&party[order[j] - 1], MON_DATA_SPECIES))
+            // UPSTREAM: Species Clause by National Dex number (formes count as one
+            // Pokémon), matching AppendIfValid in frontier_util.c. Was an exact
+            // species-id test.
+            if (SpeciesToNationalPokedexNum(species) == SpeciesToNationalPokedexNum(GetMonData(&party[order[j] - 1], MON_DATA_SPECIES)))
                 return PARTY_MSG_MONS_CANT_BE_SAME;
             if (item != ITEM_NONE && item == GetMonData(&party[order[j] - 1], MON_DATA_HELD_ITEM))
                 return PARTY_MSG_NO_SAME_HOLD_ITEMS;

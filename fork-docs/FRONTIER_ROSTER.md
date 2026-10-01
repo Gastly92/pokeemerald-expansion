@@ -41,6 +41,18 @@ set per type form) were drafted ~17× as often as a single-set Pokémon. Formes 
 variants share their dex number's weight (Ninetales and Alolan Ninetales split one share).
 This relies on each dex number's sets being contiguous, which a roster test enforces.
 
+### Species Clause
+
+"One Pokémon" means one National Dex number in the duplicate checks too, as in the
+official Battle Frontier. Upstream compares exact species ids, which lets two formes with
+their own ids (Silvally-Fire and Silvally-Water, Rotom-Wash and Rotom-Heat) share a team.
+`SpeciesListHasDexNum()` / `FactoryRentalsHaveDexNum()` (`src/fork/frontier_draft.c`) close
+that in every draft loop: Factory rentals, opponents and Brain never repeat a dex number on
+a team, nor field any forme of a Pokémon the player is renting. The Brain previously only
+skipped the exact rented sets. Tower opponents get the same within-team rule. On the
+player's side, the facility entry check (`AppendIfValid`) and the party-select check
+(`CheckBattleEntriesAndGetMessage`) compare dex numbers too; those two are `UPSTREAM:` fixes.
+
 It is named "extended" rather than "factory" or "competitive" because the other
 frontier facilities will adopt the same list — the Battle Tower already has (see
 [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md)).

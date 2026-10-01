@@ -1,6 +1,12 @@
 #include "global.h"
 #include "test/test.h"
 #include "data.h"
+#include "battle_factory.h"
+#include "battle_frontier.h"
+#include "event_data.h"
+#include "fork/frontier_extended_mons.h"
+#include "constants/battle_factory.h"
+#include "constants/battle_frontier.h"
 #include "fork/frontier_draft.h"
 #include "constants/abilities.h"
 
@@ -30,4 +36,86 @@ TEST("Frontier draft: a non-Illusion mon is never rejected for slot placement")
     EXPECT(!IllusionMonRejectsSlot(5, 6, &sPlainMon));
     EXPECT(!IllusionMonRejectsSlot(2, 3, &sPlainMon));
     EXPECT(!IllusionMonRejectsSlot(0, 6, &sPlainMon));
+}
+
+// Species Clause by dex number (SpeciesListHasDexNum): upstream's draft and party
+// checks compare exact species ids, which let two formes with their own ids share a
+// team. These pin the dex-number comparison the draft loops and the player-side
+// checks now use.
+TEST("Frontier draft: Species Clause treats formes as one Pokémon")
+{
+    static const enum Species team[] = { SPECIES_SILVALLY_FIRE, SPECIES_NINETALES, SPECIES_NIDORAN_F };
+
+    EXPECT(SpeciesListHasDexNum(team, ARRAY_COUNT(team), SPECIES_SILVALLY_WATER));
+    EXPECT(SpeciesListHasDexNum(team, ARRAY_COUNT(team), SPECIES_SILVALLY_FIRE));
+    EXPECT(SpeciesListHasDexNum(team, ARRAY_COUNT(team), SPECIES_NINETALES_ALOLA));
+    // Different dex numbers stay distinct, even when the names say otherwise.
+    EXPECT(!SpeciesListHasDexNum(team, ARRAY_COUNT(team), SPECIES_NIDORAN_M));
+    EXPECT(!SpeciesListHasDexNum(team, ARRAY_COUNT(team), SPECIES_ARCEUS_FIRE));
+    // Only the first `count` entries are the team.
+    EXPECT(!SpeciesListHasDexNum(team, 1, SPECIES_NINETALES_ALOLA));
+}
+
+static u16 FirstRosterIdOf(enum Species species)
+{
+    u32 i;
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        if (gFrontierExtendedMons[i].species == species)
+            return i;
+    }
+    return 0;
+}
+
+// Rented Pokémon whose *other* formes are in the roster, so a regression to the exact
+// species-id check has something to slip through (Arceus would not do: mythicals are
+// already banned from ordinary opponent slots by the tier quota).
+static const enum Species sMultiFormeRentals[] =
+{
+    SPECIES_SILVALLY_FIRE, SPECIES_ROTOM_WASH, SPECIES_ORICORIO, SPECIES_LYCANROC,
+    SPECIES_TAUROS, SPECIES_NINETALES, SPECIES_RAICHU, SPECIES_MAROWAK,
+    SPECIES_SLOWBRO, SPECIES_SAMUROTT, SPECIES_TYPHLOSION, SPECIES_DECIDUEYE,
+};
+
+// End to end through the Factory's own generators: the player's rental choices never repeat
+// a dex number, and an opponent never fields any forme of a rented Pokémon nor two formes of
+// one Pokémon.
+TEST("Frontier draft: Factory rentals and opponents obey the dex-number Species Clause")
+{
+    u32 run, i, j;
+    u32 numRented = min(ARRAY_COUNT(gSaveBlock2Ptr->frontier.rentalMons), ARRAY_COUNT(sMultiFormeRentals));
+
+    gSaveBlock2Ptr->frontier.lvlMode = FRONTIER_LVL_50;
+    VarSet(VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_FACTORY);
+    VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
+    gFacilityTrainerMons = gFrontierExtendedMons;
+
+    for (run = 0; run < 100; run++)
+    {
+        gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_GENERATE_RENTAL_MONS;
+        CallBattleFactoryFunction();
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            for (j = i + 1; j < PARTY_SIZE; j++)
+                EXPECT_NE(SpeciesToNationalPokedexNum(gFrontierExtendedMons[gSaveBlock2Ptr->frontier.rentalMons[i].monId].species),
+                          SpeciesToNationalPokedexNum(gFrontierExtendedMons[gSaveBlock2Ptr->frontier.rentalMons[j].monId].species));
+        }
+    }
+
+    for (i = 0; i < ARRAY_COUNT(gSaveBlock2Ptr->frontier.rentalMons); i++)
+        gSaveBlock2Ptr->frontier.rentalMons[i].monId = FirstRosterIdOf(sMultiFormeRentals[i % ARRAY_COUNT(sMultiFormeRentals)]);
+
+    for (run = 0; run < 300; run++)
+    {
+        enum Species team[FRONTIER_PARTY_SIZE];
+
+        gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_GENERATE_OPPONENT_MONS;
+        CallBattleFactoryFunction();
+        for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+        {
+            team[i] = gFrontierExtendedMons[gFrontierTempParty[i]].species;
+            EXPECT(!SpeciesListHasDexNum(sMultiFormeRentals, numRented, team[i]));
+            EXPECT(!SpeciesListHasDexNum(team, i, team[i]));
+        }
+    }
 }

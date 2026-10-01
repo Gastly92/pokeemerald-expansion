@@ -1,6 +1,7 @@
 #include "global.h"
 #include "config_changes.h"
 #include "fork/frontier_draft.h"
+#include "battle_frontier.h"
 #include "data.h"
 #include "item.h"
 #include "pokemon.h"
@@ -36,6 +37,38 @@ bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem)
     for (i = 0; i < count; i++)
     {
         if (heldItems[i] != ITEM_NONE && GetItemHoldEffect(heldItems[i]) == newEffect)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// Species Clause by National Dex number. Upstream's draft loops compare exact
+// species ids, which was the whole clause in vanilla Emerald (one id per Pokémon)
+// but lets two formes with their own ids through — and the extended roster carries
+// many (Silvally and Arceus have one set per type forme). The draft loops call
+// these alongside upstream's exact-id checks; see fork-docs/FRONTIER_ROSTER.md.
+bool32 SpeciesListHasDexNum(const enum Species *list, u32 count, enum Species species)
+{
+    enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(species);
+    u32 i;
+
+    for (i = 0; i < count; i++)
+    {
+        if (SpeciesToNationalPokedexNum(list[i]) == dexNum)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool32 FactoryRentalsHaveDexNum(enum Species species)
+{
+    enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(species);
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(gSaveBlock2Ptr->frontier.rentalMons); i++)
+    {
+        enum Species rental = gFacilityTrainerMons[gSaveBlock2Ptr->frontier.rentalMons[i].monId].species;
+        if (SpeciesToNationalPokedexNum(rental) == dexNum)
             return TRUE;
     }
     return FALSE;

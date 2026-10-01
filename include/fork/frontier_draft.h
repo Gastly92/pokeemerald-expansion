@@ -1,6 +1,7 @@
 #ifndef GUARD_FRONTIER_DRAFT_H
 #define GUARD_FRONTIER_DRAFT_H
 
+#include "constants/species.h"
 #include "fork/species_tiers.h"
 
 // FORK: shared Battle Frontier competitive-draft rules. Extracted out of the
@@ -9,6 +10,15 @@
 // teams from the extended roster (the Battle Factory and the Battle Tower). See
 // src/frontier_draft.c. Used under B_FRONTIER_EXTENDED_MONS.
 struct TrainerMon;
+
+// Species Clause by National Dex number: formes with their own species id
+// (Silvally-Fire / Silvally-Water, Rotom-Wash / Rotom-Heat, Ninetales / Alolan
+// Ninetales) count as the same Pokémon. TRUE if any of list[0..count) shares
+// `species`'s dex number.
+bool32 SpeciesListHasDexNum(const enum Species *list, u32 count, enum Species species);
+// TRUE if any of the Battle Factory's saved rentals (resolved through
+// gFacilityTrainerMons) shares `species`'s dex number.
+bool32 FactoryRentalsHaveDexNum(enum Species species);
 
 bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem);
 bool32 TierRejectsCandidate(enum SpeciesTier slotTier, enum SpeciesTier candTier, u32 pseudoCount);
