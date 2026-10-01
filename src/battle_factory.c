@@ -415,6 +415,12 @@ static void GenerateOpponentMons(void)
             continue;
 
     #if B_FRONTIER_EXTENDED_MONS
+        // FORK: Species Clause by dex number: no forme of a Pokémon the player is renting,
+        // and no second forme of one already on this team (see helper).
+        if (FactoryRentalsHaveDexNum(gFacilityTrainerMons[monId].species)
+         || SpeciesListHasDexNum(&species[firstMonId], i, gFacilityTrainerMons[monId].species))
+            continue;
+
         // At most one Mega Stone and one Z-Crystal per team (see helper).
         if (TeamHasGimmickItemConflict(&heldItems[firstMonId], i, gFacilityTrainerMons[monId].heldItem))
             continue;
@@ -593,12 +599,9 @@ static void GenerateInitialRentalMons(void)
         // pair through; with several builds per species in the competitive roster
         // that would hand the player two copies of the same mon, so forbid any
         // duplicate species outright (matching the opponent/Brain dedup).
-        for (j = firstMonId; j < firstMonId + i; j++)
-        {
-            if (species[j] == gFacilityTrainerMons[monId].species)
-                break;
-        }
-        if (j != firstMonId + i)
+        // FORK: compared by dex number, so two formes (Silvally-Fire /
+        // Silvally-Water) count too.
+        if (SpeciesListHasDexNum(&species[firstMonId], i, gFacilityTrainerMons[monId].species))
             continue;
     #endif
 
@@ -906,6 +909,13 @@ void FillFactoryBrainParty(void)
             continue;
 
     #if B_FRONTIER_EXTENDED_MONS
+        // FORK: Species Clause by dex number. Upstream's check above only skips the exact
+        // sets the player rented, so the Brain could field another set (or forme) of
+        // a rented Pokémon; with several sets per species that's a mirror match.
+        if (FactoryRentalsHaveDexNum(gFacilityTrainerMons[monId].species)
+         || SpeciesListHasDexNum(species, i, gFacilityTrainerMons[monId].species))
+            continue;
+
         // At most one Mega Stone and one Z-Crystal on the Brain's team (see helper).
         if (TeamHasGimmickItemConflict(heldItems, i, gFacilityTrainerMons[monId].heldItem))
             continue;

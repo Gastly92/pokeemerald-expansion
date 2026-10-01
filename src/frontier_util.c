@@ -2150,7 +2150,12 @@ static void AppendIfValid(enum Species species, enum Item heldItem, u16 hp, enum
     if (lvlMode == FRONTIER_LVL_50 && monLevel > FRONTIER_MAX_LEVEL_50)
         return;
 
-    for (i = 0; i < *count && speciesArray[i] != species; i++)
+    // UPSTREAM: Species Clause by National Dex number, so two formes with their own
+    // species ids (Rotom-Wash / Rotom-Heat, Ninetales / Alolan Ninetales) count as
+    // one Pokémon, as in the official Battle Frontier. Was an exact species-id test,
+    // which only matched the clause before formes had their own ids. Regression test:
+    // TEST("Frontier draft: two formes of one Pokémon don't make a party eligible").
+    for (i = 0; i < *count && SpeciesToNationalPokedexNum(speciesArray[i]) != SpeciesToNationalPokedexNum(species); i++)
         ;
     if (i != *count)
         return;

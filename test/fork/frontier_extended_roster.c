@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/test.h"
 #include "data.h"
+#include "event_data.h" // FORK: VarSet (draft-weighting test)
 #include "battle_frontier.h"
 #include "constants/battle_frontier.h" // FORK: FLAG_FRONTIER_MON_FACTORY
 #include "config_changes.h"
@@ -1516,4 +1517,43 @@ TEST("Frontier extended roster: no set holds a signature type item its species c
     // Guard against a vacuous pass if the roster ever stops carrying these items at all.
     EXPECT_GT(signatureHolders, 30);
     EXPECT_EQ(offenders, 0);
+}
+
+// The roster is sorted by National Dex number (see its ORDER note). Two things lean on that:
+// GetRandomFrontierExtendedMonId weighs every dex number equally by counting the sets in the
+// *contiguous* run around a drawn set, so a dex number split across the list would be
+// drafted more often; and authors find a species' sets, and insert new ones, by dex position.
+// Non-decreasing order implies contiguity, so this one check guards both.
+TEST("Frontier extended roster: sets are sorted by National Dex number")
+{
+    u32 i, offenders = 0;
+
+    for (i = 1; i < gFrontierExtendedMonsCount; i++)
+    {
+        enum NationalDexOrder prev = SpeciesToNationalPokedexNum(gFrontierExtendedMons[i - 1].species);
+        enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[i].species);
+        if (dexNum < prev)
+        {
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S (dex #%d) sits after dex #%d -- move it to its dex position, next to any other sets it has",
+                            i, gSpeciesInfo[gFrontierExtendedMons[i].species].speciesName, dexNum, prev);
+        }
+    }
+    EXPECT_EQ(offenders, 0);
+}
+
+// The draft is uniform per dex number, not per set: Silvally's seventeen type forms must not
+// make it seventeen times as likely as a Pokémon with one set. Drawn per set, Silvally would
+// take ~17/1600 of all draws (~53 of 5000); drawn per dex number it takes ~1/600 (~8).
+TEST("Frontier extended roster: the draft weighs each dex number equally, not each set")
+{
+    u32 i, silvally = 0;
+
+    VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
+    for (i = 0; i < 5000; i++)
+    {
+        if (SpeciesToNationalPokedexNum(gFrontierExtendedMons[GetRandomFrontierExtendedMonId()].species) == NATIONAL_DEX_SILVALLY)
+            silvally++;
+    }
+    EXPECT_LT(silvally, 25);
 }

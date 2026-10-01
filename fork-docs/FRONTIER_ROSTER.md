@@ -23,14 +23,35 @@ Plus the **species tier map** (`src/fork/species_tiers.c`) that the draft gates 
 
 Under the flag, `GetFactoryMonsTable()` / `GetFactoryMonsCount()` swap in the fork
 roster on the Battle Factory's code paths, and the vanilla tier ramp in
-`sInitialRentalMonRanges` / `GetFactoryMonId` is bypassed — sets are drawn
-**uniformly**. The vanilla `FRONTIER_MONS_HIGH_TIER` (849) Level-50 gate is disabled
+`sInitialRentalMonRanges` / `GetFactoryMonId` is bypassed — the draw is **uniform per
+National Dex number**, not per set (see "Draft weighting" below). The vanilla `FRONTIER_MONS_HIGH_TIER` (849) Level-50 gate is disabled
 too, since the roster has no tier ordering, so there is no 849-entry ceiling.
 
 The list is ordered by National Pokédex number, and carries **several distinct builds
 per species**, so an opponent's exact set can't be read off its species. Each set is
 tagged `FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`, and `GetFactoryMonId` only
 draws sets valid for the current battle format.
+
+### Draft weighting
+
+`GetRandomFrontierExtendedMonId()` gives every National Dex number the same odds, however
+many sets it has: a uniformly drawn set is kept with probability 1/n, where n is the
+number of format-valid sets sharing its dex number. Without this, Silvally and Arceus (one
+set per type form) were drafted ~17× as often as a single-set Pokémon. Formes and regional
+variants share their dex number's weight (Ninetales and Alolan Ninetales split one share).
+This relies on each dex number's sets being contiguous, which a roster test enforces.
+
+### Species Clause
+
+"One Pokémon" means one National Dex number in the duplicate checks too, as in the
+official Battle Frontier. Upstream compares exact species ids, which lets two formes with
+their own ids (Silvally-Fire and Silvally-Water, Rotom-Wash and Rotom-Heat) share a team.
+`SpeciesListHasDexNum()` / `FactoryRentalsHaveDexNum()` (`src/fork/frontier_draft.c`) close
+that in every draft loop: Factory rentals, opponents and Brain never repeat a dex number on
+a team, nor field any forme of a Pokémon the player is renting. The Brain previously only
+skipped the exact rented sets. Tower opponents get the same within-team rule. On the
+player's side, the facility entry check (`AppendIfValid`) and the party-select check
+(`CheckBattleEntriesAndGetMessage`) compare dex numbers too; those two are `UPSTREAM:` fixes.
 
 It is named "extended" rather than "factory" or "competitive" because the other
 frontier facilities will adopt the same list — the Battle Tower already has (see
