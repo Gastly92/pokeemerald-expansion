@@ -11,6 +11,7 @@
 #include "constants/battle_factory.h"
 #include "constants/battle_frontier.h"
 #include "fork/frontier_draft.h"
+#include "fork/species_tiers.h"
 #include "constants/abilities.h"
 
 // FORK: guards IllusionMonRejectsSlot (src/fork/frontier_draft.c). Illusion
@@ -146,4 +147,44 @@ TEST("Frontier draft: two formes of one Pokémon don't make a party eligible")
     EXPECT(PartyIsIneligibleForMultis(SPECIES_NINETALES, SPECIES_NINETALES_ALOLA));
     // Control: two different Pokémon are eligible.
     EXPECT(!PartyIsIneligibleForMultis(SPECIES_ROTOM_WASH, SPECIES_NINETALES));
+}
+
+// The endless Factory's swap after a Frontier Brain match drafts from rentalMons[3..5],
+// which factory_setopponentmons fills from gFrontierTempParty. GenerateOpponentMons seeds
+// that with a regular team before FillFactoryBrainParty builds the Brain's real one, so the
+// Brain has to overwrite it, or the player is offered a team they never fought.
+TEST("Factory: the swap after the Frontier Brain offers the Brain's team")
+{
+    u32 run, i;
+
+    gSaveBlock2Ptr->frontier.lvlMode = FRONTIER_LVL_50;
+    VarSet(VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_FACTORY);
+    VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
+    gFacilityTrainerMons = gFrontierExtendedMons;
+
+    for (run = 0; run < 20; run++)
+    {
+        bool32 hasLegendary = FALSE;
+
+        gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_GENERATE_RENTAL_MONS;
+        CallBattleFactoryFunction();
+        gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_GENERATE_OPPONENT_MONS;
+        CallBattleFactoryFunction();
+        FillFactoryBrainParty();
+        gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_SET_OPPONENT_MONS;
+        CallBattleFactoryFunction();
+
+        for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+        {
+            enum Species offered = gFrontierExtendedMons[gSaveBlock2Ptr->frontier.rentalMons[FRONTIER_PARTY_SIZE + i].monId].species;
+            EXPECT_EQ(offered, GetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_SPECIES));
+            if (GetSpeciesTier(offered) == TIER_LEGENDARY)
+                hasLegendary = TRUE;
+        }
+    #if B_FRONTIER_EXTENDED_MONS
+        EXPECT(hasLegendary);
+    #else
+        (void)hasLegendary;
+    #endif
+    }
 }
