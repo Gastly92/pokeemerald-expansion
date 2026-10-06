@@ -932,6 +932,12 @@ void FillFactoryBrainParty(void)
 
         species[i] = gFacilityTrainerMons[monId].species;
         heldItems[i] = gFacilityTrainerMons[monId].heldItem;
+        // FORK: record the Brain's real team in gFrontierTempParty, which still holds the
+        // regular team GenerateOpponentMons drafted for this slot. factory_setopponentmons
+        // copies it into the swap pool after the battle, so without this the endless
+        // Factory offered the discarded team instead of the Brain's (and its legendary).
+        // Test: "Factory: the swap after the Frontier Brain offers the Brain's team".
+        gFrontierTempParty[i] = monId;
     #if B_FRONTIER_EXTENDED_MONS
         if (GetSpeciesTier(gFacilityTrainerMons[monId].species) == TIER_PSEUDO)
             pseudoCount++;
