@@ -423,6 +423,7 @@ static inline s32 InnateUnawareBoonStage(enum BattlerId battler, s32 stage)
 enum MoveEndResult MoveEndAbilitiesInnate(struct BattleCalcValues *cv);
 enum MoveEndResult MoveEndAbilityEffectFoesFaintedInnate(struct BattleCalcValues *cv);
 enum MoveEndResult MoveEndColorChangeInnate(struct BattleCalcValues *cv);
+void RedirectSheerForceSkipToInnates(void);
 bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability);
 bool32 IsMoxieTypeInnateActive(u32 battler); // innate-aware Moxie / Chilling Neigh / Grim Neigh
 

@@ -8825,6 +8825,51 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Grim Neigh raises Sp. Atk w
     }
 }
 
+// Sheer Force skips the move-end steps it suppresses by jumping past them, and the chosen-ability
+// Moxie step sits inside that jump. Moxie-type KO boosts are not something Sheer Force suppresses, so an
+// innate one must still fire (RedirectSheerForceSkipToInnates). Life Orb rides along as the control that
+// the rest of the skip still applies: the boosted KO costs no recoil.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Grim Neigh still fires after a Sheer Force boosted KO")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SPECTRIER, ABILITY_GRIM_NEIGH));
+        ASSUME(MoveIsAffectedBySheerForce(MOVE_SHADOW_BALL));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_SPECTRIER) { Ability(ABILITY_SHEER_FORCE); Item(ITEM_LIFE_ORB); Moves(MOVE_SHADOW_BALL); }
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_ZIGZAGOON);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SHADOW_BALL); SEND_OUT(opponent, 1); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SHADOW_BALL, player);
+        ABILITY_POPUP(player, ABILITY_GRIM_NEIGH);
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE + 1);
+        EXPECT_EQ(player->hp, player->maxHP); // Life Orb recoil is still suppressed
+    }
+}
+
+// Magician, unlike the KO boosts, IS suppressed by Sheer Force (it is an after-move-secondary effect,
+// like Life Orb), so the detour through the attacker-side innate step must skip it.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Magician does not steal after a Sheer Force boosted move")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_DELPHOX, ABILITY_MAGICIAN));
+        ASSUME(MoveIsAffectedBySheerForce(MOVE_FLAMETHROWER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_DELPHOX) { Ability(ABILITY_SHEER_FORCE); Moves(MOVE_FLAMETHROWER); }
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_LEFTOVERS); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_FLAMETHROWER); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_FLAMETHROWER, player);
+        NONE_OF { ABILITY_POPUP(player, ABILITY_MAGICIAN); }
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+        EXPECT_EQ(opponent->item, ITEM_LEFTOVERS);
+    }
+}
+
 // Electromorphosis charges on ANY damaging hit (unlike Wind Power, which needs a wind move): the opponent hits
 // with a non-wind Tackle, and the innate still charges Bellibolt, doubling its next Electric move.
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Electromorphosis charges when hit by any damaging move")

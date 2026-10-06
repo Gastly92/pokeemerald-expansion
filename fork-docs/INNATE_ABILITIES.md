@@ -736,6 +736,20 @@ make check TESTS="Innate abilities: no species' chosen ability inverts"
 Abilities that move a *foe's* stats are deliberately absent from the second array:
 Contrary sits on the holder, so an innate Intimidate is untouched by it.
 
+## Sheer Force and the KO-boost innates
+
+Upstream's `MOVEEND_SHEER_FORCE` handles a Sheer-Force-boosted move by jumping straight
+to `MOVEEND_ITEMS_EFFECTS_ALL`, skipping every step in between — Life Orb, Shell Bell,
+Red Card, Color Change, Berserk, and also the Moxie step. Upstream never has to tell
+those apart, because no species carries Sheer Force and a Moxie-type ability at once.
+With innates, Spectrier (chosen Sheer Force, innate Grim Neigh) and others do, and
+Moxie / Chilling Neigh / Grim Neigh / Beast Boost are KO triggers Sheer Force does not
+suppress. `RedirectSheerForceSkipToInnates()` detours the skip through the
+attacker-side innate step (`MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE`), which then
+resumes it; innate Magician, which Sheer Force *does* suppress, is filtered there.
+Tests: "innate Grim Neigh still fires after a Sheer Force boosted KO" and "innate
+Magician does not steal after a Sheer Force boosted move".
+
 ## Why "mostly automatic" depends on the ability
 
 Steps 1, 2, 4, 5 are mechanical for every ability; Step 3.5 fires whenever a
