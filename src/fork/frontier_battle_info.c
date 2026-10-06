@@ -15,6 +15,7 @@
 #include "fork/free_gimmicks.h" // FORK: FindMegaStoneForStats, shared with the live form change
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/frontier_battle_info.h"
+#include "fork/battle_log.h" // the Battle Log page
 #include "gpu_regs.h"
 #include "item.h"
 #include "main.h"
@@ -88,6 +89,10 @@ enum
     INFO_PAGE_FIELD,
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
+    // Every move used this battle and the damage it did, newest first, as a % of the
+    // target's max HP (see DrawLogPage). Last of the whole-field pages, ahead of the foe-scoped
+    // ones, so the foe-scoped block stays contiguous.
+    INFO_PAGE_LOG,
     INFO_PAGE_FOE,
     // FORK: the foe's base stats, plus a row per Mega/Primal form its species can reach.
     // Foe-scoped like the Foe page (it shares tFoeIndex), and placed directly after it so
@@ -119,6 +124,9 @@ static u32 InfoPageCount(void)
 // It indexes CollectPlayerSlots()' list, not the party directly, and is re-defaulted on
 // every open (see DefaultPlayerCursor) rather than persisted like tFoeIndex.
 #define tPlayerIndex  data[3]
+// The Battle Log page's scroll position, in entries from the newest. Not persisted:
+// every open lands on the newest entries, which is what the player opens it to read.
+#define tLogScroll    data[4]
 
 // FORK: the last page/foe the player was viewing is remembered so re-opening the
 // viewer (often once per turn) returns to where they left off instead of always
@@ -1026,6 +1034,103 @@ static void DrawStatsPage(u8 windowId)
 }
 
 // ---------------------------------------------------------------------------
+// Battle Log page
+// ---------------------------------------------------------------------------
+// One row per move used, newest at the top, in four columns:
+//   turn | attacker | move | target + damage
+// Damage is a % of the target's max HP -- the same unit the health bar shows -- so the log
+// never states a foe's HP outright, which the battle otherwise keeps hidden. Every species is
+// the one the player SAW (an Illusion's disguise, recorded at the time), so the log cannot
+// leak what was behind it either. The turn is printed only on a turn's first row, which groups
+// the rows by turn without spending a line on a header. Your side's moves are blue and the
+// foe's grey; the attacker's species carries the same information for a colour-blind player.
+#define LOG_ROWS      8     // body rows between the title and the footer
+#define LOG_ATK_X     20
+#define LOG_MOVE_X    80
+#define LOG_TARGET_X  154
+#define LOG_RESULT_R  (INFO_WIN_WIDTH * 8)
+#define LOG_RESULT_W  24    // "100%" in FONT_NARROW, with a gap before it
+
+// Print a cell, narrowing the font and then clipping it so it never spills into the next
+// column. Long Z-Move and Max Move names are what need it.
+static void PrintLogCell(u8 windowId, const u8 *str, u32 x, u32 y, u32 width, u8 fg, u8 shadow)
+{
+    u8 buf[32];
+    u8 color[3] = { TEXT_COLOR_TRANSPARENT, fg, shadow };
+    u32 len = 0;
+    u32 fontId;
+
+    while (len < sizeof(buf) - 1 && str[len] != EOS)
+    {
+        buf[len] = str[len];
+        len++;
+    }
+    buf[len] = EOS;
+
+    fontId = GetFontIdToFit(buf, FONT_NARROW, 0, width);
+    while (len != 0 && GetStringWidth(fontId, buf, 0) > (s32)width)
+        buf[--len] = EOS;
+
+    AddTextPrinterParameterized4(windowId, fontId, x, y, 0, 0, color, 0, buf);
+}
+
+static void DrawLogPage(u8 windowId, u32 scroll)
+{
+    u32 count = BattleLogCount();
+    u32 y = LINE_H;
+    u8 str[16];
+
+    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  BATTLE LOG"));
+
+    if (count == 0)
+        PrintLine(windowId, COMPOUND_STRING("No moves used yet."), 0, y);
+
+    for (u32 row = 0; row < LOG_ROWS && scroll + row < count; row++, y += LINE_H)
+    {
+        const struct BattleLogEntry *entry = BattleLogGetNewest(scroll + row);
+        const struct BattleLogEntry *newer = (scroll + row == 0) ? NULL : BattleLogGetNewest(scroll + row - 1);
+        u8 fg = entry->attackerOnPlayerSide ? TEXT_COLOR_BLUE : TEXT_COLOR_DARK_GRAY;
+        u8 shadow = entry->attackerOnPlayerSide ? TEXT_COLOR_LIGHT_BLUE : TEXT_COLOR_LIGHT_GRAY;
+
+        // The top row of the page always carries its turn, so a scrolled page is never anonymous.
+        if (row == 0 || newer->turn != entry->turn)
+        {
+            u8 *p = StringCopy(str, COMPOUND_STRING("T"));
+            ConvertIntToDecimalStringN(p, entry->turn + 1, STR_CONV_MODE_LEFT_ALIGN, 3);
+            PrintLogCell(windowId, str, 0, y, LOG_ATK_X - 2, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY);
+        }
+        PrintLogCell(windowId, GetSpeciesName(entry->attackerSpecies), LOG_ATK_X, y, LOG_MOVE_X - LOG_ATK_X - 2, fg, shadow);
+        PrintLogCell(windowId, GetMoveName(entry->move), LOG_MOVE_X, y, LOG_TARGET_X - LOG_MOVE_X - 2, fg, shadow);
+
+        if (!entry->hasTarget)
+            continue;
+
+        PrintLogCell(windowId, GetSpeciesName(entry->targetSpecies), LOG_TARGET_X, y,
+                     LOG_RESULT_R - LOG_RESULT_W - LOG_TARGET_X, fg, shadow);
+        if (entry->substitute)
+        {
+            StringCopy(str, COMPOUND_STRING("Sub"));
+        }
+        else if (entry->ko)
+        {
+            StringCopy(str, COMPOUND_STRING("KO"));
+        }
+        else
+        {
+            u8 *p = ConvertIntToDecimalStringN(str, BattleLogEntryPercent(entry), STR_CONV_MODE_LEFT_ALIGN, 3);
+            *p++ = CHAR_PERCENT;
+            *p = EOS;
+        }
+        // A KO is the line the player scans for, so it alone is red.
+        PrintLineEx(windowId, str, LOG_RESULT_R - GetStringWidth(FONT_NARROW, str, 0), y,
+                    entry->ko ? TEXT_COLOR_RED : fg, entry->ko ? TEXT_COLOR_LIGHT_RED : shadow);
+    }
+
+    PrintFooter(windowId, count > LOG_ROWS ? COMPOUND_STRING("{UP_ARROW}{DOWN_ARROW}: Scroll  L/R: Page  B: Close")
+                                           : COMPOUND_STRING("L/R: Page    B: Close"));
+}
+
+// ---------------------------------------------------------------------------
 // Base Stats page
 // ---------------------------------------------------------------------------
 // FORK: base stats are a static property of the SPECIES - like the type line and the
@@ -1644,6 +1749,9 @@ static void RedrawInfo(u8 taskId)
     case INFO_PAGE_SPEED:
         DrawSpeedPage(windowId);
         break;
+    case INFO_PAGE_LOG:
+        DrawLogPage(windowId, gTasks[taskId].tLogScroll);
+        break;
     case INFO_PAGE_FOE:
         DrawFoePage(windowId, gTasks[taskId].tFoeIndex);
         break;
@@ -1747,6 +1855,19 @@ static void Task_InfoProcessInput(u8 taskId)
                 gTasks[taskId].tPlayerIndex = 0;
             else if (gTasks[taskId].tPlayerIndex < 0)
                 gTasks[taskId].tPlayerIndex = playerCount - 1;
+            RedrawInfo(taskId);
+        }
+    }
+    // On the Battle Log page up/down scrolls the log, a row at a time.
+    else if (gTasks[taskId].tPage == INFO_PAGE_LOG && (JOY_REPEAT(DPAD_DOWN) || JOY_REPEAT(DPAD_UP)))
+    {
+        s16 maxScroll = (BattleLogCount() > LOG_ROWS) ? (s16)(BattleLogCount() - LOG_ROWS) : 0;
+        s16 scroll = gTasks[taskId].tLogScroll + (JOY_REPEAT(DPAD_DOWN) ? 1 : -1);
+
+        if (scroll >= 0 && scroll <= maxScroll)
+        {
+            PlaySE(SE_SELECT);
+            gTasks[taskId].tLogScroll = scroll;
             RedrawInfo(taskId);
         }
     }

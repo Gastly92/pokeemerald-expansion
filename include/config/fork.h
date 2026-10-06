@@ -29,5 +29,6 @@
 
 // Battle UI.
 #define B_CLEAN_HEALTHBOX            TRUE    // If TRUE, declutters the battle healthboxes: removes the triangular pointer/tail on each box's corner (it points at the mon and, in doubles, can cover the on-healthbox type icons), and removes the EXP bar + its wrap-around frame from the singles player box. Keeps the B_ prefix because it reads as a battle config at its use sites (src/battle_interface.c, src/graphics.c); it is fork-only, which is why it lives here rather than in config/battle.h.
+#define B_MOVE_DAMAGE_PREVIEW        TRUE    // If TRUE, the move menu's type row shows the selected move's possible damage against the foe as a % of its max HP (e.g. "Fire 34-41%"), replacing the "TYPE/" label. The range spans the foe's unknown spread: 0 IV / 0 EV / hindering nature at the top end, 31 IV / 252 EV / boosting nature at the bottom, plus the damage roll. The foe's unrevealed ability and held item are assumed absent, so nothing hidden leaks. See fork-docs/DAMAGE_PREVIEW.md and src/fork/damage_preview.c.
 
 #endif // GUARD_CONFIG_FORK_H

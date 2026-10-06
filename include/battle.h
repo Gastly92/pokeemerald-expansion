@@ -29,6 +29,7 @@
 #include "move.h"
 #include "random.h" // for rng_value_t
 #include "trainer_slide.h"
+#include "fork/battle_log.h" // FORK: struct BattleLog, held in gBattleStruct
 
 // Used to exclude moves learned temporarily by Transform or Mimic
 #define MOVE_IS_PERMANENT(battler, moveSlot)                        \
@@ -788,6 +789,8 @@ struct BattleStruct
     // src/fork/frontier_battle_info.c.
     u8 infoViewerPage;
     u8 infoViewerFoeIndex;
+    // FORK: the B_FRONTIER_BATTLE_INFO viewer's Battle Log page (include/fork/battle_log.h).
+    struct BattleLog battleLog;
 };
 
 struct AiBattleData
