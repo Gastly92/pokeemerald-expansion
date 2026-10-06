@@ -2,7 +2,7 @@
 #include "test/battle.h"
 #include "fork/battle_log.h"
 
-// FORK: B_FRONTIER_BATTLE_INFO's Battle Log page. The log records every move used and the damage
+// B_FRONTIER_BATTLE_INFO's Battle Log page. The log records every move used and the damage
 // it dealt as a % of the target's max HP, newest first. These tests read the recorder directly;
 // the page only lays its entries out.
 

@@ -2,7 +2,7 @@
 #include "test/battle.h"
 #include "fork/damage_preview.h"
 
-// FORK: B_MOVE_DAMAGE_PREVIEW. The move menu's "% of the foe's HP" range must (1) contain the
+// B_MOVE_DAMAGE_PREVIEW. The move menu's "% of the foe's HP" range must (1) contain the
 // damage the move really does, whatever the foe's hidden spread, (2) never use anything the
 // player has not seen -- the foe's held item, its chosen ability, the mon behind an Illusion --
 // and (3) leave the battle exactly as it found it, since it runs on every cursor move.

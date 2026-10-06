@@ -1,4 +1,4 @@
-// FORK: B_FRONTIER_BATTLE_INFO -- the Battle Log page's recorder. See include/fork/battle_log.h.
+// B_FRONTIER_BATTLE_INFO -- the Battle Log page's recorder. See include/fork/battle_log.h.
 // Only ever called from real move execution (never from the AI's simulations, which do not run
 // the move-resolution cancelers), so everything here is something the player watched happen.
 

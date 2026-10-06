@@ -1,7 +1,7 @@
 #ifndef GUARD_FORK_BATTLE_LOG_H
 #define GUARD_FORK_BATTLE_LOG_H
 
-// FORK: B_FRONTIER_BATTLE_INFO -- the INFO viewer's Battle Log page: every move used this
+// B_FRONTIER_BATTLE_INFO -- the INFO viewer's Battle Log page: every move used this
 // battle and the damage it dealt, as a % of the target's max HP so the log never states a
 // foe's HP outright. Recorded by src/fork/battle_log.c from two hooks in
 // src/battle_move_resolution.c; drawn by src/fork/frontier_battle_info.c.

@@ -15,7 +15,7 @@
 #include "fork/free_gimmicks.h" // FORK: FindMegaStoneForStats, shared with the live form change
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/frontier_battle_info.h"
-#include "fork/battle_log.h" // FORK: the Battle Log page
+#include "fork/battle_log.h" // the Battle Log page
 #include "gpu_regs.h"
 #include "item.h"
 #include "main.h"
@@ -89,7 +89,7 @@ enum
     INFO_PAGE_FIELD,
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
-    // FORK: every move used this battle and the damage it did, newest first, as a % of the
+    // Every move used this battle and the damage it did, newest first, as a % of the
     // target's max HP (see DrawLogPage). Last of the whole-field pages, ahead of the foe-scoped
     // ones, so the foe-scoped block stays contiguous.
     INFO_PAGE_LOG,
@@ -124,7 +124,7 @@ static u32 InfoPageCount(void)
 // It indexes CollectPlayerSlots()' list, not the party directly, and is re-defaulted on
 // every open (see DefaultPlayerCursor) rather than persisted like tFoeIndex.
 #define tPlayerIndex  data[3]
-// FORK: the Battle Log page's scroll position, in entries from the newest. Not persisted:
+// The Battle Log page's scroll position, in entries from the newest. Not persisted:
 // every open lands on the newest entries, which is what the player opens it to read.
 #define tLogScroll    data[4]
 
@@ -1036,7 +1036,7 @@ static void DrawStatsPage(u8 windowId)
 // ---------------------------------------------------------------------------
 // Battle Log page
 // ---------------------------------------------------------------------------
-// FORK: one row per move used, newest at the top, in four columns:
+// One row per move used, newest at the top, in four columns:
 //   turn | attacker | move | target + damage
 // Damage is a % of the target's max HP -- the same unit the health bar shows -- so the log
 // never states a foe's HP outright, which the battle otherwise keeps hidden. Every species is
@@ -1858,7 +1858,7 @@ static void Task_InfoProcessInput(u8 taskId)
             RedrawInfo(taskId);
         }
     }
-    // FORK: on the Battle Log page up/down scrolls the log, a row at a time.
+    // On the Battle Log page up/down scrolls the log, a row at a time.
     else if (gTasks[taskId].tPage == INFO_PAGE_LOG && (JOY_REPEAT(DPAD_DOWN) || JOY_REPEAT(DPAD_UP)))
     {
         s16 maxScroll = (BattleLogCount() > LOG_ROWS) ? (s16)(BattleLogCount() - LOG_ROWS) : 0;

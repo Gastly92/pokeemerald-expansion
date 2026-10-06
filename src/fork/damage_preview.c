@@ -1,4 +1,4 @@
-// FORK: B_MOVE_DAMAGE_PREVIEW -- the move menu's "% of the foe's HP" damage range.
+// B_MOVE_DAMAGE_PREVIEW -- the move menu's "% of the foe's HP" damage range.
 // See include/fork/damage_preview.h and fork-docs/DAMAGE_PREVIEW.md.
 //
 // The calc itself is the AI's damage simulation (AI_CalcDamage), which already handles

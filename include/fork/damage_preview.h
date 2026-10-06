@@ -1,7 +1,7 @@
 #ifndef GUARD_FORK_DAMAGE_PREVIEW_H
 #define GUARD_FORK_DAMAGE_PREVIEW_H
 
-// FORK: B_MOVE_DAMAGE_PREVIEW (include/config/fork.h) -- the move menu's damage range.
+// B_MOVE_DAMAGE_PREVIEW (include/config/fork.h) -- the move menu's damage range.
 // See fork-docs/DAMAGE_PREVIEW.md and src/fork/damage_preview.c.
 
 // The % of the defender's max HP a move could deal, as the player can bound it from public
