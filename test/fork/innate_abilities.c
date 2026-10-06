@@ -3,6 +3,7 @@
 #include "config_changes.h"
 #include "constants/characters.h" // EOS, for CompareAbilityNames
 #include "fork/innate_abilities.h"
+#include "fork/species_tiers.h" // GetSpeciesTier (every legend-grade tier species carries innate Pressure)
 #include "fork/frontier_extended_mons.h"
 #include "fork/species_ability_overrides.h"
 #include "fork/frontier_battle_info.h" // INFO_MAX_DISPLAYED_INNATES (the viewer's innates-page row budget)
@@ -2154,6 +2155,79 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Pressure user keeps it via
     } THEN {
         EXPECT_EQ(player->pp[0], 33); // innate Pressure taxes the extra PP even though chosen is Unnerve
     }
+}
+
+// Innate Pressure announces itself on entry exactly like the real ability: the switch-in driver
+// (TryActivateInnateSwitchInEffects) runs the upstream ABILITYEFFECT_ON_SWITCHIN case, with the pop-up
+// overwritten to Pressure since Aerodactyl's chosen ability here is Rock Head.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Pressure announces itself on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_AERODACTYL, ABILITY_PRESSURE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_AERODACTYL) { Ability(ABILITY_ROCK_HEAD); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_PRESSURE); // pop-up shows the innate, not chosen Rock Head
+            MESSAGE("Aerodactyl is exerting its pressure!");
+        } else {
+            NONE_OF { MESSAGE("Aerodactyl is exerting its pressure!"); }
+        }
+    }
+}
+
+// A holder whose chosen ability is also Pressure announces once: the driver skips an innate equal to
+// the chosen ability, so the chosen-ability switch-in block is the only one that runs it.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: chosen + innate Pressure announces only once")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_AERODACTYL, ABILITY_PRESSURE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_AERODACTYL) { Ability(ABILITY_PRESSURE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_PRESSURE);
+        MESSAGE("Aerodactyl is exerting its pressure!");
+        NONE_OF {
+            ABILITY_POPUP(player, ABILITY_PRESSURE);
+            MESSAGE("Aerodactyl is exerting its pressure!");
+        }
+    }
+}
+
+// Blanket buff: every species in the TIER_LEGENDARY / TIER_MYTHICAL lists (src/fork/species_tiers.c)
+// carries Pressure innately. A species added to either tier list must get it in its INNATES(...) row.
+TEST("Innate abilities: every legendary- and mythical-tier species carries innate Pressure")
+{
+    u32 species;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        enum SpeciesTier tier = GetSpeciesTier(species);
+
+        if (tier != TIER_LEGENDARY && tier != TIER_MYTHICAL)
+            continue;
+        checked++;
+        if (SpeciesHasInnate(species, ABILITY_PRESSURE))
+            continue;
+        offenders++;
+        Test_MgbaPrintf("%S is legend-tier but has no innate Pressure", gSpeciesInfo[species].speciesName);
+    }
+
+    EXPECT_GT(checked, 0);
+    EXPECT_EQ(offenders, 0);
 }
 
 // ===== Stench =====

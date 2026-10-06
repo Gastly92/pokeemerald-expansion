@@ -1010,23 +1010,23 @@ Makes the holder's foes spend 1 extra PP per move used against it, handled at
 the two PP-deduction sites that read `ABILITY_PRESSURE`: the real deduction in `CancelerPPDeduction`
 (`src/battle_move_resolution.c`) and the fork-owned deterministic PP-refund mirror in `src/battle_util.c`
 (both the spread-move loop and the single-target branch swap `GetBattlerAbility(x) == ABILITY_PRESSURE`
-for `BattlerHasAbility(x, ABILITY_PRESSURE)`). A pure passive trait checked at a single kind of site:
-no script / pop-up / driver, and the innate is NOT recorded as identity (the cosmetic "exerting its
-Pressure!" switch-in message still fires only for the chosen ability, like all innate announcements).
+for `BattlerHasAbility(x, ABILITY_PRESSURE)`). The innate also announces itself on entry: it is listed in
+`SwitchInInnateAbilityEffect()` so the switch-in driver fires the upstream `ABILITYEFFECT_ON_SWITCHIN`
+case ("<mon> is exerting its pressure!"), with the pop-up overwritten to Pressure when the chosen
+ability differs. A holder whose chosen ability is Pressure announces once, through the chosen path.
 NO pure-boon divergence: Pressure only ever costs the FOE extra PP, so it never hurts its holder —
 the innate is a 1:1 copy of the real ability. Suppression parity holds via `BattlerHasAbility()` ->
 `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); Pressure is not breakable, so Mold
 Breaker never touches it, same as the real ability. AI needs no wiring: nothing in `src/battle_ai_*.c`
 reads `ABILITY_PRESSURE` for an effect (the PP tax isn't modeled in the AI's damage/turn calcs), so an
-innate Pressure is exactly as (in)visible to the AI as a real one. Canon only so far (no flavor picks yet — the
-"exerts pressure" theme is hard to attribute beyond its real users, and the +1 PP tax is a potent
-stall tool): every species whose ability data carries Pressure in any slot, so the signature survives
-whichever slot a build picks (Aerodactyl/Aggron-style slot-2/HA Pressure included). Forms are listed
-only where the form's ability data still carries Pressure (Giratina-Origin/Dialga-Origin/Palkia-Origin
-keep it; the Galarian birds, the Mega/Kyurem-B/W and Mewtwo-Mega-Y forms swap to a different signature
-and are omitted). Mewtwo (innate Levitate), Ho-Oh (innate Regenerator), Dusclops, the Deoxys formes
-and Giratina-Altered (all innate Levitate) already carry an innate, so they take a combined
-`INNATES(...)` list with Pressure added.
+innate Pressure is exactly as (in)visible to the AI as a real one.
+
+Who carries it: every species whose ability data carries Pressure in any slot (so the signature
+survives whichever slot a build picks), **plus every species in the `TIER_LEGENDARY` and
+`TIER_MYTHICAL` lists of `src/fork/species_tiers.c`** — a blanket buff for the legend-grade tiers,
+which also covers the non-legends those tiers deliberately include (Ultra Beasts, Paradox Pokémon,
+Dragapult, Baxcalibur, Bloodmoon Ursaluna). `test/fork/innate_abilities.c` checks that every tiered
+species carries it, so a species added to either tier list must get Pressure in its `INNATES(...)` row.
 
 ### ABILITY_STENCH
 
