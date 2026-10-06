@@ -1833,8 +1833,9 @@ clauses in `GetAttackerAbilitiesModifier` now take the cached `ctx->innatesEnabl
 `GetConfig()` per evaluation (the crit-calc caching discipline). (3) `SpeciesHasInnate` no longer walks
 the table: `GetSpeciesInnateList` reads a lazily built species-keyed row index instead — with the
 feature ON in shipped play, every `IsInnateActive` paid that walk on the AI-hot calcs, a cost CI never
-measures because tests force the feature off. The source table stays dex-sorted for humans; the
-"species-keyed lookup matches the raw table" integrity test guards the index.
+measures because tests force the feature off. The source table stays dex-sorted for humans (gated by the
+"rows are in National Dex order" test); the "species-keyed lookup matches the raw table" integrity test
+guards the index.
 
 That index was first built as a row permutation sorted by species id, populated with an insertion sort
 and binary-searched. **The sort was the wrong shape and has since been replaced.** It was assumed

@@ -11027,6 +11027,36 @@ static s32 CompareAbilityNames(enum Ability a, enum Ability b)
     return (s32)*x - (s32)*y;
 }
 
+// The table is kept in ascending National Dex order, like the tier lists and the extended roster, so a
+// new row has one obvious home and a duplicate row is visible by eye. Lookups don't depend on it
+// (GetSpeciesInnateList builds its own species-sorted index), so nothing else would catch drift: a
+// block of 31 rows once sat between Misdreavus and Unown. Sibling formes share a dex number, so ties pass.
+TEST("Innate abilities: rows are in National Dex order")
+{
+    u32 row;
+    u32 offenders = 0;
+    u16 prevSpecies;
+
+    GetSpeciesInnatesEntry(0, &prevSpecies);
+    for (row = 1; row < GetSpeciesInnatesEntryCount(); row++)
+    {
+        u16 species;
+        enum NationalDexOrder prev = SpeciesToNationalPokedexNum(prevSpecies);
+        enum NationalDexOrder dexNum;
+
+        GetSpeciesInnatesEntry(row, &species);
+        dexNum = SpeciesToNationalPokedexNum(species);
+        if (dexNum < prev)
+        {
+            offenders++;
+            Test_MgbaPrintf("innate row %d %S (dex #%d) sits after %S (dex #%d) -- move it to its dex position",
+                            row, gSpeciesInfo[species].speciesName, dexNum, gSpeciesInfo[prevSpecies].speciesName, prev);
+        }
+        prevSpecies = species;
+    }
+    EXPECT_EQ(offenders, 0);
+}
+
 // Every row lists its innates alphabetically by in-game name, so a list reads the same in the table,
 // on the summary page and in the INFO viewer, and a hand-added innate cannot land out of place. Strict
 // ordering also rejects a duplicate innate on one row. Sorted by the displayed name, not the constant:
