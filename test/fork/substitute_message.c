@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: regression coverage for the Substitute-damaged line naming a battler that has no
+// Regression coverage for the Substitute-damaged line naming a battler that has no
 // Substitute. CancelerHealthBarUpdate() in src/battle_move_resolution.c used to test
 // DoesSubstituteBlockMove() before ShouldSkipBattlerForDamage(), so every battler on the
 // field was asked whether its Substitute blocked the move -- including the attacker itself

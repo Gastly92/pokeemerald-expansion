@@ -2,7 +2,7 @@
 #include "test/battle.h"
 #include "fork/species_ability_overrides.h"
 
-// FORK: behavioural coverage for the fork-owned ability override table
+// Behavioural coverage for the fork-owned ability override table
 // (src/fork/species_ability_overrides.c). The table is gated by
 // FEATURE_INNATE_ABILITIES, which TestInitConfigData force-disables, so every
 // test here opts in with WITH_CONFIG.

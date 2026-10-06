@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: tests for DETERMINISTIC_ABILITIES. The per-test baseline forces every
+// Tests for DETERMINISTIC_ABILITIES. The per-test baseline forces every
 // DETERMINISTIC_* flag off, so each test opts in explicitly with WITH_CONFIG.
 // With the flag on, the chance-based ability effects below are guaranteed, so
 // they need no WITH_RNG/PASSES_RANDOMLY.

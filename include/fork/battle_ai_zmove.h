@@ -3,7 +3,7 @@
 
 #include "battle.h"
 
-// FORK: AI flag for spending the one-per-battle Z-Move deliberately.
+// AI flag for spending the one-per-battle Z-Move deliberately.
 //
 // Upstream's ShouldUseZMove is effectively "yes" for any damaging move that the plain
 // move would not already KO with - it never asks whether the Z-Move buys anything, so

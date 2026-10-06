@@ -1,4 +1,4 @@
-// FORK: read-only "battle info" viewer shown in Frontier facilities in place of
+// read-only "battle info" viewer shown in Frontier facilities in place of
 // the (disabled) BAG action. See include/config/frontier.h (B_FRONTIER_BATTLE_INFO)
 // and include/frontier_battle_info.h for the integration notes. This whole file
 // is fork-only, so it never conflicts on an upstream sync; it only *reads* battle
@@ -7,13 +7,13 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_controllers.h"
-#include "battle_gimmick.h" // FORK: HasTrainerUsedGimmick for the Base Stats page's projection
-#include "battle_main.h" // FORK: GetBattlerTotalSpeedStat for the player's effective Speed
+#include "battle_gimmick.h" // HasTrainerUsedGimmick for the Base Stats page's projection
+#include "battle_main.h" // GetBattlerTotalSpeedStat for the player's effective Speed
 #include "battle_util.h"
 #include "bg.h"
-#include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES)
-#include "fork/free_gimmicks.h" // FORK: FindMegaStoneForStats, shared with the live form change
-#include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
+#include "config_changes.h" // GetConfig(FEATURE_INNATE_ABILITIES)
+#include "fork/free_gimmicks.h" // FindMegaStoneForStats, shared with the live form change
+#include "fork/innate_abilities.h" // FEATURE_INNATE_ABILITIES
 #include "fork/frontier_battle_info.h"
 #include "gpu_regs.h"
 #include "item.h"
@@ -34,22 +34,22 @@
 #include "text_window.h"
 #include "window.h"
 #include "constants/battle.h"
-#include "constants/characters.h" // FORK: TEXT_COLOR_* for the styled title/footer text
-#include "constants/form_change_types.h" // FORK: the Base Stats page walks a species' Mega/Primal form changes
+#include "constants/characters.h" // TEXT_COLOR_* for the styled title/footer text
+#include "constants/form_change_types.h" // The Base Stats page walks a species' Mega/Primal form changes
 #include "constants/pokemon.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
 bool8 gFrontierBattleInfoActive = FALSE;
 
-// FORK: where to return when the viewer is closed. The in-battle action menu sets
+// Where to return when the viewer is closed. The in-battle action menu sets
 // this to ReshowBattleScreenAfterMenu (back to the battle); the in-battle "choose
 // a Pokémon" party menu sets it to a callback that re-opens that party menu. Set
 // via OpenFrontierBattleInfo() before CB2_FrontierBattleInfo runs; defaults to the
 // battle screen so a stray open can never strand the player.
 static MainCallback sInfoExitCallback = NULL;
 
-// FORK: styling. The viewer used to be a flat full-screen white window of plain
+// Styling. The viewer used to be a flat full-screen white window of plain
 // text. We now dress it up purely by reusing existing assets/helpers (no new art):
 //   - a window frame (the player's chosen options frame) around the window,
 //   - the standard menu palette so text can use the conventional TEXT_COLOR_* set,
@@ -82,14 +82,14 @@ static u16 *sFrameTilemapBuffer = NULL;
 
 enum
 {
-    // FORK: Speed Tiers leads — it's the page that actually drives a turn
+    // Speed Tiers leads — it's the page that actually drives a turn
     // decision, so it's both first in the L/R cycle and the default landing page.
     INFO_PAGE_SPEED,
     INFO_PAGE_FIELD,
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
     INFO_PAGE_FOE,
-    // FORK: the foe's base stats, plus a row per Mega/Primal form its species can reach.
+    // The foe's base stats, plus a row per Mega/Primal form its species can reach.
     // Foe-scoped like the Foe page (it shares tFoeIndex), and placed directly after it so
     // one L/R step from a mon's Foe page lands on that same mon's spread.
     INFO_PAGE_BASE_STATS,
@@ -115,12 +115,12 @@ static u32 InfoPageCount(void)
 #define tWindowId     data[0]
 #define tPage         data[1]
 #define tFoeIndex     data[2]
-// FORK: the Base Stats page's second cursor - which of YOUR living party mons is shown.
+// The Base Stats page's second cursor - which of YOUR living party mons is shown.
 // It indexes CollectPlayerSlots()' list, not the party directly, and is re-defaulted on
 // every open (see DefaultPlayerCursor) rather than persisted like tFoeIndex.
 #define tPlayerIndex  data[3]
 
-// FORK: the last page/foe the player was viewing is remembered so re-opening the
+// The last page/foe the player was viewing is remembered so re-opening the
 // viewer (often once per turn) returns to where they left off instead of always
 // resetting to the front. It lives in gBattleStruct (infoViewerPage /
 // infoViewerFoeIndex), which is zero-allocated per battle, so the position is kept
@@ -140,7 +140,7 @@ static const struct BgTemplate sBgTemplates[] =
         .priority = 1,
         .baseTile = 0,
     },
-    // FORK: frame layer — its own char block (the text window nearly fills BG0's),
+    // Frame layer — its own char block (the text window nearly fills BG0's),
     // higher priority so the border sits cleanly around the window.
     {
         .bg = FRAME_BG,
@@ -164,7 +164,7 @@ static const struct WindowTemplate sInfoWindowTemplate =
     .baseBlock = 0x1,
 };
 
-// FORK: soft cool-grey backdrop shown through the (now transparent) window, so the
+// Soft cool-grey backdrop shown through the (now transparent) window, so the
 // screen reads as a framed panel rather than a flat white sheet. Kept light to keep
 // the dark body text legible.
 static const u16 sBgColor[] = {RGB(23, 25, 30)};
@@ -266,7 +266,7 @@ static void BuildHazardLine(u8 *dst, u32 side)
         StringCopy(dst, COMPOUND_STRING("None"));
 }
 
-// FORK: the whole-field statuses that belong to neither side and are not weather
+// The whole-field statuses that belong to neither side and are not weather
 // or terrain - Trick Room above all, which silently inverts turn order and was the
 // one piece of field state this page never showed. Ordered by how often it decides
 // a turn, so the entry that matters most is the one that survives a clipped row.
@@ -369,7 +369,7 @@ static void PrintFooter(u8 windowId, const u8 *str)
     PrintLineEx(windowId, str, 0, (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
 }
 
-// FORK: right-aligned "TRICK ROOM" marker on the Speed Tiers title row. The speed
+// right-aligned "TRICK ROOM" marker on the Speed Tiers title row. The speed
 // glyphs stay a pure number comparison (see AppendSpeedGlyph), so under Trick Room
 // the faster mon is the one that moves LAST - this flags that inversion without
 // costing a body line (the page can already fill its height with 2 player rows and
@@ -390,7 +390,7 @@ static void PrintTrickRoomMarker(u8 windowId)
         PrintTitleMarker(windowId, COMPOUND_STRING("TRICK ROOM"));
 }
 
-// FORK: compact "n/N" page counter, right-aligned on the footer row, so the
+// Compact "n/N" page counter, right-aligned on the footer row, so the
 // player can see how many pages exist and where they are. Same blue chrome as
 // the footer hint; the two never collide because every footer hint is short
 // enough to leave the right edge free.
@@ -405,7 +405,7 @@ static void PrintPageIndicator(u8 windowId, u32 page)
                 (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
 }
 
-// FORK: draw the window frame ring on FRAME_BG, around the text window's bounds.
+// Draw the window frame ring on FRAME_BG, around the text window's bounds.
 // Mirrors DrawTextBorderOuter() but targets FRAME_BG (the window lives on BG0).
 static void DrawInfoFrame(void)
 {
@@ -425,7 +425,7 @@ static void DrawInfoFrame(void)
     CopyBgTilemapBufferToVram(FRAME_BG);
 }
 
-// FORK: DETERMINISTIC_DAMAGE replaces the random damage roll with a fixed,
+// DETERMINISTIC_DAMAGE replaces the random damage roll with a fixed,
 // turn-scaling percentage (DETERMINISTIC_DAMAGE_PERCENT). Surface the current
 // turn and that multiplier so the player can read the exact roll they'll get.
 static void DrawDeterministicDamageLine(u8 windowId, u8 *line, u32 y)
@@ -452,7 +452,7 @@ static void DrawFieldPage(u8 windowId)
     PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  FIELD"));
     y += LINE_H;
 
-    // FORK: the per-turn deterministic damage multiplier (only when that mode is on).
+    // The per-turn deterministic damage multiplier (only when that mode is on).
     if (GetConfig(DETERMINISTIC_DAMAGE))
     {
         DrawDeterministicDamageLine(windowId, line, y);
@@ -474,7 +474,7 @@ static void DrawFieldPage(u8 windowId)
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
-    // FORK: the side hazard/screen rows are prefixed "You"/"Foe" inline (rather than
+    // The side hazard/screen rows are prefixed "You"/"Foe" inline (rather than
     // sitting under standalone "Your side:"/"Foe side:" headers) to free the vertical
     // room the turn/damage line above needs in this fixed-height window.
     p = StringCopy(line, COMPOUND_STRING("You Hazards: "));
@@ -511,7 +511,7 @@ static u32 GetFoePartyCount(struct Pokemon *foeParty)
     return count;
 }
 
-// FORK: The mon whose *identity* the viewer should display for a foe party slot.
+// The mon whose *identity* the viewer should display for a foe party slot.
 // A foe with an active Illusion (Zoroark/Zorua) is disguised as another party
 // member, so revealing its real species before the Illusion breaks would leak it.
 // While that slot's on-field battler is ILLUSION_ON, return the disguise mon the
@@ -537,7 +537,7 @@ static struct Pokemon *GetFoeDisplayMon(struct Pokemon *foeParty, u32 foeIndex)
     return &foeParty[foeIndex];
 }
 
-// FORK: append the species' type(s) as text ("Fire/Flying", or a single name for a
+// Append the species' type(s) as text ("Fire/Flying", or a single name for a
 // pure type), via GetSpeciesType so FEATURE_NEW_TYPES re-typings are reflected.
 static u8 *AppendTypeNames(u8 *p, enum Species species)
 {
@@ -553,7 +553,7 @@ static u8 *AppendTypeNames(u8 *p, enum Species species)
     return p;
 }
 
-// FORK: append the foe mon's gimmick state. activeGimmick persists per party mon for
+// Append the foe mon's gimmick state. activeGimmick persists per party mon for
 // the forms that stay transformed (Mega/Ultra Burst/Dynamax/Tera); a Z-Move reverts
 // and is detected via the per-mon monGimmickUsed record. Nothing is shown until the
 // mon has actually used or entered a gimmick (always observed in battle).
@@ -660,7 +660,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
         *p++ = CHAR_MALE;
     else if (gender == MON_FEMALE)
         *p++ = CHAR_FEMALE;
-    // FORK: Frontier levels are fixed (always 100/50), so show the mon's type(s) here
+    // Frontier levels are fixed (always 100/50), so show the mon's type(s) here
     // instead - far more useful at a glance - plus its gimmick state (Mega/Tera/etc.)
     // once used. Both are public the moment the mon is seen / transforms.
     *p++ = CHAR_SPACE;
@@ -1028,7 +1028,7 @@ static void DrawStatsPage(u8 windowId)
 // ---------------------------------------------------------------------------
 // Base Stats page
 // ---------------------------------------------------------------------------
-// FORK: base stats are a static property of the SPECIES - like the type line and the
+// Base stats are a static property of the SPECIES - like the type line and the
 // innate list - so by the same reasoning as "Innates are not reveal-gated" in
 // fork-docs/BATTLE_INFO.md they are shown in full the moment a mon is seen. The Speed
 // Tiers page already exposes the foe's base Speed exactly this way. The gates that DO
@@ -1143,7 +1143,7 @@ static u32 DrawSpeciesRow(u8 windowId, const u8 *sidePrefix, enum Species specie
     return y + LINE_H;
 }
 
-// FORK: a Mega's species NAME is just its base form's ("Charizard" for both Mega X and
+// A Mega's species NAME is just its base form's ("Charizard" for both Mega X and
 // Mega Y, "Absol" for both Mega and Mega Z), so a species with more than one Mega needs the
 // forms told apart some other way. The suffix is taken from the Mega Stone that produces the
 // form - Charizardite X, Raichunite Y, Absolite Z all end in " <letter>" - which keeps
@@ -1216,7 +1216,7 @@ static u32 DrawAltFormRows(u8 windowId, enum Species species, u32 y)
     return y;
 }
 
-// FORK: the player-side slots the Base Stats page can show. It is the whole party, not
+// The player-side slots the Base Stats page can show. It is the whole party, not
 // just the battlers on the field, because "what should I switch to" is precisely the
 // question base stats answer and nothing else in the game shows them - the summary screen
 // shows computed stats, and neither it nor anything else shows a Mega form at all. Fainted
@@ -1250,7 +1250,7 @@ static u32 GetPlayerBattlerForSlot(u32 partyIndex)
     return MAX_BATTLERS_COUNT;
 }
 
-// FORK: where the page's player cursor starts. Unlike the foe tab - which is remembered
+// Where the page's player cursor starts. Unlike the foe tab - which is remembered
 // across re-opens so the player can keep tabbing through a scouted team - this is NOT
 // persisted, and deliberately: your active mon changes every time you switch, so a
 // remembered index would open the page on a benched mon when you wanted the one you are
@@ -1292,7 +1292,7 @@ static enum Species GetMegaTargetForStone(enum Species species, enum Item megaSt
     return SPECIES_NONE;
 }
 
-// FORK: the form a BENCHED party mon would take. Same resolution the live form change
+// The form a BENCHED party mon would take. Same resolution the live form change
 // makes, minus the parts that need a battler: under FEATURE_FREE_GIMMICKS the stone comes
 // from the mon's own Attack/Sp. Atk via the shared FindMegaStoneForStats (the one function
 // both this and GetBattleFormChangeTargetSpecies go through, so the projection cannot drift
@@ -1330,7 +1330,7 @@ static enum Species GetPartyMonProjectedForm(struct Pokemon *mon)
     return SPECIES_NONE;
 }
 
-// FORK: the form the mon ON THE FIELD would take. This goes through the engine's own
+// The form the mon ON THE FIELD would take. This goes through the engine's own
 // eligibility check rather than the party-mon resolution above, because for a battler the
 // engine can answer exactly: CanMegaEvolve applies the real rules (this mon's own gimmick
 // slot, a held Z-Crystal blocking a Mega without free gimmicks, the one-per-trainer budget)
@@ -1467,7 +1467,7 @@ static void DrawBaseStatsPage(u8 windowId, u32 playerCursor, u32 foeIndex)
     PrintFooter(windowId, sBaseStatsFooter);
 }
 
-// FORK: Speed tier report. From base stats + level alone, a foe's *possible*
+// Speed tier report. From base stats + level alone, a foe's *possible*
 // Speed stat spans a known range — the player needn't know the exact EV/IV
 // investment or nature to bound it. Lowest = 0 IVs, 0 EVs, a hindering nature
 // (x0.9); highest = 31 IVs, 252 EVs, a boosting nature (x1.1). The formula
@@ -1483,7 +1483,7 @@ static u32 CalcSpeedBound(u32 baseSpeed, u32 level, u32 iv, u32 ev, u32 natureNu
     return n * natureNum / 100;
 }
 
-// FORK: append a speed-comparison glyph to a foe row. The reference is the
+// Append a speed-comparison glyph to a foe row. The reference is the
 // player's fastest active mon's *effective* Speed (GetBattlerTotalSpeedStat,
 // which already folds in the player's own Choice Scarf, Tailwind, paralysis and
 // stat stages - all known to the player about their own side). The foe range is
@@ -1732,7 +1732,7 @@ static void Task_InfoProcessInput(u8 taskId)
             gTasks[taskId].tFoeIndex = count - 1;
         RedrawInfo(taskId);
     }
-    // FORK: on the Base Stats page up/down is the second cursor, walking YOUR party, so
+    // On the Base Stats page up/down is the second cursor, walking YOUR party, so
     // that page alone does not alias vertical onto the foe tab.
     else if (!verticalIsFoe && (JOY_NEW(DPAD_DOWN) || JOY_NEW(DPAD_UP)))
     {
@@ -1773,10 +1773,10 @@ static void VBlankCB(void)
     TransferPlttBuffer();
 }
 
-// FORK: open the read-only viewer, returning to returnCallback when the player
+// Open the read-only viewer, returning to returnCallback when the player
 // closes it. Lets the same viewer be reached from the battle action menu (return
 // to the battle screen) and the in-battle party menu (return to the party menu).
-// FORK: BUFF_ACCURACY_ITEMS_REVEAL (config/buff.h) -- Wide Lens and Zoom Lens as instruments
+// BUFF_ACCURACY_ITEMS_REVEAL (config/buff.h) -- Wide Lens and Zoom Lens as instruments
 // for SEEING, feeding this viewer's reveal bits from the player's held items.
 //
 //   - Wide Lens is BREADTH: the held item of every foe the player has seen. Shallow and
@@ -1860,7 +1860,7 @@ void ApplyAccuracyItemReveals(void)
 void OpenFrontierBattleInfo(MainCallback returnCallback)
 {
     sInfoExitCallback = returnCallback;
-    ApplyAccuracyItemReveals(); // FORK: BUFF_ACCURACY_ITEMS_REVEAL -- the lenses fill in what they can see
+    ApplyAccuracyItemReveals(); // BUFF_ACCURACY_ITEMS_REVEAL -- the lenses fill in what they can see
     SetMainCallback2(CB2_FrontierBattleInfo);
 }
 

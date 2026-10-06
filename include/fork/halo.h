@@ -1,7 +1,7 @@
 #ifndef GUARD_FORK_HALO_H
 #define GUARD_FORK_HALO_H
 
-// FORK: "Halo" -- a custom ability whose effect is a FIELD-WIDE aura rather than a personal
+// "Halo" -- a custom ability whose effect is a FIELD-WIDE aura rather than a personal
 // defence. While a Halo holder is on the field, no single hit may take more than
 // HALO_DAMAGE_CAP_PERCENT% of its target's max HP -- for every battler present, foes, allies
 // and the holder itself alike. The holder alone pays for it: each move it uses costs

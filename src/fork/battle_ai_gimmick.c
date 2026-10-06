@@ -117,7 +117,7 @@ static u32 CountLaterGimmickUsers(enum BattlerId battler)
     return count;
 }
 
-// FORK: decide whether a picked Mega or Dynamax fires this turn or is held for a later one.
+// Decide whether a picked Mega or Dynamax fires this turn or is held for a later one.
 // See AI_FREE_MEGA_COMMIT_CHANCE for the rationale. The caller has already established
 // whether the gimmick secures a KO (GimmickSecuresKO), which always commits. The rolls are
 // phrased as "commit" so a battle test that does not rig them sees the gimmick used, as before this existed.
@@ -157,7 +157,7 @@ static void SetGimmickForTurn(enum BattlerId battler, enum Gimmick gimmick, bool
     gBattleStruct->gimmick.usableGimmick[battler] = gimmick;
 }
 
-// FORK: pick this battler's gimmick from its full candidate set instead of leaving it on
+// Pick this battler's gimmick from its full candidate set instead of leaving it on
 // the enum-order default AssignUsableGimmicks seeded, then decide whether it fires this turn.
 //
 // Two passes, because the fork allows each gimmick type only once per trainer per battle
@@ -208,7 +208,7 @@ static void AI_SelectBestGimmick(enum BattlerId battler)
     }
 }
 
-// FORK: run the pick for every AI battler once per turn, from inside SetAiLogicDataForTurn
+// Run the pick for every AI battler once per turn, from inside SetAiLogicDataForTurn
 // between the battler-data pass and the move-damage pass. It needs the former (the KO check
 // runs real damage calcs, which read gAiLogicData's abilities and hold effects) and must
 // precede the latter, which caches a whole turn of simulated damage with the selected
@@ -226,7 +226,7 @@ void AI_SelectGimmicksForTurn(void)
     }
 }
 
-// FORK: resolve a chosen move to the move the engine will actually execute for it, given
+// Resolve a chosen move to the move the engine will actually execute for it, given
 // the attacker's *active* gimmick. Mirrors the conversion HandleAction_UseMove performs
 // right before the move runs (Z-Move / Max Move), and returns `move` untouched when
 // nothing converts.

@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: Illusion is only meant to break when the disguised battler takes damage, but when
+// Illusion is only meant to break when the disguised battler takes damage, but when
 // Dynamax ran out the battler's sprite silently reverted to its real species anyway.
 // BattleScript_DynamaxEnds plays B_ANIM_FORM_CHANGE, whose AnimTask_TransformMon calls
 // HandleSpeciesGfxDataChange, and that function read MON_DATA_SPECIES off the real party mon

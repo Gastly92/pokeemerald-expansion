@@ -4,7 +4,7 @@
 #include "fork/battle_ai_zmove.h"
 #include "fork/battle_ai_gimmick.h"
 
-// FORK: AI_FLAG_SMART_Z_MOVE and AI gimmick selection.
+// AI_FLAG_SMART_Z_MOVE and AI gimmick selection.
 //
 // Upstream's ShouldUseZMove says yes to any damaging move the plain move would not
 // already KO with, so the AI spends its one Z-Move on turn one regardless of whether the

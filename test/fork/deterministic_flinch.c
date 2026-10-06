@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the DETERMINISTIC_FLINCH flag (config/deterministic.h), which
+// Coverage for the DETERMINISTIC_FLINCH flag (config/deterministic.h), which
 // composes with DETERMINISTIC_ADDITIONAL_EFFECTS. Determinism flags default off in
 // the test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG. With both flags on (the shipped config), a flinch additional effect

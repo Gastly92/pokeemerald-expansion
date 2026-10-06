@@ -4,7 +4,7 @@
 #include "battle.h"
 #include "battle_gimmick.h"
 
-// FORK: let AI trainers choose between the gimmicks a mon is eligible for.
+// Let AI trainers choose between the gimmicks a mon is eligible for.
 //
 // AssignUsableGimmicks seeds usableGimmick to the first candidate in enum order
 // (MEGA, ULTRA_BURST, Z_MOVE, DYNAMAX, TERA) and nothing on the AI side ever revisits it -
@@ -26,7 +26,7 @@
     GIMMICK_TERA,                   \
     GIMMICK_Z_MOVE
 
-// FORK: when the persistent gimmicks fire. Z-Move and Tera already wait for a good moment
+// When the persistent gimmicks fire. Z-Move and Tera already wait for a good moment
 // (ShouldUseZMove, DecideTerastal); Mega and Dynamax had no such check, so the lead fired
 // whichever it was assigned on turn 1, every battle. Each turn a picked Mega or Dynamax now
 // commits only on a roll, unless it is forced: the gimmick turns this turn into a KO the
@@ -42,7 +42,7 @@
 
 void AI_SelectGimmicksForTurn(void);
 
-// FORK: the move the engine will really execute for `move`, given battlerAtk's *active*
+// The move the engine will really execute for `move`, given battlerAtk's *active*
 // gimmick. Returns `move` unchanged when nothing converts. See the comment on the
 // definition for why the AI needs it.
 enum Move AI_GetGimmickExecutedMove(enum BattlerId battlerAtk, enum Move move);

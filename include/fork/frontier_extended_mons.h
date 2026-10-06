@@ -3,7 +3,7 @@
 
 #include "data.h"
 
-// FORK: which battle format(s) an extended-roster set is suited for. Stored in
+// Which battle format(s) an extended-roster set is suited for. Stored in
 // the otherwise-unused struct TrainerMon.tags field (the Battle Factory never
 // reads tags; only trainer_pools.c does, for regular NPC trainers). The Factory's
 // mon selector (GetFactoryMonId) only draws a mon whose tags include the current
@@ -15,7 +15,7 @@
 #define FORMAT_DOUBLES (1 << 1)
 #define FORMAT_BOTH    (FORMAT_SINGLES | FORMAT_DOUBLES)
 
-// FORK: readable roster-authoring helpers for frontier_extended_mons.c. These
+// Readable roster-authoring helpers for frontier_extended_mons.c. These
 // only make the data file easier to edit (e.g. on mobile); they compile down to
 // exactly the same values the raw struct fields expect, so they're zero-cost.
 
@@ -152,7 +152,7 @@ STATIC_ASSERT(IVS(SPD, 7, SPA, 6, SPE, 5, DEF, 4, ATK, 3)
 #define NATURE_SPD_UP_SPE_DOWN  NATURE_SASSY
 #define NATURE_SPD_UP_SPA_DOWN  NATURE_CAREFUL
 
-// FORK: fork-owned Battle Factory roster overhaul (B_FRONTIER_EXTENDED_MONS).
+// fork-owned Battle Factory roster overhaul (B_FRONTIER_EXTENDED_MONS).
 // gFrontierExtendedMons replaces the vanilla gBattleFrontierMons on the Battle
 // Factory's code paths when the flag is on. Defined in
 // src/frontier_extended_mons.c. The count is exported as a runtime value (the
@@ -161,7 +161,7 @@ STATIC_ASSERT(IVS(SPD, 7, SPA, 6, SPE, 5, DEF, 4, ATK, 3)
 extern const struct TrainerMon gFrontierExtendedMons[];
 extern const u16 gFrontierExtendedMonsCount;
 
-// FORK: format-aware draw from the competitive roster, uniform per National Dex
+// format-aware draw from the competitive roster, uniform per National Dex
 // number (not per set), shared by any facility (Battle Factory, Battle Tower)
 // whose opponents pull from it.
 u16 GetRandomFrontierExtendedMonId(void);

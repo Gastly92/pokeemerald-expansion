@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the BUFF_GEMS flag (config/buff.h). BUFF_* flags default off in the
+// Coverage for the BUFF_GEMS flag (config/buff.h). BUFF_* flags default off in the
 // test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG(BUFF_GEMS, TRUE/FALSE) explicitly.
 //

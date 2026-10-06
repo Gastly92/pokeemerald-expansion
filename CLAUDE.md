@@ -577,6 +577,10 @@ instead of silently re-inlining or dropping our change.
   conflict, port upstream's change there rather than re-inlining."
 - Keep it at the exact spot that would conflict (it shows up on *our* side of the
   conflict markers, where the person resolving will see it).
+- **Only in upstream-owned files.** Everything under `fork/` (and the fork-owned
+  config headers) is ours and never conflicts, so a `FORK:` there carries no
+  information — write a plain comment instead. The tag's value is that
+  `grep -rn "FORK:" src include` lists exactly the divergences a sync has to respect.
 
 ### Upstream-mergeable changes: the `UPSTREAM:` tag
 

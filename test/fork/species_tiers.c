@@ -5,7 +5,7 @@
 #include "pokemon.h"
 #include "constants/species.h"
 
-// FORK: guards the fork-owned species_tiers.c classification table. The table
+// Guards the fork-owned species_tiers.c classification table. The table
 // is split into one array per tier (see species_tiers.c), and GetSpeciesTier
 // checks them in Mythical > Legendary > Pseudo priority order, returning the
 // first match. That priority means a species accidentally listed twice
@@ -23,7 +23,7 @@ TEST("Species tiers: no species is listed more than once")
     EXPECT(!hasDup);
 }
 
-// FORK: this is the documented reason the table is keyed by exact species id
+// This is the documented reason the table is keyed by exact species id
 // rather than by Pokedex number (see include/fork/species_tiers.h) — a forme
 // can outrank or underrank its base species. Shaymin-Sky is the example used
 // in that comment, so it doubles as a regression test for the rationale: if a
@@ -34,7 +34,7 @@ TEST("Species tiers: a forme resolves independently of its base species")
     EXPECT_EQ(GetSpeciesTier(SPECIES_SHAYMIN_SKY), TIER_MYTHICAL);
 }
 
-// FORK: the three tier arrays are maintained in ascending National Dex order
+// The three tier arrays are maintained in ascending National Dex order
 // (each row carries a `// 0901`-style dex comment). Nothing about the lookup
 // depends on that -- GetSpeciesTier is a linear scan -- but the ordering is
 // what makes a new row have one obvious home and a near-duplicate visible when
@@ -61,7 +61,7 @@ TEST("Species tiers: an unlisted species defaults to TIER_NORMAL")
     EXPECT_EQ(GetSpeciesTier(SPECIES_BULBASAUR), TIER_NORMAL);
 }
 
-// FORK: how *restricted* a tier is, which is NOT the enum's numeric order
+// How *restricted* a tier is, which is NOT the enum's numeric order
 // (TIER_PSEUDO is the highest enum value but the weakest restriction). Only the
 // draft rules care about this ordering, and only in this test, so it lives here
 // rather than in species_tiers.h. See TierRejectsCandidate in
@@ -78,7 +78,7 @@ static u32 TierRestrictionRank(enum SpeciesTier tier)
     return 0;
 }
 
-// FORK: regression test for the Arceus draft leak. The tier table is keyed by
+// Regression test for the Arceus draft leak. The tier table is keyed by
 // EXACT species id so a forme can be classified on its own merits, which means a
 // forme left out of the table silently defaults to TIER_NORMAL — i.e. drafted as
 // an ordinary mon with no quota at all. That is what happened to Arceus: only

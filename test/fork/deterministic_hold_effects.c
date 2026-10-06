@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the DETERMINISTIC_HOLD_EFFECTS flag (config/deterministic.h).
+// Coverage for the DETERMINISTIC_HOLD_EFFECTS flag (config/deterministic.h).
 // Determinism flags default off in the test baseline (see TestInitConfigData), so
 // each test opts in with WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE). The stock
 // random-chance behavior of these items keeps being exercised by the per-item

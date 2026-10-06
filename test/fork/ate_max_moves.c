@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: -ate abilities (Pixilate, Refrigerate, Aerilate, Galvanize, Dragonize) convert
+// -ate abilities (Pixilate, Refrigerate, Aerilate, Galvanize, Dragonize) convert
 // Max Moves, matching the games: "If Max Strike is selected with Pixilate, it will turn
 // into Max Starfall when used."
 //

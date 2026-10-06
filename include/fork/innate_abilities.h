@@ -1,9 +1,9 @@
 #ifndef GUARD_INNATE_ABILITIES_H
 #define GUARD_INNATE_ABILITIES_H
 
-#include "battle_util.h" // FORK: enum AbilityEffect (TryActivateInnateSwitchInEffects' phase selector)
+#include "battle_util.h" // Enum AbilityEffect (TryActivateInnateSwitchInEffects' phase selector)
 
-// FORK: innate abilities (FEATURE_INNATE_ABILITIES, config/feature.h).
+// Innate abilities (FEATURE_INNATE_ABILITIES, config/feature.h).
 //
 // Some species carry one or more *innate* abilities that are always active in
 // addition to their single chosen ability. The species->innate mapping lives in
@@ -310,7 +310,7 @@ enum Ability GetSpeciesInnate(u16 species, u32 index);
 u32 GetSpeciesInnatesEntryCount(void);
 const enum Ability *GetSpeciesInnatesEntry(u32 row, u16 *outSpecies);
 
-// FORK: end-turn innate driver. Fires `battler`'s active, scripted end-turn innates
+// end-turn innate driver. Fires `battler`'s active, scripted end-turn innates
 // (today only Speed Boost: +1 Speed). Hooked from THIRD_EVENT_BLOCK_ABILITIES_INNATE
 // in the end-turn loop (src/battle_end_turn.c), right after the chosen-ability block.
 // Re-entrant: *index is the per-battler resume cursor into the innate list — fires one
@@ -319,7 +319,7 @@ const enum Ability *GetSpeciesInnatesEntry(u32 row, u16 *outSpecies);
 // See the definition in src/fork/innate_abilities.c for the suppression/double-fire guards.
 bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index);
 
-// FORK: on-hit innate driver. Fires `battler`'s active, scripted on-hit innates — the
+// on-hit innate driver. Fires `battler`'s active, scripted on-hit innates — the
 // contact-reaction class: Rough Skin / Iron Barbs (chip a contact attacker) and Gooey /
 // Tangling Hair (drop a contact attacker's Speed). Hooked from MOVEEND_ABILITIES_INNATE in
 // the move-end loop (src/battle_move_resolution.c), right after the chosen-ability contact
@@ -330,7 +330,7 @@ bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index);
 // definition in src/fork/innate_abilities.c for the suppression/double-fire guards.
 bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Move move);
 
-// FORK: attacker-side on-hit innate driver. Fires `battler`'s active, scripted attacker-side
+// attacker-side on-hit innate driver. Fires `battler`'s active, scripted attacker-side
 // on-hit innates — today only Magician (steal a held item off a target the holder damaged).
 // Hooked from MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE in the move-end loop
 // (src/battle_move_resolution.c), right after the chosen-ability foes-fainted block. `battler` is
@@ -340,7 +340,7 @@ bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Mo
 // ABILITYEFFECT_MOVE_END_FOES_FAINTED case so the steal / script / pop-up match the real ability.
 bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index, enum Move move);
 
-// FORK: on-damage innate driver. Fires `battler`'s active, scripted on-damage innates — today only
+// on-damage innate driver. Fires `battler`'s active, scripted on-damage innates — today only
 // Berserk (raises Sp. Atk +1 when an attack drops the holder's HP to 1/2 or less). Hooked from
 // MOVEEND_COLOR_CHANGE_INNATE in the move-end loop (src/battle_move_resolution.c), right after the
 // chosen-ability color-change block, which the caller iterates over every damaged battler. Re-entrant
@@ -349,7 +349,7 @@ bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index,
 // ABILITYEFFECT_COLOR_CHANGE case so the stat change / script / pop-up match the real ability.
 bool32 TryActivateInnateOnDamageEffects(enum BattlerId battler, u32 *index);
 
-// FORK: switch-in innate driver. Fires `battler`'s active, scripted switch-in innates — Intimidate
+// switch-in innate driver. Fires `battler`'s active, scripted switch-in innates — Intimidate
 // (lowers every opposing battler's Attack by 1 stage), the Anticipation / Forewarn / Frisk information
 // reveals, Download / Supersweet Syrup (switch-in stat changes), Unnerve (denies foes their Berries) and
 // Hospitality (heals the ally in doubles). Hooked from three switch-in phases (src/battle_switch_in.c),
@@ -362,7 +362,7 @@ bool32 TryActivateInnateOnDamageEffects(enum BattlerId battler, u32 *index);
 // / pop-up match the real ability.
 bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool32 shouldTrigger, enum AbilityEffect abilityEffect);
 
-// FORK: innate-aware ability names in battle text. Rewrites the per-battler ability snapshot the
+// innate-aware ability names in battle text. Rewrites the per-battler ability snapshot the
 // {B_ATK_ABILITY} / {B_DEF_ABILITY} / {B_SCR_ACTIVE_ABILITY} / {B_EFF_ABILITY} placeholders read
 // (stringInfo->abilities[], filled from gBattleMons[].ability) so that a battler whose *innate* is
 // the ability currently being processed (gLastUsedAbility) is named by that innate instead of by
@@ -372,38 +372,38 @@ bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool
 // src/fork/innate_abilities.c for why gLastUsedAbility (and not abilityPopupOverwrite) is the signal.
 void ApplyInnateMessageAbilities(enum Ability *abilities);
 
-// FORK: the innate companion to upstream's IsAbilityOnSide() — returns holder id + 1, or 0.
+// The innate companion to upstream's IsAbilityOnSide() — returns holder id + 1, or 0.
 // Callers pair the two: `IsAbilityOnSide(b, A) || IsInnateOnSide(b, A)`.
 u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability);
 
-// FORK: the specific trapping ability (chosen or innate) `trapper` is holding `battler` with, or
+// The specific trapping ability (chosen or innate) `trapper` is holding `battler` with, or
 // ABILITY_NONE. Returning the ability rather than a bool lets the "prevents escape" message and the
 // can't-switch party menu name the real trapper even when an innate holder's chosen ability differs.
 enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum BattlerId trapper);
 
-// FORK: the innate predicates, moved here from include/battle_util.h with their
+// The innate predicates, moved here from include/battle_util.h with their
 // definitions (src/fork/innate_abilities.c).
-// FORK: FEATURE_INNATE_ABILITIES. TRUE if `battler`'s species declares `ability` as an
+// FEATURE_INNATE_ABILITIES. TRUE if `battler`'s species declares `ability` as an
 // innate AND it is currently active (same suppression gates as the chosen slot). Unlike
 // BattlerHasAbility(), this does NOT also match the chosen ability — use it at innate-only
 // effect sites that must not credit (or leak) the chosen slot, e.g. GetBattleMovePriority's
 // innate Prankster check. No-op (FALSE) when the feature flag is off. See src/battle_util.c.
 bool32 IsInnateActive(enum BattlerId battler, enum Ability ability);
-// FORK: FEATURE_INNATE_ABILITIES. "Does this battler have ability X?" trait
+// FEATURE_INNATE_ABILITIES. "Does this battler have ability X?" trait
 // predicate: TRUE for the primary (chosen) ability or an active innate. Use this
 // for trait checks; keep GetBattlerAbility() for identity/copy/swap/display.
 bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability);
-// FORK: FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord: TRUE if the chosen
+// FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord: TRUE if the chosen
 // ability matches (recorded, exactly as upstream) OR an active innate matches (NOT recorded — the
 // chosen slot stays the mon's identity). Used at chip-damage / indirect-damage gates so an innate
 // holder is spared like the real ability (e.g. Magic Guard's many end-turn/hazard/recoil sites).
 bool32 IsAbilityOrInnateAndRecord(enum BattlerId battler, enum Ability battlerAbility, enum Ability abilityToCheck);
-bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect); // FORK: grounded, or floating only by an innate Levitate (terrain / Toxic Spikes boon)
+bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability, enum HoldEffect holdEffect); // Grounded, or floating only by an innate Levitate (terrain / Toxic Spikes boon)
 
-// FORK: kept `static inline` in the header rather than in a .c, because both the damage
+// Kept `static inline` in the header rather than in a .c, because both the damage
 // calc (src/battle_util.c) and the deterministic accuracy/PP code (src/fork/
 // deterministic_moves.c) call it on hot paths and must both inline it.
-// FORK: innate Unaware is a *pure boon* (FEATURE_INNATE_ABILITIES), NOT a 1:1 real
+// Innate Unaware is a *pure boon* (FEATURE_INNATE_ABILITIES), NOT a 1:1 real
 // Unaware. A real Unaware blanks the foe's stat stage in *both* directions, which can
 // hurt: ignoring a foe's Attack/Defense/evasion/accuracy *drop* makes the holder take
 // more damage / deal less / be easier to hit than it otherwise would. At every Unaware
@@ -419,7 +419,7 @@ static inline s32 InnateUnawareBoonStage(enum BattlerId battler, s32 stage)
     return stage;
 }
 
-// FORK: MOVEEND innate handlers and AI innate reads (see the matching .c).
+// MOVEEND innate handlers and AI innate reads (see the matching .c).
 enum MoveEndResult MoveEndAbilitiesInnate(struct BattleCalcValues *cv);
 enum MoveEndResult MoveEndAbilityEffectFoesFaintedInnate(struct BattleCalcValues *cv);
 enum MoveEndResult MoveEndColorChangeInnate(struct BattleCalcValues *cv);

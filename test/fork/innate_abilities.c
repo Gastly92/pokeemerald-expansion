@@ -8,7 +8,7 @@
 #include "fork/species_ability_overrides.h"
 #include "fork/frontier_battle_info.h" // INFO_MAX_DISPLAYED_INNATES (the viewer's innates-page row budget)
 
-// FORK: coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
+// Coverage for FEATURE_INNATE_ABILITIES (config/feature.h). Feature flags
 // default off in the test baseline (see TestInitConfigData), so each test that
 // wants innates opts in with WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE). The
 // supported innate set is LEVITATE (a passive Ground immunity), REGENERATOR
@@ -226,7 +226,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Trace copies only the primary abil
     }
 }
 
-// FORK divergence: an innate Levitate is a *pure boon*, NOT a 1:1 real Levitate. It still floats
+// Deliberate divergence: an innate Levitate is a *pure boon*, NOT a 1:1 real Levitate. It still floats
 // above Ground moves and entry hazards, but the fork keeps the mon grounded for the *beneficial*
 // ground interactions (field terrain, Toxic Spikes absorption) via IsBattlerGroundedForBenefit.
 // Tapu Bulu shows both halves at once: its Grassy Surge sets Grassy Terrain on entry, its innate
@@ -593,7 +593,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Unaware user keeps it via 
     }
 }
 
-// FORK divergence: an innate Unaware is a *pure boon*, NOT a 1:1 real Unaware. A real
+// Deliberate divergence: an innate Unaware is a *pure boon*, NOT a 1:1 real Unaware. A real
 // Unaware blanks the foe's stat stage both ways — so it ignores a foe's *drop* too and
 // takes more damage for it — whereas the innate ignores only the foe's *boosts* and keeps
 // its drops (via InnateUnawareBoonStage). Defensive half: with the attacker's Attack
@@ -3000,7 +3000,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a canon Oblivious user keeps it vi
     }
 }
 
-// FORK: explicit Mega-form innate rows (src/fork/innate_abilities.c). A Mega form does NOT
+// Explicit Mega-form innate rows (src/fork/innate_abilities.c). A Mega form does NOT
 // inherit its base species' innates automatically — each Mega that should keep them has its
 // own row, mirroring the base creature's innate list as a pure boon (e.g. Mega Venusaur keeps
 // Overgrow/Chlorophyll/etc. and additionally gains Thick Fat as an innate, since its chosen slot
@@ -5172,7 +5172,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate H
     }
 }
 
-// FORK: redirection-ignore innates (Propeller Tail / Stalwart). The holder's moves ignore
+// redirection-ignore innates (Propeller Tail / Stalwart). The holder's moves ignore
 // Follow Me / Rage Powder and Lightning Rod / Storm Drain redirection, hitting the originally-selected
 // target. Wired at the shared redirection sites in src/battle_move_resolution.c (IsAffectedByFollowMe +
 // the Lightning-Rod/Storm-Drain redirect loop) beside the chosen-ability tests. Both are 1:1 clean-upside
@@ -5361,7 +5361,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate S
     }
 }
 
-// FORK: table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
+// table-integrity guards for the sSpeciesInnates table (src/fork/innate_abilities.c).
 // These are pure data-lookup tests (no battle), walking the raw rows via the
 // GetSpeciesInnatesEntry* accessors so even a duplicate species row stays visible.
 
@@ -10669,7 +10669,7 @@ TEST("Innate abilities: the Effect Spore flavor picks carry the innate")
 
 // ===== Coverage gates — every species has an innate row ===================================
 //
-// FORK: innates are a species' always-on identity, so a species the roster can draft ought to
+// Innates are a species' always-on identity, so a species the roster can draft ought to
 // have a row. Three whole lines were found with none at all during the /line-review sweep of
 // Gen 1-3 -- Kecleon, the Manectric line, and the entire weather trio (Kyogre, Groudon,
 // Rayquaza plus their Primal and Mega forms). The cause is structural rather than careless, and
@@ -10730,7 +10730,7 @@ TEST("Innate abilities: every species with a frontier set has an innate row")
     EXPECT_EQ(missing, 0);
 }
 
-// FORK: innates cover the WHOLE line, pre-evolutions included (fork-docs/LINE_REVIEW.md, Step 1) --
+// Innates cover the WHOLE line, pre-evolutions included (fork-docs/LINE_REVIEW.md, Step 1) --
 // an innate is identity a Ralts carries whether or not anything drafts it. So a species whose
 // evolution has a row must have one too. This is the check that catches the *second* kind of gap
 // the sweep found: Electrike had no row because Manectric had none, and once Manectric was given
@@ -10768,7 +10768,7 @@ TEST("Innate abilities: every pre-evolution of a species with innates has a row"
 }
 
 
-// FORK: a species the roster drafts must carry every one of its OWN vanilla abilities that the
+// A species the roster drafts must carry every one of its OWN vanilla abilities that the
 // fork knows how to run as an innate. This is the coverage half of gate (6) above: (6) says the one
 // observable slot may not name an innate-capable ability, and this says the innate-capable abilities
 // it displaced must actually be somewhere -- in the INNATES(...) row. Without both halves an ability
@@ -10888,7 +10888,7 @@ TEST("Innate abilities: every roster species carries its own innate-capable abil
     EXPECT_EQ(missing, 0);
 }
 
-// FORK: a species needs at least one ability slot that can hold its *observable* ability -- one
+// A species needs at least one ability slot that can hold its *observable* ability -- one
 // whose post-override value is never-an-innate. When every real slot is innate-capable, no set can
 // legally name an ability for that species at all, because a set's chosen ability may not be one of
 // that species' own innates. This is exactly the shape of the missing half of the Venusaur pattern:
@@ -10939,7 +10939,7 @@ TEST("Innate abilities: every species the roster drafts has a legal observable s
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: Mega Staraptor regression. Its upstream ability is CONTRARY, which inverts every stat
+// Mega Staraptor regression. Its upstream ability is CONTRARY, which inverts every stat
 // change applied to the holder -- so the innate Moxie the Starly line carries read as Attack -1 on
 // a KO instead of +1, and the transformation actively punished the trait the base form is built
 // around. Contrary is never-an-innate (double-edged, fork-docs/INNATE_ABILITIES.md), so it cannot be
@@ -10984,7 +10984,7 @@ static const enum Ability sSelfStatRaisingInnates[] =
     ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
 };
 
-// FORK: the gate the Mega Staraptor bug slipped through. Every other data check on this file asks
+// The gate the Mega Staraptor bug slipped through. Every other data check on this file asks
 // whether an innate is *wired*, *declared* or *selectable*; none asked whether the species' own
 // observable ability CONTRADICTS it. A stat-inverting chosen ability does exactly that, silently --
 // nothing is missing, nothing is duplicated, the innate simply fires backwards. Forms are covered

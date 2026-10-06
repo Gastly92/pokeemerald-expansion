@@ -2,7 +2,7 @@
 #include "test/battle.h"
 #include "fork/new_types.h"
 
-// FORK: coverage for FEATURE_NEW_TYPES (config/feature.h). Feature flags default
+// Coverage for FEATURE_NEW_TYPES (config/feature.h). Feature flags default
 // off in the test baseline (see TestInitConfigData), so each test that wants the
 // re-typing opts in with WITH_CONFIG(FEATURE_NEW_TYPES, TRUE). The first override
 // re-types Galarian Ponyta (stock pure Psychic) and Galarian Rapidash (stock

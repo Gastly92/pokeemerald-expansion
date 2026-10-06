@@ -1,7 +1,7 @@
 #ifndef GUARD_SPECIES_TIERS_H
 #define GUARD_SPECIES_TIERS_H
 
-// FORK: fork-owned species -> "tier" classification map (src/species_tiers.c).
+// fork-owned species -> "tier" classification map (src/species_tiers.c).
 //
 // A small data table tagging each legendary / mythical / pseudo-legendary species
 // with a tier, so facility logic can control *what appears where* (e.g. keep the

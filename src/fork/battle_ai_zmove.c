@@ -5,7 +5,7 @@
 #include "battle_util.h"
 #include "fork/battle_ai_zmove.h"
 
-// FORK: decide whether spending the one-per-battle Z-Move on this move is worth it.
+// Decide whether spending the one-per-battle Z-Move on this move is worth it.
 //
 // A Z-Move is a single-use resource, so the only reasons to spend it are that it changes
 // the outcome of the turn, or that there is no later turn to save it for. Upstream's

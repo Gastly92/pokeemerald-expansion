@@ -6,7 +6,7 @@
 #include "fork/frontier_battle_info.h" // INFO_MAX_DISPLAYED_ALT_FORMS (the Base Stats page's row budget)
 #include "constants/form_change_types.h"
 
-// FORK: B_FRONTIER_BATTLE_INFO. The in-battle INFO viewer must only treat a foe's
+// B_FRONTIER_BATTLE_INFO. The in-battle INFO viewer must only treat a foe's
 // ability/item as "revealed" once the player has actually witnessed it. The AI's
 // *speculative* move evaluation calls RecordAbilityBattle through GetBattleMovePriority
 // (the Prankster check on every status move it scores), so a foe whose ability the AI
@@ -29,7 +29,7 @@ AI_SINGLE_BATTLE_TEST("Frontier INFO: AI scoring a Prankster status move does no
     }
 }
 
-// FORK: B_FRONTIER_BATTLE_INFO. Once a foe's ability is genuinely witnessed, the viewer must
+// B_FRONTIER_BATTLE_INFO. Once a foe's ability is genuinely witnessed, the viewer must
 // keep showing *that* ability even though the AI's speculative move/switch evaluation later
 // overwrites gAiPartyData->mons[].ability (its live, mutable knowledge model). The viewer reads
 // a reveal-time snapshot (gBattleStruct->infoRevealedAbility) instead, so a speculative record of
@@ -61,7 +61,7 @@ AI_SINGLE_BATTLE_TEST("Frontier INFO: a speculative ability record does not corr
     }
 }
 
-// FORK: FEATURE_INNATE_ABILITIES + B_FRONTIER_BATTLE_INFO. Innates are a static property of the
+// FEATURE_INNATE_ABILITIES + B_FRONTIER_BATTLE_INFO. Innates are a static property of the
 // species, so the viewer shows them unconditionally (they are not reveal-gated). But witnessing an
 // innate (here an innate Levitate blocking a Ground move, which forces its own ability pop-up) must
 // still NOT reveal the *chosen* ability: the chosen-ability reveal bit stays clear, so the viewer
@@ -84,7 +84,7 @@ SINGLE_BATTLE_TEST("Frontier INFO: witnessing an innate does not reveal the chos
     }
 }
 
-// FORK: B_FRONTIER_BATTLE_INFO. The viewer's Base Stats page prints the foe's own spread and
+// B_FRONTIER_BATTLE_INFO. The viewer's Base Stats page prints the foe's own spread and
 // then one row per Mega/Primal form its species can reach, read from the species' own
 // form-change table. That list is bounded by INFO_MAX_DISPLAYED_ALT_FORMS, so a species
 // declaring more of those entries than the page can hold would have a reachable form the page

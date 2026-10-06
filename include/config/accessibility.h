@@ -1,7 +1,7 @@
 #ifndef GUARD_CONFIG_ACCESSIBILITY_H
 #define GUARD_CONFIG_ACCESSIBILITY_H
 
-// FORK: fork-owned config file for accessibility options. These flags make the
+// fork-owned config file for accessibility options. These flags make the
 // game easier to play for users with specific needs; FALSE = stock
 // pokeemerald-expansion behavior. They are opt-in (default FALSE) because they
 // change the look/feel for every player, not just balance.

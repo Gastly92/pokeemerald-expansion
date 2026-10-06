@@ -1,19 +1,19 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_util.h"
-#include "battle_script_commands.h" // FORK: HasBattlerActedThisTurn (Zoom Lens's moving-second window)
+#include "battle_script_commands.h" // HasBattlerActedThisTurn (Zoom Lens's moving-second window)
 #include "config_changes.h"
 #include "move.h"
 #include "random.h"
-#include "battle_ai_util.h" // FORK: AI_MoveMakesContact / AI_CanPoison / AI_GetWeather (AI deterministic predictions)
-#include "battle_scripts.h" // FORK: BattleScript_DeterministicHoldEffectConsume
+#include "battle_ai_util.h" // AI_MoveMakesContact / AI_CanPoison / AI_GetWeather (AI deterministic predictions)
+#include "battle_scripts.h" // BattleScript_DeterministicHoldEffectConsume
 #include "fork/deterministic_moves.h"
 #include "constants/battle.h"
 #include "constants/battle_move_effects.h"
 #include "constants/pokemon.h"
-#include "fork/innate_abilities.h" // FORK: innate ability predicates
+#include "fork/innate_abilities.h" // Innate ability predicates
 
-// FORK: self-contained deterministic move-resolution predicates, extracted from
+// self-contained deterministic move-resolution predicates, extracted from
 // src/battle_util.c to keep that upstream-owned file's divergence small. See
 // include/fork/deterministic_moves.h for why only these (pure) functions move while
 // the in-place DETERMINISTIC_* guards stay in battle_util.c.
@@ -195,10 +195,10 @@ u32 GetAccuracyItemRelief(enum BattlerId battlerAtk, enum BattlerId battlerDef)
     }
 }
 
-// FORK: the DETERMINISTIC_ACCURACY_EVASION accuracy/evasion and PP-cost maths. Moved out
+// The DETERMINISTIC_ACCURACY_EVASION accuracy/evasion and PP-cost maths. Moved out
 // of src/battle_util.c, where these ~180 lines sat in upstream's hottest-churn file.
 
-// FORK: net accuracy/evasion stage advantage of battlerAtk over battlerDef, after the
+// Net accuracy/evasion stage advantage of battlerAtk over battlerDef, after the
 // same overrides GetTotalAccuracy() applies to the hit calc, so DETERMINISTIC_ACCURACY_EVASION's
 // PP economy inherits them: positive = attacker advantage (PP recovered), negative = the
 // target is harder to hit (extra PP). Keen Eye / Unaware / Minds Eye / Illuminate (Gen 9)
@@ -220,19 +220,19 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
             || atkAbility == ABILITY_COMPOUND_EYES || atkAbility == ABILITY_VICTORY_STAR
             || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && atkAbility == ABILITY_ILLUMINATE))
         evasionStage = DEFAULT_STAT_STAGE;
-    // FORK: an innate Compound Eyes / Keen Eye / Illuminate ignores the target's evasion in the deterministic
+    // An innate Compound Eyes / Keen Eye / Illuminate ignores the target's evasion in the deterministic
     // PP economy too (their accuracy boost is repurposed as evasion-ignore). PURE BOON: boost-only, like
     // InnateUnawareBoonStage; the boost guard also keeps the IsInnateActive lookups off the common no-boost
     // path. Gen 9+ for Illuminate.
     else if (evasionStage > DEFAULT_STAT_STAGE
             && (IsInnateActive(battlerAtk, ABILITY_COMPOUND_EYES)
              || IsInnateActive(battlerAtk, ABILITY_KEEN_EYE)
-             || IsInnateActive(battlerAtk, ABILITY_MINDS_EYE) // FORK: Mind's Eye ignores the target's evasion (Keen Eye clone, Batch Y4)
+             || IsInnateActive(battlerAtk, ABILITY_MINDS_EYE) // Mind's Eye ignores the target's evasion (Keen Eye clone, Batch Y4)
              || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerAtk, ABILITY_ILLUMINATE))))
         evasionStage = DEFAULT_STAT_STAGE;
-    else // FORK: an innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
+    else // An innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
         evasionStage = InnateUnawareBoonStage(battlerAtk, evasionStage);
-    // FORK: mirror GetTotalAccuracy()'s ally clause -- a living partner's Victory Star boosts this
+    // Mirror GetTotalAccuracy()'s ally clause -- a living partner's Victory Star boosts this
     // battler's accuracy, so (repurposed as evasion-ignore, exactly like the user's OWN Victory Star
     // above) it makes the user ignore the target's evasion in the PP economy too. PURE BOON: the
     // boost guard keeps a foe's evasion DROP recovering PP, and keeps the partner lookup off the
@@ -250,10 +250,10 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
         evasionStage = DEFAULT_STAT_STAGE;
     if (defAbility == ABILITY_UNAWARE)
         accStage = DEFAULT_STAT_STAGE;
-    else // FORK: an innate Unaware ignores the attacker's accuracy boosts but keeps its drops (pure boon)
+    else // An innate Unaware ignores the attacker's accuracy boosts but keeps its drops (pure boon)
         accStage = InnateUnawareBoonStage(battlerDef, accStage);
 
-    // FORK: No Guard makes accuracy 100% for AND against its holder, so neither the user's
+    // No Guard makes accuracy 100% for AND against its holder, so neither the user's
     // accuracy drops nor the target's evasion increases can cost it PP -- the same shape as
     // the Micle Berry case, so it reuses it. PURE BOON: the user's accuracy boosts and the
     // target's evasion drops still recover PP. No IsInnateActive() check: No Guard is never
@@ -277,7 +277,7 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
     return delta;
 }
 
-// FORK: flat extra PP that a single target imposes on `move` under DETERMINISTIC_ACCURACY_EVASION,
+// Flat extra PP that a single target imposes on `move` under DETERMINISTIC_ACCURACY_EVASION,
 // stacking additively on top of the accuracy/evasion stage economy with no cap. BrightPowder /
 // Lax Incense, Sand Veil (in sand), Snow Cloak (in hail/snow) and Tangled Feet (while confused)
 // each add 1 PP to OFFENSIVE moves; Wonder Skin adds 1 PP to STATUS moves. No Guard on
@@ -286,13 +286,13 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
 {
     u32 tax = 0;
 
-    // FORK: No Guard's 100% accuracy, for and against its holder, overrides every evasion
+    // No Guard's 100% accuracy, for and against its holder, overrides every evasion
     // source below, so the move pays none of these taxes. defAbility is already in hand, so
     // it is tested first to keep the GetBattlerAbility() lookup off the common path.
     if (defAbility == ABILITY_NO_GUARD || GetBattlerAbility(battlerAtk) == ABILITY_NO_GUARD)
         return 0;
 
-    // FORK: BUFF_ACCURACY_ITEMS -- the attacker's Wide Lens (always) or Zoom Lens (on turns it
+    // BUFF_ACCURACY_ITEMS -- the attacker's Wide Lens (always) or Zoom Lens (on turns it
     // moves second) cancels the flat evasion taxes below, restoring the attacker's half of the
     // accuracy axis that DETERMINISTIC_ACCURACY_EVASION otherwise dropped. Returns
     // ACCURACY_ITEM_RELIEF_NONE with either flag off, so stock behavior is untouched.
@@ -301,7 +301,7 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
 
     if (IsBattleMoveStatus(move))
     {
-        if (defAbility == ABILITY_WONDER_SKIN || IsInnateActive(battlerDef, ABILITY_WONDER_SKIN)) // FORK: credit an innate Wonder Skin too
+        if (defAbility == ABILITY_WONDER_SKIN || IsInnateActive(battlerDef, ABILITY_WONDER_SKIN)) // Credit an innate Wonder Skin too
             tax++;
     }
     else
@@ -309,20 +309,20 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
         u32 weather = GetAttackerWeather(battlerAtk, GetBattlerHoldEffect(battlerAtk), GetBattlerAbility(battlerAtk), GetWeather());
         if (defHoldEffect == HOLD_EFFECT_EVASION_UP)
             tax++;
-        if ((weather & B_WEATHER_SANDSTORM) // FORK: credit an innate Sand Veil too
+        if ((weather & B_WEATHER_SANDSTORM) // Credit an innate Sand Veil too
          && (defAbility == ABILITY_SAND_VEIL || IsInnateActive(battlerDef, ABILITY_SAND_VEIL)))
             tax++;
-        if ((weather & B_WEATHER_ICY_ANY) // FORK: credit an innate Snow Cloak too
+        if ((weather & B_WEATHER_ICY_ANY) // Credit an innate Snow Cloak too
          && (defAbility == ABILITY_SNOW_CLOAK || IsInnateActive(battlerDef, ABILITY_SNOW_CLOAK)))
             tax++;
-        if ((defAbility == ABILITY_TANGLED_FEET || IsInnateActive(battlerDef, ABILITY_TANGLED_FEET)) // FORK: credit an innate Tangled Feet too
+        if ((defAbility == ABILITY_TANGLED_FEET || IsInnateActive(battlerDef, ABILITY_TANGLED_FEET)) // Credit an innate Tangled Feet too
          && gBattleMons[battlerDef].volatiles.confusionTimer)
             tax++;
     }
     return tax;
 }
 
-// FORK: projected net PP the attacker's move will cost *this turn*, for the in-battle
+// Projected net PP the attacker's move will cost *this turn*, for the in-battle
 // move-info display under DETERMINISTIC_ACCURACY_EVASION (where the move always hits, so
 // accuracy is meaningless and the PP economy is what matters). Mirrors the deduction in
 // CancelerPPDeduction (src/battle_move_resolution.c): base 1 PP, Pressure, the paralysis
@@ -355,18 +355,18 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
         for (u32 i = 0; i < gBattlersCount; i++)
         {
             if (!IsBattlerAlly(i, battlerAtk))
-                ppToDeduct += BattlerHasAbility(i, ABILITY_PRESSURE); // FORK: innate-aware
+                ppToDeduct += BattlerHasAbility(i, ABILITY_PRESSURE); // innate-aware
         }
     }
     else if (moveTarget != TARGET_OPPONENTS_FIELD)
     {
-        if (primaryDef != battlerAtk && BattlerHasAbility(primaryDef, ABILITY_PRESSURE)) // FORK: innate-aware
+        if (primaryDef != battlerAtk && BattlerHasAbility(primaryDef, ABILITY_PRESSURE)) // innate-aware
             ppToDeduct++;
     }
 
     if (gBattleMons[battlerAtk].status1 & STATUS1_PARALYSIS
         && atkAbility != ABILITY_QUICK_FEET
-        && !BattlerHasAbility(battlerAtk, ABILITY_QUICK_FEET) // FORK: innate Quick Feet is exempt from the para PP tax, like the real ability
+        && !BattlerHasAbility(battlerAtk, ABILITY_QUICK_FEET) // Innate Quick Feet is exempt from the para PP tax, like the real ability
         && GetConfig(DETERMINISTIC_PARALYSIS))
         ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
 
@@ -388,7 +388,7 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
                 if (singleTargetFoe && t != primaryDef)
                     continue;
                 enum Ability defAbility = GetBattlerAbility(t);
-                // FORK: BUFF_ACCURACY_ITEMS -- mirrors CancelerPPDeduction. Zoom Lens's window
+                // BUFF_ACCURACY_ITEMS -- mirrors CancelerPPDeduction. Zoom Lens's window
                 // depends on turn order, which is not decided yet at move-select time, so this
                 // projection reads it as closed and under-promises rather than over-promises.
                 bool32 ignorePenalties = micleActive
@@ -410,7 +410,7 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
     return ppToDeduct - refund;
 }
 
-// FORK: DETERMINISTIC_MOVE_RESULTS speed ties, moved out of src/battle_main.c.
+// DETERMINISTIC_MOVE_RESULTS speed ties, moved out of src/battle_main.c.
 //
 // The DETERMINISTIC_HOLD_EFFECTS callnatives (BS_JumpIfHangOnItemNotConsumed,
 // BS_JumpIfNotDeterministicHoldEffects) deliberately did NOT move here: they are battle
@@ -418,7 +418,7 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
 // Copying that macro would create exactly the silent-drift hazard this fork keeps getting
 // bitten by, so they stay with the command infrastructure they belong to.
 
-// FORK: DETERMINISTIC_MOVE_RESULTS breaks a speed tie by a fixed ladder instead of the
+// DETERMINISTIC_MOVE_RESULTS breaks a speed tie by a fixed ladder instead of the
 // random permutation: higher raw base Speed, then lighter weight, then higher
 // remaining-HP%. Returns 1 if battlerAtk wins the tie, -1 if battlerDef wins, or 0 if
 // every rung is also tied (caller falls back to the random order). Under Trick Room the
@@ -457,10 +457,10 @@ s32 DeterministicSpeedTieWins(enum BattlerId battlerAtk, enum BattlerId battlerD
     return result;
 }
 
-// FORK: the MOVEEND deterministic handlers (from src/battle_move_resolution.c) and the
+// The MOVEEND deterministic handlers (from src/battle_move_resolution.c) and the
 // AI's deterministic-ability predictions (from src/battle_ai_util.c).
 
-// FORK: DETERMINISTIC_HOLD_EFFECTS — consume the attacker's crit/flinch entry item
+// DETERMINISTIC_HOLD_EFFECTS — consume the attacker's crit/flinch entry item
 // (Scope Lens / Razor Claw / Lucky Punch / Leek, King's Rock / Razor Fang) after the
 // move it fired on. IsCriticalHit() sets the pending flag and TryKingsRock() records
 // the battlers it flinched; we run a removeitem here once per move.
@@ -468,7 +468,7 @@ enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValues *cv)
 {
     enum MoveEndResult result = MOVEEND_RESULT_CONTINUE;
 
-    // FORK: DETERMINISTIC_HOLD_EFFECTS — the attacker just took an action, so every foe
+    // DETERMINISTIC_HOLD_EFFECTS — the attacker just took an action, so every foe
     // still on the field has now weathered a foe's action since it entered. This closes
     // their Focus Band entry-turn window (see IsBattlersEntryTurn): a holder is protected
     // only on the turn it actually faces an attack, not the turn after. Done at move end so
@@ -507,7 +507,7 @@ enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValues *cv)
     return result;
 }
 
-// FORK: under DETERMINISTIC_ACCURACY_EVASION a damaging move that was exactly 50%
+// Under DETERMINISTIC_ACCURACY_EVASION a damaging move that was exactly 50%
 // accurate (Zap Cannon, Inferno, DynamicPunch, ...) now requires a recharge turn like
 // Hyper Beam — set via the same rechargeTimer/gLockedMoves state Hyper Beam uses, so
 // CancelerRecharge forces the recharge next turn. Sleep moves (Dark Void) are handled
@@ -528,7 +528,7 @@ enum MoveEndResult MoveEndDeterministicRecharge(struct BattleCalcValues *cv)
 }
 
 // Decide whether move having an additional effect for .
-// FORK: DETERMINISTIC_ABILITIES — TRUE when the attacker's own always-on ability
+// DETERMINISTIC_ABILITIES — TRUE when the attacker's own always-on ability
 // guarantees a beneficial poison on this damaging move: Poison Touch on a contact
 // hit, or Toxic Chain on any damaging hit. Reuses AI_CanPoison so it respects the
 // same immunity/effectiveness/substitute checks as a move's own poison effect.
@@ -554,7 +554,7 @@ bool32 AI_DeterministicAbilityGuaranteesStatus(enum BattlerId battlerAtk, enum B
     return FALSE;
 }
 
-// FORK: DETERMINISTIC_ABILITIES — TRUE when making contact with battlerDef would
+// DETERMINISTIC_ABILITIES — TRUE when making contact with battlerDef would
 // guarantee a status on battlerAtk via the defender's always-on contact ability
 // (Static/Flame Body/Poison Point/Effect Spore/Cute Charm) and the attacker can
 // actually receive it. Used to treat such a contact move as a downside.
@@ -580,7 +580,7 @@ bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum Ba
     case ABILITY_POISON_POINT:
         return CanBePoisoned(battlerDef, battlerAtk, abilityDef, abilityAtk);
     case ABILITY_EFFECT_SPORE:
-        // FORK: Effect Spore no longer applies a status under this flag — it lowers the
+        // Effect Spore no longer applies a status under this flag — it lowers the
         // contact attacker's accuracy by one stage. Roles are reversed versus the usual
         // CanLowerStat() call: the DEFENDER (the Effect Spore holder) is the one doing the
         // lowering, so it is passed as the first argument.
@@ -588,14 +588,14 @@ bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum Ba
     case ABILITY_CUTE_CHARM:
         return !gBattleMons[battlerAtk].volatiles.infatuation
             && abilityAtk != ABILITY_OBLIVIOUS
-            && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
+            && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // An innate-Oblivious attacker resists Cute Charm
             && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL)
-            && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // FORK: innate Aroma Veil on the attacker's side (Batch U)
+            && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // Innate Aroma Veil on the attacker's side (Batch U)
     default:
         break;
     }
 
-    // FORK: innate Cute Charm (FEATURE_INNATE_ABILITIES) — when the defender carries Cute Charm
+    // Innate Cute Charm (FEATURE_INNATE_ABILITIES) — when the defender carries Cute Charm
     // innately but its chosen ability differs, the switch above misses it, yet making contact still
     // risks infatuation, so treat it as a downside too. (Static / Flame Body / Poison Point are never
     // innates, so only Cute Charm needs this among the status set; BattlerHasAbility is a no-op with
@@ -603,11 +603,11 @@ bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum Ba
     if (abilityDef != ABILITY_CUTE_CHARM && BattlerHasAbility(battlerDef, ABILITY_CUTE_CHARM))
         return !gBattleMons[battlerAtk].volatiles.infatuation
             && abilityAtk != ABILITY_OBLIVIOUS
-            && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // FORK: an innate-Oblivious attacker resists Cute Charm
+            && !IsInnateActive(battlerAtk, ABILITY_OBLIVIOUS) // An innate-Oblivious attacker resists Cute Charm
             && !IsAbilityOnSide(battlerAtk, ABILITY_AROMA_VEIL)
-            && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // FORK: innate Aroma Veil on the attacker's side (Batch U)
+            && !IsInnateOnSide(battlerAtk, ABILITY_AROMA_VEIL); // Innate Aroma Veil on the attacker's side (Batch U)
 
-    // FORK: innate Effect Spore (Tier 5.10) — same shape as the Cute Charm clause above. The switch
+    // Innate Effect Spore (Tier 5.10) — same shape as the Cute Charm clause above. The switch
     // keys off the chosen ability, so a holder whose Effect Spore is innate-only would be missed,
     // yet contact still guarantees the accuracy drop. IsInnateActive supplies the usual suppression.
     if (abilityDef != ABILITY_EFFECT_SPORE && IsInnateActive(battlerDef, ABILITY_EFFECT_SPORE))
@@ -616,7 +616,7 @@ bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum Ba
     return FALSE;
 }
 
-// FORK: under DETERMINISTIC_ABILITIES, some abilities cure the holder's
+// Under DETERMINISTIC_ABILITIES, some abilities cure the holder's
 // non-volatile status at the *end of every turn*, so inflicting one on a known
 // holder of such an ability is always wasted - it is wiped before it can act. The
 // engine still applies-then-cures (Synchronize, status-flash messaging, etc. fire

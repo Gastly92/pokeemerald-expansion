@@ -15,7 +15,7 @@
 #include "constants/event_objects.h"
 #include "constants/frontier_util.h"
 
-// FORK: fork-owned static competitive teams for the Battle Tower's special
+// fork-owned static competitive teams for the Battle Tower's special
 // opponents — the Salon Maiden (Frontier Brain) and the gym-leader bosses.
 // Kept out of the upstream frontier files so this data carries no merge-conflict
 // surface; battle_frontier.c / frontier_util.c / battle_tower.c hold only tiny

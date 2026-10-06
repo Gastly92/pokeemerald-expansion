@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: BattleScript_WeatherAbilityActivates plays `playanimation_var BS_BATTLER_0, sB_ANIM_ARG1`,
+// BattleScript_WeatherAbilityActivates plays `playanimation_var BS_BATTLER_0, sB_ANIM_ARG1`,
 // but TryChangeBattleWeather only fills animArg1 on its ability-set-the-weather branch. Sand Spit
 // deliberately passes ABILITY_NONE, so before the fix it played whatever animation id happened to
 // be left in that byte: B_ANIM_STATS_CHANGE (0) on the first activation of a battle, the previous

@@ -3,7 +3,7 @@
 #include "battle_ai_util.h"
 #include "fork/battle_ai_gimmick.h"
 
-// FORK: with FEATURE_FREE_GIMMICKS an AI Mega Evolution or Dynamax is not spent on the first
+// With FEATURE_FREE_GIMMICKS an AI Mega Evolution or Dynamax is not spent on the first
 // turn it becomes available. Each turn it commits on a roll (RNG_AI_COMMIT_MEGA /
 // RNG_AI_COMMIT_DYNAMAX), unless the gimmick secures a KO, the mon is threatened with a KO,
 // or no teammate is left to use it later. See ShouldCommitGimmickNow.

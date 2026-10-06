@@ -1,7 +1,7 @@
 #ifndef GUARD_NEW_TYPES_H
 #define GUARD_NEW_TYPES_H
 
-// FORK: new typings (FEATURE_NEW_TYPES, config/feature.h).
+// New typings (FEATURE_NEW_TYPES, config/feature.h).
 //
 // Some species' types are overwritten with a fork-defined typing. The
 // species->types mapping lives in a fork-owned table (src/new_types.c) rather

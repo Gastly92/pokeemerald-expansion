@@ -4,7 +4,7 @@
 #include "fork/frontier_ai.h"
 #include "constants/battle_frontier.h"
 
-// FORK: guards Script_IsNextFactoryBattleMilestone (src/fork/frontier_ai.c), which the
+// Guards Script_IsNextFactoryBattleMilestone (src/fork/frontier_ai.c), which the
 // Factory's pre-battle attendant asks before announcing the next match. It must flag
 // exactly the upcoming match that GenerateOpponentMons drafts as the set milestone
 // (Match No. 10, 20, ...), or the "formidable opponent" warning lands on the wrong fight.

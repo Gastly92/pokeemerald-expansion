@@ -8,7 +8,7 @@
 #include "constants/battle_frontier_trainers.h"
 #include "constants/trainers.h"
 
-// FORK: guards the Frontier's two-tier AI difficulty (src/fork/frontier_ai.c).
+// Guards the Frontier's two-tier AI difficulty (src/fork/frontier_ai.c).
 // The top preset used to be the baseline for every facility battle, which left a
 // boss fight playing no better than the routine opponent before it. It is now
 // reserved for the Frontier Brain and the Battle Tower's gym-leader bosses;

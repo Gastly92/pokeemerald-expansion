@@ -6,7 +6,7 @@
 #include "constants/abilities.h"
 #include "constants/species.h"
 
-// FORK: fork-owned species->innate table (FEATURE_INNATE_ABILITIES). Kept here instead of in
+// fork-owned species->innate table (FEATURE_INNATE_ABILITIES). Kept here instead of in
 // gSpeciesInfo so upstream syncs never touch it. Each row maps a species to a list of innate
 // abilities always active on top of its normal chosen ability; write each row with the
 // INNATES(...) macro below.
@@ -12901,7 +12901,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     },
 };
 
-// FORK: O(1) species->row lookup. The source table above stays sorted by National Dex
+// O(1) species->row lookup. The source table above stays sorted by National Dex
 // number for humans (forms sit beside their base), which is NOT species-id order (form
 // constants live at high ids), so it can't be indexed or searched directly. Instead a
 // species-keyed index is built lazily on first lookup (EWRAM bss, ~3 KB) by one linear
@@ -12999,7 +12999,7 @@ enum Ability GetSpeciesInnate(u16 species, u32 index)
     return ABILITY_NONE;
 }
 
-// FORK: raw-table accessors for table-integrity tests (test/fork/innate_abilities.c).
+// raw-table accessors for table-integrity tests (test/fork/innate_abilities.c).
 // These walk the sSpeciesInnates rows directly (NOT keyed by species), so a duplicate
 // species row — invisible to GetSpeciesInnateList, which returns the first match — is
 // still observable. Not for battle logic: use SpeciesHasInnate / GetSpeciesInnate there.
@@ -13045,7 +13045,7 @@ static bool32 IsActiveEndTurnInnate(enum Ability ability)
     }
 }
 
-// FORK: end-turn innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active,
+// end-turn innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active,
 // scripted end-turn innates (today only Speed Boost), hooked from the
 // THIRD_EVENT_BLOCK_ABILITIES_INNATE step of the end-turn loop (src/battle_end_turn.c)
 // right after the chosen-ability end-turn block.
@@ -13133,7 +13133,7 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     }
 }
 
-// FORK: on-hit innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
+// on-hit innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
 // on-hit innates (contact reactions), hooked from the MOVEEND_ABILITIES_INNATE step of the
 // move-end loop (src/battle_move_resolution.c) right after the chosen-ability contact block.
 //
@@ -13194,7 +13194,7 @@ static bool32 IsActiveOnHitAttackerInnate(enum Ability ability)
     }
 }
 
-// FORK: attacker-side on-hit innate driver (FEATURE_INNATE_ABILITIES). Fires the attacker's active,
+// attacker-side on-hit innate driver (FEATURE_INNATE_ABILITIES). Fires the attacker's active,
 // scripted attacker-side on-hit innates (today only Magician), hooked from the
 // MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE step of the move-end loop (src/battle_move_resolution.c)
 // right after the chosen-ability foes-fainted block.
@@ -13248,7 +13248,7 @@ static bool32 IsActiveOnDamageInnate(enum Ability ability)
     }
 }
 
-// FORK: on-damage innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
+// on-damage innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
 // on-damage innates (today only Berserk), hooked from the MOVEEND_COLOR_CHANGE_INNATE step of the
 // move-end loop (src/battle_move_resolution.c) right after the chosen-ability MOVEEND_COLOR_CHANGE
 // block, which iterates every damaged battler. `battler` is one damaged holder; the caller loops it
@@ -13329,7 +13329,7 @@ static enum AbilityEffect SwitchInInnateAbilityEffect(enum Ability ability)
     }
 }
 
-// FORK: switch-in innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
+// switch-in innate driver (FEATURE_INNATE_ABILITIES). Fires the holder's active, scripted
 // switch-in innates, hooked from three switch-in phases of the switch-in loop (src/battle_switch_in.c),
 // each right after its chosen-ability counterpart: the ABILITYEFFECT_ON_SWITCHIN block
 // (FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE, for Intimidate / Download / the reveal trio / Supersweet
@@ -13377,7 +13377,7 @@ bool32 TryActivateInnateSwitchInEffects(enum BattlerId battler, u32 *index, bool
     return FALSE;
 }
 
-// FORK: innate-aware ability names in battle text (FEATURE_INNATE_ABILITIES).
+// innate-aware ability names in battle text (FEATURE_INNATE_ABILITIES).
 //
 // The ability-name placeholders — {B_ATK_ABILITY}, {B_DEF_ABILITY}, {B_SCR_ACTIVE_ABILITY},
 // {B_EFF_ABILITY} — do NOT read a live global: they read a per-battler snapshot of
@@ -13420,7 +13420,7 @@ void ApplyInnateMessageAbilities(enum Ability *abilities)
     }
 }
 
-// FORK: "is this ability innate on either mon of `battler`'s side?", the innate companion to
+// "is this ability innate on either mon of `battler`'s side?", the innate companion to
 // upstream's IsAbilityOnSide(). Returns the battler id + 1 of the holder (so 0 means none),
 // matching IsAbilityOnSide's convention, because callers pair the two:
 //     IsAbilityOnSide(b, A) || IsInnateOnSide(b, A)
@@ -13439,7 +13439,7 @@ u32 IsInnateOnSide(enum BattlerId battler, enum Ability ability)
         return 0;
 }
 
-// FORK: innate-aware (FEATURE_INNATE_ABILITIES). Returns the specific trapping ability `trapper` is
+// innate-aware (FEATURE_INNATE_ABILITIES). Returns the specific trapping ability `trapper` is
 // holding `battler` with — Shadow Tag / Arena Trap / Magnet Pull — or ABILITY_NONE if none. An innate
 // trapping ability traps exactly like the real one (BattlerHasAbility() is chosen-or-innate), and a
 // mon's own (chosen or innate) Shadow Tag exempts it from an enemy Shadow Tag. Returning the ability
@@ -13461,12 +13461,12 @@ enum Ability GetBattlerEscapePreventionAbility(enum BattlerId battler, enum Batt
     return ABILITY_NONE;
 }
 
-// FORK: the innate-ability predicates themselves. These used to live in
+// The innate-ability predicates themselves. These used to live in
 // src/battle_util.c beside upstream's own ability queries, which put ~60 lines of fork
 // code in the file upstream churns hardest (1797 lines across 70 commits in the 1.17.0
 // sync alone). They are unchanged; only their address has.
 
-// FORK: innate abilities (FEATURE_INNATE_ABILITIES). Mirrors CanBreakThroughAbility
+// Innate abilities (FEATURE_INNATE_ABILITIES). Mirrors CanBreakThroughAbility
 // for an arbitrary innate ability value: Mold Breaker & co. pierce an innate only
 // if that innate is itself breakable, exactly as they would the same ability in a
 // real slot. Keep in sync with CanBreakThroughAbility above.
@@ -13477,7 +13477,7 @@ static bool32 CanBreakThroughInnate(enum BattlerId battlerDef, enum Ability abil
     return gBattleStruct->moldBreakerActive && gAbilitiesInfo[ability].breakable;
 }
 
-// FORK: innate abilities (FEATURE_INNATE_ABILITIES). TRUE if `battler`'s species
+// Innate abilities (FEATURE_INNATE_ABILITIES). TRUE if `battler`'s species
 // declares `ability` as an innate AND that innate is currently active. Applies the
 // same suppression gates as GetBattlerAbilityInternal (not-on-field, Gastro Acid,
 // Neutralizing Gas, Mold Breaker on breakable abilities, Ability Shield) so an innate is
@@ -13521,7 +13521,7 @@ bool32 IsInnateActive(enum BattlerId battler, enum Ability ability)
     return !CanBreakThroughInnate(battler, ability, hasAbilityShield);
 }
 
-// FORK: innate abilities (FEATURE_INNATE_ABILITIES). The central "does this
+// Innate abilities (FEATURE_INNATE_ABILITIES). The central "does this
 // battler have ability X?" trait predicate. TRUE if X is the battler's primary
 // (chosen) ability — resolved by GetBattlerAbility(), so all the usual
 // suppression applies — OR an active innate. Identity-style queries (Trace, Skill
@@ -13535,7 +13535,7 @@ bool32 BattlerHasAbility(enum BattlerId battler, enum Ability ability)
     return IsInnateActive(battler, ability);
 }
 
-// FORK: TRUE if the battler should receive the *beneficial* ground interactions — field terrain
+// TRUE if the battler should receive the *beneficial* ground interactions — field terrain
 // and Toxic Spikes absorption. That's any grounded battler, plus one that floats only by an
 // active innate Levitate (FEATURE_INNATE_ABILITIES). Unlike a real Levitate, the fork makes an
 // innate Levitate a pure boon: the battler still floats above Ground moves and entry-hazard
@@ -13550,7 +13550,7 @@ bool32 IsBattlerGroundedForBenefit(enum BattlerId battler, enum Ability ability,
     return IsBattlerGrounded(battler, ability, holdEffect);
 }
 
-// FORK: FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord above: TRUE if the
+// FEATURE_INNATE_ABILITIES. Innate-aware drop-in for IsAbilityAndRecord above: TRUE if the
 // chosen ability matches (recorded, as upstream) OR an active innate matches (no record — the chosen
 // slot stays identity, exactly like Rock Head's innate recoil clause). Used at indirect-damage chip
 // gates so an innate holder is spared like the real ability. Collapses to IsAbilityAndRecord when the
@@ -13562,12 +13562,12 @@ bool32 IsAbilityOrInnateAndRecord(enum BattlerId battler, enum Ability battlerAb
     return IsInnateActive(battler, abilityToCheck);
 }
 
-// FORK: the MOVEEND innate handlers (from src/battle_move_resolution.c) and the AI's
+// The MOVEEND innate handlers (from src/battle_move_resolution.c) and the AI's
 // innate reads (from src/battle_ai_util.c). Both files are in upstream's top-4 churn.
 // These were `static` in those files; they are external now so the hook points can still
 // reach them, which is the one real cost of moving a helper out.
 
-// FORK: fire the target's active on-hit innates (contact reactions: Rough Skin / Iron Barbs /
+// Fire the target's active on-hit innates (contact reactions: Rough Skin / Iron Barbs /
 // Gooey / Tangling Hair) right after the chosen-ability contact block. Re-entrant, mirroring the
 // end-turn innate hook (HandleEndTurnThirdEventBlock): fire one innate per pass, resuming from a
 // per-battler cursor; hold this state (keeping the cursor) while effects keep firing, and only
@@ -13591,7 +13591,7 @@ enum MoveEndResult MoveEndAbilitiesInnate(struct BattleCalcValues *cv)
     return result;
 }
 
-// FORK: fire the attacker's active attacker-side on-hit innates (Magician steals a held item off a
+// Fire the attacker's active attacker-side on-hit innates (Magician steals a held item off a
 // target it damaged) right after the chosen-ability MOVEEND_ABILITY_EFFECT_FOES_FAINTED block. Re-entrant,
 // mirroring MoveEndAbilitiesInnate: fire one innate per pass, resuming from the per-battler cursor (which
 // the defender-side MOVEEND_ABILITIES_INNATE step, running earlier in this same move, already reset to 0);
@@ -13618,7 +13618,7 @@ enum MoveEndResult MoveEndAbilityEffectFoesFaintedInnate(struct BattleCalcValues
     return result;
 }
 
-// FORK: MOVEEND_SHEER_FORCE jumps a Sheer-Force-boosted move straight to MOVEEND_ITEMS_EFFECTS_ALL,
+// MOVEEND_SHEER_FORCE jumps a Sheer-Force-boosted move straight to MOVEEND_ITEMS_EFFECTS_ALL,
 // skipping MOVEEND_ABILITY_EFFECT_FOES_FAINTED along with the effects Sheer Force really suppresses
 // (Life Orb, Shell Bell, Red Card, Color Change, Berserk...). Upstream can't tell the difference — no
 // species has Sheer Force and a Moxie-type ability at once — but an innate can, and Moxie, Chilling /
@@ -13634,7 +13634,7 @@ void RedirectSheerForceSkipToInnates(void)
         gBattleScripting.moveendState = MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE;
 }
 
-// FORK: fire each damaged holder's active on-damage innates (Berserk) right after the chosen-ability
+// Fire each damaged holder's active on-damage innates (Berserk) right after the chosen-ability
 // MOVEEND_COLOR_CHANGE block. Mirrors MoveEndColorChange's per-battler iteration, with a nested
 // per-battler innate cursor: hold this state (keeping both cursors) while an effect fires for the
 // current battler; once that battler's innate list is exhausted, reset the cursor and advance to the
@@ -13667,7 +13667,7 @@ enum MoveEndResult MoveEndColorChangeInnate(struct BattleCalcValues *cv)
     return MOVEEND_RESULT_CONTINUE;
 }
 
-// FORK: FEATURE_INNATE_ABILITIES. Innate-aware companion to AI_IsAbilityOnSide — see the header.
+// FEATURE_INNATE_ABILITIES. Innate-aware companion to AI_IsAbilityOnSide — see the header.
 // IsInnateActive is feature-gated and species-based, so this is a strict no-op when the feature is
 // off and never leaks the chosen ability (it credits only the species' active innate).
 bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability)
@@ -13679,7 +13679,7 @@ bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability)
         || (IsBattlerAlive(partner) && IsInnateActive(partner, ability));
 }
 
-// FORK: TRUE if the battler has any Moxie-type on-KO boost as an ACTIVE INNATE
+// TRUE if the battler has any Moxie-type on-KO boost as an ACTIVE INNATE
 // (FEATURE_INNATE_ABILITIES). Moxie / Beast Boost / Chilling Neigh / Grim Neigh of the
 // Moxie-type set are innate-able (the As One combos are never innates), so this is the
 // innate-aware companion to IsMoxieTypeAbility used beside it at the AI's Moxie effect reads.
