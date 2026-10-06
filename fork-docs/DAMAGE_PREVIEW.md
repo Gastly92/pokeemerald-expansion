@@ -47,6 +47,7 @@ player can know and then restored byte-for-byte:
 ## Display
 
 - Replaces the `TYPE/` label: `<Type> lo-hi%`, narrowed to fit the 64px row.
+- **Both ends round down** (42.2-53.6% reads `42-53%`), so the top end never shows 100 for a hit that cannot take the full bar.
 - Capped at 100: `85-100%` reads as "can KO"; a range that always KOs shows `KO`.
 - Status moves, and moves the calc says cannot damage, keep the stock `TYPE/<Type>` line.
 - **Target:** the foe opposite, or its partner once that one is down — the same single

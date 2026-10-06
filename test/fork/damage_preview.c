@@ -15,9 +15,10 @@
 #define TTAR_BULKY_HP   404
 #define TTAR_BULKY_DEF  350
 
+// Both ends of the range are truncated, so the exact % lies in [lo, hi + 1).
 static bool32 PercentWithin(s32 damage, u32 maxHP, u32 lo, u32 hi)
 {
-    return (u32)damage * 100 >= lo * maxHP && (u32)damage * 100 <= hi * maxHP;
+    return (u32)damage * 100 >= lo * maxHP && (u32)damage * 100 < (hi + 1) * maxHP;
 }
 
 SINGLE_BATTLE_TEST("Damage preview: the range contains the damage dealt at either end of the foe's spread")
@@ -60,10 +61,12 @@ SINGLE_BATTLE_TEST("Damage preview: a status move has no range")
     }
 }
 
+// Off the stack: four BattlePokemon are ~500 bytes, which a battle test's stack cannot spare.
+static EWRAM_DATA struct BattlePokemon sMonsBefore[MAX_BATTLERS_COUNT] = {0};
+
 SINGLE_BATTLE_TEST("Damage preview: an unrevealed held item is left out until the player has seen it")
 {
     u32 loHidden, hiHidden, loSeen, hiSeen;
-    struct BattlePokemon before[MAX_BATTLERS_COUNT];
 
     GIVEN {
         PLAYER(SPECIES_CHARIZARD) { Moves(MOVE_FLAMETHROWER, MOVE_CELEBRATE); }
@@ -72,10 +75,10 @@ SINGLE_BATTLE_TEST("Damage preview: an unrevealed held item is left out until th
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TACKLE); }
     } THEN {
         EXPECT((gBattleStruct->infoItemRevealed[B_SIDE_OPPONENT] & 1u) == 0);
-        memcpy(before, gBattleMons, sizeof(before));
+        memcpy(sMonsBefore, gBattleMons, sizeof(sMonsBefore));
         EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_FLAMETHROWER, GIMMICK_NONE, &loHidden, &hiHidden));
         // Nothing the calc rewrote may survive it.
-        EXPECT(memcmp(before, gBattleMons, sizeof(before)) == 0);
+        EXPECT(memcmp(sMonsBefore, gBattleMons, sizeof(sMonsBefore)) == 0);
         EXPECT(gBattleMons[B_POSITION_OPPONENT_LEFT].item == ITEM_ASSAULT_VEST);
 
         gBattleStruct->infoItemRevealed[B_SIDE_OPPONENT] |= 1u;

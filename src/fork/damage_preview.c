@@ -189,11 +189,13 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
             continue;
 
         any = TRUE;
-        // Round outwards, so the range never claims more certainty than the calc has.
+        // Both ends round DOWN (42.2-53.6% reads 42-53%). Rounding the top up would turn a 99.2%
+        // max into "100%" and promise a KO from full HP that cannot happen; truncating means the
+        // readout only says 100 when the hit really can take the whole bar.
         if (dmg.minimum * 100 / maxHP < lo)
             lo = dmg.minimum * 100 / maxHP;
-        if ((dmg.maximum * 100 + maxHP - 1) / maxHP > hi)
-            hi = (dmg.maximum * 100 + maxHP - 1) / maxHP;
+        if (dmg.maximum * 100 / maxHP > hi)
+            hi = dmg.maximum * 100 / maxHP;
     }
 
     gBattleMons[battlerDef] = realDef;
