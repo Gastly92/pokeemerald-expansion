@@ -269,6 +269,11 @@ milestone slot but branches to the Head's own intro first. Hook:
 `Script_IsNextFactoryBattleMilestone` via `callnative` in the pre-battle room script;
 test `test/fork/factory_tough_match_warning.c`.
 
+After beating the Factory Head, the swap offers the Head's own team (legendary and
+mythical included), like any other opponent's. `FillFactoryBrainParty` writes its picks
+into `gFrontierTempParty`, which `factory_setopponentmons` copies into the swap pool;
+test in `test/fork/frontier_draft.c`.
+
 - **AI tier:** `IsFrontierBossTrainer` → `GetFrontierAiFlags` (`src/fork/frontier_ai.c`),
   presets `B_FRONTIER_HARD_AI_FLAGS` / `B_FRONTIER_REGULAR_AI_FLAGS`.
 - **Gimmicks:** `B_FRONTIER_BOSS_ONLY_GIMMICKS` (`config/frontier.h`), enforced through
