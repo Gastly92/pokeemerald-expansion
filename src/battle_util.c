@@ -3461,6 +3461,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         case ABILITY_PRESSURE:
             if (shouldAbilityTrigger)
             {
+                // FORK: show the innate in the pop-up, not the chosen ability, only when they differ
+                // (Speed Boost precedent — CreateAbilityPopUp reads the primary slot).
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PRESSURE;
                 BattleScriptCall(BattleScript_SwitchInAbilityMsg);
                 effect++;
