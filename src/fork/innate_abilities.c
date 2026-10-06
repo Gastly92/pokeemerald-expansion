@@ -13104,6 +13104,8 @@ bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index,
         (*index)++; // step past this slot now, so a fired effect resumes at the next one
         if (!IsActiveOnHitAttackerInnate(innate))
             continue;
+        if (innate == ABILITY_MAGICIAN && IsSheerForceAffected(move, GetBattlerAbility(battler)))
+            continue; // Sheer Force suppresses Magician (an after-move-secondary effect), but not the KO boosts
         if (GetBattlerAbility(battler) == innate) // chosen-ability foes-fainted block already ran it
             continue;
         if (!IsInnateActive(battler, innate))
@@ -13490,10 +13492,29 @@ enum MoveEndResult MoveEndAbilityEffectFoesFaintedInnate(struct BattleCalcValues
     else
     {
         gBattleStruct->eventState.moveEndInnateIndex = 0;
-        gBattleScripting.moveendState++;
+        if (IsSheerForceAffected(cv->move, cv->abilities[cv->battlerAtk]))
+            gBattleScripting.moveendState = MOVEEND_ITEMS_EFFECTS_ALL; // resume the Sheer Force skip (see RedirectSheerForceSkipToInnates)
+        else
+            gBattleScripting.moveendState++;
     }
 
     return result;
+}
+
+// FORK: MOVEEND_SHEER_FORCE jumps a Sheer-Force-boosted move straight to MOVEEND_ITEMS_EFFECTS_ALL,
+// skipping MOVEEND_ABILITY_EFFECT_FOES_FAINTED along with the effects Sheer Force really suppresses
+// (Life Orb, Shell Bell, Red Card, Color Change, Berserk...). Upstream can't tell the difference — no
+// species has Sheer Force and a Moxie-type ability at once — but an innate can, and Moxie, Chilling /
+// Grim Neigh and Beast Boost are KO triggers Sheer Force does not suppress. So detour the skip through
+// the attacker-side innate step, which then resumes it at MOVEEND_ITEMS_EFFECTS_ALL (Magician, which
+// Sheer Force does suppress, is filtered in TryActivateInnateOnHitAttackerEffects). Called right after
+// upstream's MoveEndSheerForce picks its next state; a no-op unless that state is the skip target.
+// Tests: test/fork/innate_abilities.c "innate Grim Neigh still fires after a Sheer Force boosted KO" and
+// "innate Magician does not steal after a Sheer Force boosted move".
+void RedirectSheerForceSkipToInnates(void)
+{
+    if (gBattleScripting.moveendState == MOVEEND_ITEMS_EFFECTS_ALL)
+        gBattleScripting.moveendState = MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE;
 }
 
 // FORK: fire each damaged holder's active on-damage innates (Berserk) right after the chosen-ability

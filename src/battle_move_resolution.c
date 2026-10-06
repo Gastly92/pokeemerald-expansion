@@ -4501,6 +4501,7 @@ static enum MoveEndResult MoveEndSheerForce(struct BattleCalcValues *cv)
         gBattleScripting.moveendState = MOVEEND_ITEMS_EFFECTS_ALL;
     else
         gBattleScripting.moveendState++;
+    RedirectSheerForceSkipToInnates(); // FORK: KO-boost innates (Moxie / Grim Neigh) survive the Sheer Force skip
 
     return MOVEEND_RESULT_CONTINUE;
 }
