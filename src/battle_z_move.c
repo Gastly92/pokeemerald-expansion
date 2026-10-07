@@ -40,13 +40,14 @@
 #include "constants/battle_move_effects.h"
 #include "constants/abilities.h"
 #include "constants/moves.h"
+#include "fork/damage_preview.h" // FORK: B_MOVE_DAMAGE_PREVIEW
 
 #define STAT_STAGE(battler, stat) (gBattleMons[battler].statStages[stat - 1])
 
 // Function Declarations
 static void ZMoveSelectionDisplayPpNumber(enum BattlerId battler);
 static void ZMoveSelectionDisplayPower(enum Move move, enum Move zMove);
-static void ZMoveSelectionDisplayMoveType(enum Move zMove, enum BattlerId battler);
+static void ZMoveSelectionDisplayMoveType(enum Move move, enum Move zMove, enum BattlerId battler);
 
 // Const Data
 static const struct SignatureZMove sSignatureZMoves[] =
@@ -421,7 +422,7 @@ bool32 MoveSelectionDisplayZMove(enum Move zmove, enum BattlerId battler)
         BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_NAME_1);
 
         ZMoveSelectionDisplayPpNumber(battler);
-        ZMoveSelectionDisplayMoveType(zmove, battler);
+        ZMoveSelectionDisplayMoveType(move, zmove, battler);
         MoveSelectionCreateCursorAt(0, 0);
         return TRUE;
     }
@@ -456,10 +457,15 @@ static void ZMoveSelectionDisplayPpNumber(enum BattlerId battler)
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING);
 }
 
-static void ZMoveSelectionDisplayMoveType(enum Move zMove, enum BattlerId battler)
+static void ZMoveSelectionDisplayMoveType(enum Move move, enum Move zMove, enum BattlerId battler)
 {
     u8 *txtPtr, *end;
     enum Type zMoveType = GetBattleMoveType(zMove);
+
+    // FORK: B_MOVE_DAMAGE_PREVIEW prints "<Type> lo-hi%" in place of "TYPE/<Type>" for a damaging
+    // Z-Move (src/fork/damage_preview.c); `move` (the base move) was added for it.
+    if (TryPrintZMoveDamagePreview(battler, move, zMove, zMoveType))
+        return;
 
     txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType);
     *(txtPtr)++ = EXT_CTRL_CODE_BEGIN;

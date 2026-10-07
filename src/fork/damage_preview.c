@@ -96,7 +96,7 @@ static void ApplySpreadBound(struct BattlePokemon *mon, const struct BattlePokem
     mon->speed     = CalcStatBound(GetSpeciesBaseSpeed(species),     level, offIv, offEv, offNature);
 }
 
-bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct)
+bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct, enum DamagePreviewKO *ko)
 {
     struct BattlePokemon realDef;
     enum Ability savedAbility[MAX_BATTLERS_COUNT];
@@ -105,10 +105,11 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     enum Item savedAiItems[MAX_BATTLERS_COUNT];
     enum HoldEffect savedAiHoldEffects[MAX_BATTLERS_COUNT];
     u32 savedDragonDarts;
+    u32 savedHpPercent;
     enum Species species;
     u32 level, hpScaleNum, hpScaleDen;
     u32 lo = UINT32_MAX, hi = 0;
-    bool32 any = FALSE;
+    bool32 any = FALSE, koAlways = TRUE, koMaybe = FALSE, endures;
 
     if (move == MOVE_NONE || IsBattleMoveStatus(move) || !IsBattlerAlive(battlerDef) || gBattleMons[battlerDef].maxHP == 0)
         return FALSE;
@@ -129,6 +130,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         hpScaleDen = hpScaleNum = 1;
 
     savedDragonDarts = gAiLogicData->dragonDartsHitsBothTarget;
+    savedHpPercent = gAiLogicData->hpPercents[battlerDef];
     for (enum BattlerId b = 0; b < gBattlersCount; b++)
     {
         savedAbility[b] = gBattleMons[b].ability;
@@ -170,6 +172,14 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         gBattleMons[battlerDef].types[2] = TYPE_MYSTERY;
     }
 
+    // A known Sturdy / Focus Sash / Disguise at full HP survives any single hit, so nothing is
+    // promised as a KO. Asked here, while the AI's knowledge model holds only what the player
+    // has seen; its cached HP% may be stale in the menu, so it is set from the bar first.
+    gAiLogicData->hpPercents[battlerDef] = realDef.hp * 100 / realDef.maxHP;
+    if (gAiLogicData->hpPercents[battlerDef] == 0)
+        gAiLogicData->hpPercents[battlerDef] = 1;
+    endures = CanEndureHit(battlerAtk, battlerDef, move);
+
     for (u32 frail = 0; frail < 2; frail++)
     {
         struct AiCalcValues aiCalc = {
@@ -196,6 +206,12 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
             lo = dmg.minimum * 100 / maxHP;
         if (dmg.maximum * 100 / maxHP > hi)
             hi = dmg.maximum * 100 / maxHP;
+        // KO is judged against the foe's *current* HP (the bar's fraction at this spread), so a
+        // 40-50% move on a foe in the red still reads as a KO.
+        if (dmg.minimum < gBattleMons[battlerDef].hp)
+            koAlways = FALSE;
+        if (dmg.maximum >= gBattleMons[battlerDef].hp)
+            koMaybe = TRUE;
     }
 
     gBattleMons[battlerDef] = realDef;
@@ -208,11 +224,20 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         gAiLogicData->holdEffects[b] = savedAiHoldEffects[b];
     }
     gAiLogicData->dragonDartsHitsBothTarget = savedDragonDarts;
+    gAiLogicData->hpPercents[battlerDef] = savedHpPercent;
 
     if (!any)
         return FALSE;
     *loPct = lo;
     *hiPct = hi;
+    if (endures)
+        *ko = DAMAGE_PREVIEW_NO_KO;
+    else if (koAlways)
+        *ko = DAMAGE_PREVIEW_KO_ALWAYS;
+    else if (koMaybe)
+        *ko = DAMAGE_PREVIEW_KO_MAYBE;
+    else
+        *ko = DAMAGE_PREVIEW_NO_KO;
     return TRUE;
 }
 
@@ -227,28 +252,42 @@ static enum BattlerId GetPreviewTarget(enum BattlerId battler)
     return target;
 }
 
-bool32 TryPrintMoveDamagePreview(enum BattlerId battler, enum Move move, enum Type type)
+// Text colours from the move window's palette (graphics/battle_interface/text.pal).
+#define KO_ALWAYS_FG     1 // red
+#define KO_ALWAYS_SHADOW 2
+#define KO_MAYBE_FG      3 // orange
+#define KO_MAYBE_SHADOW  4
+
+static bool32 PrintDamagePreview(enum BattlerId battler, enum Move move, enum Gimmick gimmick, enum Type type)
 {
     enum BattlerId target = GetPreviewTarget(battler);
-    enum Gimmick gimmick = gBattleStruct->gimmick.usableGimmick[battler];
+    enum DamagePreviewKO ko;
     u32 lo, hi;
     u8 *end;
 
     if (!B_MOVE_DAMAGE_PREVIEW)
         return FALSE;
-    if (!IsGimmickSelected(battler, gimmick))
-        gimmick = GIMMICK_NONE;
-    if (!GetDamagePreviewRange(battler, target, move, gimmick, &lo, &hi))
+    if (!GetDamagePreviewRange(battler, target, move, gimmick, &lo, &hi, &ko))
         return FALSE;
 
     // The type row is 64px. "<Type> lo-hi%" fits it in FONT_NARROWER for every type name as
-    // long as the numbers stay under three digits, so anything past a KO is shown as 100:
-    // "85-100%" reads as "can KO", and a range that always KOs collapses to "KO".
+    // long as the numbers stay under three digits, so anything past the full bar is shown as
+    // 100: "85-100%" reads as "can KO from full", and a range that always does collapses to "KO".
     if (hi > 100)
         hi = 100;
+    if (lo > 100)
+        lo = 100;
     end = StringCopy(gDisplayedStringBattle, gTypesInfo[type].name);
     *end++ = CHAR_SPACE;
-    if (lo >= 100)
+    // The KO cue: the numbers turn red when the hit KOs the foe from its current HP whatever its
+    // spread and roll, orange when it can. Colour costs no width, so the row still fits.
+    if (ko != DAMAGE_PREVIEW_NO_KO)
+    {
+        end = WriteColorChangeControlCode(end, TEXT_COLOR_TYPE_FOREGROUND, ko == DAMAGE_PREVIEW_KO_ALWAYS ? KO_ALWAYS_FG : KO_MAYBE_FG);
+        end = WriteColorChangeControlCode(end, TEXT_COLOR_TYPE_SHADOW, ko == DAMAGE_PREVIEW_KO_ALWAYS ? KO_ALWAYS_SHADOW : KO_MAYBE_SHADOW);
+    }
+    // A known Sturdy & co. still shows 100%, not "KO".
+    if (lo == 100 && ko == DAMAGE_PREVIEW_KO_ALWAYS)
     {
         end = StringCopy(end, COMPOUND_STRING("KO"));
     }
@@ -266,4 +305,22 @@ bool32 TryPrintMoveDamagePreview(enum BattlerId battler, enum Move move, enum Ty
     PrependFontIdToFit(gDisplayedStringBattle, end, FONT_NARROW, WindowWidthPx(B_WIN_MOVE_TYPE));
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE);
     return TRUE;
+}
+
+bool32 TryPrintMoveDamagePreview(enum BattlerId battler, enum Move move, enum Type type)
+{
+    enum Gimmick gimmick = gBattleStruct->gimmick.usableGimmick[battler];
+
+    if (!IsGimmickSelected(battler, gimmick))
+        gimmick = GIMMICK_NONE;
+    return PrintDamagePreview(battler, move, gimmick, type);
+}
+
+bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move baseMove, enum Move zMove, enum Type zMoveType)
+{
+    // The Z view is only up while the Z-Move is the armed choice. A status Z-Move (Extreme
+    // Evoboost, off a damaging Last Resort) has no damage to show.
+    if (IsBattleMoveStatus(zMove))
+        return FALSE;
+    return PrintDamagePreview(battler, baseMove, GIMMICK_Z_MOVE, zMoveType);
 }

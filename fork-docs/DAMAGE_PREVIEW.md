@@ -9,8 +9,10 @@ Ground 46-61%
 ```
 
 - **Flag:** `B_MOVE_DAMAGE_PREVIEW` (`include/config/fork.h`, compile-time)
-- **Code:** `src/fork/damage_preview.c` (`GetDamagePreviewRange`, `TryPrintMoveDamagePreview`),
-  hooked from `MoveSelectionDisplayMoveType` in `src/battle_controller_player.c`
+- **Code:** `src/fork/damage_preview.c` (`GetDamagePreviewRange`, `TryPrintMoveDamagePreview`,
+  `TryPrintZMoveDamagePreview`), hooked from `MoveSelectionDisplayMoveType` in
+  `src/battle_controller_player.c` and, for the Z-Move view, `ZMoveSelectionDisplayMoveType` in
+  `src/battle_z_move.c`
 - **Test:** `test/fork/damage_preview.c`
 
 ## What the range spans
@@ -48,7 +50,18 @@ player can know and then restored byte-for-byte:
 
 - Replaces the `TYPE/` label: `<Type> lo-hi%`, narrowed to fit the 64px row.
 - **Both ends round down** (42.2-53.6% reads `42-53%`), so the top end never shows 100 for a hit that cannot take the full bar.
-- Capped at 100: `85-100%` reads as "can KO"; a range that always KOs shows `KO`.
+- Capped at 100: `85-100%` means it can take the whole bar; a range that always does shows `KO`.
+- **KO colour**, judged against the foe's **current** HP (the bar's fraction at each end of the
+  spread), so a `40-50%` move on a foe at 30% counts:
+  - **red** — KOs at every spread and roll;
+  - **orange** — KOs at some (the frail end, or a high roll);
+  - normal — cannot KO.
+
+  A **known** Sturdy, Focus Sash or intact Disguise at full HP blocks the colour (and the `KO`
+  collapse), since the foe would hang on; the AI's `CanEndureHit` decides, fed only what the
+  player has seen. An unrevealed Sash still reads as a KO — the player can't know.
+- **Z-Moves:** with a Z-Move armed, the Z view's type row shows the Z-Move's range (its own
+  power for signature Z-Moves). A status Z-Move keeps the stock line.
 - Status moves, and moves the calc says cannot damage, keep the stock `TYPE/<Type>` line.
 - **Target:** the foe opposite, or its partner once that one is down — the same single
   readout the stock effectiveness icon uses. In doubles it does not follow the target cursor.
