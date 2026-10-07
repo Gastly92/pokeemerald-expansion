@@ -629,6 +629,28 @@ static u32 CountDisplayedInnates(enum Species displaySpecies, bool32 abilitySeen
     return CollectDisplayedInnates(displaySpecies, abilitySeen, seenAbility, innates);
 }
 
+u32 GetFoeHpPercent(u32 foeIndex)
+{
+    struct Pokemon *mon = &GetTrainerParty(B_TRAINER_OPPONENT_A)[foeIndex];
+    u32 hp = GetMonData(mon, MON_DATA_HP, NULL);
+    u32 maxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+    u32 pct;
+
+    for (enum BattlerId b = 0; b < gBattlersCount; b++)
+    {
+        if (!IsOnPlayerSide(b) && gBattlerPartyIndexes[b] == foeIndex && IsBattlerAlive(b))
+        {
+            hp = gBattleMons[b].hp;
+            maxHP = gBattleMons[b].maxHP;
+            break;
+        }
+    }
+    if (hp == 0 || maxHP == 0)
+        return 0;
+    pct = hp * 100 / maxHP;
+    return pct == 0 ? 1 : pct;
+}
+
 static void DrawFoePage(u8 windowId, u32 foeIndex)
 {
     u8 line[64];
@@ -647,6 +669,17 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     *p++ = CHAR_SLASH;
     ConvertIntToDecimalStringN(p, count, STR_CONV_MODE_LEFT_ALIGN, 1);
     PrintTitle(windowId, line);
+    // The selected mon's current HP, on the title row because the page has no spare body row.
+    // Rounded down, as the move menu's damage range is, so the two compare directly: a hit that
+    // reads 40-50% KOs this foe at "HP 38%". A fainted mon keeps its FNT marker instead.
+    if (seen && GetFoeHpPercent(foeIndex) != 0)
+    {
+        p = StringCopy(line, COMPOUND_STRING("HP "));
+        p = ConvertIntToDecimalStringN(p, GetFoeHpPercent(foeIndex), STR_CONV_MODE_LEFT_ALIGN, 3);
+        *p++ = CHAR_PERCENT;
+        *p = EOS;
+        PrintTitleMarker(windowId, line);
+    }
     y += LINE_H;
 
     if (!seen)

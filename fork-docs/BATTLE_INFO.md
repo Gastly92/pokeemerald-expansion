@@ -45,7 +45,7 @@ path.
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
 | **Battle Log** | Every move used this battle, newest first, with the damage it dealt as a % of the target's max HP (see below) |
-| **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, `FNT` when fainted, moves/PP/ability/held item |
+| **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, current `HP n%` (title row, rounded down like the [damage preview](DAMAGE_PREVIEW.md)) or `FNT` when fainted, moves/PP/ability/held item |
 | **Base Stats** | One of your party mons (`{UP}{DOWN}`, bench included) and the selected foe as a stat table, each with the Mega/Primal form(s) it can reach |
 | **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
 
