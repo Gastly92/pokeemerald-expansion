@@ -219,7 +219,7 @@ SINGLE_BATTLE_TEST("Damage preview: a revealed Focus Sash at full HP is never pr
     }
 }
 
-// The KO verdict is in the text, not only the colour, so it reads for colour-blind players.
+// The KO verdict is spelled out in the text.
 TEST("Damage preview: the readout spells out a sure or possible KO")
 {
     u8 buf[16];
@@ -227,7 +227,7 @@ TEST("Damage preview: the readout spells out a sure or possible KO")
     FormatDamagePreviewAmount(buf, 46, 55, DAMAGE_PREVIEW_KO_ALWAYS);
     EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("KO")), 0);
     FormatDamagePreviewAmount(buf, 40, 55, DAMAGE_PREVIEW_KO_MAYBE);
-    EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("40-KO")), 0);
+    EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("40%-KO")), 0);
     FormatDamagePreviewAmount(buf, 40, 50, DAMAGE_PREVIEW_NO_KO);
     EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("40-50%")), 0);
     // Behind a known Sturdy: no verdict, so the range shows, capped at the full bar.
