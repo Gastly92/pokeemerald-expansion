@@ -85,7 +85,8 @@ knowing its exact spread**, using only what is derivable from public data.
 level: min = 0 IVs / 0 EVs / hindering nature ×0.9, max = 31 IVs / 252 EVs / boosting
 nature ×1.1. Only *seen* slots are listed — unseen ones are omitted entirely, so
 neither an unrevealed mon **nor the foe's party size** leaks. Rows sort fastest-first
-by the top of their range, so the list reads as a true tier.
+by the top of their range, so the list reads as a true tier. Each foe row also carries
+its current `HP n%` (or `FNT`) right-aligned, the same rounded-down figure as the Foe page.
 
 **Your rows use effective Speed instead** — `GetBattlerTotalSpeedStat`, which folds in
 everything you already know about your own side: Choice Scarf, Tailwind, paralysis,

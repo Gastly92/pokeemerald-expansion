@@ -651,6 +651,22 @@ u32 GetFoeHpPercent(u32 foeIndex)
     return pct == 0 ? 1 : pct;
 }
 
+// "HP n%", or "FNT" for a fainted slot.
+static void FormatFoeHp(u8 *dst, u32 foeIndex)
+{
+    u32 pct = GetFoeHpPercent(foeIndex);
+
+    if (pct == 0)
+    {
+        StringCopy(dst, COMPOUND_STRING("FNT"));
+        return;
+    }
+    dst = StringCopy(dst, COMPOUND_STRING("HP "));
+    dst = ConvertIntToDecimalStringN(dst, pct, STR_CONV_MODE_LEFT_ALIGN, 3);
+    *dst++ = CHAR_PERCENT;
+    *dst = EOS;
+}
+
 static void DrawFoePage(u8 windowId, u32 foeIndex)
 {
     u8 line[64];
@@ -674,10 +690,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     // reads 40-50% KOs this foe at "HP 38%". A fainted mon keeps its FNT marker instead.
     if (seen && GetFoeHpPercent(foeIndex) != 0)
     {
-        p = StringCopy(line, COMPOUND_STRING("HP "));
-        p = ConvertIntToDecimalStringN(p, GetFoeHpPercent(foeIndex), STR_CONV_MODE_LEFT_ALIGN, 3);
-        *p++ = CHAR_PERCENT;
-        *p = EOS;
+        FormatFoeHp(line, foeIndex);
         PrintTitleMarker(windowId, line);
     }
     y += LINE_H;
@@ -1758,6 +1771,10 @@ static void DrawSpeedPage(u8 windowId)
             p = ConvertIntToDecimalStringN(p, his[k], STR_CONV_MODE_LEFT_ALIGN, 3);
             AppendSpeedGlyph(p, haveRef, ref, los[k], his[k]);
             PrintLine(windowId, line, 0, y);
+            // Current HP, right-aligned: the row is ~150px at its longest ("Foe 6: " + a
+            // 12-letter name + " 999-999 ^"), so "HP 100%" (~35px) clears it in 224px.
+            FormatFoeHp(line, slots[k]);
+            PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
             y += LINE_H;
         }
     }
