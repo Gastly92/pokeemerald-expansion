@@ -54,12 +54,11 @@ player can know and then restored byte-for-byte:
   always a real KO: a 46.2% hit on a 46.6% foe reads `46%` vs `HP 47%`, not `46%` vs `46%`.
 - **KO is spelled out**, judged against the foe's **current** HP (the bar's fraction at each end
   of the spread), so a `40-50%` move on a foe at 30% counts:
-  - `Ground KO` (**red**) — KOs at every spread and roll;
-  - `Ground 40-KO` (**orange**) — KOs at some (the frail end, or a high roll); `40` is the low end;
+  - `Ground KO` — KOs at every spread and roll;
+  - `Ground 40%-KO` — KOs at some (the frail end, or a high roll); `40%` is the low end;
   - `Ground 40-50%` — cannot KO.
 
-  The text carries the verdict and the colour only repeats it, so it reads for colour-blind
-  players. Because the verdict uses exact HP, the readout never shows a number that the INFO
+  Plain text, no colour: it stays calm on the menu and reads for colour-blind players. Because the verdict uses exact HP, the readout never shows a number that the INFO
   viewer's `HP n%` contradicts.
 - Without a KO verdict the range is capped at 100, which only happens behind a known Sturdy & co.:
   a **known** Sturdy, Focus Sash or intact Disguise at full HP blocks the verdict, since the foe

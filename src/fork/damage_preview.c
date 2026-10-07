@@ -253,17 +253,10 @@ static enum BattlerId GetPreviewTarget(enum BattlerId battler)
     return target;
 }
 
-// Text colours from the move window's palette (graphics/battle_interface/text.pal).
-#define KO_ALWAYS_FG     1 // red
-#define KO_ALWAYS_SHADOW 2
-#define KO_MAYBE_FG      3 // orange
-#define KO_MAYBE_SHADOW  4
-
 u8 *FormatDamagePreviewAmount(u8 *dst, u32 lo, u32 hi, enum DamagePreviewKO ko)
 {
-    // The KO verdict is spelled out, not left to the colour: "KO" when every spread and roll
-    // KOs from the foe's current HP, "lo-KO" when some do. That reads for colour-blind players,
-    // and it never puts a number beside the INFO viewer's HP % that disagrees with the verdict
+    // The KO verdict is spelled out in plain text: "KO" when every spread and roll KOs from the
+    // foe's current HP, "lo%-KO" when some do. It never puts a number beside the INFO viewer's HP % that disagrees with the verdict
     // (a 46.8% low end on a 46.6% foe reads "KO", not "46%" against "HP 47%").
     if (ko == DAMAGE_PREVIEW_KO_ALWAYS)
         return StringCopy(dst, COMPOUND_STRING("KO"));
@@ -278,6 +271,7 @@ u8 *FormatDamagePreviewAmount(u8 *dst, u32 lo, u32 hi, enum DamagePreviewKO ko)
     dst = ConvertIntToDecimalStringN(dst, lo, STR_CONV_MODE_LEFT_ALIGN, 3);
     if (ko == DAMAGE_PREVIEW_KO_MAYBE)
     {
+        *dst++ = CHAR_PERCENT;
         *dst++ = CHAR_HYPHEN;
         return StringCopy(dst, COMPOUND_STRING("KO"));
     }
@@ -305,13 +299,6 @@ static bool32 PrintDamagePreview(enum BattlerId battler, enum Move move, enum Gi
 
     end = StringCopy(gDisplayedStringBattle, gTypesInfo[type].name);
     *end++ = CHAR_SPACE;
-    // The colour repeats the KO verdict the text already spells out: red for "KO", orange for
-    // "lo-KO". Colour costs no width, so the row still fits.
-    if (ko != DAMAGE_PREVIEW_NO_KO)
-    {
-        end = WriteColorChangeControlCode(end, TEXT_COLOR_TYPE_FOREGROUND, ko == DAMAGE_PREVIEW_KO_ALWAYS ? KO_ALWAYS_FG : KO_MAYBE_FG);
-        end = WriteColorChangeControlCode(end, TEXT_COLOR_TYPE_SHADOW, ko == DAMAGE_PREVIEW_KO_ALWAYS ? KO_ALWAYS_SHADOW : KO_MAYBE_SHADOW);
-    }
     end = FormatDamagePreviewAmount(end, lo, hi, ko);
     PrependFontIdToFit(gDisplayedStringBattle, end, FONT_NARROW, WindowWidthPx(B_WIN_MOVE_TYPE));
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE);
