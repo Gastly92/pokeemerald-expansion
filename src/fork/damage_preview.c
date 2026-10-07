@@ -259,6 +259,38 @@ static enum BattlerId GetPreviewTarget(enum BattlerId battler)
 #define KO_MAYBE_FG      3 // orange
 #define KO_MAYBE_SHADOW  4
 
+u8 *FormatDamagePreviewAmount(u8 *dst, u32 lo, u32 hi, enum DamagePreviewKO ko)
+{
+    // The KO verdict is spelled out, not left to the colour: "KO" when every spread and roll
+    // KOs from the foe's current HP, "lo-KO" when some do. That reads for colour-blind players,
+    // and it never puts a number beside the INFO viewer's HP % that disagrees with the verdict
+    // (a 46.8% low end on a 46.6% foe reads "KO", not "46%" against "HP 47%").
+    if (ko == DAMAGE_PREVIEW_KO_ALWAYS)
+        return StringCopy(dst, COMPOUND_STRING("KO"));
+
+    // The type row is 64px; "<Type> lo-hi%" fits it in FONT_NARROWER for every type name while
+    // the numbers stay under three digits, so anything past the full bar is shown as 100. That
+    // only arises without a KO verdict, i.e. behind a known Sturdy / Focus Sash.
+    if (hi > 100)
+        hi = 100;
+    if (lo > 100)
+        lo = 100;
+    dst = ConvertIntToDecimalStringN(dst, lo, STR_CONV_MODE_LEFT_ALIGN, 3);
+    if (ko == DAMAGE_PREVIEW_KO_MAYBE)
+    {
+        *dst++ = CHAR_HYPHEN;
+        return StringCopy(dst, COMPOUND_STRING("KO"));
+    }
+    if (hi != lo)
+    {
+        *dst++ = CHAR_HYPHEN;
+        dst = ConvertIntToDecimalStringN(dst, hi, STR_CONV_MODE_LEFT_ALIGN, 3);
+    }
+    *dst++ = CHAR_PERCENT;
+    *dst = EOS;
+    return dst;
+}
+
 static bool32 PrintDamagePreview(enum BattlerId battler, enum Move move, enum Gimmick gimmick, enum Type type)
 {
     enum BattlerId target = GetPreviewTarget(battler);
@@ -271,38 +303,16 @@ static bool32 PrintDamagePreview(enum BattlerId battler, enum Move move, enum Gi
     if (!GetDamagePreviewRange(battler, target, move, gimmick, &lo, &hi, &ko))
         return FALSE;
 
-    // The type row is 64px. "<Type> lo-hi%" fits it in FONT_NARROWER for every type name as
-    // long as the numbers stay under three digits, so anything past the full bar is shown as
-    // 100: "85-100%" reads as "can KO from full", and a range that always does collapses to "KO".
-    if (hi > 100)
-        hi = 100;
-    if (lo > 100)
-        lo = 100;
     end = StringCopy(gDisplayedStringBattle, gTypesInfo[type].name);
     *end++ = CHAR_SPACE;
-    // The KO cue: the numbers turn red when the hit KOs the foe from its current HP whatever its
-    // spread and roll, orange when it can. Colour costs no width, so the row still fits.
+    // The colour repeats the KO verdict the text already spells out: red for "KO", orange for
+    // "lo-KO". Colour costs no width, so the row still fits.
     if (ko != DAMAGE_PREVIEW_NO_KO)
     {
         end = WriteColorChangeControlCode(end, TEXT_COLOR_TYPE_FOREGROUND, ko == DAMAGE_PREVIEW_KO_ALWAYS ? KO_ALWAYS_FG : KO_MAYBE_FG);
         end = WriteColorChangeControlCode(end, TEXT_COLOR_TYPE_SHADOW, ko == DAMAGE_PREVIEW_KO_ALWAYS ? KO_ALWAYS_SHADOW : KO_MAYBE_SHADOW);
     }
-    // A known Sturdy & co. still shows 100%, not "KO".
-    if (lo == 100 && ko == DAMAGE_PREVIEW_KO_ALWAYS)
-    {
-        end = StringCopy(end, COMPOUND_STRING("KO"));
-    }
-    else
-    {
-        end = ConvertIntToDecimalStringN(end, lo, STR_CONV_MODE_LEFT_ALIGN, 3);
-        if (hi != lo)
-        {
-            *end++ = CHAR_HYPHEN;
-            end = ConvertIntToDecimalStringN(end, hi, STR_CONV_MODE_LEFT_ALIGN, 3);
-        }
-        *end++ = CHAR_PERCENT;
-        *end = EOS;
-    }
+    end = FormatDamagePreviewAmount(end, lo, hi, ko);
     PrependFontIdToFit(gDisplayedStringBattle, end, FONT_NARROW, WindowWidthPx(B_WIN_MOVE_TYPE));
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE);
     return TRUE;

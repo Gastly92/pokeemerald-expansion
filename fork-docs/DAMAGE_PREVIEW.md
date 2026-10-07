@@ -52,15 +52,18 @@ player can know and then restored byte-for-byte:
 - **Both ends round down** (42.2-53.6% reads `42-53%`), so the top end never shows 100 for a hit that cannot take the full bar.
   The INFO viewer's foe `HP n%` rounds the **other** way (up), so on-screen "damage ≥ HP" is
   always a real KO: a 46.2% hit on a 46.6% foe reads `46%` vs `HP 47%`, not `46%` vs `46%`.
-- Capped at 100: `85-100%` means it can take the whole bar; a range that always does shows `KO`.
-- **KO colour**, judged against the foe's **current** HP (the bar's fraction at each end of the
-  spread), so a `40-50%` move on a foe at 30% counts:
-  - **red** — KOs at every spread and roll;
-  - **orange** — KOs at some (the frail end, or a high roll);
-  - normal — cannot KO.
+- **KO is spelled out**, judged against the foe's **current** HP (the bar's fraction at each end
+  of the spread), so a `40-50%` move on a foe at 30% counts:
+  - `Ground KO` (**red**) — KOs at every spread and roll;
+  - `Ground 40-KO` (**orange**) — KOs at some (the frail end, or a high roll); `40` is the low end;
+  - `Ground 40-50%` — cannot KO.
 
-  A **known** Sturdy, Focus Sash or intact Disguise at full HP blocks the colour (and the `KO`
-  collapse), since the foe would hang on; the AI's `CanEndureHit` decides, fed only what the
+  The text carries the verdict and the colour only repeats it, so it reads for colour-blind
+  players. Because the verdict uses exact HP, the readout never shows a number that the INFO
+  viewer's `HP n%` contradicts.
+- Without a KO verdict the range is capped at 100, which only happens behind a known Sturdy & co.:
+  a **known** Sturdy, Focus Sash or intact Disguise at full HP blocks the verdict, since the foe
+  would hang on; the AI's `CanEndureHit` decides, fed only what the
   player has seen. An unrevealed Sash still reads as a KO — the player can't know.
 - **Z-Moves:** with a Z-Move armed, the Z view's type row shows the Z-Move's range (its own
   power for signature Z-Moves). A status Z-Move keeps the stock line.

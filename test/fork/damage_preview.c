@@ -1,5 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
+#include "string_util.h"
 #include "fork/damage_preview.h"
 
 // B_MOVE_DAMAGE_PREVIEW. The move menu's "% of the foe's HP" range must (1) contain the
@@ -216,4 +217,20 @@ SINGLE_BATTLE_TEST("Damage preview: a revealed Focus Sash at full HP is never pr
         EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_EARTHQUAKE, GIMMICK_NONE, &lo, &hi, &ko));
         EXPECT_EQ(ko, DAMAGE_PREVIEW_NO_KO);
     }
+}
+
+// The KO verdict is in the text, not only the colour, so it reads for colour-blind players.
+TEST("Damage preview: the readout spells out a sure or possible KO")
+{
+    u8 buf[16];
+
+    FormatDamagePreviewAmount(buf, 46, 55, DAMAGE_PREVIEW_KO_ALWAYS);
+    EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("KO")), 0);
+    FormatDamagePreviewAmount(buf, 40, 55, DAMAGE_PREVIEW_KO_MAYBE);
+    EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("40-KO")), 0);
+    FormatDamagePreviewAmount(buf, 40, 50, DAMAGE_PREVIEW_NO_KO);
+    EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("40-50%")), 0);
+    // Behind a known Sturdy: no verdict, so the range shows, capped at the full bar.
+    FormatDamagePreviewAmount(buf, 120, 150, DAMAGE_PREVIEW_NO_KO);
+    EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("100%")), 0);
 }

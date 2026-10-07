@@ -22,6 +22,10 @@ enum DamagePreviewKO
 
 bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct, enum DamagePreviewKO *ko);
 
+// The readout after the type name: "KO" (KOs at every corner), "lo-KO" (at some), else
+// "lo-hi%" capped at 100. Returns the new end of `dst`. Exposed for test/fork/damage_preview.c.
+u8 *FormatDamagePreviewAmount(u8 *dst, u32 lo, u32 hi, enum DamagePreviewKO ko);
+
 // The move-menu hook: prints "<Type> lo-hi%" on the type row for the battler's selected
 // move against the foe it would hit. Returns FALSE (having printed nothing) when there is no
 // range to show, so the caller falls back to the stock "TYPE/<Type>" line.
