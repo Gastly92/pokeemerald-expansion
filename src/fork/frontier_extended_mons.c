@@ -158,17 +158,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SUBSTITUTE,
             MOVE_SLEEP_POWDER,
-            MOVE_GIGA_DRAIN,
-            MOVE_SLUDGE_BOMB
+            MOVE_LEECH_SEED,
+            MOVE_GIGA_DRAIN
         },
         .ability = ABILITY_GRASSY_SURGE,
-        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spa = 252,
-            .spd = 4
+            .spd = 252,
+            .def = 4
         ),
-        .teraType = TYPE_GRASS,
+        .teraType = TYPE_STEEL,
     },
 
     // 0006
