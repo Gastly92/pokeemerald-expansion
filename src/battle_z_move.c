@@ -40,6 +40,7 @@
 #include "constants/battle_move_effects.h"
 #include "constants/abilities.h"
 #include "constants/moves.h"
+#include "fork/damage_preview.h" // FORK: B_MOVE_DAMAGE_PREVIEW
 
 #define STAT_STAGE(battler, stat) (gBattleMons[battler].statStages[stat - 1])
 
@@ -460,6 +461,11 @@ static void ZMoveSelectionDisplayMoveType(enum Move zMove, enum BattlerId battle
 {
     u8 *txtPtr, *end;
     enum Type zMoveType = GetBattleMoveType(zMove);
+
+    // FORK: B_MOVE_DAMAGE_PREVIEW prints "<Type> lo-hi%" in place of "TYPE/<Type>" for a damaging
+    // Z-Move (src/fork/damage_preview.c). Additive block; keep it first on conflict.
+    if (TryPrintZMoveDamagePreview(battler, zMove, zMoveType))
+        return;
 
     txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType);
     *(txtPtr)++ = EXT_CTRL_CODE_BEGIN;

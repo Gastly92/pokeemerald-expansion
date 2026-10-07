@@ -9,8 +9,10 @@ Ground 46-61%
 ```
 
 - **Flag:** `B_MOVE_DAMAGE_PREVIEW` (`include/config/fork.h`, compile-time)
-- **Code:** `src/fork/damage_preview.c` (`GetDamagePreviewRange`, `TryPrintMoveDamagePreview`),
-  hooked from `MoveSelectionDisplayMoveType` in `src/battle_controller_player.c`
+- **Code:** `src/fork/damage_preview.c` (`GetDamagePreviewRange`, `TryPrintMoveDamagePreview`,
+  `TryPrintZMoveDamagePreview`), hooked from `MoveSelectionDisplayMoveType` in
+  `src/battle_controller_player.c` and, for the Z-Move view, `ZMoveSelectionDisplayMoveType` in
+  `src/battle_z_move.c`
 - **Test:** `test/fork/damage_preview.c`
 
 ## What the range spans
@@ -48,7 +50,23 @@ player can know and then restored byte-for-byte:
 
 - Replaces the `TYPE/` label: `<Type> lo-hi%`, narrowed to fit the 64px row.
 - **Both ends round down** (42.2-53.6% reads `42-53%`), so the top end never shows 100 for a hit that cannot take the full bar.
-- Capped at 100: `85-100%` reads as "can KO"; a range that always KOs shows `KO`.
+  The INFO viewer's foe `HP n%` rounds the **other** way (up), so on-screen "damage ≥ HP" is
+  always a real KO: a 46.2% hit on a 46.6% foe reads `46%` vs `HP 47%`, not `46%` vs `46%`.
+- **KO is spelled out**, judged against the foe's **current** HP (the bar's fraction at each end
+  of the spread), so a `40-50%` move on a foe at 30% counts:
+  - `Ground KO` (**red**) — KOs at every spread and roll;
+  - `Ground 40-KO` (**orange**) — KOs at some (the frail end, or a high roll); `40` is the low end;
+  - `Ground 40-50%` — cannot KO.
+
+  The text carries the verdict and the colour only repeats it, so it reads for colour-blind
+  players. Because the verdict uses exact HP, the readout never shows a number that the INFO
+  viewer's `HP n%` contradicts.
+- Without a KO verdict the range is capped at 100, which only happens behind a known Sturdy & co.:
+  a **known** Sturdy, Focus Sash or intact Disguise at full HP blocks the verdict, since the foe
+  would hang on; the AI's `CanEndureHit` decides, fed only what the
+  player has seen. An unrevealed Sash still reads as a KO — the player can't know.
+- **Z-Moves:** with a Z-Move armed, the Z view's type row shows the Z-Move's range (its own
+  power for signature Z-Moves). A status Z-Move keeps the stock line.
 - Status moves, and moves the calc says cannot damage, keep the stock `TYPE/<Type>` line.
 - **Target:** the foe opposite, or its partner once that one is down — the same single
   readout the stock effectiveness icon uses. In doubles it does not follow the target cursor.

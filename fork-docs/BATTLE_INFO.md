@@ -45,7 +45,7 @@ path.
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
 | **Battle Log** | Every move used this battle, newest first, with the damage it dealt as a % of the target's max HP (see below) |
-| **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, `FNT` when fainted, moves/PP/ability/held item |
+| **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, current `HP n%` (title row, rounded **up** so it reads safely against the [damage preview](DAMAGE_PREVIEW.md#display)'s rounded-down range; 99 at most below full) or `FNT` when fainted, moves/PP/ability/held item |
 | **Base Stats** | One of your party mons (`{UP}{DOWN}`, bench included) and the selected foe as a stat table, each with the Mega/Primal form(s) it can reach |
 | **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
 
@@ -85,7 +85,8 @@ knowing its exact spread**, using only what is derivable from public data.
 level: min = 0 IVs / 0 EVs / hindering nature ×0.9, max = 31 IVs / 252 EVs / boosting
 nature ×1.1. Only *seen* slots are listed — unseen ones are omitted entirely, so
 neither an unrevealed mon **nor the foe's party size** leaks. Rows sort fastest-first
-by the top of their range, so the list reads as a true tier.
+by the top of their range, so the list reads as a true tier. Each foe row also carries
+its current `HP n%` (or `FNT`) right-aligned, the same rounded-up figure as the Foe page.
 
 **Your rows use effective Speed instead** — `GetBattlerTotalSpeedStat`, which folds in
 everything you already know about your own side: Choice Scarf, Tailwind, paralysis,

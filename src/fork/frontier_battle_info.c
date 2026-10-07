@@ -629,6 +629,51 @@ static u32 CountDisplayedInnates(enum Species displaySpecies, bool32 abilitySeen
     return CollectDisplayedInnates(displaySpecies, abilitySeen, seenAbility, innates);
 }
 
+u32 GetFoeHpPercent(u32 foeIndex)
+{
+    struct Pokemon *mon = &GetTrainerParty(B_TRAINER_OPPONENT_A)[foeIndex];
+    u32 hp = GetMonData(mon, MON_DATA_HP, NULL);
+    u32 maxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+    u32 pct;
+
+    for (enum BattlerId b = 0; b < gBattlersCount; b++)
+    {
+        if (!IsOnPlayerSide(b) && gBattlerPartyIndexes[b] == foeIndex && IsBattlerAlive(b))
+        {
+            hp = gBattleMons[b].hp;
+            maxHP = gBattleMons[b].maxHP;
+            break;
+        }
+    }
+    if (hp == 0 || maxHP == 0)
+        return 0;
+    if (hp >= maxHP)
+        return 100;
+    // Rounded UP, against the damage preview's rounded-DOWN range, so the numbers can only err
+    // towards "no KO": a 46.2% hit on a 46.6% foe reads 46% vs 47%. If they rounded the same way
+    // both would read 46% and the player would expect a KO that does not happen. The KO colour
+    // compares exact HP and is the authority either way. Capped at 99 below full, so "100%"
+    // still means untouched (Sturdy / Focus Sash).
+    pct = (hp * 100 + maxHP - 1) / maxHP;
+    return pct > 99 ? 99 : pct;
+}
+
+// "HP n%", or "FNT" for a fainted slot.
+static void FormatFoeHp(u8 *dst, u32 foeIndex)
+{
+    u32 pct = GetFoeHpPercent(foeIndex);
+
+    if (pct == 0)
+    {
+        StringCopy(dst, COMPOUND_STRING("FNT"));
+        return;
+    }
+    dst = StringCopy(dst, COMPOUND_STRING("HP "));
+    dst = ConvertIntToDecimalStringN(dst, pct, STR_CONV_MODE_LEFT_ALIGN, 3);
+    *dst++ = CHAR_PERCENT;
+    *dst = EOS;
+}
+
 static void DrawFoePage(u8 windowId, u32 foeIndex)
 {
     u8 line[64];
@@ -647,6 +692,14 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     *p++ = CHAR_SLASH;
     ConvertIntToDecimalStringN(p, count, STR_CONV_MODE_LEFT_ALIGN, 1);
     PrintTitle(windowId, line);
+    // The selected mon's current HP, on the title row because the page has no spare body row.
+    // Rounded up (see GetFoeHpPercent) so it can be read against the move menu's damage range:
+    // a hit whose low end is at least this number KOs. A fainted mon keeps its FNT marker instead.
+    if (seen && GetFoeHpPercent(foeIndex) != 0)
+    {
+        FormatFoeHp(line, foeIndex);
+        PrintTitleMarker(windowId, line);
+    }
     y += LINE_H;
 
     if (!seen)
@@ -1725,6 +1778,10 @@ static void DrawSpeedPage(u8 windowId)
             p = ConvertIntToDecimalStringN(p, his[k], STR_CONV_MODE_LEFT_ALIGN, 3);
             AppendSpeedGlyph(p, haveRef, ref, los[k], his[k]);
             PrintLine(windowId, line, 0, y);
+            // Current HP, right-aligned: the row is ~150px at its longest ("Foe 6: " + a
+            // 12-letter name + " 999-999 ^"), so "HP 100%" (~35px) clears it in 224px.
+            FormatFoeHp(line, slots[k]);
+            PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
             y += LINE_H;
         }
     }
