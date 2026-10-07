@@ -50,6 +50,8 @@ player can know and then restored byte-for-byte:
 
 - Replaces the `TYPE/` label: `<Type> lo-hi%`, narrowed to fit the 64px row.
 - **Both ends round down** (42.2-53.6% reads `42-53%`), so the top end never shows 100 for a hit that cannot take the full bar.
+  The INFO viewer's foe `HP n%` rounds the **other** way (up), so on-screen "damage ≥ HP" is
+  always a real KO: a 46.2% hit on a 46.6% foe reads `46%` vs `HP 47%`, not `46%` vs `46%`.
 - Capped at 100: `85-100%` means it can take the whole bar; a range that always does shows `KO`.
 - **KO colour**, judged against the foe's **current** HP (the bar's fraction at each end of the
   spread), so a `40-50%` move on a foe at 30% counts:

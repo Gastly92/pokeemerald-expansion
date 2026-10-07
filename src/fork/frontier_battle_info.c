@@ -647,8 +647,15 @@ u32 GetFoeHpPercent(u32 foeIndex)
     }
     if (hp == 0 || maxHP == 0)
         return 0;
-    pct = hp * 100 / maxHP;
-    return pct == 0 ? 1 : pct;
+    if (hp >= maxHP)
+        return 100;
+    // Rounded UP, against the damage preview's rounded-DOWN range, so the numbers can only err
+    // towards "no KO": a 46.2% hit on a 46.6% foe reads 46% vs 47%. If they rounded the same way
+    // both would read 46% and the player would expect a KO that does not happen. The KO colour
+    // compares exact HP and is the authority either way. Capped at 99 below full, so "100%"
+    // still means untouched (Sturdy / Focus Sash).
+    pct = (hp * 100 + maxHP - 1) / maxHP;
+    return pct > 99 ? 99 : pct;
 }
 
 // "HP n%", or "FNT" for a fainted slot.
@@ -686,8 +693,8 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     ConvertIntToDecimalStringN(p, count, STR_CONV_MODE_LEFT_ALIGN, 1);
     PrintTitle(windowId, line);
     // The selected mon's current HP, on the title row because the page has no spare body row.
-    // Rounded down, as the move menu's damage range is, so the two compare directly: a hit that
-    // reads 40-50% KOs this foe at "HP 38%". A fainted mon keeps its FNT marker instead.
+    // Rounded up (see GetFoeHpPercent) so it can be read against the move menu's damage range:
+    // a hit whose low end is at least this number KOs. A fainted mon keeps its FNT marker instead.
     if (seen && GetFoeHpPercent(foeIndex) != 0)
     {
         FormatFoeHp(line, foeIndex);

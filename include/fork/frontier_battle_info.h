@@ -42,8 +42,9 @@ void OpenFrontierBattleInfo(void (*returnCallback)(void));
 // can assert the bits directly rather than driving the UI.
 void ApplyAccuracyItemReveals(void);
 
-// The Foe page's "HP n%": the foe party slot's current HP as a % of its max, ROUNDED DOWN like
-// the move menu's damage range (so 100 only at full HP), but never 0 for a living mon. An
+// The Foe page's "HP n%": the foe party slot's current HP as a % of its max, ROUNDED UP --
+// the opposite of the move menu's rounded-down damage range, so "damage >= HP" on screen always
+// means a real KO -- but capped at 99 below full HP, so 100 still means untouched. An
 // on-field mon is read from its battler (a Dynamaxed foe's bar is its multiplied HP), a benched
 // one from the party. Exposed for test/fork/frontier_battle_info_hp.c.
 u32 GetFoeHpPercent(u32 foeIndex);

@@ -5,17 +5,18 @@
 #include "fork/frontier_battle_info.h"
 #include "constants/characters.h"
 
-// B_FRONTIER_BATTLE_INFO. The Foe page's "HP n%" rounds DOWN, like the move menu's damage
-// range, so the two can be compared directly; it never reads 0% for a mon that is still up.
+// B_FRONTIER_BATTLE_INFO. The Foe page's "HP n%" rounds UP, against the damage preview's
+// rounded-down range, so "damage >= HP" on screen is always a real KO. Below full it caps at 99.
 
-SINGLE_BATTLE_TEST("Frontier INFO: the foe's HP % rounds down and never shows 0 for a living mon")
+SINGLE_BATTLE_TEST("Frontier INFO: the foe's HP % rounds up, and reads 100 only at full HP")
 {
     u32 hp, expected;
 
     PARAMETRIZE { hp = 200; expected = 100; }
-    PARAMETRIZE { hp = 199; expected = 99; }  // 99.5% reads 99, not 100
-    PARAMETRIZE { hp = 101; expected = 50; }  // 50.5% reads 50
-    PARAMETRIZE { hp = 1;   expected = 1; }   // 0.5% reads 1, not 0
+    PARAMETRIZE { hp = 199; expected = 99; }  // 99.5% would round up to 100; capped below full
+    PARAMETRIZE { hp = 101; expected = 51; }  // 50.5% reads 51
+    PARAMETRIZE { hp = 100; expected = 50; }  // exact stays exact
+    PARAMETRIZE { hp = 1;   expected = 1; }   // 0.5% reads 1
 
     GIVEN {
         PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
@@ -36,7 +37,7 @@ SINGLE_BATTLE_TEST("Frontier INFO: a benched foe's HP % is read from its party s
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE); }
     } THEN {
-        EXPECT_EQ(GetFoeHpPercent(1), 33);
+        EXPECT_EQ(GetFoeHpPercent(1), 34); // 33.3% rounds up
     }
 }
 
@@ -79,4 +80,20 @@ TEST("Frontier INFO: the Speed page's HP column clears the widest foe row")
     StringCopy(hpText, COMPOUND_STRING("HP 100%"));
     // 224px window, with a few px of gap between the two.
     EXPECT_LT(widest + GetStringWidth(FONT_NARROW, hpText, 0) + 4, 28 * 8);
+}
+
+// The case that motivated rounding up: a 46.2% hit on a foe at 46.6%. Rounded the same way both
+// would read 46% and look like a KO; the hit leaves it standing.
+SINGLE_BATTLE_TEST("Frontier INFO: the HP % never reads as KO'd by a hit that leaves the foe standing")
+{
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(1000); HP(466); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        u32 damagePct = 462 * 100 / 1000; // the preview's rounded-down 46.2%
+        EXPECT_EQ(damagePct, 46);
+        EXPECT_GT(GetFoeHpPercent(0), damagePct);
+    }
 }
