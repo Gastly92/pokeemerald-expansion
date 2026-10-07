@@ -4656,6 +4656,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LIGHT_METAL,
             ABILITY_LIMBER,
             ABILITY_PRESSURE,
+            ABILITY_REGENERATOR,
             ABILITY_STURDY
         )
     },
@@ -4666,6 +4667,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_HEALER,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
+            ABILITY_SPEED_BOOST,
             ABILITY_TELEPATHY
         )
     },
@@ -4675,6 +4677,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_HEALER,
             ABILITY_LEVITATE,
+            ABILITY_PRESSURE,
+            ABILITY_SPEED_BOOST,
             ABILITY_TELEPATHY
         )
     },
@@ -4684,6 +4688,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FOREWARN,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
+            ABILITY_SPEED_BOOST,
             ABILITY_TELEPATHY
         )
     },
@@ -4692,6 +4697,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FOREWARN,
             ABILITY_LEVITATE,
+            ABILITY_PRESSURE,
+            ABILITY_SPEED_BOOST,
             ABILITY_TELEPATHY
         )
     },
@@ -4707,6 +4714,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KYOGRE_PRIMAL,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_PRESSURE,
             ABILITY_RAIN_DISH
         )
     },
@@ -4723,6 +4731,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GROUDON_PRIMAL,
         INNATES(
             ABILITY_MAGMA_ARMOR,
+            ABILITY_PRESSURE,
             ABILITY_SAND_FORCE,
             ABILITY_SOLID_ROCK
         )
