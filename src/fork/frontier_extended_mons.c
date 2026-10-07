@@ -30141,7 +30141,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FAKE_OUT,
             MOVE_GUNK_SHOT,
             MOVE_CLOSE_COMBAT,
-            MOVE_THROAT_CHOP
+            MOVE_QUICK_ATTACK
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -30150,7 +30150,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_FIGHTING,
+        .teraType = TYPE_NORMAL,
     },
     {
         .species = SPECIES_SNEASLER,
