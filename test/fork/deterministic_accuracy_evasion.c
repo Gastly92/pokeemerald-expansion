@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the DETERMINISTIC_ACCURACY_EVASION flag (config/deterministic.h).
+// Coverage for the DETERMINISTIC_ACCURACY_EVASION flag (config/deterministic.h).
 // Determinism flags default off in the test baseline (see TestInitConfigData), so each
 // test opts in with WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE). With the flag on,
 // accuracy/evasion stop deciding hit/miss and instead drive a PP economy; sub-100%

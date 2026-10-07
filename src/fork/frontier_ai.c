@@ -12,7 +12,7 @@
 #include "constants/battle_ai.h"
 #include "constants/trainers.h"
 
-// FORK: which AI preset a Battle Frontier opponent runs, chosen by opponent role
+// Which AI preset a Battle Frontier opponent runs, chosen by opponent role
 // rather than by facility or win streak.
 //
 // The fork used to hand B_FRONTIER_HARD_AI_FLAGS to every Battle Factory

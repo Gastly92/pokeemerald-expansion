@@ -7,7 +7,7 @@
 #include "config/accessibility.h"
 #include "fork/accessibility_gfx.h"
 
-// FORK: When COLOR_BLIND is on, recolor the HP bar's healthy (>50%) band from
+// When COLOR_BLIND is on, recolor the HP bar's healthy (>50%) band from
 // green to the EXP bar's blue. The bar fill is a separate "healthbar" sprite
 // using TAG_HEALTHBAR_PAL, whose palette holds the two green shades at entries
 // 10-11 (yellow at 12-13, red at 14-15), so swapping just those two entries

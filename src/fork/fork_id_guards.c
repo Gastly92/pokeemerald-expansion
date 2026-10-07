@@ -1,4 +1,4 @@
-// FORK: build-time guards for the ID spaces this fork claims out of upstream's enums
+// build-time guards for the ID spaces this fork claims out of upstream's enums
 // and flag words. Upstream allocates these UPWARD as it implements things, so a fork ID
 // parked just above upstream's high-water mark gets taken sooner or later. When our ID
 // lives in a fork-owned header (the AI flags), that collision lands with no merge

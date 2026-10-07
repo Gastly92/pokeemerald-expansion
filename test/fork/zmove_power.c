@@ -2,7 +2,7 @@
 #include "test/battle.h"
 #include "battle_z_move.h"
 
-// FORK: Z-Move base power regression tests.
+// Z-Move base power regression tests.
 //
 // CalcMoveBasePower used to read the global gCurrentMove for the Z-Move's base power.
 // By the time the damage calc runs, that global holds the *Z-Move*, whose data entry

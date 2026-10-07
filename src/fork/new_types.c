@@ -3,7 +3,7 @@
 #include "constants/pokemon.h"
 #include "constants/species.h"
 
-// FORK: fork-owned species->types override table (FEATURE_NEW_TYPES). Kept here
+// fork-owned species->types override table (FEATURE_NEW_TYPES). Kept here
 // instead of in gSpeciesInfo so upstream syncs never touch it and the upstream
 // species data stays untouched. Each row maps a species to its two replacement
 // types (slot 0 and slot 1); a pure (single-type) species uses the same type in

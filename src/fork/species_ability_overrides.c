@@ -1,10 +1,10 @@
 #include "global.h"
 #include "fork/species_ability_overrides.h"
-#include "config_changes.h" // FORK: GetConfig(FEATURE_INNATE_ABILITIES) gates the override table
+#include "config_changes.h" // GetConfig(FEATURE_INNATE_ABILITIES) gates the override table
 #include "constants/abilities.h"
 #include "constants/species.h"
 
-// FORK: fork-owned species ability overrides (sibling to src/innate_abilities.c).
+// fork-owned species ability overrides (sibling to src/innate_abilities.c).
 // See include/species_ability_overrides.h for the full rationale. In short: this
 // gives a small set of innate-Levitate/Regenerator species a real, selectable
 // SECOND ability so a Battle Factory set can run it alongside the innate, without
@@ -2551,7 +2551,7 @@ enum Ability GetSpeciesAbilityOverride(u16 species, u8 slot)
     u32 i;
     bool32 foundSpecies = FALSE;
 
-    // FORK: gate the override table behind FEATURE_INNATE_ABILITIES, exactly like innates
+    // Gate the override table behind FEATURE_INNATE_ABILITIES, exactly like innates
     // and the fork's other runtime features. TestInitConfigData() force-disables every fork
     // FEATURE flag by default, so upstream tests see VANILLA ability slots -- an override can
     // no longer rewrite a species' ability inside a test that does not opt in via WITH_CONFIG.

@@ -14,7 +14,7 @@
 #include "constants/pokemon.h" // DEFAULT_STAT_STAGE, STAT_SPEED
 #include "constants/species.h"
 
-// FORK: see include/battle_ai_species_overrides.h for the design rationale. Every
+// See include/battle_ai_species_overrides.h for the design rationale. Every
 // public function here is reached from a single, additive hook in upstream AI
 // code, all guarded by AI_FLAG_SMART_SPECIES_LOGIC at the call site.
 

@@ -1,7 +1,7 @@
 #ifndef GUARD_CONFIG_DETERMINISTIC_H
 #define GUARD_CONFIG_DETERMINISTIC_H
 
-// FORK: fork-owned config file. These DETERMINISTIC_* flags are an ongoing
+// fork-owned config file. These DETERMINISTIC_* flags are an ongoing
 // fork project to strip random chance out of the game piece by piece, so that
 // outcomes are decided by player choices and state rather than RNG. Each flag
 // removes one specific source of randomness; FALSE = stock

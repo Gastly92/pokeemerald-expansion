@@ -1,7 +1,7 @@
 #ifndef GUARD_CONFIG_FORK_H
 #define GUARD_CONFIG_FORK_H
 
-// FORK: fork-owned config file. Compile-time flags this fork layers on top of
+// fork-owned config file. Compile-time flags this fork layers on top of
 // upstream that gate boot-time / new-game behavior. Unlike the FEATURE_* and
 // DETERMINISTIC_* flags (which are registered into the runtime config system so
 // battle tests can toggle them per-test), these are plain compile-time #defines

@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for FEATURE_FREE_GIMMICKS (config/feature.h). The flag drops the
+// Coverage for FEATURE_FREE_GIMMICKS (config/feature.h). The flag drops the
 // held-item / key-item / charge requirements for the battle transformation
 // gimmicks and lets a mon pick from several via the move-selection picker. The
 // flag defaults off in the test baseline (see TestInitConfigData) so the inherited
@@ -64,7 +64,7 @@ SINGLE_BATTLE_TEST("FREE_GIMMICKS: an equal-stat mon defaults to the X Mega form
     }
 }
 
-// FORK regression: with item-free Mega Evolution the held Mega Stone no longer gates
+// Regression: with item-free Mega Evolution the held Mega Stone no longer gates
 // the gimmick, which previously let a transformed mon (Ditto/Imposter, which copies its
 // target's species but not its item) arm Mega Evolution. The form change is then refused
 // by CanBattlerFormChange (B_TRANSFORM_FORM_CHANGES >= GEN_5) AFTER the gimmick was marked

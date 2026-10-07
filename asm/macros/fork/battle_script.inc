@@ -7,14 +7,14 @@
 	@
 	@ Add new fork macros here, never to the upstream file.
 
-	@ FORK: DETERMINISTIC_HOLD_EFFECTS — jump to \ptr unless the hung-on item should
+	@ DETERMINISTIC_HOLD_EFFECTS — jump to \ptr unless the hung-on item should
 	@ be consumed (Focus Sash always; Focus Band only under the flag).
 	.macro jumpifhangonitemnotconsumed ptr:req
 	callnative BS_JumpIfHangOnItemNotConsumed
 	.4byte \ptr
 	.endm
 
-	@ FORK: jump to \ptr when DETERMINISTIC_HOLD_EFFECTS is off (so flag-gated item
+	@ Jump to \ptr when DETERMINISTIC_HOLD_EFFECTS is off (so flag-gated item
 	@ consumption is skipped in stock play).
 	.macro jumpifnotdeterministicholdeffects ptr:req
 	callnative BS_JumpIfNotDeterministicHoldEffects

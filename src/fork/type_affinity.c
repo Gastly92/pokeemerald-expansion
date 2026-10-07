@@ -5,7 +5,7 @@
 #include "constants/abilities.h"
 #include "constants/pokemon.h"
 
-// FORK: the "Affinity" ability family (see include/fork/type_affinity.h and
+// The "Affinity" ability family (see include/fork/type_affinity.h and
 // fork-docs/NEW_ABILITIES.md). An Affinity ability grants the holder a latent THIRD type in
 // battle. The grant is applied at the single canonical type accessor GetBattlerTypes()
 // (src/battle_util.c), exactly as FEATURE_NEW_TYPES injects at GetSpeciesType(), so the added

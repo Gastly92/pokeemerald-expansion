@@ -12,7 +12,7 @@
 #include "constants/pokemon.h"
 #include "constants/species.h"
 
-// FORK: fork-owned Battle Factory roster overhaul (B_FRONTIER_EXTENDED_MONS).
+// fork-owned Battle Factory roster overhaul (B_FRONTIER_EXTENDED_MONS).
 // A from-scratch roster of modern competitive sets that replaces the vanilla
 // gBattleFrontierMons on the Battle Factory's code paths, kept in this new file so
 // upstream syncs never touch it. Same struct TrainerMon format as
@@ -34165,7 +34165,7 @@ static u32 CountFormatSetsInDexRun(u16 id, u32 formatTag)
     return count;
 }
 
-// FORK: draw one random roster index whose set is valid for the current battle
+// Draw one random roster index whose set is valid for the current battle
 // format (singles/doubles). The draw is uniform per *National Dex number*, not per
 // set: a Pokémon with seventeen sets (Silvally, Arceus — one per type form) is no
 // more likely to be drafted than one with a single set. A uniformly drawn set is

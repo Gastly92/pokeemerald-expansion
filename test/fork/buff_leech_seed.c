@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the BUFF_LEECH_SEED flag (config/buff.h). BUFF_* flags
+// Coverage for the BUFF_LEECH_SEED flag (config/buff.h). BUFF_* flags
 // default off in the test baseline (see TestInitConfigData), so each test opts in
 // with WITH_CONFIG(BUFF_LEECH_SEED, TRUE). The stock single-seeder behavior is
 // exercised by the inherited tests in test/battle/move_effect/leech_seed.c.

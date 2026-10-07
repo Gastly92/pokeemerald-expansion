@@ -3,7 +3,7 @@
 
 #include "config_changes.h"
 
-// FORK: BUFF_CONFUSION_SELF_DAMAGE (config/buff.h) -- base power of the typeless self-hit a
+// BUFF_CONFUSION_SELF_DAMAGE (config/buff.h) -- base power of the typeless self-hit a
 // confused battler takes. Kept `static inline` in a fork header rather than in a .c so the
 // call sites in CancelerConfused() (src/battle_move_resolution.c) stay one-liners and no fork
 // function has to live in that high-churn upstream file.

@@ -3,7 +3,7 @@
 
 #include "constants/species.h"
 
-// FORK: short aliases for upstream species constants whose names are long enough
+// Short aliases for upstream species constants whose names are long enough
 // to be a nuisance in the fork's hand-edited data tables (species_tiers.c,
 // frontier_extended_mons.c, innate_abilities.c). Those tables are edited from a
 // phone, where a 34-character token is both painful to type and — being longer

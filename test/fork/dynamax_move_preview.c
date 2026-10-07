@@ -2,7 +2,7 @@
 #include "test/battle.h"
 #include "battle_dynamax.h"
 
-// FORK: the move-selection menu previews each slot's Max Move name by calling
+// The move-selection menu previews each slot's Max Move name by calling
 // GetMaxMove() once per slot (MoveSelectionDisplayMoveNames in
 // src/battle_controller_player.c). GetMaxMove resolved the base move's type through
 // SetTypeBeforeUsingMove, which only ever *sets* gBattleStruct->dynamicMoveType and
@@ -96,7 +96,7 @@ SINGLE_BATTLE_TEST("DYNAMAX FORK: a plate holder's Judgment takes the plate's Ma
     }
 }
 
-// FORK: GetMaxMovePower's second parameter is the MAX move, not the base move - that is
+// GetMaxMovePower's second parameter is the MAX move, not the base move - that is
 // how the damage calc calls it, GetMaxMovePower(ctx->baseMove, ctx->move) in
 // CalcMoveBasePower. It reads that parameter for the MOVE_EFFECT_FIXED_POWER check which
 // pins G-Max Drum Solo, G-Max Hydrosnipe and G-Max Fireball to 160 base power.

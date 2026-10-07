@@ -9,7 +9,7 @@
 #include "constants/battle_frontier.h"
 #include "constants/trainers.h"
 
-// FORK: guards B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h). Under
+// Guards B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h). Under
 // FEATURE_FREE_GIMMICKS a regular Frontier opponent may not Mega Evolve, Z-Move,
 // Dynamax or Terastallize; the Frontier Brain, the Tower's gym-leader bosses and
 // the Factory's milestone opponent (every 10th win) keep all four, and the

@@ -4,7 +4,7 @@
 #include "pokemon.h"
 #include "constants/species.h"
 
-// FORK: species -> tier classification (see include/species_tiers.h for the full
+// Species -> tier classification (see include/species_tiers.h for the full
 // rationale and the fork's tier definitions). Keyed by EXACT species id so each
 // forme is classified on its own merits: a powerful forme can sit above its base
 // (Shaymin-Sky is TIER_MYTHICAL while ordinary Shaymin is TIER_LEGENDARY), and a

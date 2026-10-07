@@ -6,7 +6,7 @@
 #include "constants/items.h"
 #include "constants/form_change_types.h"
 
-// FORK: the held-item progress tracker. Two things are worth tracking about a held item,
+// The held-item progress tracker. Two things are worth tracking about a held item,
 // and this file gates both:
 //
 //   1. BALANCE  -- is the item at a good power level? Some arrive there for free

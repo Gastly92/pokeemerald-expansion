@@ -1,7 +1,7 @@
 #ifndef GUARD_CONFIG_BUFF_H
 #define GUARD_CONFIG_BUFF_H
 
-// FORK: fork-owned config file. These BUFF_* flags are an ongoing fork project
+// fork-owned config file. These BUFF_* flags are an ongoing fork project
 // to rebalance items and other game functionality, usually as compensation for
 // other changes we make (e.g. the DETERMINISTIC_* project trades random upsides
 // away, so some items get buffed to keep battles balanced). Each flag improves

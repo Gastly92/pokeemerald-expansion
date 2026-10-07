@@ -1,7 +1,7 @@
 #ifndef GUARD_SPECIES_ABILITY_OVERRIDES_H
 #define GUARD_SPECIES_ABILITY_OVERRIDES_H
 
-// FORK: fork-owned species ability overrides (sibling to innate_abilities.h).
+// fork-owned species ability overrides (sibling to innate_abilities.h).
 //
 // Replaces what gSpeciesInfo[species].abilities[slot] reports for a handful of
 // species, WITHOUT editing the upstream species data. The override is consulted

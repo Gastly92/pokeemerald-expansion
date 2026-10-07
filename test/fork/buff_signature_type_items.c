@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the BUFF_SIGNATURE_TYPE_ITEMS flag (config/buff.h). BUFF_* flags
+// Coverage for the BUFF_SIGNATURE_TYPE_ITEMS flag (config/buff.h). BUFF_* flags
 // default off in the test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG explicitly. The flag has two halves -- it LOCKS the Plate/Memory/Drive
 // boost to Arceus/Silvally/Genesect, and it raises the whole signature class onto
@@ -198,7 +198,7 @@ SINGLE_BATTLE_TEST("BUFF_SIGNATURE_TYPE_ITEMS: Soul Dew moves off the stock 20% 
     }
 }
 
-// FORK: the Soul Dew gate reads the holder by BASE species, so a Mega Latias/Latios keeps the
+// The Soul Dew gate reads the holder by BASE species, so a Mega Latias/Latios keeps the
 // boost. Upstream's exact-species test is unreachable-safe there (a Mega Stone and Soul Dew
 // cannot share the slot), but FEATURE_FREE_GIMMICKS drops the stone requirement and makes the
 // case live: without this, a Soul Dew Latios that Mega Evolves silently loses its own item.

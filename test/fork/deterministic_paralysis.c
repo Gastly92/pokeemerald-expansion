@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the DETERMINISTIC_PARALYSIS flag (config/deterministic.h).
+// Coverage for the DETERMINISTIC_PARALYSIS flag (config/deterministic.h).
 // Determinism flags default off in the test baseline (see TestInitConfigData), so
 // each test opts in with WITH_CONFIG(DETERMINISTIC_PARALYSIS, TRUE). The stock
 // paralysis behavior (random full-paralysis miss + Speed cut) runs unmodified

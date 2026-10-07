@@ -14,7 +14,7 @@
 #include "fork/species_tiers.h"
 #include "constants/abilities.h"
 
-// FORK: guards IllusionMonRejectsSlot (src/fork/frontier_draft.c). Illusion
+// Guards IllusionMonRejectsSlot (src/fork/frontier_draft.c). Illusion
 // disguises its holder as the team's last conscious party member, so an Illusion
 // mon drafted into the final slot has nothing to copy and the disguise never
 // forms (GetIllusionMonPartyId bails). The draft loops use this helper to keep

@@ -2,7 +2,7 @@
 #include "test/battle.h"
 #include "battle_ai_util.h"
 
-// FORK: a damaging Z-Move (Knock Off -> Black Hole Eclipse) keeps none of Knock
+// A damaging Z-Move (Knock Off -> Black Hole Eclipse) keeps none of Knock
 // Off's utility - it does not strip the target's item. With FEATURE_FREE_GIMMICKS
 // the AI always has a Z-Move available, so it used to upgrade Knock Off every time
 // and waste the one-shot Z-Move instead of removing a worthwhile item. ShouldUseZMove

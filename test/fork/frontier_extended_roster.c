@@ -1,27 +1,27 @@
 #include "global.h"
 #include "test/test.h"
 #include "data.h"
-#include "event_data.h" // FORK: VarSet (draft-weighting test)
+#include "event_data.h" // VarSet (draft-weighting test)
 #include "battle_frontier.h"
-#include "constants/battle_frontier.h" // FORK: FLAG_FRONTIER_MON_FACTORY
+#include "constants/battle_frontier.h" // FLAG_FRONTIER_MON_FACTORY
 #include "config_changes.h"
-#include "item.h" // FORK: gItemsInfo (accuracy-item redundancy test)
+#include "item.h" // gItemsInfo (accuracy-item redundancy test)
 #include "fork/frontier_extended_mons.h"
-#include "fork/frontier_draft.h" // FORK: ApplySwappedMonFriendship
+#include "fork/frontier_draft.h" // ApplySwappedMonFriendship
 #include "fork/innate_abilities.h"
 #include "fork/species_ability_overrides.h"
 #include "constants/abilities.h"
-#include "constants/items.h" // FORK: ITEM_WIDE_LENS / ITEM_ZOOM_LENS
+#include "constants/items.h" // ITEM_WIDE_LENS / ITEM_ZOOM_LENS
 #include "constants/species.h"
 #include "constants/items.h"
 #include "move.h"
 #include "battle.h"
-#include "battle_main.h"   // FORK: gTypesInfo (item-activation gate names the type)
-#include "battle_util.h"   // FORK: GetTypeModifier (resist-berry weakness check)
+#include "battle_main.h"   // gTypesInfo (item-activation gate names the type)
+#include "battle_util.h"   // GetTypeModifier (resist-berry weakness check)
 #include "constants/hold_effects.h"
 #include "constants/battle_move_effects.h"
 
-// FORK: guards the fork-owned competitive Battle Factory roster
+// Guards the fork-owned competitive Battle Factory roster
 // (gFrontierExtendedMons, src/frontier_extended_mons.c). A set's .ability is
 // resolved by CreateFacilityMon (src/battle_frontier.c) into a 2-bit ability
 // *slot* on the mon, so it must be one of the species' real abilities. An
@@ -76,7 +76,7 @@ TEST("Frontier extended roster: every set's ability is legal for its species")
     EXPECT_EQ(illegalCount, 0);
 }
 
-// FORK: a frontier set's .ability is the mon's single CHOSEN (observable) ability,
+// A frontier set's .ability is the mon's single CHOSEN (observable) ability,
 // layered ON TOP of that species' always-on innates (fork/innate_abilities.c). When the
 // chosen ability is ITSELF one of the species' innates, the chosen slot is REDUNDANT: the
 // mon would already have that ability from its innate, so the one observable pick is wasted
@@ -124,7 +124,7 @@ TEST("Frontier extended roster: no set's chosen ability duplicates a species inn
     EXPECT_EQ(redundant, 0);
 }
 
-// FORK: the same redundancy invariant as the test above, but checked at its SOURCE -- the
+// The same redundancy invariant as the test above, but checked at its SOURCE -- the
 // fork-owned override table (src/fork/species_ability_overrides.c) rather than the roster that
 // consumes it. An override row exists to hand a species a real, OBSERVABLE second trait alongside
 // its always-on innates, so a row granting an ability the species already has innately defeats its
@@ -173,7 +173,7 @@ TEST("Frontier extended roster: no species ability override duplicates a species
     EXPECT_EQ(redundant, 0);
 }
 
-// FORK: ABILITY_NONE on a set means "let the Factory pick the ability at draft", which yields a
+// ABILITY_NONE on a set means "let the Factory pick the ability at draft", which yields a
 // non-deterministic, unlabeled ability -- and for the fork's all-innate species it can only ever
 // land on a redundant innate. Every set must instead name a real, deliberate chosen ability. This
 // was previously impossible for species whose every real slot was pinned by an upstream battle test
@@ -181,7 +181,7 @@ TEST("Frontier extended roster: no species ability override duplicates a species
 // behind FEATURE_INNATE_ABILITIES fixed that (the override is invisible to flag-off upstream tests),
 // so the escape hatch is gone. This test bans ABILITY_NONE outright and fails loudly if a new set
 // reintroduces it -- give the set a fork override (src/fork/species_ability_overrides.c) instead.
-// FORK: BUFF_ACCURACY_ITEMS (config/buff.h) gives Wide Lens and Zoom Lens a job inside the
+// BUFF_ACCURACY_ITEMS (config/buff.h) gives Wide Lens and Zoom Lens a job inside the
 // DETERMINISTIC_ACCURACY_EVASION PP economy: Wide Lens cancels the flat evasion taxes a target
 // imposes (BrightPowder / Lax Incense, Sand Veil in sand, Snow Cloak in snow, Tangled Feet while
 // confused, Wonder Skin vs a status move), and Zoom Lens cancels those AND the whole stat-stage
@@ -306,7 +306,7 @@ TEST("Frontier extended roster: no set uses ABILITY_NONE (every set names a real
     EXPECT_EQ(noneCount, 0);
 }
 
-// FORK: Sheer Force deletes a move's additional effect outright. For most moves that is
+// Sheer Force deletes a move's additional effect outright. For most moves that is
 // the intended trade (the move keeps 1.3x power instead), but Fake Out is 40 BP: the flinch
 // IS the move, and 52 BP buys nothing back. So a set must never end up holding both.
 //
@@ -387,7 +387,7 @@ TEST("Frontier extended roster: no Fake Out set is (or Mega Evolves into) Sheer 
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: CreateFacilityMon grants the Gigantamax Factor at draft time to any mon
+// CreateFacilityMon grants the Gigantamax Factor at draft time to any mon
 // whose species has a G-Max form, so gmax-capable Factory/Tower mons Gigantamax
 // instead of plain Dynamaxing (without annotating each roster entry). A species
 // with no G-Max form must NOT receive the factor.
@@ -405,7 +405,7 @@ TEST("Frontier extended roster: drafted mon gets Gigantamax Factor iff its speci
     EXPECT(!GetMonData(&mon, MON_DATA_GIGANTAMAX_FACTOR));
 }
 
-// FORK: CreateFacilityMon grants the maximum Dynamax Level at draft time so a
+// CreateFacilityMon grants the maximum Dynamax Level at draft time so a
 // Dynamaxed mon gets the full HP boost. An explicit per-entry .dynamaxLevel
 // still overrides the default.
 TEST("Frontier extended roster: drafted mon gets the maximum Dynamax Level by default")
@@ -421,7 +421,7 @@ TEST("Frontier extended roster: drafted mon gets the maximum Dynamax Level by de
     EXPECT_EQ(GetMonData(&mon, MON_DATA_DYNAMAX_LEVEL), 5);
 }
 
-// FORK: B_FRONTIER_PREFER_RETURN -- facility mons carry Return at max friendship,
+// B_FRONTIER_PREFER_RETURN -- facility mons carry Return at max friendship,
 // never Frustration at zero, including the Battle Factory whose vanilla builder
 // swaps Return for Frustration.
 TEST("Frontier extended roster: drafted mon uses Return at max friendship instead of Frustration")
@@ -439,7 +439,7 @@ TEST("Frontier extended roster: drafted mon uses Return at max friendship instea
     EXPECT_EQ(GetMonData(&mon, MON_DATA_FRIENDSHIP), MAX_FRIENDSHIP);
 }
 
-// FORK: B_FRONTIER_PREFER_RETURN -- the Factory swap screen (CopySwappedMonData) zeroes
+// B_FRONTIER_PREFER_RETURN -- the Factory swap screen (CopySwappedMonData) zeroes
 // a swapped-in mon's friendship, assuming upstream's Frustration. This replays that
 // step on a Factory-built Return mon: without ApplySwappedMonFriendship it would
 // battle with a 1 BP Return until the party is next rebuilt.
@@ -460,7 +460,7 @@ TEST("Frontier extended roster: a Factory swapped-in mon keeps max friendship fo
 // Roster coverage
 // ============================================================================
 //
-// FORK: the roster's headline promise (fork-docs/FRONTIER_ROSTER.md, "Coverage") is that
+// The roster's headline promise (fork-docs/FRONTIER_ROSTER.md, "Coverage") is that
 // EVERY fully-evolved species -- alternate formes included -- has at least one build. That
 // promise was prose only, so a species arriving with an upstream sync (a new generation, a
 // new regional forme) could sit unbuilt forever with nothing failing. The tests below make
@@ -494,7 +494,7 @@ TEST("Frontier extended roster: a Factory swapped-in mon keeps max friendship fo
 // have not got to yet -- the thirteen genuine gaps this sweep first turned up were built, and
 // the next one should be too.
 
-// FORK: NFEs the roster builds on purpose -- Eviolite (and friends) give these a role their
+// NFEs the roster builds on purpose -- Eviolite (and friends) give these a role their
 // evolution does not dominate, so they are roster-required despite still evolving. The list is
 // exact in both directions (see "the roster's NFEs are exactly the niche NFEs"): a set for an
 // unlisted NFE fails, which is what catches a pre-evolution typo'd in place of its evolution
@@ -738,7 +738,7 @@ TEST("Frontier extended roster: every fully-evolved species has at least one set
     EXPECT_EQ(uncovered, 0);
 }
 
-// FORK: an exception row promises a profile genuinely cannot be, or need not be, built. Rows rot
+// An exception row promises a profile genuinely cannot be, or need not be, built. Rows rot
 // silently in three ways: the profile gets a set (the row now excuses nothing), a derived rule
 // grows to cover the species (an upstream sync flags the forme Tera, say), or a second row lands
 // on the same profile. Dead rows are worse than no rows -- they hide the next real gap -- so each
@@ -789,7 +789,7 @@ TEST("Frontier extended roster: no stale coverage exception")
     EXPECT_EQ(stale, 0);
 }
 
-// FORK: "only fully-evolved Pokémon appear, except NFEs with a genuine niche" is a roster rule
+// "only fully-evolved Pokémon appear, except NFEs with a genuine niche" is a roster rule
 // (fork-docs/FRONTIER_ROSTER.md), and it cuts both ways. sNicheNfes[] is the complete list of
 // deliberate exceptions, so an NFE in the roster that is NOT listed is almost always a typo -- a
 // pre-evolution written where its evolution was meant -- and a listed NFE with no set is a
@@ -836,7 +836,7 @@ TEST("Frontier extended roster: the roster's NFEs are exactly the niche NFEs")
 
 // ===== Line-review set-shape gates ========================================================
 //
-// FORK: two set-shape gates the /line-review sweep turned into recurring findings. Both were
+// Two set-shape gates the /line-review sweep turned into recurring findings. Both were
 // RATCHETS while the sweep ran, matching the innate-row gates in test/fork/innate_abilities.c --
 // bounded by a reviewed-through-dex constant each batch raised as it landed, so the unreviewed
 // generations could not wedge CI. The sweep finished at Pecharunt and both bounds were retired;
@@ -847,7 +847,7 @@ static bool32 SetIsDoublesCapable(const struct TrainerMon *set)
     return set->tags == FORMAT_DOUBLES || set->tags == FORMAT_BOTH;
 }
 
-// FORK: TARGET_FOES_AND_ALLY moves hit the holder's own partner. Nine sets were carrying one on a
+// TARGET_FOES_AND_ALLY moves hit the holder's own partner. Nine sets were carrying one on a
 // doubles-tagged build in Gen 3 alone -- Earthquake mostly, plus Surf and Sludge Wave -- every one
 // of them damaging its own teammate for the whole format the tag exists to cover. The fix is
 // usually a single-target twin (Earthquake -> a species-fitting Ground move, Surf -> Muddy Water) or, on a
@@ -895,7 +895,7 @@ TEST("Frontier extended roster: no doubles set carries a move that hits its own 
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: a Choice item locks the holder into the first move it uses, so a status move on a Choice set
+// A Choice item locks the holder into the first move it uses, so a status move on a Choice set
 // is either never reachable or a trap that ends the set's usefulness. Sharpedo shipped a Choice
 // Scarf build with Destiny Bond, which can never be both chosen and followed up.
 //
@@ -942,7 +942,7 @@ TEST("Frontier extended roster: no Choice set carries a status move the lock wou
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: a damaging move only scales with the stat the set actually invests in, so a set that
+// A damaging move only scales with the stat the set actually invests in, so a set that
 // lowers a stat with its nature AND leaves it uninvested should not be carrying a real attacking
 // move on that side. Five of these shipped before the gate existed -- Celesteela ran Heavy Slam,
 // its main STAB, on two sets with an Attack-lowering nature and zero Attack EVs; Pheromosa ran
@@ -1056,7 +1056,7 @@ TEST("Frontier extended roster: no set carries an attacking move on the stat it 
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: the Factory drafts by picking among a species' sets, so two sets that play identically
+// The Factory drafts by picking among a species' sets, so two sets that play identically
 // cost a draw for nothing -- the species is half as varied as its row count suggests. Five such
 // pairs were live when this test was written (Kyogre, Galarian Darmanitan, Toucannon, Dhelmise,
 // Iron Bundle), on top of the four the /line-review sweep found by eye.
@@ -1121,7 +1121,7 @@ TEST("Frontier extended roster: no species carries two sets that are the same se
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: some items can only ever fire if the set carries a move that meets their precondition,
+// Some items can only ever fire if the set carries a move that meets their precondition,
 // so holding one without that move is a slot spent on nothing for the whole battle. Popplio
 // shipped a Throat Spray set whose four moves were Hydro Pump, Moonblast, Energy Ball and
 // Psychic -- not one of them a sound move -- and Centiskorch and Tatsugiri were still doing the
@@ -1151,7 +1151,7 @@ static bool32 SetHasSoundMove(const struct TrainerMon *set)
     return FALSE;
 }
 
-// FORK: an -ate ability rewrites the holder's NORMAL moves to another type, which silently
+// An -ate ability rewrites the holder's NORMAL moves to another type, which silently
 // moves them out from under a type-keyed item. Checked on innates as well as the chosen
 // ability, since an innate is always on. Normalize is the reverse and is handled by the
 // caller. Returns TYPE_NONE when no -ate applies.
@@ -1241,7 +1241,7 @@ static bool32 SetHasDamagingMoveOfType(const struct TrainerMon *set, enum Type t
     return FALSE;
 }
 
-// FORK: an ability (or innate) that makes the holder IMMUNE to a type means a hit of that type
+// An ability (or innate) that makes the holder IMMUNE to a type means a hit of that type
 // never lands, so anything keyed on taking one is dead in the slot.
 static bool32 SetIsImmuneToTypeByAbility(const struct TrainerMon *set, enum Type type)
 {
@@ -1372,7 +1372,7 @@ TEST("Frontier extended roster: no set holds an item none of its moves can activ
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: the frontier applies a set's .ev array straight through SetMonData (src/battle_frontier.c,
+// The frontier applies a set's .ev array straight through SetMonData (src/battle_frontier.c,
 // CreateFacilityMon) with no cap check, so a set CAN exceed the game's 510 EV total and simply gets
 // the better spread. That is a real lever, and it is deliberately used: Pikachu's two sets carry 252
 // in all six stats.
@@ -1441,7 +1441,7 @@ TEST("Frontier extended roster: only the documented exceptions exceed the EV cap
     EXPECT_EQ(offenders, 0);
 }
 
-// FORK: BUFF_SIGNATURE_TYPE_ITEMS (config/buff.h) locks each signature type item to one species,
+// BUFF_SIGNATURE_TYPE_ITEMS (config/buff.h) locks each signature type item to one species,
 // so a Plate on anything but an Arceus -- or a Memory off Silvally, a Drive off Genesect, Soul Dew
 // off a Lati@s, an orb off its own legendary -- grants NOTHING. The set silently plays an item
 // down, with no other symptom in battle.

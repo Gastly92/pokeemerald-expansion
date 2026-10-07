@@ -4,7 +4,7 @@
 #include "battle_util.h"
 #include "constants/abilities.h"
 
-// FORK: the Halo ability (see include/fork/halo.h and fork-docs/NEW_ABILITIES.md). Halo is an
+// The Halo ability (see include/fork/halo.h and fork-docs/NEW_ABILITIES.md). Halo is an
 // aura, so IsHaloOnField() asks "is a Halo holder anywhere on the field", not "is the target
 // the holder" -- everyone standing in the light is protected, including the holder's foes.
 //

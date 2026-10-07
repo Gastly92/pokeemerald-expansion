@@ -1,7 +1,7 @@
 #ifndef GUARD_FORK_DETERMINISTIC_MOVES_H
 #define GUARD_FORK_DETERMINISTIC_MOVES_H
 
-// FORK: self-contained deterministic move-resolution predicates (config/deterministic.h).
+// self-contained deterministic move-resolution predicates (config/deterministic.h).
 //
 // These helpers were extracted out of src/battle_util.c — a file we already diverge
 // from heavily — to shrink that upstream-owned conflict surface. They qualify for the
@@ -15,9 +15,9 @@
 // or the stock RNG roll, so behavior is unchanged in vanilla play.
 
 #include "constants/battle.h"
-#include "fork/innate_abilities.h" // FORK: IsInnateActive (Quick Feet exemption below)
+#include "fork/innate_abilities.h" // IsInnateActive (Quick Feet exemption below)
 
-// FORK: DETERMINISTIC_PARALYSIS -- how much priority a paralyzed battler's move loses.
+// DETERMINISTIC_PARALYSIS -- how much priority a paralyzed battler's move loses.
 // Kept `static inline` in the header because GetBattleMovePriority needs it at two points
 // that cannot share a single statement: upstream's Max Guard early return near the top of
 // the function, and the ordinary path at the bottom. Putting the predicate here keeps the
@@ -74,16 +74,16 @@ enum AccuracyItemRelief
 // DETERMINISTIC_ACCURACY_EVASION is off, so stock behavior is untouched.
 u32 GetAccuracyItemRelief(enum BattlerId battlerAtk, enum BattlerId battlerDef);
 
-// FORK: DETERMINISTIC_ACCURACY_EVASION accuracy/evasion + PP economy, moved here from
+// DETERMINISTIC_ACCURACY_EVASION accuracy/evasion + PP economy, moved here from
 // include/battle_util.h with their definitions (src/fork/deterministic_moves.c).
-s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, bool32 ignorePenalties); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
-u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect); // FORK: DETERMINISTIC_ACCURACY_EVASION PP economy
-s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move); // FORK: DETERMINISTIC_ACCURACY_EVASION move-info PP cost
+s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, bool32 ignorePenalties); // DETERMINISTIC_ACCURACY_EVASION PP economy
+u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect); // DETERMINISTIC_ACCURACY_EVASION PP economy
+s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move); // DETERMINISTIC_ACCURACY_EVASION move-info PP cost
 
-// FORK: DETERMINISTIC_MOVE_RESULTS speed ties (moved from include/battle_main.h).
-s32 DeterministicSpeedTieWins(enum BattlerId battlerAtk, enum BattlerId battlerDef); // FORK: DETERMINISTIC_MOVE_RESULTS
+// DETERMINISTIC_MOVE_RESULTS speed ties (moved from include/battle_main.h).
+s32 DeterministicSpeedTieWins(enum BattlerId battlerAtk, enum BattlerId battlerDef); // DETERMINISTIC_MOVE_RESULTS
 
-// FORK: MOVEEND deterministic handlers and AI deterministic predictions (see the matching .c).
+// MOVEEND deterministic handlers and AI deterministic predictions (see the matching .c).
 enum MoveEndResult MoveEndDeterministicHoldConsume(struct BattleCalcValues *cv);
 enum MoveEndResult MoveEndDeterministicRecharge(struct BattleCalcValues *cv);
 bool32 AI_DeterministicAbilityGuaranteesStatus(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move);

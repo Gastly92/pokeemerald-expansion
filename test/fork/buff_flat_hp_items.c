@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the BUFF_FLAT_HP_ITEMS flag (config/buff.h). BUFF_* flags default
+// Coverage for the BUFF_FLAT_HP_ITEMS flag (config/buff.h). BUFF_* flags default
 // off in the test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG(BUFF_FLAT_HP_ITEMS, TRUE) and the stock flat-HP behavior is pinned here
 // with the flag explicitly off.

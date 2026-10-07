@@ -3,7 +3,7 @@
 
 #include "battle_ai_switch.h" // struct SwitchAiContext
 
-// FORK: Species-aware AI corrections. These patch a handful of spots where the
+// Species-aware AI corrections. These patch a handful of spots where the
 // generic AI misplays specific mons/abilities, gated behind one opt-in AI flag
 // so non-smart trainers (and anything that doesn't set the flag) are untouched.
 //

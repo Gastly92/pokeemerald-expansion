@@ -4,7 +4,7 @@
 #include "constants/species.h"
 #include "fork/species_tiers.h"
 
-// FORK: shared Battle Frontier competitive-draft rules. Extracted out of the
+// Shared Battle Frontier competitive-draft rules. Extracted out of the
 // upstream src/battle_factory.c into this fork-owned file so the rules carry no
 // upstream merge-conflict surface and can be reused by any facility that drafts
 // teams from the extended roster (the Battle Factory and the Battle Tower). See

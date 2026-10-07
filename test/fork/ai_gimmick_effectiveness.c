@@ -3,7 +3,7 @@
 #include "battle_ai_util.h"
 #include "fork/battle_ai_gimmick.h"
 
-// FORK: the AI scores a gimmick move's type matchup off the move the engine will really
+// The AI scores a gimmick move's type matchup off the move the engine will really
 // execute, not off the move that was chosen.
 //
 // A Z-Move or Max Move inherits its base move's *type* but none of its matchup quirks:

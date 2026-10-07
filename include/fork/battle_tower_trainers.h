@@ -3,7 +3,7 @@
 
 #include "constants/trainers.h"
 
-// FORK: the Battle Tower's fork-owned "special" opponents and their fixed,
+// The Battle Tower's fork-owned "special" opponents and their fixed,
 // hand-authored competitive teams: the Salon Maiden (Frontier Brain) and the
 // gym-leader boss roster. The data lives here (not in the upstream frontier files
 // frontier_util.c / battle_frontier.c) so it carries no merge-conflict surface;

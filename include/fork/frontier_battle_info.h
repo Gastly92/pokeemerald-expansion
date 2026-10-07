@@ -1,7 +1,7 @@
 #ifndef GUARD_FRONTIER_BATTLE_INFO_H
 #define GUARD_FRONTIER_BATTLE_INFO_H
 
-// FORK: read-only "battle info" viewer that replaces the (disabled) BAG action
+// read-only "battle info" viewer that replaces the (disabled) BAG action
 // in Frontier facilities. Gated by B_FRONTIER_BATTLE_INFO (config/frontier.h).
 // Piggybacks on the existing B_ACTION_DEBUG controller plumbing: when the player
 // chooses the INFO slot we set gFrontierBattleInfoActive and emit B_ACTION_DEBUG,
@@ -21,7 +21,7 @@ bool32 ShouldReplaceBagWithInfo(void);
 // test/fork/innate_abilities.c guards the table against it.
 #define INFO_MAX_DISPLAYED_INNATES 14
 
-// FORK: B_FRONTIER_BATTLE_INFO -- how many Mega/Primal rows the viewer's Base Stats page can
+// B_FRONTIER_BATTLE_INFO -- how many Mega/Primal rows the viewer's Base Stats page can
 // list beneath the foe's own spread. It is both a display budget and a layout one: the page
 // draws your active mon(s) above the foe, and a STATIC_ASSERT in src/fork/frontier_battle_info.c
 // proves the worst case (doubles, both of your mons projecting a form) still fits. A species
@@ -36,7 +36,7 @@ void CB2_FrontierBattleInfo(void);
 // in-battle action menu (INFO slot) and the in-battle party menu (SELECT).
 void OpenFrontierBattleInfo(void (*returnCallback)(void));
 
-// FORK: BUFF_ACCURACY_ITEMS_REVEAL -- writes the reveal bits the player's held Wide Lens
+// BUFF_ACCURACY_ITEMS_REVEAL -- writes the reveal bits the player's held Wide Lens
 // (every seen foe's item) and Zoom Lens (the ability and full moveset of a foe that has used
 // a move) can see. Called when the viewer is opened; exposed so test/fork/buff_accuracy_items.c
 // can assert the bits directly rather than driving the UI.

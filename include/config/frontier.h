@@ -1,7 +1,7 @@
 #ifndef GUARD_CONFIG_FRONTIER_H
 #define GUARD_CONFIG_FRONTIER_H
 
-// FORK: Battle Frontier sandbox configuration. These flags are our own
+// Battle Frontier sandbox configuration. These flags are our own
 // divergence from upstream; on a sync conflict, keep the flags and re-apply
 // the gated behavior rather than reverting to the vanilla 3-mon / Lv50 format.
 

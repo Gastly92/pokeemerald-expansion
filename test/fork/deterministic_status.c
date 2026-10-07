@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the DETERMINISTIC_STATUS flag (config/deterministic.h).
+// Coverage for the DETERMINISTIC_STATUS flag (config/deterministic.h).
 // Determinism flags default off in the test baseline (see TestInitConfigData), so
 // each test opts in with WITH_CONFIG(DETERMINISTIC_STATUS, TRUE). Stock infatuation/
 // sleep/confusion behavior runs unmodified (determinism off) in the inherited suite.

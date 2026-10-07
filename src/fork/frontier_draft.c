@@ -11,7 +11,7 @@
 #include "constants/form_change_types.h"
 #include "constants/hold_effects.h"
 
-// FORK: shared Battle Frontier competitive-draft rules, moved here from the
+// Shared Battle Frontier competitive-draft rules, moved here from the
 // upstream src/battle_factory.c (see frontier_draft.h). Reused by the Battle
 // Factory and the Battle Tower; only exercised under B_FRONTIER_EXTENDED_MONS.
 
@@ -25,7 +25,7 @@ bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem)
     enum HoldEffect newEffect = GetItemHoldEffect(newItem);
     u32 i;
 
-    // FORK: with item-free gimmicks the held Mega Stone / Z-Crystal no longer gates
+    // With item-free gimmicks the held Mega Stone / Z-Crystal no longer gates
     // the gimmick (any mon may Mega/Z), so a team is no longer limited to one of
     // each. Balance is maintained through the species tier map instead.
     if (GetConfig(FEATURE_FREE_GIMMICKS))

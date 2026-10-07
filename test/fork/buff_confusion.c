@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: coverage for the BUFF_CONFUSION_SELF_DAMAGE flag (config/buff.h), which raises the
+// Coverage for the BUFF_CONFUSION_SELF_DAMAGE flag (config/buff.h), which raises the
 // confusion self-hit from the stock 40 BP to BUFF_CONFUSION_SELF_DAMAGE_POWER (60). BUFF_* flags
 // default off in the test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG(BUFF_CONFUSION_SELF_DAMAGE, TRUE/FALSE) explicitly, and the stock 40-BP behavior

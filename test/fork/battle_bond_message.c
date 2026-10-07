@@ -1,7 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 
-// FORK: regression coverage for a wrong-battler stat-change message.
+// Regression coverage for a wrong-battler stat-change message.
 //
 // ShouldDoTrainerSlide() used to set gBattleScripting.battler BEFORE deciding whether a slide
 // actually runs, so every "no slide" answer still left the global pointing at the OPPONENT.

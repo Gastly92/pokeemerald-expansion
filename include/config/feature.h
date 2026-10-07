@@ -1,7 +1,7 @@
 #ifndef GUARD_CONFIG_FEATURE_H
 #define GUARD_CONFIG_FEATURE_H
 
-// FORK: fork-owned config file. The FEATURE_* flags here gate standalone
+// fork-owned config file. The FEATURE_* flags here gate standalone
 // gameplay features this fork layers on top of upstream (innate abilities, new
 // types, etc.). FALSE = stock pokeemerald-expansion behavior.
 //

@@ -1,8 +1,8 @@
 #include "global.h"
 #include "test/battle.h"
-#include "fork/frontier_battle_info.h" // FORK: ApplyAccuracyItemReveals (BUFF_ACCURACY_ITEMS_REVEAL)
+#include "fork/frontier_battle_info.h" // ApplyAccuracyItemReveals (BUFF_ACCURACY_ITEMS_REVEAL)
 
-// FORK: coverage for the BUFF_ACCURACY_ITEMS flag (config/buff.h). BUFF_* flags default
+// Coverage for the BUFF_ACCURACY_ITEMS flag (config/buff.h). BUFF_* flags default
 // off in the test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG(BUFF_ACCURACY_ITEMS, TRUE) -- and, since the buff only exists inside the
 // PP economy, WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE) alongside it.
@@ -111,7 +111,7 @@ SINGLE_BATTLE_TEST("BUFF_ACCURACY_ITEMS: Zoom Lens gives nothing while moving fi
     }
 }
 
-// FORK: BUFF_ACCURACY_ITEMS_REVEAL — the lenses as instruments for *seeing*, feeding the
+// BUFF_ACCURACY_ITEMS_REVEAL — the lenses as instruments for *seeing*, feeding the
 // B_FRONTIER_BATTLE_INFO viewer's reveal bits (fork-docs/BATTLE_INFO.md). Wide Lens is
 // breadth (every seen foe's held item), Zoom Lens is depth (one foe's ability and full
 // moveset, once it has been watched using a move).
