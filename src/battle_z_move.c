@@ -47,7 +47,7 @@
 // Function Declarations
 static void ZMoveSelectionDisplayPpNumber(enum BattlerId battler);
 static void ZMoveSelectionDisplayPower(enum Move move, enum Move zMove);
-static void ZMoveSelectionDisplayMoveType(enum Move move, enum Move zMove, enum BattlerId battler);
+static void ZMoveSelectionDisplayMoveType(enum Move zMove, enum BattlerId battler);
 
 // Const Data
 static const struct SignatureZMove sSignatureZMoves[] =
@@ -422,7 +422,7 @@ bool32 MoveSelectionDisplayZMove(enum Move zmove, enum BattlerId battler)
         BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_NAME_1);
 
         ZMoveSelectionDisplayPpNumber(battler);
-        ZMoveSelectionDisplayMoveType(move, zmove, battler);
+        ZMoveSelectionDisplayMoveType(zmove, battler);
         MoveSelectionCreateCursorAt(0, 0);
         return TRUE;
     }
@@ -457,14 +457,14 @@ static void ZMoveSelectionDisplayPpNumber(enum BattlerId battler)
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING);
 }
 
-static void ZMoveSelectionDisplayMoveType(enum Move move, enum Move zMove, enum BattlerId battler)
+static void ZMoveSelectionDisplayMoveType(enum Move zMove, enum BattlerId battler)
 {
     u8 *txtPtr, *end;
     enum Type zMoveType = GetBattleMoveType(zMove);
 
     // FORK: B_MOVE_DAMAGE_PREVIEW prints "<Type> lo-hi%" in place of "TYPE/<Type>" for a damaging
-    // Z-Move (src/fork/damage_preview.c); `move` (the base move) was added for it.
-    if (TryPrintZMoveDamagePreview(battler, move, zMove, zMoveType))
+    // Z-Move (src/fork/damage_preview.c). Additive block; keep it first on conflict.
+    if (TryPrintZMoveDamagePreview(battler, zMove, zMoveType))
         return;
 
     txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType);

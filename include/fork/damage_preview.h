@@ -28,7 +28,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
 bool32 TryPrintMoveDamagePreview(enum BattlerId battler, enum Move move, enum Type type);
 
 // The same for the Z-Move view, which prints its own type row: the range of `zMove` as fired
-// from `baseMove`. FALSE for a status Z-Move, so the caller keeps its stock line.
-bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move baseMove, enum Move zMove, enum Type zMoveType);
+// from the move under the cursor. FALSE for a status Z-Move, so the caller keeps its stock line.
+bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move zMove, enum Type zMoveType);
 
 #endif // GUARD_FORK_DAMAGE_PREVIEW_H

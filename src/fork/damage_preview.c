@@ -12,6 +12,7 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_ai_util.h"
+#include "battle_controllers.h"
 #include "battle_dynamax.h"
 #include "battle_gimmick.h"
 #include "battle_message.h"
@@ -316,8 +317,13 @@ bool32 TryPrintMoveDamagePreview(enum BattlerId battler, enum Move move, enum Ty
     return PrintDamagePreview(battler, move, gimmick, type);
 }
 
-bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move baseMove, enum Move zMove, enum Type zMoveType)
+bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move zMove, enum Type zMoveType)
 {
+    // The base move under the cursor, read the way MoveSelectionDisplayZMove reads it, so the
+    // upstream hook point needs no new parameter.
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
+    enum Move baseMove = moveInfo->moves[gMoveSelectionCursor[battler]];
+
     // The Z view is only up while the Z-Move is the armed choice. A status Z-Move (Extreme
     // Evoboost, off a damaging Last Resort) has no damage to show.
     if (IsBattleMoveStatus(zMove))
