@@ -22,7 +22,7 @@ enum DamagePreviewKO
 
 bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct, enum DamagePreviewKO *ko);
 
-// The readout after the type name: "KO" (KOs at every corner), "lo-KO" (at some), else
+// The readout after the type name: "KO" (KOs at every corner), "lo%-KO" (at some), else
 // "lo-hi%" capped at 100. Returns the new end of `dst`. Exposed for test/fork/damage_preview.c.
 u8 *FormatDamagePreviewAmount(u8 *dst, u32 lo, u32 hi, enum DamagePreviewKO ko);
 
