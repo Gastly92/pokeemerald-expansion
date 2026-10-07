@@ -742,6 +742,7 @@ static enum CancelerResult CancelerAttackstring(struct BattleCalcValues *cv)
         gBattleMons[gBattlerAttacker].volatiles.usedMoves |= 1u << gCurrMovePos;
         // FORK: mark this move slot as actually used for the B_FRONTIER_BATTLE_INFO viewer.
         gBattleStruct->infoUsedMoves[GetBattlerSide(gBattlerAttacker)][gBattlerPartyIndexes[gBattlerAttacker]] |= 1u << gCurrMovePos;
+        BattleLogRecordMove(gBattlerAttacker, cv->move); // FORK: and log it for the viewer's Battle Log page.
         gBattleStruct->battlerState[gBattlerAttacker].lastMoveTarget = gBattlerTarget;
         gLastPrintedMoves[gBattlerAttacker] = gChosenMove;
         RecordKnownMove(gBattlerAttacker, gChosenMove);
@@ -3268,6 +3269,8 @@ static bool32 TryMoveDamageUpdate(struct BattleCalcValues *cv)
             gBattleStruct->moveDamage[cv->battlerDef] = gBattleMons[cv->battlerDef].volatiles.substituteHP;
             gBattleMons[cv->battlerDef].volatiles.substituteHP = 0;
         }
+        // FORK: B_FRONTIER_BATTLE_INFO's Battle Log records the hit as taken by the Substitute.
+        BattleLogRecordDamage(cv->battlerAtk, cv->battlerDef, cv->move, 0, TRUE);
         // check substitute fading
         if (gBattleMons[cv->battlerDef].volatiles.substituteHP == 0)
         {
@@ -3323,6 +3326,8 @@ static bool32 TryMoveDamageUpdate(struct BattleCalcValues *cv)
             hpLost = hpBefore - gBattleMons[cv->battlerDef].hp;
             if (hpLost != 0)
                 gBattleStruct->innardsOutHpLost[cv->battlerDef] += hpLost;
+            // FORK: B_FRONTIER_BATTLE_INFO's Battle Log (src/fork/battle_log.c).
+            BattleLogRecordDamage(cv->battlerAtk, cv->battlerDef, cv->move, hpLost, FALSE);
 
             gProtectStructs[cv->battlerDef].assuranceDoubled = TRUE;
             gProtectStructs[cv->battlerDef].revengeDoubled |= 1u << cv->battlerAtk;

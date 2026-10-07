@@ -51,6 +51,7 @@
 #include "pokedex.h"
 #include "test/battle.h"
 #include "fork/deterministic_moves.h" // FORK: DETERMINISTIC_ACCURACY_EVASION helpers
+#include "fork/damage_preview.h" // FORK: B_MOVE_DAMAGE_PREVIEW on the move-type row
 
 static void PlayerHandleLoadMonSprite(enum BattlerId battler);
 static void PlayerHandleDrawTrainerPic(enum BattlerId battler);
@@ -1762,6 +1763,10 @@ static void MoveSelectionDisplayMoveType(enum BattlerId battler)
         struct Pokemon *mon = GetBattlerMon(battler);
         type = CheckDynamicMoveType(mon, move, battler, MON_IN_BATTLE);
     }
+    // FORK: B_MOVE_DAMAGE_PREVIEW prints "<Type> lo-hi%" in place of "TYPE/<Type>" for a move
+    // with a damage range (src/fork/damage_preview.c); otherwise fall through to the stock line.
+    if (TryPrintMoveDamagePreview(battler, move, type))
+        return;
     end = StringCopy(txtPtr, gTypesInfo[type].name);
 
     PrependFontIdToFit(txtPtr, end, FONT_NORMAL, WindowWidthPx(B_WIN_MOVE_TYPE) - 25);

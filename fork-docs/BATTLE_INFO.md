@@ -1,8 +1,8 @@
 # The in-battle INFO viewer (`B_FRONTIER_BATTLE_INFO`)
 
 In Frontier facilities the bag is disabled, so its action slot is dead space. This
-fork turns it into **INFO**: a read-only, six-page reference screen showing field
-state, both sides' conditions and stat changes, a foe speed-tier comparison, and the
+fork turns it into **INFO**: a read-only reference screen showing field
+state, both sides' conditions and stat changes, a log of every move used and its damage, a foe speed-tier comparison, and the
 foe's revealed party data and innates, and both sides' base stats.
 
 Its whole design problem is **what the player is allowed to know**. The battle engine
@@ -33,7 +33,7 @@ menu (`CB2_OpenBattleInfoFromPartyMenu` / `CB2_ReturnToPartyMenuFromBattleInfo` 
 Opening it **does not consume the turn** — it reuses the `B_ACTION_DEBUG` controller
 path.
 
-## The seven pages
+## The eight pages
 
 **L/R** cycle in both directions, with a right-aligned `n/N` indicator
 (`PrintPageIndicator`).
@@ -44,6 +44,7 @@ path.
 | **Field** | Weather, terrain, whole-field effects (Trick Room, Gravity, Magic/Wonder Room, the Sports, Fairy Lock, Ion Deluge) with turns left, plus entry hazards and side screens for both sides |
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
+| **Battle Log** | Every move used this battle, newest first, with the damage it dealt as a % of the target's max HP (see below) |
 | **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, `FNT` when fainted, moves/PP/ability/held item |
 | **Base Stats** | One of your party mons (`{UP}{DOWN}`, bench included) and the selected foe as a stat table, each with the Mega/Primal form(s) it can reach |
 | **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
@@ -216,6 +217,33 @@ Only the *chosen* ability stays gated. `RecordAbilityBattle` will not mark it re
 when what the player witnessed was an innate pop-up (`gBattleScripting.abilityPopupOverwrite`,
 an innate Levitate/Sturdy forcing the pop-up to its name) rather than the chosen
 ability — so an innate reveal never leaks the chosen one.
+
+## The Battle Log page
+
+One row per move used, newest at the top, `{UP}{DOWN}` to scroll:
+
+```
+BATTLE INFO  -  BATTLE LOG
+T3 Tyranitar  Stone Edge      Garchomp      KO
+   Garchomp   Earthquake      Tyranitar    46%
+T2 Tyranitar  Stealth Rock
+   Garchomp   Swords Dance
+```
+
+- **Damage is a % of the target's max HP**, never HP points — the same unit the health bar
+  shows, so the log cannot state a foe's HP the battle otherwise keeps hidden. A KO reads
+  `KO` (in red), a hit absorbed by a Substitute `Sub`.
+- **One entry per move per target.** A multi-hit move's hits sum into its entry; a spread
+  move gets a row per target. A status move or a miss has no target column.
+- **Species are the ones the player saw**, snapshotted at the time — an Illusion's disguise
+  stays the disguise in the log even after it breaks.
+- The turn number is printed on a turn's first row only, which groups rows without a
+  header line. Your moves are blue, the foe's grey.
+- **Source:** `src/fork/battle_log.c`, a 40-entry ring buffer in `gBattleStruct->battleLog`
+  (so it resets per battle), fed from two hooks in `src/battle_move_resolution.c` — the
+  attack-string canceler (move used) and `TryMoveDamageUpdate` (damage landed). Only real
+  move execution reaches either; the AI's simulations never do. `test/fork/battle_log.c`.
+- **Not logged:** damage that is not a move hitting (hazards, weather, status, recoil, Life Orb).
 
 ## The Base Stats page
 
