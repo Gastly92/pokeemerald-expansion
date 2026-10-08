@@ -97,6 +97,34 @@ static void ApplySpreadBound(struct BattlePokemon *mon, const struct BattlePokem
     mon->speed     = CalcStatBound(GetSpeciesBaseSpeed(species),     level, offIv, offEv, offNature);
 }
 
+// Why a damaging move came out at 0: a matchup the player knows is immune (a type immunity, a
+// revealed Levitate / Bulletproof / Volt Absorb, Dazzling vs priority) reads "0%", while a move that
+// merely fails here (Dream Eater on a waking foe, Poltergeist against an item the player has not
+// seen) keeps the stock line -- the second kind can hinge on what the preview hid. Asked while the
+// defender is still rewritten into what the player knows.
+static bool32 IsKnownImmunity(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, uq4_12_t typeEffectiveness)
+{
+    struct DamageContext ctx = {0};
+
+    if (typeEffectiveness == UQ_4_12(0.0))
+        return TRUE;
+    if (Ai_IsPriorityBlocked(battlerAtk, battlerDef, move, gAiLogicData))
+        return TRUE;
+
+    ctx.battlerAtk = battlerAtk;
+    ctx.battlerDef = battlerDef;
+    ctx.move = ctx.chosenMove = ctx.baseMove = move;
+    ctx.moveType = GetBattleMoveType(move);
+    ctx.weather = AI_GetWeather();
+    ctx.terrain = gFieldTimers.terrain;
+    ctx.abilities[battlerAtk] = gAiLogicData->abilities[battlerAtk];
+    ctx.abilities[battlerDef] = AI_GetMoldBreakerSanitizedAbility(battlerAtk, gAiLogicData->abilities[battlerAtk],
+        gAiLogicData->abilities[battlerDef], gAiLogicData->holdEffects[battlerDef], move);
+    ctx.holdEffects[battlerAtk] = gAiLogicData->holdEffects[battlerAtk];
+    ctx.holdEffects[battlerDef] = gAiLogicData->holdEffects[battlerDef];
+    return AI_CanMoveBeBlockedByTarget(&ctx);
+}
+
 bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct, enum DamagePreviewKO *ko)
 {
     struct BattlePokemon realDef;
@@ -110,7 +138,8 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     enum Species species;
     u32 level, hpScaleNum, hpScaleDen;
     u32 lo = UINT32_MAX, hi = 0;
-    bool32 any = FALSE, koAlways = TRUE, koMaybe = FALSE, endures;
+    bool32 any = FALSE, immune = FALSE, koAlways = TRUE, koMaybe = FALSE, endures;
+    uq4_12_t typeEffectiveness = UQ_4_12(1.0);
 
     if (move == MOVE_NONE || IsBattleMoveStatus(move) || !IsBattlerAlive(battlerDef) || gBattleMons[battlerDef].maxHP == 0)
         return FALSE;
@@ -196,6 +225,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         ApplySpreadBound(&gBattleMons[battlerDef], &realDef, species, level, hpScaleNum, hpScaleDen, frail);
         maxHP = gBattleMons[battlerDef].maxHP;
         dmg = AI_CalcDamage(&aiCalc, battlerAtk, battlerDef);
+        typeEffectiveness = aiCalc.typeEffectiveness;
         if (dmg.maximum == 0)
             continue;
 
@@ -214,6 +244,8 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         if (dmg.maximum >= gBattleMons[battlerDef].hp)
             koMaybe = TRUE;
     }
+    if (!any)
+        immune = IsKnownImmunity(battlerAtk, battlerDef, move, typeEffectiveness);
 
     gBattleMons[battlerDef] = realDef;
     for (enum BattlerId b = 0; b < gBattlersCount; b++)
@@ -228,7 +260,13 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     gAiLogicData->hpPercents[battlerDef] = savedHpPercent;
 
     if (!any)
-        return FALSE;
+    {
+        if (!immune)
+            return FALSE;
+        *loPct = *hiPct = 0;
+        *ko = DAMAGE_PREVIEW_NO_KO;
+        return TRUE;
+    }
     *loPct = lo;
     *hiPct = hi;
     if (endures)

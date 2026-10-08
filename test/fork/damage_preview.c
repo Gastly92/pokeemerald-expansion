@@ -65,6 +65,63 @@ SINGLE_BATTLE_TEST("Damage preview: a status move has no range")
     }
 }
 
+SINGLE_BATTLE_TEST("Damage preview: a known immunity reads 0%, not the stock status-move line")
+{
+    u32 lo, hi;
+
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_SLUDGE_BOMB, MOVE_EARTHQUAKE, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_CHESNAUGHT) { Ability(ABILITY_BULLETPROOF); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        // Bulletproof not yet seen: the player cannot know Sludge Bomb bounces off.
+        EXPECT((gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & 1u) == 0);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_SLUDGE_BOMB, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT_GT(hi, 0);
+
+        gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] |= 1u;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_SLUDGE_BOMB, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT_EQ(lo, 0);
+        EXPECT_EQ(hi, 0);
+        EXPECT_EQ(sKo, DAMAGE_PREVIEW_NO_KO);
+        // An unaffected move still has its range.
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_EARTHQUAKE, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT_GT(hi, 0);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a type immunity reads 0%")
+{
+    u32 lo, hi;
+
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_EARTHQUAKE, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_PIDGEOT) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_EARTHQUAKE, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT_EQ(lo, 0);
+        EXPECT_EQ(hi, 0);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a move that fails for another reason keeps the stock line")
+{
+    u32 lo, hi;
+
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_DREAM_EATER, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        // Dream Eater on a waking foe does nothing, but that is not an immunity.
+        EXPECT(!GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_DREAM_EATER, GIMMICK_NONE, &lo, &hi, &sKo));
+    }
+}
+
 // Off the stack: four BattlePokemon are ~500 bytes, which a battle test's stack cannot spare.
 static EWRAM_DATA struct BattlePokemon sMonsBefore[MAX_BATTLERS_COUNT] = {0};
 
@@ -230,6 +287,9 @@ TEST("Damage preview: the readout spells out a sure or possible KO")
     EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("40%-KO")), 0);
     FormatDamagePreviewAmount(buf, 40, 50, DAMAGE_PREVIEW_NO_KO);
     EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("40-50%")), 0);
+    // A known immunity.
+    FormatDamagePreviewAmount(buf, 0, 0, DAMAGE_PREVIEW_NO_KO);
+    EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("0%")), 0);
     // Behind a known Sturdy: no verdict, so the range shows, capped at the full bar.
     FormatDamagePreviewAmount(buf, 120, 150, DAMAGE_PREVIEW_NO_KO);
     EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("100%")), 0);
