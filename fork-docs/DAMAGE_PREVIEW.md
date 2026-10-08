@@ -66,7 +66,11 @@ player can know and then restored byte-for-byte:
   player has seen. An unrevealed Sash still reads as a KO — the player can't know.
 - **Z-Moves:** with a Z-Move armed, the Z view's type row shows the Z-Move's range (its own
   power for signature Z-Moves). A status Z-Move keeps the stock line.
-- Status moves, and moves the calc says cannot damage, keep the stock `TYPE/<Type>` line.
+- **Known immunity → `<Type> 0%`**: a type immunity, or a revealed ability that blocks the move
+  (Bulletproof vs Sludge Bomb, Volt Absorb, Levitate, Dazzling vs priority). An *unrevealed* one
+  is left out like any hidden ability, so the range still shows.
+- Status moves, and damaging moves that fail for any other reason (Dream Eater on a waking foe,
+  Poltergeist vs an unseen item), keep the stock `TYPE/<Type>` line.
 - **Target:** the foe opposite, or its partner once that one is down — the same single
   readout the stock effectiveness icon uses. In doubles it does not follow the target cursor.
 - A selected Mega Evolution is not projected; the range is for the current form.

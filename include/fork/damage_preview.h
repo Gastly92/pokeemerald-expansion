@@ -9,8 +9,10 @@
 // legal spread (31 IV / 252 EV / boosting nature in HP and both defences) at the bottom to
 // the frailest (0 / 0 / hindering) at the top, widened by the damage roll. Anything the
 // player has not seen -- the foe's chosen ability, its held item, the real mon behind an
-// Illusion -- is left out of the calc. Returns FALSE for a move that has no range to show
-// (status moves, or nothing the calc can damage). Leaves no battle state changed.
+// Illusion -- is left out of the calc. A damaging move against a foe the player knows is immune
+// (type, or a revealed ability such as Bulletproof) is a 0-0 range. Returns FALSE for a move that
+// has no range to show (status moves, or a move that fails for any other reason). Leaves no
+// battle state changed.
 // `ko` says whether the hit KOs from the defender's *current* HP: at every corner of the range,
 // at some, or not at all (also when a known Sturdy / Focus Sash / Disguise would hold on).
 enum DamagePreviewKO
