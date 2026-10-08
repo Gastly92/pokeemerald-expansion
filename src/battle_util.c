@@ -3120,8 +3120,9 @@ static bool32 TryStenchFlinch(void)
     return FALSE;
 }
 
-// Cute Charm's on-hit infatuation attempt, shared by the chosen-ability dispatch in
-// ABILITYEFFECT_MOVE_END and the innate-Cute-Charm path beside it (FEATURE_INNATE_ABILITIES).
+// Cute Charm's on-hit infatuation attempt, run by the ABILITY_CUTE_CHARM case of
+// ABILITYEFFECT_MOVE_END for both the chosen ability and an innate one (FEATURE_INNATE_ABILITIES,
+// delegated from the on-hit innate driver).
 // The Cute Charm holder is gBattlerTarget (the one hit by the contact move); the attacker
 // (gBattlerAttacker) is the one infatuated. Cute Charm only ever infatuates the FOE, so it is a
 // clean upside and the innate is a 1:1 copy of the real ability (no pure-boon divergence).
@@ -4203,16 +4204,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         }
         break;
     case ABILITYEFFECT_MOVE_END: // Think contact abilities.
-        // FORK: innate Cute Charm (FEATURE_INNATE_ABILITIES). The dispatch below keys off the
-        // target's chosen ability (gLastUsedAbility), so an innate Cute Charm on a mon whose
-        // chosen ability differs would never reach the case below — run the same infatuation
-        // additively here. The `!= ABILITY_CUTE_CHARM` guard means a real Cute Charm (handled by
-        // the switch case) never infatuates twice. Cute Charm is a clean upside — it only ever
-        // infatuates the FOE — so the innate is a 1:1 copy, no pure-boon divergence.
-        if (gLastUsedAbility != ABILITY_CUTE_CHARM
-         && IsInnateActive(gBattlerTarget, ABILITY_CUTE_CHARM)
-         && TryCuteCharmInfatuate(move))
-            effect++;
+        // FORK: innate Cute Charm is NOT pre-checked here — it fires from the on-hit innate driver
+        // (TryActivateInnateOnHitEffects, MOVEEND_ABILITIES_INNATE) through the case below. An inline
+        // pre-check here pushed a second script in the same pass as the chosen ability (e.g. Static),
+        // interleaving their pop-ups; test/fork/innate_abilities.c "resolves after a chosen Static".
         switch (gLastUsedAbility)
         {
         case ABILITY_JUSTIFIED:

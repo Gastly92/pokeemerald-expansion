@@ -2711,7 +2711,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Limber cures pre-existing p
 // Cute Charm gives a 30% chance (Gen 4+) to infatuate an opposite-gender attacker that lands a
 // contact move on the holder. Wired innate-aware at the ABILITYEFFECT_MOVE_END on-hit site
 // (src/battle_util.c): the chosen-ability dispatch keys off the target's gLastUsedAbility, so an
-// innate Cute Charm is run additively in a pre-check beside the switch (TryCuteCharmInfatuate), and
+// innate Cute Charm fires from the on-hit innate driver (MOVEEND_ABILITIES_INNATE) via that case, and
 // the pop-up is overwritten to Cute Charm. A clean upside (it only ever infatuates the FOE), so the
 // innate is a 1:1 copy of the real ability. Milotic is the vehicle: it carries Cute Charm as its
 // Hidden Ability, so with a chosen Marvel Scale the infatuation can only come from the innate.
@@ -2729,6 +2729,34 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cute Charm infatuates an op
     } SCENE {
         ABILITY_POPUP(opponent, ABILITY_CUTE_CHARM); // pop-up shows Cute Charm, not the chosen Marvel Scale
         MESSAGE("Wobbuffet fell in love!");
+    }
+}
+
+// Innate Cute Charm on a holder whose chosen ability is ALSO a contact reaction (Pikachu: Static +
+// innate Cute Charm) must resolve the two one after the other, each pop-up beside its own effect.
+// Regression: Cute Charm used to run as an inline pre-check inside the chosen ability's
+// ABILITYEFFECT_MOVE_END pass, so both scripts were pushed in one call — Static's ran first while
+// the Cute Charm pop-up overwrite was already set, and the two pop-ups ended up bunched together
+// after the paralysis. It now fires from the MOVEEND_ABILITIES_INNATE driver, after Static.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cute Charm resolves after a chosen Static, each with its own pop-up")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PIKACHU, ABILITY_CUTE_CHARM));
+        ASSUME(MoveMakesContact(MOVE_SCRATCH));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE); // both always attempt, so both fire this hit
+        PLAYER(SPECIES_WOBBUFFET) { Gender(MON_MALE); Speed(100); }
+        OPPONENT(SPECIES_PIKACHU) { Gender(MON_FEMALE); Ability(ABILITY_STATIC); Speed(50); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); MOVE(opponent, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SCRATCH, player);
+        ABILITY_POPUP(opponent, ABILITY_STATIC);
+        MESSAGE("Wobbuffet is paralyzed, so it may be unable to move!");
+        ABILITY_POPUP(opponent, ABILITY_CUTE_CHARM);
+        MESSAGE("Wobbuffet fell in love!");
+    } THEN {
+        EXPECT(player->status1 & STATUS1_PARALYSIS);
     }
 }
 
