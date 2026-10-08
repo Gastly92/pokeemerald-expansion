@@ -482,8 +482,8 @@ How much is needed depends on the ability class:
     `MOVEEND_ABILITIES_INNATE` step (`src/battle_move_resolution.c`), delegating to the
     upstream `ABILITYEFFECT_MOVE_END` case. Adding a further on-hit active (Aftermath,
     Cursed Body, Steam Engine, …) is a one-line addition to `IsActiveOnHitInnate`. See the
-    `### ABILITY_ROUGH_SKIN / …` wiring block below. (Cute Charm / Stench predate the driver
-    and keep their own inline prechecks, so they are not in `IsActiveOnHitInnate`.)
+    `### ABILITY_ROUGH_SKIN / …` wiring block below. (Cute Charm is in `IsActiveOnHitInnate` too;
+    Stench, an attacker-side reaction, keeps its own inline precheck.)
   - **switch-in actives** (Intimidate, …) now have their driver: **`TryActivateInnateSwitchInEffects`**
     (`src/fork/innate_abilities.c`), the switch-in analogue of the end-turn / on-hit drivers —
     re-entrant, hooked from the new `FIRST_EVENT_BLOCK_GENERAL_ABILITIES_INNATE` step
@@ -1159,10 +1159,10 @@ slot the now-innate Limber freed).
 
 When the holder is hit by a contact move, a 30% chance to infatuate the
 attacker if they are of opposite genders (under `DETERMINISTIC_ABILITIES`, a guaranteed infatuation
-regardless of gender). Wired innate-aware at the `ABILITYEFFECT_MOVE_END` on-hit site in
-`src/battle_util.c`: the chosen-ability dispatch keys off the target's `gLastUsedAbility`, so an innate
-Cute Charm whose chosen ability differs is run additively in a pre-check beside the switch
-(`TryCuteCharmInfatuate`, guarded `!= ABILITY_CUTE_CHARM` so a real Cute Charm never infatuates twice).
+regardless of gender). Wired through the on-hit innate driver (`IsActiveOnHitInnate`, `MOVEEND_ABILITIES_INNATE`), which
+delegates to the upstream `ABILITY_CUTE_CHARM` case (`TryCuteCharmInfatuate`) and skips it when Cute Charm
+is the chosen ability. Because the driver runs after the chosen ability's contact reaction, a holder
+like Pikachu (Static + innate Cute Charm) resolves Static's pop-up and paralysis first, then Cute Charm's.
 The effect runs the same `BattleScript_CuteCharmActivates` (pop-up + infatuation), so the one extra
 step a pop-up'd innate needs is forcing `gBattleScripting.abilityPopupOverwrite = ABILITY_CUTE_CHARM`
 when the chosen ability differs (the Limber/Speed Boost pop-up precedent), so the pop-up shows Cute

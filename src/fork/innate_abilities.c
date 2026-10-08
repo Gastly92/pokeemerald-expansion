@@ -13113,9 +13113,8 @@ bool32 TryActivateInnateEndTurnEffects(enum BattlerId battler, u32 *index)
 // fires in turn. Each delegates to the existing upstream ABILITYEFFECT_MOVE_END case, so the
 // recoil / retaliation damage / stat drop / script / pop-up matches the real ability for free
 // (the effect site in src/battle_util.c forces the pop-up to the innate when the chosen ability
-// differs, the Speed Boost precedent). Cute Charm is deliberately NOT here: it predates this
-// driver and keeps its own inline precheck at the top of ABILITYEFFECT_MOVE_END, so listing it
-// would fire it twice.
+// differs, the Speed Boost precedent). Cute Charm is here too: it fires after the chosen
+// ability's contact reaction (e.g. Static), so each pop-up sits beside its own effect.
 static bool32 IsActiveOnHitInnate(enum Ability ability)
 {
     switch (ability)
@@ -13137,6 +13136,7 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_ANGER_POINT:   // maxes Attack when the holder takes a critical hit
     case ABILITY_RATTLED:       // raises Speed +1 when hit by a Dark/Ghost/Bug move
     case ABILITY_EFFECT_SPORE:  // lowers a contact attacker's accuracy by 1 (powder-gated)
+    case ABILITY_CUTE_CHARM:    // 30% (always under DETERMINISTIC_ABILITIES) to infatuate a contact attacker
         return TRUE;
     default:
         return FALSE;
