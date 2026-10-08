@@ -97,9 +97,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_SLUDGE_BOMB,
-            MOVE_PROTECT,
+            MOVE_SLEEP_POWDER,
             MOVE_LEECH_SEED,
-            MOVE_SLEEP_POWDER
+            MOVE_PROTECT
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(DEF_UP, ATK_DOWN),
@@ -112,33 +112,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_VENUSAUR,
-        .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_TERRAIN_EXTENDER,
-        .moves =
-        {
-            MOVE_POLLEN_PUFF,
-            MOVE_RAGE_POWDER,
-            MOVE_GIGA_DRAIN,
-            MOVE_SLEEP_POWDER
-        },
-        .ability = ABILITY_GRASSY_SURGE,
-        .nature = NATURE(DEF_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .def = 252,
-            .spd = 4
-        ),
-        .teraType = TYPE_WATER,
-    },
-    {
-        .species = SPECIES_VENUSAUR,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_TOXIC,
-            MOVE_LEECH_SEED,
             MOVE_STRENGTH_SAP,
+            MOVE_LEECH_SEED,
             MOVE_GIGA_DRAIN
         },
         .ability = ABILITY_GRASSY_SURGE,
@@ -156,19 +136,39 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_SUBSTITUTE,
             MOVE_SLEEP_POWDER,
+            MOVE_SUBSTITUTE,
             MOVE_LEECH_SEED,
             MOVE_GIGA_DRAIN
         },
         .ability = ABILITY_GRASSY_SURGE,
-        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
-            .spd = 252,
-            .def = 4
-        ),
+            .def = 252,
+            .spd = 4
+        ), 
         .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_VENUSAUR,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_TERRAIN_EXTENDER,
+        .moves =
+        {
+            MOVE_SLEEP_POWDER,
+            MOVE_RAGE_POWDER,
+            MOVE_POLLEN_PUFF,
+            MOVE_GIGA_DRAIN
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
     },
 
     // 0006
