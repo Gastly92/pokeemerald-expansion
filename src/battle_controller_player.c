@@ -1762,6 +1762,9 @@ static void MoveSelectionDisplayMoveType(enum BattlerId battler)
     {
         struct Pokemon *mon = GetBattlerMon(battler);
         type = CheckDynamicMoveType(mon, move, battler, MON_IN_BATTLE);
+        // FORK: an armed Mega Evolution / Ultra Burst shows the type its form fires (Pixilate's
+        // Fairy Hyper Voice); src/fork/damage_preview.c. Additive line; keep it on conflict.
+        type = GetArmedFormDynamicMoveType(battler, move, type);
     }
     // FORK: B_MOVE_DAMAGE_PREVIEW prints "<Type> lo-hi%" in place of "TYPE/<Type>" for a move
     // with a damage range (src/fork/damage_preview.c); otherwise fall through to the stock line.
@@ -2493,6 +2496,11 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
     ctx.battlerAtk = battlerAtk;
     ctx.battlerDef = battlerDef;
     ctx.move = moveInfo->moves[gMoveSelectionCursor[battlerAtk]];
+    // FORK: an armed Mega Evolution / Ultra Burst is judged as the form it becomes, whose
+    // -ate / Scrappy / Normalize decide the matchup (src/fork/damage_preview.c). Undone right
+    // after the modifier below; keep the pair together on conflict.
+    struct BattlePokemon armedSaved;
+    bool32 armedForm = BeginArmedFormPreview(battlerAtk, GetArmedGimmick(battlerAtk), &armedSaved);
     ctx.moveType = CheckDynamicMoveType(GetBattlerMon(battlerAtk), ctx.move, battlerAtk, MON_IN_BATTLE);
     ctx.updateFlags = FALSE;
     ctx.weather = GetWeather();
@@ -2530,6 +2538,9 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
         modifier = CalcIllusionTypeEffectiveness(ctx.moveType, illusionSpecies);
     else
         modifier = CalcTypeEffectivenessMultiplier(&ctx);
+    // FORK: the end of the armed-form projection begun above.
+    if (armedForm)
+        EndArmedFormPreview(battlerAtk, &armedSaved);
 
     if (!ShouldShowTypeEffectiveness(battlerDef))
         return EFFECTIVENESS_CANNOT_VIEW;

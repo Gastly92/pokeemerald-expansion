@@ -37,4 +37,18 @@ bool32 TryPrintMoveDamagePreview(enum BattlerId battler, enum Move move, enum Ty
 // from the move under the cursor. FALSE for a status Z-Move, so the caller keeps its stock line.
 bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move zMove, enum Type zMoveType);
 
+// An armed Mega Evolution / Ultra Burst, previewed as the form it becomes. The move menu shows
+// the battler before the turn starts, but the form change happens before the move, so every
+// readout about that move -- the damage range, the dynamic type label, the effectiveness icon --
+// is asked of the projected form.
+// The gimmick the player has armed for `battler` in the move menu, else GIMMICK_NONE.
+enum Gimmick GetArmedGimmick(enum BattlerId battler);
+// Rewrites gBattleMons[battler] into the form `gimmick` turns it into (its species, stats,
+// ability and types), saving the real entry in `saved`. FALSE, changing nothing, when the
+// gimmick changes no form. Pair every TRUE with EndArmedFormPreview before anything else runs.
+bool32 BeginArmedFormPreview(enum BattlerId battler, enum Gimmick gimmick, struct BattlePokemon *saved);
+void EndArmedFormPreview(enum BattlerId battler, const struct BattlePokemon *saved);
+// `move`'s dynamic type as fired by the armed form (Pixilate's Fairy Hyper Voice), else `type`.
+enum Type GetArmedFormDynamicMoveType(enum BattlerId battler, enum Move move, enum Type type);
+
 #endif // GUARD_FORK_DAMAGE_PREVIEW_H

@@ -294,3 +294,84 @@ TEST("Damage preview: the readout spells out a sure or possible KO")
     FormatDamagePreviewAmount(buf, 120, 150, DAMAGE_PREVIEW_NO_KO);
     EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("100%")), 0);
 }
+
+// An armed Mega Evolution happens before the move, so the preview reads the attacker as the
+// Mega form. The reference is a partner that *is* that Mega form already, with the same spread:
+// the two ranges against the same foe must be identical. Each case hinges on a different part
+// of the form change -- Huge Power doubling Attack, Pixilate retyping Hyper Voice into Fairy,
+// Mega Charizard X's new Dragon STAB.
+DOUBLE_BATTLE_TEST("Damage preview: an armed Mega Evolution is read as the Mega form")
+{
+    enum Species species, megaSpecies;
+    enum Item stone;
+    enum Move move;
+    u32 lo = 0, hi = 0, loMega = 0, hiMega = 0, loBase = 0, hiBase = 0;
+    struct BattlePokemon before;
+
+    PARAMETRIZE { species = SPECIES_MAWILE;    megaSpecies = SPECIES_MAWILE_MEGA;      stone = ITEM_MAWILITE;      move = MOVE_IRON_HEAD; }
+    PARAMETRIZE { species = SPECIES_GARDEVOIR; megaSpecies = SPECIES_GARDEVOIR_MEGA;   stone = ITEM_GARDEVOIRITE;  move = MOVE_HYPER_VOICE; }
+    PARAMETRIZE { species = SPECIES_CHARIZARD; megaSpecies = SPECIES_CHARIZARD_MEGA_X; stone = ITEM_CHARIZARDITE_X; move = MOVE_DRAGON_CLAW; }
+
+    GIVEN {
+        // The held stone picks the form; with item-free gimmicks Charizard would pick by stats.
+        WITH_CONFIG(FEATURE_FREE_GIMMICKS, FALSE);
+        PLAYER(species) { Item(stone); Moves(MOVE_CELEBRATE, move); }
+        OPPONENT(SPECIES_SALAMENCE) { Ability(ABILITY_MOXIE); Moves(MOVE_CELEBRATE); }
+        PLAYER(megaSpecies) { Item(stone); Moves(MOVE_CELEBRATE, move); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } THEN {
+        before = gBattleMons[B_BATTLER_0];
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, GIMMICK_MEGA, &lo, &hi, &sKo));
+        EXPECT(GetDamagePreviewRange(B_BATTLER_2, B_BATTLER_1, move, GIMMICK_NONE, &loMega, &hiMega, &sKo));
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, GIMMICK_NONE, &loBase, &hiBase, &sKo));
+        EXPECT_EQ(lo, loMega);
+        EXPECT_EQ(hi, hiMega);
+        EXPECT_GT(lo, loBase);
+        // Nothing of the projection is left behind.
+        EXPECT(memcmp(&before, &gBattleMons[B_BATTLER_0], sizeof(before)) == 0);
+    }
+}
+
+DOUBLE_BATTLE_TEST("Damage preview: an armed Mega Evolution reads the weather its ability sets")
+{
+    u32 lo = 0, hi = 0, loMega = 0, hiMega = 0;
+
+    GIVEN {
+        WITH_CONFIG(FEATURE_FREE_GIMMICKS, FALSE);
+        PLAYER(SPECIES_CHARIZARD) { Item(ITEM_CHARIZARDITE_Y); Moves(MOVE_CELEBRATE, MOVE_FLAMETHROWER); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+        PLAYER(SPECIES_CHARIZARD_MEGA_Y) { Item(ITEM_CHARIZARDITE_Y); Moves(MOVE_CELEBRATE, MOVE_FLAMETHROWER); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } THEN {
+        // The partner's Drought set the sun on the way in; clear it so only the projection can.
+        gBattleWeather = B_WEATHER_NONE;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_FLAMETHROWER, GIMMICK_MEGA, &lo, &hi, &sKo));
+        gBattleWeather = B_WEATHER_SUN_NORMAL;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_2, B_BATTLER_1, MOVE_FLAMETHROWER, GIMMICK_NONE, &loMega, &hiMega, &sKo));
+        EXPECT_EQ(lo, loMega);
+        EXPECT_EQ(hi, hiMega);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: the type label follows an armed Mega Evolution's -ate ability")
+{
+    GIVEN {
+        ASSUME(P_SHOW_DYNAMIC_TYPES);
+        WITH_CONFIG(FEATURE_FREE_GIMMICKS, FALSE);
+        PLAYER(SPECIES_GARDEVOIR) { Item(ITEM_GARDEVOIRITE); Moves(MOVE_CELEBRATE, MOVE_HYPER_VOICE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN {}
+    } THEN {
+        gBattleStruct->gimmick.usableGimmick[B_BATTLER_0] = GIMMICK_MEGA;
+        gBattleStruct->gimmick.toActivate &= ~(1u << B_BATTLER_0);
+        EXPECT_EQ(GetArmedFormDynamicMoveType(B_BATTLER_0, MOVE_HYPER_VOICE, TYPE_NORMAL), TYPE_NORMAL);
+        gBattleStruct->gimmick.toActivate |= 1u << B_BATTLER_0;
+        EXPECT_EQ(GetArmedFormDynamicMoveType(B_BATTLER_0, MOVE_HYPER_VOICE, TYPE_NORMAL), TYPE_FAIRY);
+        EXPECT_EQ(gBattleMons[B_BATTLER_0].species, SPECIES_GARDEVOIR);
+    }
+}

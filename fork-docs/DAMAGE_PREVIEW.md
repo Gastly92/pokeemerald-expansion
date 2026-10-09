@@ -32,7 +32,7 @@ the roll is the fixed turn multiplier, so only the spread widens the range.
 
 Everything the player **does** know is used as normal: your own mon's stats, ability, item
 and stat stages, the foe's stat stages, types (Tera included), weather, terrain, screens, and
-an armed Z-Move / Dynamax / Tera. Multi-hit moves count their hits.
+an armed Z-Move / Dynamax / Tera / Mega Evolution. Multi-hit moves count their hits.
 
 ## What it hides
 
@@ -73,4 +73,9 @@ player can know and then restored byte-for-byte:
   Poltergeist vs an unseen item), keep the stock `TYPE/<Type>` line.
 - **Target:** the foe opposite, or its partner once that one is down — the same single
   readout the stock effectiveness icon uses. In doubles it does not follow the target cursor.
-- A selected Mega Evolution is not projected; the range is for the current form.
+- **Mega Evolution / Ultra Burst:** with one armed, the attacker is read as the form it becomes —
+  its stats from your mon's own spread, its types and its ability (Huge Power, Pixilate, Tough
+  Claws...), plus any weather that ability sets on the way in (Mega Charizard Y's sun). The
+  type label (`P_SHOW_DYNAMIC_TYPES`, on in this fork) and the effectiveness icon follow the
+  same form, so a Mega Gardevoir-to-be's Hyper Voice reads Fairy. The form is borrowed for the
+  calc and restored; nothing on screen changes until it really Mega Evolves.

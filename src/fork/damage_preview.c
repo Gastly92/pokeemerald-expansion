@@ -6,8 +6,9 @@
 // gimmick (Z-Move / Dynamax / Tera) that is not active yet, multi-hit strike counts, fixed-damage
 // moves, Nature Power, Protean. What this file adds is the *hypothetical defender*: before the
 // call it rewrites the defender into what the player can actually know about it, and afterwards
-// puts every byte back. Nothing here may leave battle state changed -- it runs on every cursor
-// move in the move menu.
+// puts every byte back. It does the same to the attacker when a Mega Evolution / Ultra Burst is
+// armed, since the AI calc cannot change forms (BeginArmedFormPreview). Nothing here may leave
+// battle state changed -- it runs on every cursor move in the move menu.
 
 #include "global.h"
 #include "battle.h"
@@ -125,9 +126,85 @@ static bool32 IsKnownImmunity(enum BattlerId battlerAtk, enum BattlerId battlerD
     return AI_CanMoveBeBlockedByTarget(&ctx);
 }
 
+// The form an armed Mega Evolution / Ultra Burst turns the battler into, resolved the way
+// ActivateMegaEvolution / ActivateUltraBurst (src/battle_util.c) resolve it; SPECIES_NONE when
+// the gimmick changes no form.
+static enum Species GetArmedFormSpecies(enum BattlerId battler, enum Gimmick gimmick)
+{
+    enum Ability ability = GetBattlerAbility(battler);
+    enum Species species = gBattleMons[battler].species;
+    enum Species target;
+
+    if (GetActiveGimmick(battler) != GIMMICK_NONE)
+        return SPECIES_NONE;
+    switch (gimmick)
+    {
+    case GIMMICK_MEGA:
+        target = GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE, ability);
+        if (target == species)
+            target = GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM, ability);
+        break;
+    case GIMMICK_ULTRA_BURST:
+        target = GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_ULTRA_BURST, ability);
+        break;
+    default:
+        return SPECIES_NONE;
+    }
+    return (target == species) ? SPECIES_NONE : target;
+}
+
+enum Gimmick GetArmedGimmick(enum BattlerId battler)
+{
+    enum Gimmick gimmick = gBattleStruct->gimmick.usableGimmick[battler];
+
+    return IsGimmickSelected(battler, gimmick) ? gimmick : GIMMICK_NONE;
+}
+
+bool32 BeginArmedFormPreview(enum BattlerId battler, enum Gimmick gimmick, struct BattlePokemon *saved)
+{
+    enum Species target = GetArmedFormSpecies(battler, gimmick);
+    struct Pokemon mon;
+    bool32 keepSpeed;
+
+    if (target == SPECIES_NONE)
+        return FALSE;
+
+    // What TryBattleFormChange + RecalcBattlerStats do, on a copy of the party mon so nothing
+    // outside gBattleMons[battler] is touched: the form's stats from the mon's own spread, and
+    // its ability and types. Stat stages and everything else carry over as they do for real.
+    *saved = gBattleMons[battler];
+    mon = *GetBattlerMon(battler);
+    SetMonData(&mon, MON_DATA_SPECIES, &target);
+    keepSpeed = gBattleMons[battler].volatiles.speedSwapped && GetConfig(B_MEGA_EVO_SPEED_SWAP) >= GEN_CHAMPIONS;
+    if (keepSpeed)
+        CalculateMonStatsCont(&mon, FALSE);
+    else
+        CalculateMonStats(&mon);
+    gBattleMons[battler].species = target;
+    CopyMonLevelAndBaseStatsToBattleMon(battler, &mon, !keepSpeed);
+    CopyMonAbilityAndTypesToBattleMon(battler, &mon);
+    return TRUE;
+}
+
+void EndArmedFormPreview(enum BattlerId battler, const struct BattlePokemon *saved)
+{
+    gBattleMons[battler] = *saved;
+}
+
+enum Type GetArmedFormDynamicMoveType(enum BattlerId battler, enum Move move, enum Type type)
+{
+    struct BattlePokemon saved;
+
+    if (!BeginArmedFormPreview(battler, GetArmedGimmick(battler), &saved))
+        return type;
+    type = CheckDynamicMoveType(GetBattlerMon(battler), move, battler, MON_IN_BATTLE);
+    EndArmedFormPreview(battler, &saved);
+    return type;
+}
+
 bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct, enum DamagePreviewKO *ko)
 {
-    struct BattlePokemon realDef;
+    struct BattlePokemon realDef, realAtk;
     enum Ability savedAbility[MAX_BATTLERS_COUNT];
     enum Item savedItem[MAX_BATTLERS_COUNT];
     enum Ability savedAiAbilities[MAX_BATTLERS_COUNT];
@@ -138,12 +215,15 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     enum Species species;
     u32 level, hpScaleNum, hpScaleDen;
     u32 lo = UINT32_MAX, hi = 0;
-    bool32 any = FALSE, immune = FALSE, koAlways = TRUE, koMaybe = FALSE, endures;
+    bool32 any = FALSE, immune = FALSE, koAlways = TRUE, koMaybe = FALSE, endures, armedForm;
     uq4_12_t typeEffectiveness = UQ_4_12(1.0);
 
     if (move == MOVE_NONE || IsBattleMoveStatus(move) || !IsBattlerAlive(battlerDef) || gBattleMons[battlerDef].maxHP == 0)
         return FALSE;
 
+    // An armed Mega Evolution / Ultra Burst happens before the move, so the attacker is read as
+    // the form it becomes: its stats, types and ability (Huge Power, Pixilate, Tough Claws...).
+    armedForm = BeginArmedFormPreview(battlerAtk, gimmick, &realAtk);
     realDef = gBattleMons[battlerDef];
     species = realDef.species;
     level = realDef.level;
@@ -216,7 +296,9 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
             .move = move,
             .gimmickAtk = gimmick,
             .gimmickDef = GIMMICK_NONE,
-            .weather = AI_GetWeather(),
+            // A projected form's Drought / Sand Stream / Snow Warning sets its weather on the
+            // way in, before the move.
+            .weather = armedForm ? AI_GetSwitchinWeather(battlerAtk) : AI_GetWeather(),
             .terrain = gFieldTimers.terrain,
         };
         struct SimulatedDamage dmg;
@@ -258,6 +340,8 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     }
     gAiLogicData->dragonDartsHitsBothTarget = savedDragonDarts;
     gAiLogicData->hpPercents[battlerDef] = savedHpPercent;
+    if (armedForm)
+        EndArmedFormPreview(battlerAtk, &realAtk);
 
     if (!any)
     {
@@ -345,11 +429,7 @@ static bool32 PrintDamagePreview(enum BattlerId battler, enum Move move, enum Gi
 
 bool32 TryPrintMoveDamagePreview(enum BattlerId battler, enum Move move, enum Type type)
 {
-    enum Gimmick gimmick = gBattleStruct->gimmick.usableGimmick[battler];
-
-    if (!IsGimmickSelected(battler, gimmick))
-        gimmick = GIMMICK_NONE;
-    return PrintDamagePreview(battler, move, gimmick, type);
+    return PrintDamagePreview(battler, move, GetArmedGimmick(battler), type);
 }
 
 bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move zMove, enum Type zMoveType)
