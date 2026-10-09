@@ -160,10 +160,15 @@ enum Gimmick GetArmedGimmick(enum BattlerId battler)
     return IsGimmickSelected(battler, gimmick) ? gimmick : GIMMICK_NONE;
 }
 
-bool32 BeginArmedFormPreview(enum BattlerId battler, enum Gimmick gimmick, struct BattlePokemon *saved)
+// The projection's scratch lives in EWRAM, not on the stack: it is taken under the AI damage
+// calc, whose call depth leaves no room for two more battler-sized structs.
+static EWRAM_DATA struct BattlePokemon sArmedFormSaved = {0};
+static EWRAM_DATA struct Pokemon sArmedFormMon = {0};
+
+bool32 BeginArmedFormPreview(enum BattlerId battler, enum Gimmick gimmick)
 {
     enum Species target = GetArmedFormSpecies(battler, gimmick);
-    struct Pokemon mon;
+    struct Pokemon *mon = &sArmedFormMon;
     bool32 keepSpeed;
 
     if (target == SPECIES_NONE)
@@ -172,39 +177,37 @@ bool32 BeginArmedFormPreview(enum BattlerId battler, enum Gimmick gimmick, struc
     // What TryBattleFormChange + RecalcBattlerStats do, on a copy of the party mon so nothing
     // outside gBattleMons[battler] is touched: the form's stats from the mon's own spread, and
     // its ability and types. Stat stages and everything else carry over as they do for real.
-    *saved = gBattleMons[battler];
-    mon = *GetBattlerMon(battler);
-    SetMonData(&mon, MON_DATA_SPECIES, &target);
+    sArmedFormSaved = gBattleMons[battler];
+    *mon = *GetBattlerMon(battler);
+    SetMonData(mon, MON_DATA_SPECIES, &target);
     keepSpeed = gBattleMons[battler].volatiles.speedSwapped && GetConfig(B_MEGA_EVO_SPEED_SWAP) >= GEN_CHAMPIONS;
     if (keepSpeed)
-        CalculateMonStatsCont(&mon, FALSE);
+        CalculateMonStatsCont(mon, FALSE);
     else
-        CalculateMonStats(&mon);
+        CalculateMonStats(mon);
     gBattleMons[battler].species = target;
-    CopyMonLevelAndBaseStatsToBattleMon(battler, &mon, !keepSpeed);
-    CopyMonAbilityAndTypesToBattleMon(battler, &mon);
+    CopyMonLevelAndBaseStatsToBattleMon(battler, mon, !keepSpeed);
+    CopyMonAbilityAndTypesToBattleMon(battler, mon);
     return TRUE;
 }
 
-void EndArmedFormPreview(enum BattlerId battler, const struct BattlePokemon *saved)
+void EndArmedFormPreview(enum BattlerId battler)
 {
-    gBattleMons[battler] = *saved;
+    gBattleMons[battler] = sArmedFormSaved;
 }
 
 enum Type GetArmedFormDynamicMoveType(enum BattlerId battler, enum Move move, enum Type type)
 {
-    struct BattlePokemon saved;
-
-    if (!BeginArmedFormPreview(battler, GetArmedGimmick(battler), &saved))
+    if (!BeginArmedFormPreview(battler, GetArmedGimmick(battler)))
         return type;
     type = CheckDynamicMoveType(GetBattlerMon(battler), move, battler, MON_IN_BATTLE);
-    EndArmedFormPreview(battler, &saved);
+    EndArmedFormPreview(battler);
     return type;
 }
 
 bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct, enum DamagePreviewKO *ko)
 {
-    struct BattlePokemon realDef, realAtk;
+    struct BattlePokemon realDef;
     enum Ability savedAbility[MAX_BATTLERS_COUNT];
     enum Item savedItem[MAX_BATTLERS_COUNT];
     enum Ability savedAiAbilities[MAX_BATTLERS_COUNT];
@@ -223,7 +226,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
 
     // An armed Mega Evolution / Ultra Burst happens before the move, so the attacker is read as
     // the form it becomes: its stats, types and ability (Huge Power, Pixilate, Tough Claws...).
-    armedForm = BeginArmedFormPreview(battlerAtk, gimmick, &realAtk);
+    armedForm = BeginArmedFormPreview(battlerAtk, gimmick);
     realDef = gBattleMons[battlerDef];
     species = realDef.species;
     level = realDef.level;
@@ -341,7 +344,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     gAiLogicData->dragonDartsHitsBothTarget = savedDragonDarts;
     gAiLogicData->hpPercents[battlerDef] = savedHpPercent;
     if (armedForm)
-        EndArmedFormPreview(battlerAtk, &realAtk);
+        EndArmedFormPreview(battlerAtk);
 
     if (!any)
     {

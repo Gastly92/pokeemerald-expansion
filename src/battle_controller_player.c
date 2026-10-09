@@ -2499,8 +2499,7 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
     // FORK: an armed Mega Evolution / Ultra Burst is judged as the form it becomes, whose
     // -ate / Scrappy / Normalize decide the matchup (src/fork/damage_preview.c). Undone right
     // after the modifier below; keep the pair together on conflict.
-    struct BattlePokemon armedSaved;
-    bool32 armedForm = BeginArmedFormPreview(battlerAtk, GetArmedGimmick(battlerAtk), &armedSaved);
+    bool32 armedForm = BeginArmedFormPreview(battlerAtk, GetArmedGimmick(battlerAtk));
     ctx.moveType = CheckDynamicMoveType(GetBattlerMon(battlerAtk), ctx.move, battlerAtk, MON_IN_BATTLE);
     ctx.updateFlags = FALSE;
     ctx.weather = GetWeather();
@@ -2540,7 +2539,7 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
         modifier = CalcTypeEffectivenessMultiplier(&ctx);
     // FORK: the end of the armed-form projection begun above.
     if (armedForm)
-        EndArmedFormPreview(battlerAtk, &armedSaved);
+        EndArmedFormPreview(battlerAtk);
 
     if (!ShouldShowTypeEffectiveness(battlerDef))
         return EFFECTIVENESS_CANNOT_VIEW;

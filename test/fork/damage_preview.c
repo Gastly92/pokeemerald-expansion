@@ -300,13 +300,15 @@ TEST("Damage preview: the readout spells out a sure or possible KO")
 // the two ranges against the same foe must be identical. Each case hinges on a different part
 // of the form change -- Huge Power doubling Attack, Pixilate retyping Hyper Voice into Fairy,
 // Mega Charizard X's new Dragon STAB.
+// The battler copy is kept off the stack: the preview runs the AI damage calc, which needs it.
+static EWRAM_DATA struct BattlePokemon sBefore = {0};
+
 DOUBLE_BATTLE_TEST("Damage preview: an armed Mega Evolution is read as the Mega form")
 {
     enum Species species, megaSpecies;
     enum Item stone;
     enum Move move;
     u32 lo = 0, hi = 0, loMega = 0, hiMega = 0, loBase = 0, hiBase = 0;
-    struct BattlePokemon before;
 
     PARAMETRIZE { species = SPECIES_MAWILE;    megaSpecies = SPECIES_MAWILE_MEGA;      stone = ITEM_MAWILITE;      move = MOVE_IRON_HEAD; }
     PARAMETRIZE { species = SPECIES_GARDEVOIR; megaSpecies = SPECIES_GARDEVOIR_MEGA;   stone = ITEM_GARDEVOIRITE;  move = MOVE_HYPER_VOICE; }
@@ -322,7 +324,7 @@ DOUBLE_BATTLE_TEST("Damage preview: an armed Mega Evolution is read as the Mega 
     } WHEN {
         TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_CELEBRATE); }
     } THEN {
-        before = gBattleMons[B_BATTLER_0];
+        sBefore = gBattleMons[B_BATTLER_0];
         EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, GIMMICK_MEGA, &lo, &hi, &sKo));
         EXPECT(GetDamagePreviewRange(B_BATTLER_2, B_BATTLER_1, move, GIMMICK_NONE, &loMega, &hiMega, &sKo));
         EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, GIMMICK_NONE, &loBase, &hiBase, &sKo));
@@ -330,7 +332,7 @@ DOUBLE_BATTLE_TEST("Damage preview: an armed Mega Evolution is read as the Mega 
         EXPECT_EQ(hi, hiMega);
         EXPECT_GT(lo, loBase);
         // Nothing of the projection is left behind.
-        EXPECT(memcmp(&before, &gBattleMons[B_BATTLER_0], sizeof(before)) == 0);
+        EXPECT(memcmp(&sBefore, &gBattleMons[B_BATTLER_0], sizeof(sBefore)) == 0);
     }
 }
 

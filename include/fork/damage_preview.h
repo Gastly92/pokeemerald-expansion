@@ -44,10 +44,10 @@ bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move zMove, enum 
 // The gimmick the player has armed for `battler` in the move menu, else GIMMICK_NONE.
 enum Gimmick GetArmedGimmick(enum BattlerId battler);
 // Rewrites gBattleMons[battler] into the form `gimmick` turns it into (its species, stats,
-// ability and types), saving the real entry in `saved`. FALSE, changing nothing, when the
-// gimmick changes no form. Pair every TRUE with EndArmedFormPreview before anything else runs.
-bool32 BeginArmedFormPreview(enum BattlerId battler, enum Gimmick gimmick, struct BattlePokemon *saved);
-void EndArmedFormPreview(enum BattlerId battler, const struct BattlePokemon *saved);
+// ability and types), saving the real entry. FALSE, changing nothing, when the gimmick changes
+// no form. There is one save slot: pair every TRUE with EndArmedFormPreview before the next.
+bool32 BeginArmedFormPreview(enum BattlerId battler, enum Gimmick gimmick);
+void EndArmedFormPreview(enum BattlerId battler);
 // `move`'s dynamic type as fired by the armed form (Pixilate's Fairy Hyper Voice), else `type`.
 enum Type GetArmedFormDynamicMoveType(enum BattlerId battler, enum Move move, enum Type type);
 
