@@ -6838,7 +6838,13 @@ static inline u32 CalcMoveBasePower(struct DamageContext *ctx)
             return GetZMoveBasePower(baseMove, zMove);
         }
     case GIMMICK_DYNAMAX:
-        return GetMaxMovePower(ctx->baseMove, ctx->move);
+        // UPSTREAM: GetMaxMovePower reads its second argument for G-Max Fireball / Drum Solo /
+        // Hydrosnipe's fixed 160. Execution passes the converted Max Move, but the AI's damage
+        // simulation (and the fork's move-menu damage preview) pass the unconverted base move,
+        // which priced G-Max Fireball as the plain Max Flare tier (140 off Pyro Ball). Resolve
+        // the Max Move here when it has not been converted yet.
+        // Regression test: test/fork/damage_preview.c ("G-Max Fireball").
+        return GetMaxMovePower(ctx->baseMove, IsMaxMove(move) ? move : GetMaxMove(battlerAtk, move));
     default:
         break;
     }

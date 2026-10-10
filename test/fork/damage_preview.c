@@ -217,6 +217,96 @@ SINGLE_BATTLE_TEST("Damage preview: an armed Z-Move's range contains the Z-Move'
     }
 }
 
+SINGLE_BATTLE_TEST("Damage preview: an armed Dynamax prices G-Max Fireball at its own 160, not Max Flare's tier")
+{
+    u32 maxHP, defense;
+    s16 damage;
+    u32 lo = 0, hi = 0, loBase = 0, hiBase = 0;
+
+    PARAMETRIZE { maxHP = TTAR_FRAIL_HP; defense = TTAR_FRAIL_DEF; }
+    PARAMETRIZE { maxHP = TTAR_BULKY_HP; defense = TTAR_BULKY_DEF; }
+
+    GIVEN {
+        ASSUME(GetMovePower(MOVE_PYRO_BALL) == 120); // Max Flare off it would be 140
+        PLAYER(SPECIES_CINDERACE) { GigantamaxFactor(TRUE); Moves(MOVE_PYRO_BALL); }
+        OPPONENT(SPECIES_TYRANITAR) { Ability(ABILITY_UNNERVE); MaxHP(maxHP); HP(maxHP); Defense(defense); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_PYRO_BALL, gimmick: GIMMICK_DYNAMAX); }
+    } SCENE {
+        MESSAGE("Cinderace used G-Max Fireball!");
+        HP_BAR(opponent, captureDamage: &damage);
+    } THEN {
+        // Read with the gimmick armed, the way the menu asks before the Pokemon has Dynamaxed.
+        SetActiveGimmick(B_BATTLER_0, GIMMICK_NONE);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_PYRO_BALL, GIMMICK_DYNAMAX, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, maxHP, lo, hi));
+        // The spread is wide enough to hide 140 vs 160 above, so pin the power: 160/120 over
+        // plain Pyro Ball, where Max Flare's tier would read 140/120.
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_PYRO_BALL, GIMMICK_NONE, &loBase, &hiBase, &sKo));
+        EXPECT_GE(hi * 100, hiBase * 125);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a move type left latched by an earlier calc does not leak into the range")
+{
+    u32 lo = 0, hi = 0, loClean = 0, hiClean = 0;
+
+    // SetTypeBeforeUsingMove only ever sets gBattleStruct->dynamicMoveType, so a value the AI
+    // left there (scoring the foe's Weather Ball in rain leaves Water) used to be read as the
+    // type of a move with no dynamic type of its own. AI_CalcDamage clears it on its way out,
+    // so only the first of the preview's two calcs -- the bulky end -- came out wrong: a
+    // Water-type U-turn into Politoed, at half damage, until the cursor moved.
+    GIVEN {
+        PLAYER(SPECIES_CINDERACE) { Ability(ABILITY_LIBERO); Moves(MOVE_U_TURN); }
+        OPPONENT(SPECIES_POLITOED) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { }
+    } THEN {
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_U_TURN, GIMMICK_NONE, &loClean, &hiClean, &sKo));
+        gBattleStruct->dynamicMoveType = TYPE_WATER;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_U_TURN, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT_EQ(lo, loClean);
+        EXPECT_EQ(hi, hiClean);
+        // ...and the preview leaves the latch as it found it.
+        EXPECT_EQ(gBattleStruct->dynamicMoveType, TYPE_WATER);
+        gBattleStruct->dynamicMoveType = TYPE_NONE;
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a gimmick off a multi-strike move is priced as the one hit it is")
+{
+    u32 maxHP, defense;
+    enum Gimmick gimmick;
+    enum Move move;
+    enum Item item;
+    s16 damage;
+    u32 lo = 0, hi = 0;
+
+    // Z-Moves and Max Moves hit once at their own power. The simulation used to run Triple
+    // Axel's three-kick loop at Subzero Slammer's power (~3x), and multiply a Max Move by the
+    // base move's strike count.
+    PARAMETRIZE { gimmick = GIMMICK_Z_MOVE;  move = MOVE_TRIPLE_AXEL; item = ITEM_ICIUM_Z; maxHP = TTAR_FRAIL_HP; defense = TTAR_FRAIL_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_Z_MOVE;  move = MOVE_TRIPLE_AXEL; item = ITEM_ICIUM_Z; maxHP = TTAR_BULKY_HP; defense = TTAR_BULKY_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_DYNAMAX; move = MOVE_DOUBLE_KICK; item = ITEM_NONE;    maxHP = TTAR_FRAIL_HP; defense = TTAR_FRAIL_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_DYNAMAX; move = MOVE_DOUBLE_KICK; item = ITEM_NONE;    maxHP = TTAR_BULKY_HP; defense = TTAR_BULKY_DEF; }
+
+    GIVEN {
+        ASSUME(GetMoveStrikeCount(MOVE_TRIPLE_AXEL) == 3);
+        ASSUME(GetMoveStrikeCount(MOVE_DOUBLE_KICK) == 2);
+        PLAYER(SPECIES_WEAVILE) { Item(item); Moves(move); }
+        OPPONENT(SPECIES_TYRANITAR) { Ability(ABILITY_UNNERVE); MaxHP(maxHP); HP(maxHP); Defense(defense); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, move, gimmick: gimmick); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+    } THEN {
+        // Read with the gimmick armed, the way the menu asks before it is used.
+        SetActiveGimmick(B_BATTLER_0, GIMMICK_NONE);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, gimmick, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, maxHP, lo, hi));
+    }
+}
+
 SINGLE_BATTLE_TEST("Damage preview: the KO verdict is read against the foe's current HP")
 {
     u32 hp, lo, hi;
