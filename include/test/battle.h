@@ -559,7 +559,12 @@
 
 // NOTE: If the stack is too small the test runner will probably crash
 // or loop.
-#define BATTLE_TEST_STACK_SIZE 1024
+// FORK: upstream default is 1024. Fork tests call the AI damage simulation from THEN
+// (test/fork/damage_preview.c measured ~1.1KB at its deepest), which overflowed 1024 into
+// the neighbouring test state and hung or slowed tests depending on memory layout. 4096
+// still fits in sBackupMapData (STATIC_ASSERT in test/test_runner_battle.c). On conflict,
+// keep the larger value.
+#define BATTLE_TEST_STACK_SIZE 4096
 #define MAX_TURNS 16
 #define MAX_QUEUED_EVENTS 30
 #define MAX_EXPECTED_ACTIONS 10

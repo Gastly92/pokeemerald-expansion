@@ -300,8 +300,10 @@ SINGLE_BATTLE_TEST("Damage preview: a gimmick off a multi-strike move is priced 
     } SCENE {
         HP_BAR(opponent, captureDamage: &damage);
     } THEN {
-        // Read with the gimmick armed, the way the menu asks before it is used.
+        // Read with the gimmick armed, the way the menu asks before it is used -- and at the
+        // Attack the hit was dealt at: Max Knuckle raised it by a stage on the way out.
         SetActiveGimmick(B_BATTLER_0, GIMMICK_NONE);
+        gBattleMons[B_BATTLER_0].statStages[STAT_ATK] = DEFAULT_STAT_STAGE;
         EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, gimmick, &lo, &hi, &sKo));
         EXPECT(PercentWithin(damage, maxHP, lo, hi));
     }
