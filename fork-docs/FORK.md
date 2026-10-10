@@ -1,10 +1,10 @@
 # Fork changes
 
 This is a fork of [RHH's `pokeemerald-expansion`](https://github.com/rh-hideout/pokeemerald-expansion).
-It tracks upstream and layers a set of custom features on top to build a
-**standalone single-player romhack** centered on quality-of-life improvements to
-the Battle Frontier facilities, growing into a fuller game over time. See
-[`CLAUDE.md`](../CLAUDE.md) for the conventions and the upstream-sync process.
+It tracks upstream and layers custom features on top to build a **standalone
+single-player romhack** centered on quality-of-life improvements to the Battle
+Frontier. See [`CLAUDE.md`](../CLAUDE.md) for the conventions and the upstream-sync
+process.
 
 **This file is an index, not a spec.** Each row is one line: what the feature does,
 its flag, and where to read more. The source of truth for a flag's exact behavior is
@@ -21,13 +21,13 @@ doc below. A row records only what neither of those can — status, and the poin
 | [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) | Innate abilities, the species ability-override table, per-ability wiring, how to add one |
 | [`NEW_ABILITIES.md`](NEW_ABILITIES.md) | Custom abilities (Affinity, Halo) and how to add one |
 | [`NEW_TYPES.md`](NEW_TYPES.md) | Re-typing a species |
-| [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md) | Converting a facility to 6v6 + endless; the Factory and Tower as worked examples |
+| [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md) | Converting a facility to 6v6 + endless, per-facility status, the Factory and Tower as worked examples |
 | [`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md) | The extended roster, the species tier map, and the draft rules |
-| [`HELD_ITEMS.md`](HELD_ITEMS.md) | Held-item usage across the roster, and the completed audit behind it: why each item sits where it does, and why six are deliberately undrafted (status is tracked in `test/fork/held_item_tracker.c`) |
+| [`HELD_ITEMS.md`](HELD_ITEMS.md) | Held-item usage across the roster and the audit behind each item's place |
 | [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md) | Item-free Mega/Z/Tera/Dynamax and the gimmick picker |
 | [`BATTLE_INFO.md`](BATTLE_INFO.md) | The in-battle INFO viewer and its reveal-gating rules |
 | [`DAMAGE_PREVIEW.md`](DAMAGE_PREVIEW.md) | The move menu's damage-range readout: what the range spans and what it hides |
-| [`LINE_REVIEW.md`](LINE_REVIEW.md) | The per-species-line review playbook (innates, overrides, Factory sets), for a single line or a batch given as a dex-number range |
+| [`LINE_REVIEW.md`](LINE_REVIEW.md) | The per-species-line review playbook (innates, overrides, Factory sets) |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
 
@@ -37,118 +37,103 @@ Legend: ✅ done · ⚠️ partial / has known limitations.
 |---|---|---|---|---|
 | Boot straight to the main menu | `SKIP_TITLE_SEQUENCE` | `config/fork.h` | ✅ | Skips copyright/intro/title. RHH intro still plays if `EXPANSION_INTRO`. |
 | Trim Prof. Birch's new-game intro | `SKIP_BIRCH_SPEECH` | `config/fork.h` | ✅ | Keeps look + name selection, drops the monologue. |
-| Gender-neutral text | `GENDER_NEUTRAL_TEXT` | `config/fork.h` | ✅ | Neutral wording in the new-game look picker; extensible to other gendered strings. Text only — selection unchanged. |
-| Start a new game at the Battle Frontier | `START_AT_BATTLE_FRONTIER` | `config/fork.h`, `src/new_game.c` | ✅ | Warps to the Frontier dock as if first arriving (`SetBattleFrontierFirstArrivalState()`); no effect on FRLG. Also sets `FLAG_SYS_POKEMON_GET` so the party menu is reachable with no starter. |
-| Battle Frontier facility guide | _(no flag; part of the Frontier-start intro)_ | `BattleFrontier_OutsideWest`/`ReceptionGate` scripts | ✅ | Continues the redirected Scott intro: a greeter escorts the player from the Reception Gate to the Battle Factory door, then becomes a permanent directions-giver with a two-level multichoice (`MULTI_FRONTIER_GUIDE_AREAS`/`_WEST`/`_EAST`). Hand-authored BFS paths avoid NPC home tiles; `lockall` freezes wanderers. Exchange-shop directions not yet listed. |
-| New-game option defaults | `NEW_GAME_TEXT_SPEED`, `NEW_GAME_BATTLE_STYLE` | `config/fork.h` | ✅ | Initial text speed (Fast) and battle style (Set) in `SetDefaultOptions()`; the player can still change them. |
-| Start with battle-gimmick items | `START_WITH_BATTLE_GIMMICK_ITEMS` | `config/fork.h` | ⚠️ partial | Gives Mega Ring / Z-Power Ring / Dynamax Band / Tera Orb (`GiveStartingBattleGimmickItems()`). Largely moot: `FEATURE_FREE_GIMMICKS` enables all four gimmicks without them, so these matter only in a free-gimmicks-off build. |
+| Gender-neutral text | `GENDER_NEUTRAL_TEXT` | `config/fork.h` | ✅ | Neutral wording in the new-game look picker. Text only — selection unchanged. |
+| Start a new game at the Battle Frontier | `START_AT_BATTLE_FRONTIER` | `config/fork.h`, `src/new_game.c` | ✅ | Warps to the Frontier dock as if first arriving, with the party menu reachable before any Pokémon is obtained. No effect on FRLG. |
+| Battle Frontier facility guide | _(no flag; part of the Frontier-start intro)_ | `BattleFrontier_OutsideWest`/`ReceptionGate` scripts | ✅ | A greeter escorts the player to the Battle Factory door, then stays as a directions-giver for every facility. Exchange-shop directions not yet listed. |
+| New-game option defaults | `NEW_GAME_TEXT_SPEED`, `NEW_GAME_BATTLE_STYLE` | `config/fork.h` | ✅ | Starts at Fast text and Set battle style; the player can still change them. |
+| Start with battle-gimmick items | `START_WITH_BATTLE_GIMMICK_ITEMS` | `config/fork.h` | ⚠️ partial | Gives Mega Ring / Z-Power Ring / Dynamax Band / Tera Orb. Moot while `FEATURE_FREE_GIMMICKS` is on. |
 | Debug menus always on | `DEBUG_OVERWORLD_MENU`, `DEBUG_BATTLE_MENU` | `config/debug.h` | ✅ | Overworld menu (hold R + Start), battle menu (Select). |
 
 ## Battle Frontier
 
 | Feature | Flag(s) | Where | Status | Notes |
 |---|---|---|---|---|
-| 6v6 Battle Frontier | `B_FRONTIER_PARTY_SIZE_6V6` | `config/frontier.h` | ⚠️ partial | Frontier-wide full 6-mon teams in singles **and** doubles; party picker extended to 6 picks; lobby and rules-board text updated. Flag is deliberately `1`/`0`, not `TRUE`/`FALSE` — see [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md) Footgun 1. **Battle Dome layout is not generalized to 6.** |
-| Endless Frontier challenge | `B_FRONTIER_ENDLESS` (+ `FRONTIER_STAGES_PER_CHALLENGE`) | `config/frontier.h`, `constants/battle_frontier.h` | ⚠️ partial | Challenges never end: a "set" is `FRONTIER_STAGES_PER_CHALLENGE` (7 → 10) wins, BP is awarded after every win scaling per set, "Rest" saves and returns to the lobby with the streak live, and the Frontier Brain moves to the 50th/100th win. Factory and Tower wired up. Details: [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md). |
-| 6v6 + endless Battle Tower | `B_FRONTIER_ENDLESS`, `B_FRONTIER_TOWER_DISABLE_MULTI_LINK` | `config/frontier.h`, `src/battle_tower.c`, `src/fork/battle_tower_trainers.c` | ⚠️ partial | The second facility conversion, Singles + Doubles: roster opponents each bringing a guaranteed Mega, the Salon Maiden at the 50th/100th win, random Hoenn gym-leader bosses on the other set-end wins, and independent per-mode streaks. Multi/Link Multi disabled behind the flag. Details + limitations: [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md) "The Battle Tower". |
-| Frontier battles forced to Lv100 | `B_FRONTIER_FORCE_LVL_100` | `config/frontier.h` | ✅ | Factory and Tower force Open Level (both teams at `MAX_LEVEL`): the lobby skips the Lv50/Open multichoice, and the Reception Gate rules guide hides the now-irrelevant level-mode entries (`MULTI_FRONTIER_RULES_LV100`). See Known quirks. |
-| Frontier max PP | `B_FRONTIER_MAX_PP` | `config/frontier.h` | ✅ | Maxes the PP Up bonus on all four move slots in `CreateFacilityMon`, the shared facility mon builder — so it covers every facility, plus Battle Tent and multi-battle partners. |
-| Frontier prefers Return | `B_FRONTIER_PREFER_RETURN` | `config/frontier.h` | ✅ | `CreateFacilityMon` swaps Frustration for Return (undoing the Factory's vanilla Return → Frustration swap), so every facility mon keeps max friendship; the Factory swap screen restores it on swapped-in mons via `ApplySwappedMonFriendship`. Both moves are 102 BP. |
-| Frontier max IVs | `B_FRONTIER_MAX_IVS` | `config/frontier.h` | ⚠️ partial | Forces 31 IVs in every stat via `GetFactoryMonFixedIV`, replacing the vanilla per-challenge ramp for rentals, opponents and the Brain. Factory-only; other facilities' IV ramps live elsewhere. |
-| Frontier AI difficulty tiers | `B_FRONTIER_HARD_AI` (+ `B_FRONTIER_HARD_AI_FLAGS`, `B_FRONTIER_REGULAR_AI_FLAGS`) | `config/frontier.h`, `src/fork/frontier_ai.c` | ✅ | Facility AI is picked by opponent *role*, not by facility or win streak: the Frontier Brain and the Tower's gym-leader bosses get the strongest preset, every regular opponent one tier below it — no switching engine (`AI_FLAG_SMART_SWITCHING` / `AI_FLAG_SMART_MON_CHOICES`), no omniscience, no PP-stall prevention, no species overrides, but still basic move choice and gimmick discipline. Hooked from `GetAiScriptsInBattleFactory` and `GetAiFlags`; the Battle Tent keeps its vanilla AI. `test/fork/frontier_ai_difficulty.c` |
-| Factory swap: opponent summary | `B_FRONTIER_FACTORY_OPP_SUMMARY` | `config/frontier.h`, `src/battle_factory_screen.c` | ✅ | On the post-battle rental-swap screen, selecting an *opponent* mon opens the same Summary/Swap/Rechoose popup the player's mons get, instead of jumping straight to "Accept this Pokémon?" with no way to inspect it. The duplicate-species guard still runs first. |
-| Extended frontier roster | `B_FRONTIER_EXTENDED_MONS` | `config/frontier.h`, `src/fork/frontier_extended_mons.c` | ✅ | Fork-owned roster of modern competitive sets replacing `gBattleFrontierMons`, drawn uniformly per National Dex number (not per set) under a dex-number Species Clause, with several format-tagged builds per species. Gens I–IX are comprehensively built out, including all regional forms and notable formes, and a coverage test fails if a fully-evolved species has neither a set nor a reasoned exception row. Eight further gates, established by the /line-review sweep and now covering the whole dex: innate-row coverage, pre-evolution coverage, a legal observable slot per drafted species, no ally-hitting spread move on a doubles set, no status move on a Choice set, no damaging move on the stat a set dumped, no two sets on one species that are the same set, and no item none of the set's moves can activate. Factory + Tower. **Saved rentals key on array index — appending is save-safe, mid-list edits are not.** Details: [`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md); set authoring: [`LINE_REVIEW.md`](LINE_REVIEW.md). |
-| Species tier map | _(data; no flag)_ | `src/fork/species_tiers.c` | ✅ | Fork-owned species→tier table (`TIER_MYTHICAL`/`LEGENDARY`/`PSEUDO`/`NORMAL` — this fork's own groupings, not Game Freak's), keyed per forme so a forme is classified on its own merits. Gates the frontier draft. Details: [`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md). |
-| All species legal in Frontier | `B_FRONTIER_ALL_SPECIES_LEGAL` | `config/frontier.h`, `include/fork/frontier_legality.h` | ✅ | Ignores the per-species `isFrontierBanned` flag, so every species is legal and the "ineligible Pokémon" list is always empty. The upstream reads are funnelled through the `IsSpeciesFrontierBanned()` chokepoint; `gSpeciesInfo` is untouched, so `FALSE` restores the vanilla bans. |
-| Disable Frontier battle recording | `B_FRONTIER_DISABLE_RECORD_BATTLE` | `config/frontier.h`, `src/frontier_util.c` | ✅ | No attendant offers to record a battle. Playback re-simulates from a saved seed + inputs, which the expansion's far more stateful battle engine doesn't reproduce reliably (a long-standing **upstream** fragility — those files are stock), so replays desync into a glitched battle. Forces `FRONTIER_DATA_RECORD_DISABLED`; the recording code is left intact, so flipping this back revives it. |
-| In-battle INFO viewer | `B_FRONTIER_BATTLE_INFO` | `config/frontier.h`, `src/fork/frontier_battle_info.c` | ⚠️ partial | In facilities where the bag is disabled, the BAG slot (and SELECT in the battle party menu) opens a read-only eight-page reference: Speed Tiers, Field, Conditions, Stat Changes, Battle Log (every move used and its damage as a % of max HP), Foe, Base Stats (your party incl. bench, and the foe, with projected Mega forms), Innates. Strictly reveal-gated and Illusion-safe; stock assets only. Details: [`BATTLE_INFO.md`](BATTLE_INFO.md). Foe page reads opponent A only. |
-| Move damage preview | `B_MOVE_DAMAGE_PREVIEW` | `config/fork.h`, `src/fork/damage_preview.c` | ✅ | The move menu's type row shows the selected move's damage against the foe as a % of its max HP (`Fire 34-41%`), spanning the foe's whole legal spread and the damage roll, reading `KO` / `40%-KO` for a sure / possible KO from current HP and `0%` against a known immunity, Z-Move view and armed Mega form included; unrevealed abilities/items are left out and Illusion is respected. Details: [`DAMAGE_PREVIEW.md`](DAMAGE_PREVIEW.md). `test/fork/damage_preview.c` |
+| 6v6 Battle Frontier | `B_FRONTIER_PARTY_SIZE_6V6` | `config/frontier.h` | ⚠️ partial | Full 6-mon teams in singles and doubles, Frontier-wide. **Battle Dome layout is not generalized to 6.** [Details](FRONTIER_ENDLESS.md) |
+| Endless Frontier challenge | `B_FRONTIER_ENDLESS` (+ `FRONTIER_STAGES_PER_CHALLENGE`) | `config/frontier.h`, `constants/battle_frontier.h` | ⚠️ partial | Challenges never end: BP after every win, "Rest" saves with the streak live, and the Frontier Brain at the 50th/100th win. Factory and Tower only. [Details](FRONTIER_ENDLESS.md) |
+| 6v6 + endless Battle Tower | `B_FRONTIER_ENDLESS`, `B_FRONTIER_TOWER_DISABLE_MULTI_LINK` | `config/frontier.h`, `src/battle_tower.c`, `src/fork/battle_tower_trainers.c` | ⚠️ partial | Singles + Doubles with Mega-carrying opponents, the Salon Maiden and gym-leader bosses; Multi/Link Multi disabled. [Details + limitations](FRONTIER_ENDLESS.md#the-battle-tower--the-worked-reference-conversion) |
+| Frontier battles forced to Lv100 | `B_FRONTIER_FORCE_LVL_100` | `config/frontier.h` | ✅ | Factory and Tower force Open Level and hide the Lv50 options. See Known quirks. |
+| Frontier max PP | `B_FRONTIER_MAX_PP` | `config/frontier.h` | ✅ | Maxes PP Ups on every facility mon, including Battle Tent and multi partners. |
+| Frontier prefers Return | `B_FRONTIER_PREFER_RETURN` | `config/frontier.h` | ✅ | Facility mons carry Return instead of Frustration and keep max friendship, swapped-in Factory rentals included. |
+| Frontier max IVs | `B_FRONTIER_MAX_IVS` | `config/frontier.h` | ⚠️ partial | 31 IVs in every stat for rentals, opponents and the Brain. Factory-only. |
+| Frontier AI difficulty tiers | `B_FRONTIER_HARD_AI` (+ `…_HARD_AI_FLAGS`, `…_REGULAR_AI_FLAGS`) | `config/frontier.h`, `src/fork/frontier_ai.c` | ✅ | AI strength is picked by opponent role: Brains and Tower bosses get the strongest preset, regular opponents one tier below. `test/fork/frontier_ai_difficulty.c` |
+| Factory swap: opponent summary | `B_FRONTIER_FACTORY_OPP_SUMMARY` | `config/frontier.h`, `src/battle_factory_screen.c` | ✅ | The rental-swap screen lets you open an opponent mon's summary before taking it. |
+| Extended frontier roster | `B_FRONTIER_EXTENDED_MONS` | `config/frontier.h`, `src/fork/frontier_extended_mons.c` | ✅ | Modern competitive sets for Gens I–IX, drawn per National Dex number under a Species Clause and CI-gated for coverage and set sanity. **Saved rentals key on array index — append only.** [Details](FRONTIER_ROSTER.md) · [set authoring](LINE_REVIEW.md) |
+| Species tier map | _(data; no flag)_ | `src/fork/species_tiers.c` | ✅ | This fork's per-forme tier groupings, which gate the frontier draft. [Details](FRONTIER_ROSTER.md) |
+| All species legal in Frontier | `B_FRONTIER_ALL_SPECIES_LEGAL` | `config/frontier.h`, `include/fork/frontier_legality.h` | ✅ | Every species is Frontier-legal; `FALSE` restores the vanilla bans. |
+| Disable Frontier battle recording | `B_FRONTIER_DISABLE_RECORD_BATTLE` | `config/frontier.h`, `src/frontier_util.c` | ✅ | No battle-recording offer, since replays desync on the expansion engine (an upstream fragility). The recording code is intact. |
+| In-battle INFO viewer | `B_FRONTIER_BATTLE_INFO` | `config/frontier.h`, `src/fork/frontier_battle_info.c` | ⚠️ partial | The BAG slot opens a read-only, reveal-gated reference: speed tiers, field, stats, battle log, foe, base stats, innates. Foe page reads opponent A only. [Details](BATTLE_INFO.md) |
+| Move damage preview | `B_MOVE_DAMAGE_PREVIEW` | `config/fork.h`, `src/fork/damage_preview.c` | ✅ | The move menu shows the selected move's damage as a % of the foe's HP and the type it is fired as, with a KO verdict, using only what the player has seen and an armed Mega form. [Details](DAMAGE_PREVIEW.md) · `test/fork/damage_preview.c` |
 
 ## Determinism (`DETERMINISTIC_*`)
 
-An ongoing project to remove as much RNG from the game as possible, one source at a
-time, so outcomes follow from player choices and battle state rather than luck. The
-general shape is that a *random upside* (a lucky crit/burn/flinch) is swapped for
-something the player can read off the board: a guaranteed-or-impossible outcome, or
-one gated on a legible condition (super effective, STAB, "did they flinch last
-turn"). The AI is taught each new rule. As random upsides are removed, the `BUFF_*`
-line compensates so battles stay balanced rather than simply harder.
-
-Each source gets its own flag in `config/deterministic.h` (`FALSE` = stock). **All
-ten below are enabled.** Full rationale and per-flag mechanics:
-**[`DETERMINISM.md`](DETERMINISM.md)**.
+Removes RNG one source at a time, replacing each random upside with something the
+player can read off the board; the AI is taught each rule. Each flag lives in
+`config/deterministic.h` (`FALSE` = stock), and **all ten are enabled.** Rationale
+and mechanics: **[`DETERMINISM.md`](DETERMINISM.md)**.
 
 | Feature | Flag(s) | Status | Notes |
 |---|---|---|---|
-| Deterministic critical hits | `DETERMINISTIC_CRITICAL_HITS` | ✅ | Removes the random crit-chance roll (`IsCriticalHit`) — crits land only when *guaranteed* (always-crit moves, Laser Focus, Merciless vs. a poisoned target, 1/1 crit stage); crit-blockers unchanged, AI crit valuations made config-aware. [Mechanics](DETERMINISM.md#deterministic_critical_hits) · `test/fork/deterministic_critical_hits.c` |
-| Deterministic damage | `DETERMINISTIC_DAMAGE` (+ `…_BASE_PERCENT`, `…_TURN_INCREMENT`) | ✅ | Replaces the random 85%–100% damage roll with a fixed multiplier scaling with the turn count (default 92%, +1%/turn, **intentionally uncapped**); the AI is fed the same figure. [Mechanics](DETERMINISM.md#deterministic_damage) · `test/fork/deterministic_damage.c` |
-| Deterministic flinch | `DETERMINISTIC_FLINCH` | ✅ | Anti flinch-lock cap: a gated flinch can't be re-applied to a foe that flinched last turn (Fake Out / guaranteed flinches exempt). Required by the additional-effects flag so its gated flinches can't lock. [Mechanics](DETERMINISM.md#deterministic_flinch) · `test/fork/deterministic_flinch.c` |
-| Deterministic additional effects | `DETERMINISTIC_ADDITIONAL_EFFECTS` | ✅ | A move's sub-100% secondary effect lands on a fixed condition instead of a roll: a super-effective hit (types that *can* be SE) or a STAB user (Normal). Serene Grace / Pledge Rainbow make it *certain*. [Mechanics](DETERMINISM.md#deterministic_additional_effects) · `test/fork/deterministic_additional_effects.c` |
-| Deterministic paralysis | `DETERMINISTIC_PARALYSIS` (+ `…_PP_TAX`, `…_PRIORITY_TAX`) | ✅ | Drops the 25% full-paralysis miss and the Speed cut; instead every move costs +1 PP and −1 priority, keeping full Speed (Quick Feet exempt). AI turn-order prediction tracks it for free. [Mechanics](DETERMINISM.md#deterministic_paralysis) · `test/fork/deterministic_paralysis.c` |
-| Deterministic hold effects | `DETERMINISTIC_HOLD_EFFECTS` | ✅ | Chance-to-trigger hold items become guaranteed one-shot **entry items** (Focus Band, Quick Claw, crit items, King's Rock, Starf Berry). Blunder Policy instead arms on any **blunder** — Protect, semi-invulnerability, a type/ability/Air Balloon immunity — since the accuracy flag makes its stock miss trigger unreachable. [Mechanics](DETERMINISM.md#deterministic_hold_effects) · `test/fork/deterministic_hold_effects.c` |
-| Deterministic accuracy/evasion | `DETERMINISTIC_ACCURACY_EVASION` (+ `…_OHKO_MAX_HP_PERCENT`, `…_EXTRA_MISS_COST_PERCENT`) | ✅ | Accuracy/evasion become a **PP economy** rather than a coin flip: moves always hit, sub-100% moves get reduced max PP plus a per-use stage tax/refund and flat item/ability taxes (No Guard exempt). OHKO moves deal 40% max HP; sub-100% sleep moves cause drowsiness; 50%-accuracy moves gain a recharge turn. [Mechanics](DETERMINISM.md#deterministic_accuracy_evasion) · `test/fork/deterministic_accuracy_evasion.c` |
-| Deterministic abilities | `DETERMINISTIC_ABILITIES` | ⚠️ partial | Contact statuses (Static, Flame Body, Poison Point/Touch, Cute Charm, Toxic Chain, Cursed Body) always attempt; Effect Spore → −1 accuracy on the contact attacker (PP tax, not a status); Stench / Quick Draw fire first-turn-only; Moody, Pickup, Trace, Forewarn, Rivalry made state-based. **Overworld ability RNG is out of scope** (deferred to the Pyramid rework). [Mechanics](DETERMINISM.md#deterministic_abilities) · `test/fork/deterministic_abilities.c` |
-| Deterministic status | `DETERMINISTIC_STATUS` (+ `…_INFATUATION_TURNS`, `…_INFATUATION_DMG_PERCENT`, `…_SLEEP_TURNS`) | ✅ | Infatuation drops the gender requirement and the coin flip (reduced damage for a fixed duration instead); sleep lasts a fixed 3 turns, counted only on acting turns, costing the target two actions; confusion becomes one guaranteed self-hit that doesn't deny the action. [Mechanics](DETERMINISM.md#deterministic_status) · `test/fork/deterministic_status.c` |
-| Deterministic move results | `DETERMINISTIC_MOVE_RESULTS` (+ multi-hit / rampage / wrap / Present tuning) | ✅ | Multi-hit → 3 (5 with Skill Link/Loaded Dice), Population Bomb → 5/10, rampage 2 turns, binding 4/7, speed ties by a fixed Speed→weight→HP% ladder, consecutive Protect always fails; Tri Attack, Dire Claw, Magnitude, Present, Fickle Beam, Shell Side Arm and phazing made state-based. [Mechanics](DETERMINISM.md#deterministic_move_results) · `test/fork/deterministic_move_results.c` |
+| Deterministic critical hits | `DETERMINISTIC_CRITICAL_HITS` | ✅ | Crits land only when guaranteed. [Mechanics](DETERMINISM.md#deterministic_critical_hits) · `test/fork/deterministic_critical_hits.c` |
+| Deterministic damage | `DETERMINISTIC_DAMAGE` (+ `…_BASE_PERCENT`, `…_TURN_INCREMENT`) | ✅ | A fixed damage multiplier that rises with the turn count replaces the 85–100% roll. [Mechanics](DETERMINISM.md#deterministic_damage) · `test/fork/deterministic_damage.c` |
+| Deterministic flinch | `DETERMINISTIC_FLINCH` | ✅ | A foe that flinched last turn can't be flinched again (Fake Out exempt). [Mechanics](DETERMINISM.md#deterministic_flinch) · `test/fork/deterministic_flinch.c` |
+| Deterministic additional effects | `DETERMINISTIC_ADDITIONAL_EFFECTS` | ✅ | Secondary effects land on a fixed condition (super-effective, or STAB for Normal) instead of a roll. [Mechanics](DETERMINISM.md#deterministic_additional_effects) · `test/fork/deterministic_additional_effects.c` |
+| Deterministic paralysis | `DETERMINISTIC_PARALYSIS` (+ `…_PP_TAX`, `…_PRIORITY_TAX`) | ✅ | No full-paralysis miss or Speed cut; moves cost +1 PP and −1 priority instead. [Mechanics](DETERMINISM.md#deterministic_paralysis) · `test/fork/deterministic_paralysis.c` |
+| Deterministic hold effects | `DETERMINISTIC_HOLD_EFFECTS` | ✅ | Chance-based items become guaranteed one-shot entry items. [Mechanics](DETERMINISM.md#deterministic_hold_effects) · `test/fork/deterministic_hold_effects.c` |
+| Deterministic accuracy/evasion | `DETERMINISTIC_ACCURACY_EVASION` (+ `…_OHKO_MAX_HP_PERCENT`, `…_EXTRA_MISS_COST_PERCENT`) | ✅ | Moves always hit; accuracy and evasion become a PP economy. [Mechanics](DETERMINISM.md#deterministic_accuracy_evasion) · `test/fork/deterministic_accuracy_evasion.c` |
+| Deterministic abilities | `DETERMINISTIC_ABILITIES` | ⚠️ partial | Chance-based battle abilities become always-on or state-based. **Overworld ability RNG is out of scope.** [Mechanics](DETERMINISM.md#deterministic_abilities) · `test/fork/deterministic_abilities.c` |
+| Deterministic status | `DETERMINISTIC_STATUS` (+ `…_INFATUATION_TURNS`, `…_INFATUATION_DMG_PERCENT`, `…_SLEEP_TURNS`) | ✅ | Fixed-length sleep and infatuation, and confusion as one guaranteed self-hit. [Mechanics](DETERMINISM.md#deterministic_status) · `test/fork/deterministic_status.c` |
+| Deterministic move results | `DETERMINISTIC_MOVE_RESULTS` (+ multi-hit / rampage / wrap / Present tuning) | ✅ | Fixed hit counts and durations, a fixed speed-tie ladder, and state-based random moves. [Mechanics](DETERMINISM.md#deterministic_move_results) · `test/fork/deterministic_move_results.c` |
 
 ## Balance / buffs (`BUFF_*`)
 
-An ongoing project to rebalance items and other functionality, usually as
-compensation for other changes — the `DETERMINISTIC_*` project trades random upsides
-away, so some items get buffed to keep battles balanced. Each tweak gets its own flag
-in `config/buff.h` (`FALSE` = stock). Both below are enabled. The held-item audit that
-drove them is finished; `test/fork/held_item_tracker.c` sorts every held item into done or
-ignored — two lists, both gated, with no unwatched middle — and fails CI if a *done* item is
-unclassified, unheld by any set, held by only one set (unless one is its ceiling: a
-form-change enabler, or an item sharing a hold effect with one, which is what lets each
-signature orb sit beside its crystal), or over 20% of the roster, and if any set holds an
-*ignored* one; [`HELD_ITEMS.md`](HELD_ITEMS.md) carries the reasoning behind each verdict. A companion gate in the roster suite ("no set holds an item none of its
-moves can activate") catches the case no tracker gate can see: a conditional item sitting
-on a holder it can never fire for.
+Rebalances items and mechanics, mostly to compensate for the random upsides
+`DETERMINISTIC_*` removed. Each flag lives in `config/buff.h` (`FALSE` = stock), with
+its full reasoning in the flag comment; all are enabled. The held-item audit and its
+CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 
 | Feature | Flag(s) | Status | Notes |
 |---|---|---|---|
-| Shell Bell buff | `BUFF_SHELL_BELL` (+ `…_DENOMINATOR`) | ✅ | Recovery from 1/8 of damage dealt to 1/`BUFF_SHELL_BELL_DENOMINATOR` (1/4 by default) in `TryShellBell()`. `test/fork/buff_shell_bell.c` |
-| Leech Seed buff | `BUFF_LEECH_SEED` (+ `…_DENOMINATOR`) | ✅ | Two changes: seeds **stack** (several battlers can seed one target, each draining independently), and re-using Leech Seed on a foe you already seed deals an **immediate 1/8 drain** instead of failing (that drain pierces the victim's Substitute, like the end-turn tick; a *first* seed is still blocked by one). The tick fraction stays at vanilla 1/8 — the buff is the stacking, not a bigger tick. Storage is additive: upstream's single-seeder `leechSeed` volatile stays the "primary", with a fork `leechSeededBy` bitmask holding the full set. `test/fork/buff_leech_seed.c` |
-| Accuracy items buff | `BUFF_ACCURACY_ITEMS` | ✅ | `DETERMINISTIC_ACCURACY_EVASION` left Wide Lens and Zoom Lens completely inert — they only scale an accuracy figure `DoesMoveMissTarget()` no longer reads — while the defender's BrightPowder half kept working. They now cancel the attacker's accuracy-axis PP penalty instead: Wide Lens the flat evasion taxes, Zoom Lens those plus the whole stat-stage half (the target's evasion boosts **and** the holder's own accuracy drops, since it reuses the No Guard / Micle `ignorePenalties` path) while it moves second. Pure boon — never refunds below the base 1 PP. `GetAccuracyItemRelief()` in `src/fork/deterministic_moves.c`; `test/fork/buff_accuracy_items.c`, plus a roster test that fails if a set holds a lens its own ability makes redundant. |
-| Accuracy items: reveal | `BUFF_ACCURACY_ITEMS_REVEAL` | ✅ | The lenses also act as instruments for *seeing*, feeding the INFO viewer's reveal bits: Wide Lens is **breadth** (every seen foe's held item), Zoom Lens is **depth** (one foe's ability and full moveset, once it has been watched using a move). [Mechanics](BATTLE_INFO.md#held-item-and-depth-reveals-from-a-lens-buff_accuracy_items_reveal). `test/fork/buff_accuracy_items.c` |
-| Type-boost items buff | `BUFF_TYPE_BOOST_ITEMS` (+ `…_PERCENT`) | ✅ | The 23 `HOLD_EFFECT_TYPE_POWER` items (Charcoal, Mystic Water, Magnet, …) and the 17 `HOLD_EFFECT_PLATE` items go from the stock +20% to +`BUFF_TYPE_BOOST_PERCENT` (+40% by default) on matching-type moves. At +20% they were a strictly narrower Expert Belt — same 1.2x, one type instead of any super-effective hit — and lost to Life Orb's 1.3x on anything but a pure mono-attacker. +40% beats Life Orb when a set's damage is concentrated in one type while staying under Choice Band's 1.5x. Memories and drives join this scale via `BUFF_SIGNATURE_TYPE_ITEMS` (next row), which also locks the plates to Arceus. `HOLD_EFFECT_TYPE_POWER` case in `CalcDamage()`; `test/fork/buff_type_boost_items.c` |
-| Gems buff | `BUFF_GEMS` (+ `…_PERCENT`) | ✅ | The 18 one-shot Gems go from the stock +30% to +`BUFF_GEM_PERCENT` (+60% by default) on the move they are spent on; consumption is unchanged. `BUFF_TYPE_BOOST_ITEMS` had left them a strictly worse Charcoal — less damage, one move, then gone. A Gem is boost×one turn against a type item's boost×every turn, so +60% wins when its type is clicked **once** and loses from two uses on, making it the coverage nuke rather than a general damage item. `gemParam` in `SetTypeBeforeUsingMove()`; `test/fork/buff_gems.c` |
-| Flat-HP items buff | `BUFF_FLAT_HP_ITEMS` (+ `…_DENOMINATOR`) | ✅ | Oran Berry and Berry Juice heal `maxHP/4` instead of a flat 10 and 20, which at the frontier's Level 50 was 5–13% against Sitrus Berry's 25% in the same slot. Both match Sitrus deliberately — one item per team means duplicates are draft-rate relief for its 103 sets. Keyed on the two items rather than `HOLD_EFFECT_RESTORE_HP`, since Sitrus shares that hold effect whenever `I_SITRUS_BERRY_HEAL < GEN_4`. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped). `ItemHealHp()` in `src/battle_hold_effects.c`; `test/fork/buff_flat_hp_items.c` |
-| Signature type items | `BUFF_SIGNATURE_TYPE_ITEMS` | ✅ | Locks the species-signature type items to their own species (Plates to Arceus, Memories to Silvally, Drives to Genesect) and puts the whole class on `BUFF_TYPE_BOOST_PERCENT`, which grants Memories and Drives a multiplier they never had and lifts Soul Dew and the Adamant/Lustrous/Griseous orbs off the stock +20%. Silvally could not even decline the problem — `FORM_CHANGE_ITEM_HOLD` means dropping the Memory reverts the forme — so every Silvally set was playing an item down. [Reasoning](HELD_ITEMS.md#group-b--dominated-by-our-own-buffs--shipped); Also widens Soul Dew's holder test to base species, so a Lati@s that Mega Evolves under `FEATURE_FREE_GIMMICKS` keeps its own item. `SignatureTypeItemAllowed()` in `CalcDamage()`; `test/fork/buff_signature_type_items.c` Roster: every member holds its own species' item, and each orb sits on the base forme with its crystal on the Origin forme (Dialga/Adamant Orb, Dialga-Origin/Adamant Crystal, and so on) — one set each, since orb and crystal are the same item in battle. |
-| Confusion self-hit buff | `BUFF_CONFUSION_SELF_DAMAGE` (+ `…_POWER`) | ✅ | The confusion self-hit goes from the stock 40 BP to `BUFF_CONFUSION_SELF_DAMAGE_POWER` (60 by default), on both the `DETERMINISTIC_STATUS` one-time tax and the stock per-action roll. That pays for the action lockout `DETERMINISTIC_STATUS` traded away in guaranteed damage rather than restoring it — at 40 BP the one hit left Confuse Ray, Supersonic and Swagger barely worth a turn. [Mechanics](DETERMINISM.md#deterministic_status). `GetConfusionSelfDamagePower()` in `include/fork/buff_confusion.h`, called from `CancelerConfused()`; the AI's valuation rises with it in `IncreaseConfusionScore()`, and the separate disobedience self-hit keeps the stock 40. `test/fork/buff_confusion.c` |
+| Shell Bell buff | `BUFF_SHELL_BELL` (+ `…_DENOMINATOR`) | ✅ | Heals 1/4 of damage dealt instead of 1/8. `test/fork/buff_shell_bell.c` |
+| Leech Seed buff | `BUFF_LEECH_SEED` (+ `…_DENOMINATOR`) | ✅ | Seeds stack across seeders, and re-seeding drains immediately instead of failing. `test/fork/buff_leech_seed.c` |
+| Accuracy items buff | `BUFF_ACCURACY_ITEMS` | ✅ | Wide Lens and Zoom Lens cancel accuracy PP taxes, since `DETERMINISTIC_ACCURACY_EVASION` had left them inert. `test/fork/buff_accuracy_items.c` |
+| Accuracy items: reveal | `BUFF_ACCURACY_ITEMS_REVEAL` | ✅ | Wide Lens reveals every foe's item and Zoom Lens one foe's ability and moveset in the INFO viewer. [Mechanics](BATTLE_INFO.md#held-item-and-depth-reveals-from-a-lens-buff_accuracy_items_reveal) · `test/fork/buff_accuracy_items.c` |
+| Type-boost items buff | `BUFF_TYPE_BOOST_ITEMS` (+ `…_PERCENT`) | ✅ | Type items and Plates boost +40% instead of +20%. `test/fork/buff_type_boost_items.c` |
+| Gems buff | `BUFF_GEMS` (+ `…_PERCENT`) | ✅ | Gems boost +60% instead of +30%. `test/fork/buff_gems.c` |
+| Flat-HP items buff | `BUFF_FLAT_HP_ITEMS` (+ `…_DENOMINATOR`) | ✅ | Oran Berry and Berry Juice heal 1/4 max HP, like Sitrus. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_flat_hp_items.c` |
+| Signature type items | `BUFF_SIGNATURE_TYPE_ITEMS` | ✅ | Plates, Memories and Drives are locked to their own species and boost on the type-item scale, as do the signature orbs. [Reasoning](HELD_ITEMS.md#group-b--dominated-by-our-own-buffs--shipped) · `test/fork/buff_signature_type_items.c` |
+| Confusion self-hit buff | `BUFF_CONFUSION_SELF_DAMAGE` (+ `…_POWER`) | ✅ | The confusion self-hit is 60 BP instead of 40. [Mechanics](DETERMINISM.md#deterministic_status) · `test/fork/buff_confusion.c` |
 
 ## Abilities, types & gimmicks
 
 | Feature | Flag(s) | Where | Status | Notes |
 |---|---|---|---|---|
-| Innate abilities | `FEATURE_INNATE_ABILITIES` | `config/feature.h`, `src/fork/innate_abilities.c` | ✅ | Some species gain one or more **innate** abilities, always active *in addition to* their chosen ability, from a fork-owned table (never `gSpeciesInfo`). An innate answers `BattlerHasAbility()` but is never the battler's copyable/swappable identity. **Design principle: an innate is a pure boon** — where the real ability has a downside, the innate drops it. Allowlist-gated, grown one ability at a time; picks are keyed per form. Shown on the summary "Innates" page and in the INFO viewer. Details: [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md). `test/fork/innate_abilities.c` |
-| Species ability overrides | `FEATURE_INNATE_ABILITIES` | `src/fork/species_ability_overrides.c` | ✅ | Fork-owned `{species, slot, ability}` table consulted by `GetSpeciesAbility()` — the accessor every ability read funnels through — so an override behaves like a real ability everywhere **without editing `gSpeciesInfo`**. It exists to give a real slot to species whose only real abilities are now innate. A chosen ability must be a **never-an-innate** pick, must not be one of the **reserved** abilities welded to a single line (Illusion, Zorua/Zoroark), and must not *invert* the species' own innates (Contrary over an innate Moxie); all three rules are CI gates, not conventions. Details: [`INNATE_ABILITIES.md#direction`](INNATE_ABILITIES.md). |
-| New types | `FEATURE_NEW_TYPES` | `config/feature.h`, `src/fork/new_types.c` | ✅ | Overwrites selected species' types from a fork-owned table (never `gSpeciesInfo`), applied at the single `GetSpeciesType()` accessor so the re-typing flows to matchups, STAB, type icons, the Pokédex and the summary from one hook. Type identity only — movepool/abilities/learnset unchanged. First entry: Galarian Ponyta and Rapidash → Fire/Fairy. Details: [`NEW_TYPES.md`](NEW_TYPES.md). `test/fork/new_types.c` |
-| Custom abilities (Affinity family) | _(data; no flag)_ | `src/fork/type_affinity.c` | ✅ | Fork abilities in the post-Gen-9 id block (currently interleaved with upstream's — a known recurring sync conflict; see CLAUDE.md "ID spaces the fork claims"). An **Affinity** grants its holder a **latent third type in battle** — that type's STAB and resistances *plus* its weaknesses — injected into an empty third slot at the `GetBattlerTypes()` chokepoint, so the AI predicts it for free. The built-in downside is why it's a chosen ability and never an innate. `Psychic Affinity` (Butterfree, Venomoth, Golduck) and `Water Affinity` (Lugia, Masquerain, Beartic, Dhelmise, Cursola, Cetitan) are the two members. Details: [`NEW_ABILITIES.md`](NEW_ABILITIES.md). |
-| Custom abilities (Halo) | _(data; no flag)_ | `src/fork/halo.c` | ✅ | An **aura**, not a personal trait: while its holder is on the field, no single hit may take more than `HALO_DAMAGE_CAP_PERCENT` (40) of **any** battler's max HP — so nothing on the field dies in fewer than three hits, the holder's own attacks included. The holder alone pays: `HALO_PP_TAX` (+1 PP per move). Fixed-damage moves and multi-hit moves are deliberate counterplay. On Mega Clefable (all three slots) and Wigglytuff. Details: [`NEW_ABILITIES.md`](NEW_ABILITIES.md). |
-| Sand Spit weather animation fix | _(fix; no new flag)_ | `src/battle_util.c`, `src/battle_script_commands.c` | ✅ | Sand Spit set its sandstorm through `TryChangeBattleWeather`'s `ABILITY_NONE` branch — the one branch that never fills `animArg1` — so its script played whatever animation id was left in that byte, including a binding move's id truncated to 8 bits, which indexes past `sBattleAnims_General[]` and hangs the battle. The ability now pins the sandstorm animation, and `PlayAnimation` skips an out-of-range id instead of running a garbage script. `test/fork/weather_ability_animation.c` |
-| Illusion survives a form-change gfx reload | _(fix; no new flag)_ | `src/battle_gfx_sfx_util.c` | ✅ | `HandleSpeciesGfxDataChange` read the real party species for every non-Transform sprite reload, so the `B_ANIM_FORM_CHANGE` that plays when Dynamax runs out repainted a disguised battler as its true species even though nothing had broken the Illusion — while the healthbox, which goes through `GetIllusionMonPtr`, still showed the disguise. The reloading battler now prefers its Illusion mon's species, personality and shininess, the way `BattleLoadMonSpriteGfx` already did. `test/fork/illusion_dynamax.c` |
-| Item-free battle gimmicks | `FEATURE_FREE_GIMMICKS` | `config/feature.h`, `src/battle_gimmick.c` | ✅ | Drops the held-item, key-item and charge requirements for Mega, Z-Moves, Tera and Dynamax, and gives each mon a Start-key **picker** among the gimmicks it can currently use. One gimmick per mon and once per type per trainer still apply, so a team's mons *compete* for the slot. X/Y Megas are chosen by Attack vs Sp. Atk. The AI picks among its candidates (regular Frontier opponents get no gimmicks — [boss-only](FREE_GIMMICKS.md#boss-only-gimmicks-in-the-frontier)), and times its Mega/Dynamax rather than firing on turn 1. Details: [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md); set-building consequences: [`LINE_REVIEW.md`](LINE_REVIEW.md). `test/fork/free_gimmicks.c` |
+| Innate abilities | `FEATURE_INNATE_ABILITIES` | `config/feature.h`, `src/fork/innate_abilities.c` | ✅ | Some species gain always-on innate abilities on top of their chosen one; an innate is a pure boon. [Details](INNATE_ABILITIES.md) · `test/fork/innate_abilities.c` |
+| Species ability overrides | `FEATURE_INNATE_ABILITIES` | `src/fork/species_ability_overrides.c` | ✅ | Replaces a species' ability slot without editing `gSpeciesInfo`, CI-gated against innate clashes. [Details](INNATE_ABILITIES.md#direction) |
+| New types | `FEATURE_NEW_TYPES` | `config/feature.h`, `src/fork/new_types.c` | ✅ | Re-types selected species everywhere from one hook (first: Galarian Ponyta/Rapidash → Fire/Fairy). [Details](NEW_TYPES.md) · `test/fork/new_types.c` |
+| Custom abilities (Affinity family) | _(data; no flag)_ | `src/fork/type_affinity.c` | ✅ | An Affinity gives its holder a latent third type in battle, weaknesses included. [Details](NEW_ABILITIES.md) |
+| Custom abilities (Halo) | _(data; no flag)_ | `src/fork/halo.c` | ✅ | While its holder is out, no single hit can take more than 40% of any battler's max HP; the holder pays +1 PP per move. [Details](NEW_ABILITIES.md#case-study-halo) |
+| Item-free battle gimmicks | `FEATURE_FREE_GIMMICKS` | `config/feature.h`, `src/battle_gimmick.c` | ✅ | Mega, Z-Moves, Tera and Dynamax need no items, with a per-mon picker among them. [Details](FREE_GIMMICKS.md) · `test/fork/free_gimmicks.c` |
+| Sand Spit weather animation fix | _(fix; no new flag)_ | `src/battle_util.c`, `src/battle_script_commands.c` | ✅ | Sand Spit no longer plays a garbage animation that could hang the battle. `test/fork/weather_ability_animation.c` |
+| Illusion survives a form-change gfx reload | _(fix; no new flag)_ | `src/battle_gfx_sfx_util.c` | ✅ | A disguised battler's sprite is no longer repainted as its true species when Dynamax ends. `test/fork/illusion_dynamax.c` |
 
 ## Battle AI
 
 | Feature | Flag(s) | Where | Status | Notes |
 |---|---|---|---|---|
-| Species-aware AI overrides | `AI_FLAG_SMART_SPECIES_LOGIC` | `src/fork/battle_ai_species_overrides.c` | ⚠️ partial | Opt-in AI flag (bit 59 — fork AI flags allocate downward, see CLAUDE.md "ID spaces the fork claims") patching spots where the generic AI misplays specific mons; OR'd into `B_FRONTIER_HARD_AI_FLAGS`. All logic lives in the fork module, reached from three small gated hooks (a switch veto in `ShouldSwitch`, a move-score entry, a Mega-defer in `ReconsiderGimmick`). Covers **Palafin** (don't voluntarily pivot out a transformed Hero form) and **Sharpedo** (Protect turn one to bank a Speed Boost, then Mega — only when the Mega form *loses* the ability). Extend by adding cases to the module. `test/fork/ai_smart_species_logic.c` |
-| Deliberate AI Z-Move usage | `AI_FLAG_SMART_Z_MOVE` | `src/fork/battle_ai_zmove.c` | ✅ | Opt-in per trainer, mirroring upstream's `AI_FLAG_SMART_TERA`. Upstream's `ShouldUseZMove` says yes to any damaging move the plain move wouldn't KO with, so the AI burns its one Z-Move on turn one. With the flag, `AI_ShouldSpendZMove` spends it only to secure a KO this turn, or when the user is about to faint anyway — merely needing fewer hits isn't enough. Also fixes two unconditional fall-throughs in the status-move branch (which spent the Z-Move after judging the boost not worth it); those apply with or without the flag. Not part of `AI_FLAG_SMART_TRAINER`. `test/fork/ai_zmove_selection.c` |
-| Z-Move base power fix | _(no flag; always compiled)_ | `src/battle_z_move.c`, `src/battle_util.c` | ✅ | `GetZMoveBasePower()` is the single source of truth for Z-Move power, shared by the move-selection preview and the damage calc so the number the menu advertises can't drift from the number dealt. Upstream's `ctx->baseMove` (added in #10616) now covers the ordinary path, but it still derives *every* Z-Move's power from the base move via the tier table — wrong for signature Z-Moves, which carry their own power — and it holds the Z-Move rather than the base move on the called-move path, so the fork keeps its `zmove.baseMoves[]` recovery there. `test/fork/zmove_power.c` |
-| AI gimmick type matchups | _(no flag; always compiled)_ | `src/fork/battle_ai_gimmick.c`, `src/battle_ai_util.c` | ✅ | The AI now scores a gimmick move's type matchup off the move the engine will really execute, since a Z-Move or Max Move keeps its base move's type but none of its matchup quirks — Freeze-Dry read as 2x against Water while Subzero Slammer / Max Hailstorm really land for 0.5x, a 4x error that made the AI upgrade into resists. Also covers Flying Press, Thousand Arrows and Synchronoise. `test/fork/ai_gimmick_effectiveness.c` |
-| -ate abilities convert Max Moves | _(no flag; always compiled)_ | `src/battle_main.c`, `src/battle_controller_player.c` | ✅ | Pixilate/Refrigerate/Aerilate/Galvanize/Dragonize now retype a Max Move as the games do, so Pixilate Sylveon's Hyper Voice is Max Starfall both in the picker and when it fires — upstream skipped the -ate branch while Dynamax was active, and the menu previews with the gimmick only *armed*, so the two disagreed. The 20% -ate boost stays off under Dynamax, matching the Normalize branch beside it. The move-selection effectiveness readout also follows the armed Z-Move's (unconverted) type. `test/fork/ate_max_moves.c` |
-| Max Move preview resolves per slot | _(no flag; always compiled)_ | `src/battle_dynamax.c`, `src/battle_controller_player.c` | ✅ | The move picker resolves each slot's Max Move name on its own move: `GetMaxMove` now clears and restores `gBattleStruct->dynamicMoveType` (which `SetTypeBeforeUsingMove` only ever *sets*), so a plate-holding Arceus no longer previews Judgment's Max Mindstorm for the Shadow Ball beneath it while the engine fires Max Phantasm. Also fixes the description window's PWR, which passed the base move where `GetMaxMovePower` wants the max move and so missed the 160 fixed power of G-Max Drum Solo / Hydrosnipe / Fireball. `test/fork/dynamax_move_preview.c` |
+| Species-aware AI overrides | `AI_FLAG_SMART_SPECIES_LOGIC` | `src/fork/battle_ai_species_overrides.c` | ⚠️ partial | Per-species AI fixes (so far Palafin and Sharpedo); extend by adding cases. `test/fork/ai_smart_species_logic.c` |
+| Deliberate AI Z-Move usage | `AI_FLAG_SMART_Z_MOVE` | `src/fork/battle_ai_zmove.c` | ✅ | The AI saves its Z-Move to secure a KO or before fainting, not on turn one. `test/fork/ai_zmove_selection.c` |
+| Z-Move base power fix | _(no flag; always compiled)_ | `src/battle_z_move.c`, `src/battle_util.c` | ✅ | One function gives Z-Move power to both the menu and the damage calc, correct for signature Z-Moves. `test/fork/zmove_power.c` |
+| AI gimmick type matchups | _(no flag; always compiled)_ | `src/fork/battle_ai_gimmick.c`, `src/battle_ai_util.c` | ✅ | The AI scores a Z-Move or Max Move's matchup without its base move's quirks (Freeze-Dry, Flying Press). `test/fork/ai_gimmick_effectiveness.c` |
+| -ate abilities convert Max Moves | _(no flag; always compiled)_ | `src/battle_main.c`, `src/battle_controller_player.c` | ✅ | Pixilate & co. retype Max Moves as the games do, in the picker and when fired. `test/fork/ate_max_moves.c` |
+| Max Move preview resolves per slot | _(no flag; always compiled)_ | `src/battle_dynamax.c`, `src/battle_controller_player.c` | ✅ | Each move slot previews its own Max Move and power. `test/fork/dynamax_move_preview.c` |
 
 ## UI & accessibility
 
 | Feature | Flag(s) | Where | Status | Notes |
 |---|---|---|---|---|
-| Color-blind HP bar | `COLOR_BLIND` | `config/accessibility.h` | ✅ | First of a planned accessibility set. Recolors the in-battle HP bar's healthy (>50%) band from green to the EXP bar's blue, so the ramp is blue→yellow→red rather than putting the confusable colors at the extremes. A 2-entry palette swap, no new graphics. Battle bar only — the party-menu/summary bars use a different mechanism and still follow stock colors. |
-| Clean battle healthboxes | `B_CLEAN_HEALTHBOX` | `config/fork.h`, `src/battle_interface.c` | ✅ | Declutters the healthboxes two ways: **(1)** removes the corner pointer/tail that overlaps the on-healthbox type icons from `B_SHOW_TYPES` — it's baked into the box sprite art, so the flag swaps in fork-owned `*_notail.png` variants; **(2)** removes the singles player box's EXP bar and its wrap-around frame. HP bar, level/HP text, status and nick untouched. Vanilla art/behavior fully preserved at `FALSE`. |
-| Illusion-safe effectiveness readout | `B_SHOW_EFFECTIVENESS` (fix; no new flag) | `src/battle_controller_player.c` | ✅ | Stops the move-select effectiveness indicator from **leaking an Illusion disguise** — `CheckTypeEffectiveness` called the real damage calc and surfaced e.g. Zoroark's Dark weaknesses through the disguise. Now computed from the *apparent* species' base types via `CalcIllusionTypeEffectiveness`, falling back to the true calc once the Illusion breaks. **Known limitation:** pure type-chart only, so it deliberately ignores the hidden mon's ability/item and move-specific overrides (Freeze-Dry, Flying Press). `FORK:`-tagged. |
+| Color-blind HP bar | `COLOR_BLIND` | `config/accessibility.h` | ✅ | The battle HP bar's healthy band is blue instead of green. Party/summary bars unchanged. |
+| Clean battle healthboxes | `B_CLEAN_HEALTHBOX` | `config/fork.h`, `src/battle_interface.c` | ✅ | Removes the healthbox corner tail and the singles player EXP bar. |
+| Illusion-safe effectiveness readout | `B_SHOW_EFFECTIVENESS` (fix; no new flag) | `src/battle_controller_player.c` | ✅ | The effectiveness icon reads a disguised foe's apparent typing, so it can't leak an Illusion. Type chart only while disguised. |
 
 ## The fork-flag test harness
 
@@ -158,90 +143,46 @@ this is the note the other docs point back to.
 Each flag is registered into the runtime config system (`DETERMINISTIC_CONFIG_DEFINITIONS`
 / `BUFF_CONFIG_DEFINITIONS` / `FEATURE_CONFIG_DEFINITIONS` in
 `include/constants/config_changes.h`), so engine code reads it via `GetConfig(X)` and
-battle tests toggle it per-test with `WITH_CONFIG(X, TRUE)`.
+battle tests toggle it per-test with `WITH_CONFIG(X, TRUE)`. The `#define`s are the
+production defaults, while **the per-test baseline forces every flag off**
+(`TestInitConfigData`), so the inherited upstream suite runs against stock behavior and
+only `test/fork/*.c` opts in.
 
-The `#define`s in `config/*.h` remain the production defaults (on in the shipped ROM),
-while **the per-test baseline forces every flag off** (`TestInitConfigData`). That is
-what keeps the entire inherited upstream test suite running against stock behavior
-untouched — only the dedicated `test/fork/*.c` files opt in. It is also what lets the
-species ability-override table repurpose a slot an upstream test pins: that test never
-sees the override.
-
-So **adding a new flag costs one `#define` + one line in the relevant
-`*_CONFIG_DEFINITIONS` + swapping its consumption site(s) to `GetConfig`** — no
-scattering `#if` guards across the upstream suite.
-
-Where a flag has a *magnitude* rather than just on/off, the toggle is registered but
-the magnitude is a plain compile-time constant alongside it — e.g. `BUFF_SHELL_BELL`
-(registered) + `BUFF_SHELL_BELL_DENOMINATOR` (tuning), mirroring how
-`DETERMINISTIC_DAMAGE` pairs its toggle with `BASE_PERCENT`/`TURN_INCREMENT`. This
-keeps the boolean test baseline uniform (force off = stock) while leaving the numbers
-tunable in one fork-owned file.
-
-The `B_FRONTIER_*` flags are the exception: they are plain `#if` compile-time flags,
-not registered.
+Adding a flag costs one `#define`, one `*_CONFIG_DEFINITIONS` line, and `GetConfig` at
+its use sites. A magnitude (`BUFF_SHELL_BELL_DENOMINATOR`) stays a plain compile-time
+constant beside its registered toggle. The `B_FRONTIER_*` flags are the exception:
+plain `#if` compile-time flags, not registered.
 
 ## Known quirks / future work
 
-- **Forced Lv100 leaves dual record tracking (`B_FRONTIER_FORCE_LVL_100`).** With only
-  Open Level in use, the always-empty "Lv 50" block is dropped from the **Factory** and
-  **Tower** results windows (`src/frontier_util.c`). The remaining facilities' record
-  windows still show both blocks. The save block also still persists Lv50 records that
-  can no longer change — a candidate to drop for space if needed.
-- **Battle Dome at 6v6.** Its fixed 3-mon coordinate tables aren't generalized, so its
-  layout is wrong at 6 mons. The tables are stubbed so it still builds.
-- **Bumped `FRONTIER_STAGES_PER_CHALLENGE` (7 → 10) is global.** Per review, the shared
-  constant was changed rather than adding a Factory-specific one, so every facility now
-  sees 10-stage challenges. Their fixed-size layout tables (Battle Pyramid floor/pickup
-  offsets, floor-name arrays) still have 7 entries, so those facilities are off until
-  generalized — accepted for now, to be fixed alongside their endless conversion.
-- **Dead "won challenge" lobby path.** With `B_FRONTIER_ENDLESS` on, the lobby's
-  `CHALLENGE_STATUS_WON` handler is unreachable for new runs (it only fires for a save
-  left mid-WON by a pre-update build, or with the flag off). Kept for compatibility; a
-  later cleanup can remove it.
-- **Substitute message mis-targeting (upstream #10630).** `CancelerHealthBarUpdate()` asked
-  every battler on the field whether its Substitute blocked the move, so a user behind its
-  own Substitute made the line fire against a target that had none — fixed here (see the
-  `FORK:` note in `src/battle_move_resolution.c`, tests in `test/fork/substitute_message.c`).
-  Two sibling defects from the same upstream commit are still open: `STRINGID_SUBSTITUTEDAMAGED`
-  reads `gBattlerTarget` rather than the Substitute's owner, so a spread move in a double names
-  the wrong foe; and `CancelerSubstitute()`'s loop tests `cv->battlerDef` instead of its own
-  `battler` index.
-
-- **Only the Factory and Tower are converted.** Per-facility status, what's left, and
-  the repeatable conversion pattern are in [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md)
-  — read it before converting Palace/Arena/Dome/Pyramid/Pike.
+- **Only the Factory and Tower are converted.** Per-facility status and the conversion
+  pattern are in [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md).
+- **`FRONTIER_STAGES_PER_CHALLENGE` (7 → 10) is global**, so unconverted facilities with
+  fixed 7-entry tables (Pyramid, floor names) are off until their own conversion.
+- **Battle Dome at 6v6:** its 3-mon layout tables are stubbed so it builds, but its
+  layout is wrong.
+- **Forced Lv100 leftovers:** the other facilities' record windows still show a Lv50
+  block, and the save still holds Lv50 records that can no longer change.
+- **Dead "won challenge" lobby path** under `B_FRONTIER_ENDLESS`, kept for old saves.
+- **Substitute message mis-targeting (upstream #10630)** is fixed here
+  (`test/fork/substitute_message.c`). Two sibling upstream defects remain:
+  `STRINGID_SUBSTITUTEDAMAGED` names `gBattlerTarget` rather than the Substitute's owner
+  (wrong foe on a doubles spread move), and `CancelerSubstitute()`'s loop tests
+  `cv->battlerDef` instead of its own `battler`.
 
 ## CI / infrastructure
 
-- **Hardened `Install binutils` CI step.** Upstream installs the GBA toolchain with an
-  inline `apt-get` step copy-pasted into each job, which hung intermittently on
-  dpkg-lock/mirror stalls. We extracted it into a fork-owned composite action,
-  [`.github/actions/install-binutils`](../.github/actions/install-binutils/action.yml),
-  that **caches the ~107 MB of toolchain `.deb`s** (the actual root cause — jobs now
-  install from GitHub's cache rather than the slow Ubuntu mirror) and wraps each apt
-  invocation in a per-attempt `timeout` with backoff retries, so a stall is killed and
-  **auto-retried in-job**, failing only after 3 attempts. A `timeout-minutes` backstop
-  on each call site is the outer net. Every job in `build.yml` and `rom-artifact.yml`
-  calls it via `uses:`. The call sites in `build.yml` are `FORK:`-tagged — on conflict,
-  keep our `uses:` + `timeout-minutes` and port any upstream apt-package change into
-  the action's package list rather than re-inlining the step.
-- **`test/battle/front_anim.c` "Front anims work" is quarantined (`TO_DO`).** Upstream's
-  test plays every species' front-pic animation against a shiny wild opponent under the
-  headless runner. Something in that path writes out of bounds — upstream's EWRAM layout
-  absorbs it, but ours puts `gHeap` there, so it corrupts a malloc block header and hangs
-  the whole suite on an illegal-opcode loop (CI's `test` job then times out after ~1h).
-  Diagnosed with a temporary heap-walk in `malloc.c`'s `FreeInternal`; skipping just the
-  animation callback did **not** fix it (the OOB is in the test's setup), so the whole
-  test is stubbed. This is a latent **upstream** bug worth reporting. On a sync conflict,
-  keep the `TO_DO_BATTLE_TEST` stub; restore the real test only once upstream fixes the
-  OOB (original body is in git history at the sync merge).
+- **Hardened `Install binutils` step:** a fork-owned composite action caches the
+  toolchain and retries stalled installs.
+  [`.github/actions/install-binutils`](../.github/actions/install-binutils/action.yml)
+  carries the details and the sync rule.
+- **`test/battle/front_anim.c` is quarantined (`TO_DO`)** because a latent upstream
+  out-of-bounds write hangs the suite under our memory layout. The `FORK:` note in that
+  file has the diagnosis and when to restore it.
 
 ## Conventions
 
 - Intentional divergences from upstream inside upstream-owned files are tagged `FORK:`
   (greppable: `grep -rn "FORK:" src include .github`).
-- Behavior-preserving cleanups worth contributing back are tagged `UPSTREAM:`.
-- Prefer adding behavior behind a config flag in `include/config/*.h` over patching core
-  logic, so changes land in files we own and survive upstream syncs cleanly. See
-  `CLAUDE.md` for the full rationale.
+- Changes worth contributing back are tagged `UPSTREAM:`.
+- Prefer a config flag over patching core logic; see `CLAUDE.md` for the full rationale.
