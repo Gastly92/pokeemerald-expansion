@@ -1023,8 +1023,10 @@ struct SimulatedDamage AI_CalcDamage(struct AiCalcValues *aiCalc, enum BattlerId
     // The guard keeps the overwhelmingly common no-gimmick calc at one extra read: AI
     // thinking time is budgeted per turn (test/battle/ai/ai_thinking_time.c) and this runs
     // once per move x target x switch-in candidate.
+    // FORK: also remembered as `convertedByGimmick` below; Z-Moves and Max Moves hit once.
     if (GetActiveGimmick(battlerAtk) != GIMMICK_NONE)
         ctx.move = AI_GetGimmickExecutedMove(battlerAtk, move);
+    bool32 convertedByGimmick = (ctx.move != move);
     ctx.typeEffectivenessModifier = aiCalc->typeEffectiveness = CalcTypeEffectivenessMultiplier(&ctx);
     ctx.move = move;
 
@@ -1041,7 +1043,11 @@ struct SimulatedDamage AI_CalcDamage(struct AiCalcValues *aiCalc, enum BattlerId
         {
             simDamage.minimum = simDamage.median = simDamage.maximum = simDamage.random = fixedDamage;
         }
-        else if (moveEffect == EFFECT_TRIPLE_KICK)
+        // FORK: a Z-Move or Max Move converted from a multi-strike move is one hit at the
+        // gimmick's own power (CalcMoveBasePower returns it before EFFECT_TRIPLE_KICK's scaling),
+        // so summing three of them priced a Triple Axel Subzero Slammer at ~3x its real damage.
+        // On conflict: keep the !convertedByGimmick guard on whatever upstream's loop becomes.
+        else if (moveEffect == EFFECT_TRIPLE_KICK && !convertedByGimmick)
         {
             for (gMultiHitCounter = GetMoveStrikeCount(move); gMultiHitCounter > 0; gMultiHitCounter--) // The global is used to simulate actual damage done
             {
@@ -1079,7 +1085,8 @@ struct SimulatedDamage AI_CalcDamage(struct AiCalcValues *aiCalc, enum BattlerId
             simDamage.random = AI_ApplyModifiersAfterDmgRoll(&ctx, simDamage.random);
         }
 
-        if (GetActiveGimmick(battlerAtk) != GIMMICK_Z_MOVE)
+        if (GetActiveGimmick(battlerAtk) != GIMMICK_Z_MOVE
+         && !convertedByGimmick) // FORK: a Max Move is one hit too - no strike-count / Parental Bond multiplier
             CalcDynamicMoveDamage(&ctx, &simDamage);
 
         AI_RestoreBattlerTypes(battlerAtk, types);

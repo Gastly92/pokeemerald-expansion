@@ -273,6 +273,40 @@ SINGLE_BATTLE_TEST("Damage preview: a move type left latched by an earlier calc 
     }
 }
 
+SINGLE_BATTLE_TEST("Damage preview: a gimmick off a multi-strike move is priced as the one hit it is")
+{
+    u32 maxHP, defense;
+    enum Gimmick gimmick;
+    enum Move move;
+    enum Item item;
+    s16 damage;
+    u32 lo = 0, hi = 0;
+
+    // Z-Moves and Max Moves hit once at their own power. The simulation used to run Triple
+    // Axel's three-kick loop at Subzero Slammer's power (~3x), and multiply a Max Move by the
+    // base move's strike count.
+    PARAMETRIZE { gimmick = GIMMICK_Z_MOVE;  move = MOVE_TRIPLE_AXEL; item = ITEM_ICIUM_Z; maxHP = TTAR_FRAIL_HP; defense = TTAR_FRAIL_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_Z_MOVE;  move = MOVE_TRIPLE_AXEL; item = ITEM_ICIUM_Z; maxHP = TTAR_BULKY_HP; defense = TTAR_BULKY_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_DYNAMAX; move = MOVE_DOUBLE_KICK; item = ITEM_NONE;    maxHP = TTAR_FRAIL_HP; defense = TTAR_FRAIL_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_DYNAMAX; move = MOVE_DOUBLE_KICK; item = ITEM_NONE;    maxHP = TTAR_BULKY_HP; defense = TTAR_BULKY_DEF; }
+
+    GIVEN {
+        ASSUME(GetMoveStrikeCount(MOVE_TRIPLE_AXEL) == 3);
+        ASSUME(GetMoveStrikeCount(MOVE_DOUBLE_KICK) == 2);
+        PLAYER(SPECIES_WEAVILE) { Item(item); Moves(move); }
+        OPPONENT(SPECIES_TYRANITAR) { Ability(ABILITY_UNNERVE); MaxHP(maxHP); HP(maxHP); Defense(defense); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, move, gimmick: gimmick); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+    } THEN {
+        // Read with the gimmick armed, the way the menu asks before it is used.
+        SetActiveGimmick(B_BATTLER_0, GIMMICK_NONE);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, gimmick, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, maxHP, lo, hi));
+    }
+}
+
 SINGLE_BATTLE_TEST("Damage preview: the KO verdict is read against the foe's current HP")
 {
     u32 hp, lo, hi;
