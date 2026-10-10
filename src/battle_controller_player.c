@@ -2493,6 +2493,10 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
     ctx.battlerAtk = battlerAtk;
     ctx.battlerDef = battlerDef;
     ctx.move = moveInfo->moves[gMoveSelectionCursor[battlerAtk]];
+    // FORK: an armed Mega Evolution / Ultra Burst is judged as the form it becomes, whose
+    // -ate / Scrappy / Normalize decide the matchup (src/fork/damage_preview.c). Undone right
+    // after the modifier below; keep the pair together on conflict.
+    bool32 armedForm = BeginArmedFormPreview(battlerAtk, GetArmedGimmick(battlerAtk));
     ctx.moveType = CheckDynamicMoveType(GetBattlerMon(battlerAtk), ctx.move, battlerAtk, MON_IN_BATTLE);
     ctx.updateFlags = FALSE;
     ctx.weather = GetWeather();
@@ -2530,6 +2534,9 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
         modifier = CalcIllusionTypeEffectiveness(ctx.moveType, illusionSpecies);
     else
         modifier = CalcTypeEffectivenessMultiplier(&ctx);
+    // FORK: the end of the armed-form projection begun above.
+    if (armedForm)
+        EndArmedFormPreview(battlerAtk);
 
     if (!ShouldShowTypeEffectiveness(battlerDef))
         return EFFECTIVENESS_CANNOT_VIEW;

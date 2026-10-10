@@ -62,7 +62,7 @@ Legend: ✅ done · ⚠️ partial / has known limitations.
 | All species legal in Frontier | `B_FRONTIER_ALL_SPECIES_LEGAL` | `config/frontier.h`, `include/fork/frontier_legality.h` | ✅ | Every species is Frontier-legal; `FALSE` restores the vanilla bans. |
 | Disable Frontier battle recording | `B_FRONTIER_DISABLE_RECORD_BATTLE` | `config/frontier.h`, `src/frontier_util.c` | ✅ | No battle-recording offer, since replays desync on the expansion engine (an upstream fragility). The recording code is intact. |
 | In-battle INFO viewer | `B_FRONTIER_BATTLE_INFO` | `config/frontier.h`, `src/fork/frontier_battle_info.c` | ⚠️ partial | The BAG slot opens a read-only, reveal-gated reference: speed tiers, field, stats, battle log, foe, base stats, innates. Foe page reads opponent A only. [Details](BATTLE_INFO.md) |
-| Move damage preview | `B_MOVE_DAMAGE_PREVIEW` | `config/fork.h`, `src/fork/damage_preview.c` | ✅ | The move menu shows the selected move's damage as a % of the foe's HP, with a KO verdict, using only what the player has seen. [Details](DAMAGE_PREVIEW.md) · `test/fork/damage_preview.c` |
+| Move damage preview | `B_MOVE_DAMAGE_PREVIEW` | `config/fork.h`, `src/fork/damage_preview.c` | ✅ | The move menu shows the selected move's damage as a % of the foe's HP and the type it is fired as, with a KO verdict, using only what the player has seen and an armed Mega form. [Details](DAMAGE_PREVIEW.md) · `test/fork/damage_preview.c` |
 
 ## Determinism (`DETERMINISTIC_*`)
 
