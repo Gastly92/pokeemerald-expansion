@@ -217,6 +217,36 @@ SINGLE_BATTLE_TEST("Damage preview: an armed Z-Move's range contains the Z-Move'
     }
 }
 
+SINGLE_BATTLE_TEST("Damage preview: an armed Dynamax prices G-Max Fireball at its own 160, not Max Flare's tier")
+{
+    u32 maxHP, defense;
+    s16 damage;
+    u32 lo = 0, hi = 0, loBase = 0, hiBase = 0;
+
+    PARAMETRIZE { maxHP = TTAR_FRAIL_HP; defense = TTAR_FRAIL_DEF; }
+    PARAMETRIZE { maxHP = TTAR_BULKY_HP; defense = TTAR_BULKY_DEF; }
+
+    GIVEN {
+        ASSUME(GetMovePower(MOVE_PYRO_BALL) == 120); // Max Flare off it would be 140
+        PLAYER(SPECIES_CINDERACE) { GigantamaxFactor(TRUE); Moves(MOVE_PYRO_BALL); }
+        OPPONENT(SPECIES_TYRANITAR) { Ability(ABILITY_UNNERVE); MaxHP(maxHP); HP(maxHP); Defense(defense); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_PYRO_BALL, gimmick: GIMMICK_DYNAMAX); }
+    } SCENE {
+        MESSAGE("Cinderace used G-Max Fireball!");
+        HP_BAR(opponent, captureDamage: &damage);
+    } THEN {
+        // Read with the gimmick armed, the way the menu asks before the Pokemon has Dynamaxed.
+        SetActiveGimmick(B_BATTLER_0, GIMMICK_NONE);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_PYRO_BALL, GIMMICK_DYNAMAX, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, maxHP, lo, hi));
+        // The spread is wide enough to hide 140 vs 160 above, so pin the power: 160/120 over
+        // plain Pyro Ball, where Max Flare's tier would read 140/120.
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_PYRO_BALL, GIMMICK_NONE, &loBase, &hiBase, &sKo));
+        EXPECT_GE(hi * 100, hiBase * 125);
+    }
+}
+
 SINGLE_BATTLE_TEST("Damage preview: the KO verdict is read against the foe's current HP")
 {
     u32 hp, lo, hi;

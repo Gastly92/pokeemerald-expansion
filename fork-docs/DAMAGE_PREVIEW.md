@@ -32,7 +32,9 @@ the roll is the fixed turn multiplier, so only the spread widens the range.
 
 Everything the player **does** know is used as normal: your own mon's stats, ability, item
 and stat stages, the foe's stat stages, types (Tera included), weather, terrain, screens, and
-an armed Z-Move / Dynamax / Tera / Mega Evolution. Multi-hit moves count their hits.
+an armed Z-Move / Dynamax / Tera / Mega Evolution. Multi-hit moves count their hits. An armed Dynamax prices the Max Move
+the move becomes, G-Max moves included (G-Max Fireball is 160, not Max Flare's tier), and drops
+Choice Band / Specs as the real Dynamax does.
 
 ## What it hides
 
