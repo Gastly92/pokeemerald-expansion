@@ -164,6 +164,9 @@ enum Gimmick GetArmedGimmick(enum BattlerId battler)
 // The projection's scratch lives in EWRAM, not on the stack: it is taken under the AI damage
 // calc, whose call depth leaves no room for two more battler-sized structs.
 static EWRAM_DATA struct BattlePokemon sArmedFormSaved = {0};
+// GetDamagePreviewRange's saved type / category latches, off the stack for the same reason.
+static EWRAM_DATA enum Type sSavedDynamicMoveType = 0;
+static EWRAM_DATA enum DamageCategory sSavedDynamicMoveCategory = 0;
 static EWRAM_DATA struct Pokemon sArmedFormMon = {0};
 
 bool32 BeginArmedFormPreview(enum BattlerId battler, enum Gimmick gimmick)
@@ -261,6 +264,17 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     hpScaleDen = (GetActiveGimmick(battlerDef) == GIMMICK_DYNAMAX) ? GetNonDynamaxMaxHP(battlerDef) : realDef.maxHP;
     if (hpScaleDen == 0)
         hpScaleDen = hpScaleNum = 1;
+
+    // SetTypeBeforeUsingMove only ever *sets* these latches, so whatever the last caller left in
+    // them (the AI scoring the foe's Weather Ball in rain leaves Water) is read as the type of any
+    // move without a dynamic type of its own. AI_CalcDamage clears them only on its way out, so
+    // the first calc below -- the bulky end -- came out as a Water-type U-turn into Politoed, at
+    // half damage, while the frail end and every redraw after it were right ("20%-KO" on opening
+    // the menu, "40%-KO" after moving the cursor). Start clean, and put back what was there.
+    sSavedDynamicMoveType = gBattleStruct->dynamicMoveType;
+    sSavedDynamicMoveCategory = gBattleStruct->dynamicMoveCategory;
+    gBattleStruct->dynamicMoveType = TYPE_NONE;
+    gBattleStruct->dynamicMoveCategory = DAMAGE_CATEGORY_NONE;
 
     savedDragonDarts = gAiLogicData->dragonDartsHitsBothTarget;
     savedHpPercent = gAiLogicData->hpPercents[battlerDef];
@@ -363,6 +377,8 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     }
     gAiLogicData->dragonDartsHitsBothTarget = savedDragonDarts;
     gAiLogicData->hpPercents[battlerDef] = savedHpPercent;
+    gBattleStruct->dynamicMoveType = sSavedDynamicMoveType;
+    gBattleStruct->dynamicMoveCategory = sSavedDynamicMoveCategory;
     if (armedForm)
         EndArmedFormPreview(battlerAtk);
 

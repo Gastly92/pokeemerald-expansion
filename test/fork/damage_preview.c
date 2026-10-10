@@ -247,6 +247,32 @@ SINGLE_BATTLE_TEST("Damage preview: an armed Dynamax prices G-Max Fireball at it
     }
 }
 
+SINGLE_BATTLE_TEST("Damage preview: a move type left latched by an earlier calc does not leak into the range")
+{
+    u32 lo = 0, hi = 0, loClean = 0, hiClean = 0;
+
+    // SetTypeBeforeUsingMove only ever sets gBattleStruct->dynamicMoveType, so a value the AI
+    // left there (scoring the foe's Weather Ball in rain leaves Water) used to be read as the
+    // type of a move with no dynamic type of its own. AI_CalcDamage clears it on its way out,
+    // so only the first of the preview's two calcs -- the bulky end -- came out wrong: a
+    // Water-type U-turn into Politoed, at half damage, until the cursor moved.
+    GIVEN {
+        PLAYER(SPECIES_CINDERACE) { Ability(ABILITY_LIBERO); Moves(MOVE_U_TURN); }
+        OPPONENT(SPECIES_POLITOED) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { }
+    } THEN {
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_U_TURN, GIMMICK_NONE, &loClean, &hiClean, &sKo));
+        gBattleStruct->dynamicMoveType = TYPE_WATER;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_U_TURN, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT_EQ(lo, loClean);
+        EXPECT_EQ(hi, hiClean);
+        // ...and the preview leaves the latch as it found it.
+        EXPECT_EQ(gBattleStruct->dynamicMoveType, TYPE_WATER);
+        gBattleStruct->dynamicMoveType = TYPE_NONE;
+    }
+}
+
 SINGLE_BATTLE_TEST("Damage preview: the KO verdict is read against the foe's current HP")
 {
     u32 hp, lo, hi;
