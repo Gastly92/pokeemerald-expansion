@@ -359,21 +359,25 @@ DOUBLE_BATTLE_TEST("Damage preview: an armed Mega Evolution reads the weather it
     }
 }
 
-SINGLE_BATTLE_TEST("Damage preview: the type label follows an armed Mega Evolution's -ate ability")
+SINGLE_BATTLE_TEST("Damage preview: the readout names the type the move is fired as")
 {
     GIVEN {
-        ASSUME(P_SHOW_DYNAMIC_TYPES);
+        ASSUME(GetMoveType(MOVE_HYPER_VOICE) == TYPE_NORMAL);
+        ASSUME(GetMoveType(MOVE_WEATHER_BALL) == TYPE_NORMAL);
         WITH_CONFIG(FEATURE_FREE_GIMMICKS, FALSE);
-        PLAYER(SPECIES_GARDEVOIR) { Item(ITEM_GARDEVOIRITE); Moves(MOVE_CELEBRATE, MOVE_HYPER_VOICE); }
+        PLAYER(SPECIES_GARDEVOIR) { Item(ITEM_GARDEVOIRITE); Moves(MOVE_CELEBRATE, MOVE_HYPER_VOICE, MOVE_WEATHER_BALL); }
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
     } WHEN {
         TURN {}
     } THEN {
-        gBattleStruct->gimmick.usableGimmick[B_BATTLER_0] = GIMMICK_MEGA;
-        gBattleStruct->gimmick.toActivate &= ~(1u << B_BATTLER_0);
-        EXPECT_EQ(GetArmedFormDynamicMoveType(B_BATTLER_0, MOVE_HYPER_VOICE, TYPE_NORMAL), TYPE_NORMAL);
-        gBattleStruct->gimmick.toActivate |= 1u << B_BATTLER_0;
-        EXPECT_EQ(GetArmedFormDynamicMoveType(B_BATTLER_0, MOVE_HYPER_VOICE, TYPE_NORMAL), TYPE_FAIRY);
+        // Pixilate only once the armed Mega form is in place.
+        EXPECT_EQ(GetDamagePreviewMoveType(B_BATTLER_0, MOVE_HYPER_VOICE, GIMMICK_NONE), TYPE_NORMAL);
+        EXPECT_EQ(GetDamagePreviewMoveType(B_BATTLER_0, MOVE_HYPER_VOICE, GIMMICK_MEGA), TYPE_FAIRY);
         EXPECT_EQ(gBattleMons[B_BATTLER_0].species, SPECIES_GARDEVOIR);
+        // A move whose type follows the field, with no gimmick involved.
+        gBattleWeather = B_WEATHER_SUN_NORMAL;
+        EXPECT_EQ(GetDamagePreviewMoveType(B_BATTLER_0, MOVE_WEATHER_BALL, GIMMICK_NONE), TYPE_FIRE);
+        // Nothing the type resolution latches is left behind for the real move.
+        EXPECT_EQ(gBattleStruct->dynamicMoveType, TYPE_NONE);
     }
 }

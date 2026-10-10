@@ -1762,9 +1762,6 @@ static void MoveSelectionDisplayMoveType(enum BattlerId battler)
     {
         struct Pokemon *mon = GetBattlerMon(battler);
         type = CheckDynamicMoveType(mon, move, battler, MON_IN_BATTLE);
-        // FORK: an armed Mega Evolution / Ultra Burst shows the type its form fires (Pixilate's
-        // Fairy Hyper Voice); src/fork/damage_preview.c. Additive line; keep it on conflict.
-        type = GetArmedFormDynamicMoveType(battler, move, type);
     }
     // FORK: B_MOVE_DAMAGE_PREVIEW prints "<Type> lo-hi%" in place of "TYPE/<Type>" for a move
     // with a damage range (src/fork/damage_preview.c); otherwise fall through to the stock line.

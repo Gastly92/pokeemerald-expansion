@@ -48,7 +48,10 @@ player can know and then restored byte-for-byte:
 
 ## Display
 
-- Replaces the `TYPE/` label: `<Type> lo-hi%`, narrowed to fit the 64px row.
+- Replaces the `TYPE/` label: `<Type> lo-hi%`, narrowed to fit the 64px row. `<Type>` is the
+  type the move is fired as, not its base type: Weather Ball in sun reads `Fire`, a Pixilate
+  Hyper Voice `Fairy`, an armed Tera's Tera Blast its Tera type. This needs no upstream flag
+  (`P_SHOW_DYNAMIC_TYPES` stays off); status moves keep the stock label.
 - **Both ends round down** (42.2-53.6% reads `42-53%`), so the top end never shows 100 for a hit that cannot take the full bar.
   The INFO viewer's foe `HP n%` rounds the **other** way (up), so on-screen "damage ≥ HP" is
   always a real KO: a 46.2% hit on a 46.6% foe reads `46%` vs `HP 47%`, not `46%` vs `46%`.
@@ -76,6 +79,6 @@ player can know and then restored byte-for-byte:
 - **Mega Evolution / Ultra Burst:** with one armed, the attacker is read as the form it becomes —
   its stats from your mon's own spread, its types and its ability (Huge Power, Pixilate, Tough
   Claws...), plus any weather that ability sets on the way in (Mega Charizard Y's sun). The
-  type label (`P_SHOW_DYNAMIC_TYPES`, on in this fork) and the effectiveness icon follow the
-  same form, so a Mega Gardevoir-to-be's Hyper Voice reads Fairy. The form is borrowed for the
-  calc and restored; nothing on screen changes until it really Mega Evolves.
+  type it names and the effectiveness icon follow the same form, so a Mega Gardevoir-to-be's
+  Hyper Voice reads `Fairy`. The form is borrowed for the calc and restored; nothing on screen
+  changes until it really Mega Evolves.

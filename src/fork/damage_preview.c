@@ -16,6 +16,7 @@
 #include "battle_controllers.h"
 #include "battle_dynamax.h"
 #include "battle_gimmick.h"
+#include "battle_main.h"
 #include "battle_message.h"
 #include "battle_util.h"
 #include "pokemon.h"
@@ -196,12 +197,31 @@ void EndArmedFormPreview(enum BattlerId battler)
     gBattleMons[battler] = sArmedFormSaved;
 }
 
-enum Type GetArmedFormDynamicMoveType(enum BattlerId battler, enum Move move, enum Type type)
+enum Type GetDamagePreviewMoveType(enum BattlerId battler, enum Move move, enum Gimmick gimmick)
 {
-    if (!BeginArmedFormPreview(battler, GetArmedGimmick(battler)))
-        return type;
-    type = CheckDynamicMoveType(GetBattlerMon(battler), move, battler, MON_IN_BATTLE);
-    EndArmedFormPreview(battler);
+    bool32 armedForm = BeginArmedFormPreview(battler, gimmick);
+    bool32 toggledGimmick = FALSE;
+    enum Type type;
+
+    // Set up the way AI_CalcDamage sets it up, so the name agrees with the range beside it:
+    // the armed gimmick switched on, then the engine's own pre-move type resolution. Everything
+    // SetTypeBeforeUsingMove latches is cleared again, as AI_CalcDamage clears it.
+    if (gimmick != GIMMICK_NONE && GetActiveGimmick(battler) == GIMMICK_NONE)
+    {
+        toggledGimmick = TRUE;
+        SetActiveGimmick(battler, gimmick);
+    }
+    gBattleStruct->dynamicMoveType = TYPE_NONE;
+    SetTypeBeforeUsingMove(move, battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
+    type = GetBattleMoveType(move);
+    gBattleStruct->dynamicMoveType = TYPE_NONE;
+    gBattleStruct->dynamicMoveCategory = DAMAGE_CATEGORY_NONE;
+    gBattleStruct->battlerState[battler].ateBoost = FALSE;
+    gSpecialStatuses[battler].gemBoost = FALSE;
+    if (toggledGimmick)
+        SetActiveGimmick(battler, GIMMICK_NONE);
+    if (armedForm)
+        EndArmedFormPreview(battler);
     return type;
 }
 
@@ -421,6 +441,9 @@ static bool32 PrintDamagePreview(enum BattlerId battler, enum Move move, enum Gi
         return FALSE;
     if (!GetDamagePreviewRange(battler, target, move, gimmick, &lo, &hi, &ko))
         return FALSE;
+    // A Z-Move's row names the Z-Move's own type, which its caller passes in.
+    if (gimmick != GIMMICK_Z_MOVE)
+        type = GetDamagePreviewMoveType(battler, move, gimmick);
 
     end = StringCopy(gDisplayedStringBattle, gTypesInfo[type].name);
     *end++ = CHAR_SPACE;
