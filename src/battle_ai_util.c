@@ -997,6 +997,11 @@ struct SimulatedDamage AI_CalcDamage(struct AiCalcValues *aiCalc, enum BattlerId
     }
 
     SetDynamicMoveCategory(battlerAtk, battlerDef, move);
+    // UPSTREAM: SetTypeBeforeUsingMove only ever *sets* the type latch, and this function clears
+    // it only on its way out, so a value an earlier caller left behind (scoring Weather Ball in
+    // rain leaves Water) was read as the type of the next move with no dynamic type of its own.
+    // Regression test: test/fork/ai_calc_damage_type_latch.c.
+    gBattleStruct->dynamicMoveType = TYPE_NONE;
     SetTypeBeforeUsingMove(move, battlerAtk, ctx.abilities[battlerAtk], ctx.holdEffects[battlerAtk]);
 
     ctx.moveType = GetBattleMoveType(move);
