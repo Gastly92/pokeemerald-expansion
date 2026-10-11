@@ -90,7 +90,9 @@ its current `HP n%` (or `FNT`) right-aligned, the same rounded-up figure as the 
 
 **Your rows use effective Speed instead** — `GetBattlerTotalSpeedStat`, which folds in
 everything you already know about your own side: Choice Scarf, Tailwind, paralysis,
-stat stages, Speed abilities.
+stat stages, Speed abilities. Each also carries its own current `HP n%`, rounded up the
+same way as the foe rows - which makes it exact for HP-cost moves: Substitute (1/4 max HP)
+works iff it reads **26%** or more, Belly Drum (1/2) iff **51%** or more.
 
 The fastest of your active mons anchors a per-foe comparison **glyph**:
 

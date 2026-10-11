@@ -97,3 +97,64 @@ SINGLE_BATTLE_TEST("Frontier INFO: the HP % never reads as KO'd by a hit that le
         EXPECT_GT(GetFoeHpPercent(0), damagePct);
     }
 }
+
+// The Speed page's "You:" rows carry the same rounded-up figure. Rounding up is what makes it
+// usable for Substitute: the move works iff the row reads 26% or more. These are the HP values
+// of the 26/25/25 cases in the test below; this one checks the move agrees.
+SINGLE_BATTLE_TEST("Frontier INFO: Substitute works exactly when your HP % reads 26 or more")
+{
+    u32 hp;
+    bool32 works;
+
+    PARAMETRIZE { hp = 101; works = TRUE; }  // 25.25% reads 26
+    PARAMETRIZE { hp = 100; works = FALSE; } // exactly 1/4 reads 25, and is not enough
+    PARAMETRIZE { hp = 99;  works = FALSE; } // 24.75% reads 25
+
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(400); HP(hp); Moves(MOVE_SUBSTITUTE, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_SUBSTITUTE); }
+    } SCENE {
+        if (works)
+            ANIMATION(ANIM_TYPE_MOVE, MOVE_SUBSTITUTE, player);
+        else
+            NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_SUBSTITUTE, player);
+    } THEN {
+        if (works)
+            EXPECT_EQ(gBattleMons[0].hp, hp - 100);
+        else
+            EXPECT_EQ(gBattleMons[0].hp, hp);
+    }
+}
+
+SINGLE_BATTLE_TEST("Frontier INFO: your HP % rounds up, and reads 100 only at full HP")
+{
+    u32 maxHP, hp, expected;
+
+    PARAMETRIZE { maxHP = 200; hp = 200; expected = 100; }
+    PARAMETRIZE { maxHP = 200; hp = 199; expected = 99; }
+    PARAMETRIZE { maxHP = 400; hp = 101; expected = 26; } // the Substitute cases above
+    PARAMETRIZE { maxHP = 400; hp = 100; expected = 25; }
+    PARAMETRIZE { maxHP = 400; hp = 99;  expected = 25; }
+
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(maxHP); HP(hp); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(GetBattlerHpPercent(0), expected);
+    }
+}
+
+// "You: " + the widest 12-character nickname + "  Spe 9999" must leave room for "HP 100%".
+TEST("Frontier INFO: the Speed page's HP column clears the widest own row")
+{
+    u8 row[64], hpText[16];
+
+    StringCopy(row, COMPOUND_STRING("You: WWWWWWWWWWWW  Spe 9999"));
+    StringCopy(hpText, COMPOUND_STRING("HP 100%"));
+    EXPECT_LT(GetStringWidth(FONT_NARROW, row, 0) + GetStringWidth(FONT_NARROW, hpText, 0) + 4, 28 * 8);
+}

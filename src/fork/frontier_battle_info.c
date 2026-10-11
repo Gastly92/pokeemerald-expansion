@@ -629,22 +629,10 @@ static u32 CountDisplayedInnates(enum Species displaySpecies, bool32 abilitySeen
     return CollectDisplayedInnates(displaySpecies, abilitySeen, seenAbility, innates);
 }
 
-u32 GetFoeHpPercent(u32 foeIndex)
+static u32 HpPercentRoundedUp(u32 hp, u32 maxHP)
 {
-    struct Pokemon *mon = &GetTrainerParty(B_TRAINER_OPPONENT_A)[foeIndex];
-    u32 hp = GetMonData(mon, MON_DATA_HP, NULL);
-    u32 maxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
     u32 pct;
 
-    for (enum BattlerId b = 0; b < gBattlersCount; b++)
-    {
-        if (!IsOnPlayerSide(b) && gBattlerPartyIndexes[b] == foeIndex && IsBattlerAlive(b))
-        {
-            hp = gBattleMons[b].hp;
-            maxHP = gBattleMons[b].maxHP;
-            break;
-        }
-    }
     if (hp == 0 || maxHP == 0)
         return 0;
     if (hp >= maxHP)
@@ -658,11 +646,35 @@ u32 GetFoeHpPercent(u32 foeIndex)
     return pct > 99 ? 99 : pct;
 }
 
-// "HP n%", or "FNT" for a fainted slot.
-static void FormatFoeHp(u8 *dst, u32 foeIndex)
+u32 GetFoeHpPercent(u32 foeIndex)
 {
-    u32 pct = GetFoeHpPercent(foeIndex);
+    struct Pokemon *mon = &GetTrainerParty(B_TRAINER_OPPONENT_A)[foeIndex];
+    u32 hp = GetMonData(mon, MON_DATA_HP, NULL);
+    u32 maxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
 
+    for (enum BattlerId b = 0; b < gBattlersCount; b++)
+    {
+        if (!IsOnPlayerSide(b) && gBattlerPartyIndexes[b] == foeIndex && IsBattlerAlive(b))
+        {
+            hp = gBattleMons[b].hp;
+            maxHP = gBattleMons[b].maxHP;
+            break;
+        }
+    }
+    return HpPercentRoundedUp(hp, maxHP);
+}
+
+// The same figure for one of the player's on-field battlers (Speed page "You:" rows). Rounding
+// up makes the Substitute / Belly Drum thresholds exact rather than approximate: a cost of 1/4
+// max HP is affordable iff this reads 26 or more (1/2: 51 or more).
+u32 GetBattlerHpPercent(u32 battler)
+{
+    return HpPercentRoundedUp(gBattleMons[battler].hp, gBattleMons[battler].maxHP);
+}
+
+// "HP n%", or "FNT" for a fainted slot.
+static void FormatHpPercent(u8 *dst, u32 pct)
+{
     if (pct == 0)
     {
         StringCopy(dst, COMPOUND_STRING("FNT"));
@@ -697,7 +709,7 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
     // a hit whose low end is at least this number KOs. A fainted mon keeps its FNT marker instead.
     if (seen && GetFoeHpPercent(foeIndex) != 0)
     {
-        FormatFoeHp(line, foeIndex);
+        FormatHpPercent(line, GetFoeHpPercent(foeIndex));
         PrintTitleMarker(windowId, line);
     }
     y += LINE_H;
@@ -1707,6 +1719,10 @@ static void DrawSpeedPage(u8 windowId)
         p = StringCopy(p, COMPOUND_STRING("  Spe "));
         ConvertIntToDecimalStringN(p, spe, STR_CONV_MODE_LEFT_ALIGN, 4);
         PrintLine(windowId, line, 0, y);
+        // Current HP, right-aligned like the foe rows, so a Substitute / Belly Drum call can be
+        // made from this page ("You: " + a 12-letter nickname + "  Spe 9999" is well under ~150px).
+        FormatHpPercent(line, GetBattlerHpPercent(battler));
+        PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
         y += LINE_H;
     }
 
@@ -1780,7 +1796,7 @@ static void DrawSpeedPage(u8 windowId)
             PrintLine(windowId, line, 0, y);
             // Current HP, right-aligned: the row is ~150px at its longest ("Foe 6: " + a
             // 12-letter name + " 999-999 ^"), so "HP 100%" (~35px) clears it in 224px.
-            FormatFoeHp(line, slots[k]);
+            FormatHpPercent(line, GetFoeHpPercent(slots[k]));
             PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
             y += LINE_H;
         }

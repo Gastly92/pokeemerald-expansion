@@ -48,5 +48,8 @@ void ApplyAccuracyItemReveals(void);
 // on-field mon is read from its battler (a Dynamaxed foe's bar is its multiplied HP), a benched
 // one from the party. Exposed for test/fork/frontier_battle_info_hp.c.
 u32 GetFoeHpPercent(u32 foeIndex);
+// The same rounded-up figure for one of the player's on-field battlers (Speed page "You:" rows):
+// a 1/4-max-HP cost like Substitute is affordable iff it reads 26 or more.
+u32 GetBattlerHpPercent(u32 battler);
 
 #endif // GUARD_FRONTIER_BATTLE_INFO_H
