@@ -133,7 +133,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_BIG_ROOT,
         .moves =
         {
             MOVE_SLEEP_POWDER,
@@ -147,7 +147,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .def = 252,
             .spd = 4
-        ), 
+        ),
         .teraType = TYPE_STEEL,
     },
     {
@@ -169,6 +169,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_VENUSAUR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_GROWTH,
+            MOVE_SOLAR_BEAM,
+            MOVE_WEATHER_BALL
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
     },
 
     // 0006
