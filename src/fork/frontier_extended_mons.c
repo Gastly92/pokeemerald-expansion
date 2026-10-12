@@ -178,7 +178,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HEAT_WAVE,
             MOVE_SLUDGE_BOMB,
-            MOVE_LEAF_STORM,
+            MOVE_ENERGY_BALL,
             MOVE_EARTH_POWER
         },
         .ability = ABILITY_GRASSY_SURGE,
@@ -189,6 +189,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_VENUSAUR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves =
+        {
+            MOVE_CURSE,
+            MOVE_KNOCK_OFF,
+            MOVE_POWER_WHIP,
+            MOVE_SYNTHESIS
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(SPD_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_DARK,
     },
 
     // 0006
