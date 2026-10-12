@@ -72,8 +72,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
    `python3 .claude/skills/line-review/tools/forms.py <NAME>`, run from the repo
    root. That directory also holds `lines.py` (the lines a dex range covers),
    `line.py` (a species' rows and sets), `dex.py`, `users.py` (canon ability
-   users), and the `inn.py`/`addset.py` editors; each carries its usage in a
-   docstring.
+   users), `smogon.py` (Smogon's published sets, all gens and formats), and the
+   `inn.py`/`addset.py` editors; each carries its usage in a docstring.
    Rows and sets are routinely keyed on a form constant a bare name aliases to
    (`SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_MINIOR` → `_METEOR_RED` in two hops)
    and the reverse (`SPECIES_ALCREMIE` is `_STRAWBERRY_VANILLA_CREAM`). Grep
@@ -288,20 +288,23 @@ Everything in "Do this" still applies **per line**, at the same depth.
   per species, so borrowing an implemented innate another species carries is intended,
   not a loophole. **`ABILITY_NONE` is banned** by a fourth roster test; free a slot with
   a fork override instead.
-- **Smogon is a legitimate input for EVALUATION, never for generation.** Competitive
-  analysis sharpens both parts of Step 3 — a second opinion on whether a move earns
-  its slot, whether a spread reaches a benchmark, whether a set is one you'd draft.
+- **Smogon is a legitimate input: read it after drafting from the creature, for
+  ideas and for evaluation.** Run `tools/smogon.py <NAME>` (every published set, all
+  gens and formats) rather than citing it from memory. It sharpens both parts of
+  Step 3 — a second opinion on whether a move earns its slot, whether a spread
+  reaches a benchmark, whether a set is one you'd draft — and its sets are a good
+  source of roles, items and moves once your own draft exists.
   Three limits: it is **learnset-constrained**, so building *from* a Smogon set
   re-imports the very gate the moveset rule above removes (generate from the creature
-  first, then let Smogon critique it — never let it bound the move pool); this fork's
+  first, then read Smogon — never let it bound the move pool); this fork's
   **mechanics aren't vanilla**, so re-check any claim against `deterministic.h` /
   `buff.h` (Blizzard is 4 PP here, secondaries need a super-effective hit, paralysis
   is weaker, high-crit moves always crit through the gate); and the **format differs**
   (Factory drafting, no teambuilding or team preview, AI opponents).
   **Flavor still governs** — a Smogon-optimal set that reads as nothing is a worse
-  outcome than a flavorful one that gives up power. Smogon breaks ties and catches
-  mistakes; it doesn't pick the concept. Flag it as recall (or fetch it) — it's not
-  in the repo.
+  outcome than a flavorful one that gives up power. Smogon feeds ideas, breaks ties
+  and catches mistakes; flavor decides. Cite the generation and format of any set you
+  lean on.
 - **Build sets for the BASE form; the Mega is upside.** Gimmicks are **once per
   trainer per battle** (`HasTrainerUsedGimmick`), and free gimmicks make the whole
   drafted team eligible, so they compete for one slot — a given mon often won't

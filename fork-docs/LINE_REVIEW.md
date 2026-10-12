@@ -220,6 +220,7 @@ from the repo root; each carries its usage in a docstring.
 | `users.py ABILITY…` | the canon users of an ability — the Step 1 signature gate |
 | `inn.py SPECIES… ABILITY…` | add innates to existing rows, keeping them alphabetical |
 | `addset.py NAME` | insert a new frontier set after that species' last one |
+| `smogon.py NAME…` | Smogon's published sets for a species and its formes, every generation and format (`python3 -I`; fetched from data.pkmn.cc and cached) |
 
 ### Working the batch
 
@@ -823,12 +824,15 @@ anything Beedrill learns; and a cornered venomous defender wants **Baneful Bunke
 over plain Protect. None of the three are in its learnset, and all three read more
 truly than the moves that are.
 
-**Smogon is a legitimate input — for EVALUATION, never for generation.** Competitive
-analysis (Smogon dex entries, standard sets, spread benchmarks, what a species is
+**Smogon is a legitimate input — read it after drafting from the creature, for
+ideas and for evaluation.** `tools/smogon.py` prints every set Smogon has published
+for a species across all nine generations and every format, so this is real data,
+not recall. Competitive analysis (standard sets, spread benchmarks, what a species is
 actually considered good and bad at, what checks it) genuinely sharpens both parts of
 this step: it is a good second opinion on whether a move earns its slot, whether a
-spread reaches anything, and whether a set is one you would really draft. Use it to
-enhance the analysis. Three limits, because it is describing a different game:
+spread reaches anything, and whether a set is one you would really draft — and its
+sets are a good source of ideas (a role, an item, a move) once your own draft exists.
+Three limits, because it is describing a different game:
 
 - **It is learnset-constrained, and this step is not.** Every Smogon set is legal by
   construction, so building *from* one silently re-imports the exact gate the
@@ -851,9 +855,8 @@ enhance the analysis. Three limits, because it is describing a different game:
 And **flavor still governs.** A Smogon-optimal set that reads as nothing in particular
 is a worse outcome here than a flavorful one that gives up some power — this doc is
 flavor-first by design, and competitive strength is welcome, not required. Smogon
-breaks ties and catches mistakes; it does not pick the concept. Same honesty rule as
-the other-media clause in Step 1: it is not in the repo, so flag it as recall (or fetch
-the actual analysis if the session has network) rather than presenting it as verified.
+feeds ideas, breaks ties and catches mistakes; flavor decides. Run `smogon.py` rather than
+citing Smogon from memory, and name the generation and format of any set you cite.
 
 **Step 3 runs in two parts, in order: Part A audits what is already there, Part B
 adds new sets.** Finish Part A before starting Part B — same reasoning as the step
