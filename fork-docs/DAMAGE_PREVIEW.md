@@ -37,6 +37,13 @@ the move becomes, G-Max moves included (G-Max Fireball is 160, not Max Flare's t
 Choice Band / Specs as the real Dynamax does. A Z-Move or Max Move off a multi-strike move
 (Triple Axel, Double Kick) is priced as the single hit it is.
 
+Your item is read as it will be **when the move runs**. An item used up while turn order is
+settled — Quick Claw on its entry turn under `DETERMINISTIC_HOLD_EFFECTS`, a Custap Berry in its
+HP range — counts as already gone, so Acrobatics shows its doubled power. Items used up at move
+end (crit / flinch items, King's Rock) are still held for the hit. A held crit item's guaranteed
+crit under `DETERMINISTIC_HOLD_EFFECTS` is priced in, as is a Gem's boost. What a faster foe does
+to your item first (Knock Off, Thief, Trick) cannot be known and is not predicted.
+
 ## What it hides
 
 Built on the AI's damage simulation (`AI_CalcDamage`), with the foe rewritten into what the

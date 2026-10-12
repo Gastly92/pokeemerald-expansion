@@ -877,6 +877,11 @@ static inline bool32 ShouldCalcCritDamage(struct DamageContext *ctx)
         return TRUE;
     if (GetCriticalHitOdds(critChanceIndex) == 1)
         return TRUE;
+    // FORK: DETERMINISTIC_HOLD_EFFECTS -- a held crit item guarantees the crit, exactly as in
+    // IsCriticalHit, so the AI and the move menu's damage preview must price it in.
+    // Regression test: test/fork/damage_preview.c ("Scope Lens").
+    if (critChanceIndex != CRITICAL_HIT_BLOCKED && IsDeterministicCritItemActive(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]))
+        return TRUE;
 
     // FORK: with DETERMINISTIC_CRITICAL_HITS the random roll never crits, so the AI
     // must not gamble on a partial-chance crit (even when Risky) — it would predict

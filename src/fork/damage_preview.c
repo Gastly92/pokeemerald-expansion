@@ -24,6 +24,7 @@
 #include "text.h"
 #include "window.h"
 #include "fork/damage_preview.h"
+#include "fork/innate_abilities.h"
 #include "constants/battle.h"
 #include "constants/characters.h"
 
@@ -63,6 +64,32 @@ static bool32 IsFoeItemKnown(enum BattlerId battler)
     if (GetIllusionMonSpecies(battler) != SPECIES_NONE)
         return FALSE;
     return (gBattleStruct->infoItemRevealed[GetBattlerSide(battler)] >> gBattlerPartyIndexes[battler]) & 1;
+}
+
+// An item the attacker uses up while turn order is settled, before its move runs, mirroring
+// TryChangingTurnOrderEffects / CheckChangingTurnOrderEffects (src/battle_main.c): Quick Claw on
+// the holder's entry turn under DETERMINISTIC_HOLD_EFFECTS, and a Custap Berry in its HP range.
+// The move then runs item-less, which is what Acrobatics (doubled) and Fling (fails) read.
+// Not used when an entry-turn Quick Draw goes first instead, or the holder cannot act.
+static bool32 IsItemUsedUpBeforeMove(enum BattlerId battler, enum Move move)
+{
+    enum HoldEffect holdEffect = GetBattlerHoldEffect(battler);
+    bool32 used;
+
+    if (holdEffect == HOLD_EFFECT_QUICK_CLAW)
+        used = GetConfig(DETERMINISTIC_HOLD_EFFECTS) && IsBattlersFirstTurn(battler);
+    else if (holdEffect == HOLD_EFFECT_CUSTAP_BERRY)
+        used = HasEnoughHpToEatBerry(battler, GetBattlerAbility(battler), 4, gBattleMons[battler].item);
+    else
+        return FALSE;
+    if (!used || GetMoveEffect(move) == EFFECT_FOCUS_PUNCH)
+        return FALSE;
+    if (gBattleMons[battler].status1 & STATUS1_SLEEP || gBattleMons[battler].volatiles.truantCounter)
+        return FALSE;
+    if (BattlerHasAbility(battler, ABILITY_QUICK_DRAW) && !IsBattleMoveStatus(move)
+     && GetConfig(DETERMINISTIC_ABILITIES) && IsBattlersFirstTurn(battler))
+        return FALSE;
+    return TRUE;
 }
 
 // One end of the spread. `frail` is the top of the range: the least HP and defences the foe can
@@ -299,6 +326,11 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         gAiLogicData->abilities[b] = abilityKnown ? GetBattlerAbility(b) : ABILITY_NONE;
         gAiLogicData->items[b] = itemKnown ? gBattleMons[b].item : ITEM_NONE;
         gAiLogicData->holdEffects[b] = itemKnown ? GetBattlerHoldEffect(b) : HOLD_EFFECT_NONE;
+    }
+    if (IsItemUsedUpBeforeMove(battlerAtk, move))
+    {
+        gAiLogicData->items[battlerAtk] = ITEM_NONE;
+        gAiLogicData->holdEffects[battlerAtk] = HOLD_EFFECT_NONE;
     }
     for (enum BattlerId b = 0; b < gBattlersCount; b++)
     {
