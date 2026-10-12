@@ -832,32 +832,40 @@ actually considered good and bad at, what checks it) genuinely sharpens both par
 this step: it is a good second opinion on whether a move earns its slot, whether a
 spread reaches anything, and whether a set is one you would really draft — and its
 sets are a good source of ideas (a role, an item, a move) once your own draft exists.
-**Treat it as inspiration, never as set-defining.** Four limits, because it is
+**Treat it as inspiration, never as set-defining.** Two limits, because it is
 describing a different game:
 
-- **It knows nothing of innates.** Innates exist only in this fork; Smogon sets are
-  written for vanilla, where a species has one ability. Here the species carries its
-  whole innate row too, and a plan that fits Smogon can fight an innate. Worked example from the Venusaur pass: Smogon's Curse
-  tank stays in to keep its boosts and heals with Synthesis, which wastes Venusaur's
-  innate Regenerator — the innate that rewards switching out. Read a Smogon set
-  against the innate row before borrowing its plan.
+- **It knows nothing of this fork.** Smogon sets are written for vanilla, and every
+  fork change is invisible to them, so a plan that fits Smogon can be weak, wrong or
+  self-defeating here. Read a Smogon set against all of these before borrowing from it:
+  - **Innates.** A species here carries its whole innate row, not one ability, and a
+    Smogon plan can fight an innate. Worked example from the Venusaur pass: Smogon's
+    Curse tank stays in to keep its boosts and heals with Synthesis, which wastes
+    Venusaur's innate Regenerator — the innate that rewards switching out.
+  - **`DETERMINISTIC_*` mechanics.** Blizzard's max PP is scaled by
+    `DETERMINISTIC_ACCURACY_EVASION` (5 base x 70 accuracy = 3) and then raised back
+    to **4** by the facility's max PP Ups (`B_FRONTIER_MAX_PP`, `src/battle_frontier.c`)
+    — quote the in-battle number, not the scaled base, for any move you are pricing;
+    secondaries fire only on super-effective hits; paralysis loses full-para and the
+    Speed drop; high-crit moves always crit through the strong-hit gate.
+  - **`BUFF_*` changes.** Shell Bell, Leech Seed, Gems, type items and the accuracy
+    items all behave differently here.
+  - **Free gimmicks.** Mega Evolution and Z-Moves need no Mega Stone or Z-Crystal
+    (`FEATURE_FREE_GIMMICKS`), so a Smogon Mega set spends its item slot on a stone
+    this fork gives back. And the Mega Smogon assumes is not guaranteed: each gimmick
+    type is once per trainer, every Mega-capable teammate can claim it, and a mon that
+    Dynamaxes or Terastallizes cannot also Mega Evolve.
+  - **The Factory format.** No player-side teambuilding, no team preview, AI
+    opponents. Smogon assumes full teambuilding and free switching; its item and
+    spread advice does not transfer unexamined.
+
+  Re-check any Smogon-derived claim against `include/config/deterministic.h`,
+  `include/config/buff.h` and the innate row before acting on it.
 - **It is learnset-constrained, and this step is not.** Every Smogon set is legal by
   construction, so building *from* one silently re-imports the exact gate the
   generation rule above spends its length removing — the "narrow kit" failure, arrived
   at by a more respectable route. Generate from the creature first (dex, design, other
   media), *then* let Smogon critique what you built. Never let it bound the move pool.
-- **This fork's mechanics are not vanilla, so a competitive claim can be flatly wrong
-  here.** Blizzard's max PP is scaled by `DETERMINISTIC_ACCURACY_EVASION` (5 base
-  x 70 accuracy = 3) and then raised back to **4** by the facility's max PP Ups
-  (`B_FRONTIER_MAX_PP`, `src/battle_frontier.c`) — quote the in-battle number, not
-  the scaled base, for any move you are pricing;
-  secondaries fire only on super-effective hits; paralysis loses full-para and the Speed
-  drop; high-crit moves always crit through the strong-hit gate; Shell Bell and Leech
-  Seed are buffed. Re-check any Smogon-derived claim against
-  `include/config/deterministic.h` and `include/config/buff.h` before acting on it.
-- **The format is different.** Battle Factory drafting means no player-side teambuilding, no team preview, AI opponents, and
-  gimmicks competing for one slot per trainer. Smogon assumes full teambuilding and
-  free switching; its item and spread advice does not transfer unexamined.
 
 And **flavor still governs.** A Smogon-optimal set that reads as nothing in particular
 is a worse outcome here than a flavorful one that gives up some power — this doc is

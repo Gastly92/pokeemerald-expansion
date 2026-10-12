@@ -294,16 +294,17 @@ Everything in "Do this" still applies **per line**, at the same depth.
   Step 3 — a second opinion on whether a move earns its slot, whether a spread
   reaches a benchmark, whether a set is one you'd draft — and its sets are a good
   source of roles, items and moves once your own draft exists. **Inspiration, never
-  set-defining.** Four limits: it **knows nothing of innates** — they exist only in
-  this fork, and Smogon sets are written for vanilla, where a species has one
-  ability; so a plan that fits Smogon can fight an innate (a Curse tank that must stay in to keep
-  its boosts wastes innate Regenerator, which rewards switching out); it is **learnset-constrained**, so building *from* a Smogon set
-  re-imports the very gate the moveset rule above removes (generate from the creature
-  first, then read Smogon — never let it bound the move pool); this fork's
-  **mechanics aren't vanilla**, so re-check any claim against `deterministic.h` /
-  `buff.h` (Blizzard is 4 PP here, secondaries need a super-effective hit, paralysis
-  is weaker, high-crit moves always crit through the gate); and the **format differs**
-  (Factory drafting, no teambuilding or team preview, AI opponents).
+  set-defining.** Two limits: it **knows nothing of this fork** — Smogon sets are
+  written for vanilla, so they never account for innates (a Curse tank that must stay
+  in to keep its boosts wastes innate Regenerator, which rewards switching out), the
+  `DETERMINISTIC_*` and `BUFF_*` changes (Blizzard is 4 PP here, secondaries need a
+  super-effective hit, paralysis is weaker, high-crit moves always crit through the
+  gate), free gimmicks (no Mega Stone or Z-Crystal needed, so a Smogon Mega set's item
+  slot is free here, and the Mega isn't guaranteed: Mega is once per trainer and a
+  mon that Dynamaxes or Teras can't also Mega), or the Factory format (drafting, no team preview, AI opponents); and it
+  is **learnset-constrained**, so building *from* a Smogon set re-imports the very
+  gate the moveset rule above removes (generate from the creature first, then read
+  Smogon — never let it bound the move pool).
   **Flavor still governs** — a Smogon-optimal set that reads as nothing is a worse
   outcome than a flavorful one that gives up power. Smogon feeds ideas, breaks ties
   and catches mistakes; flavor decides. Cite the generation and format of any set you
