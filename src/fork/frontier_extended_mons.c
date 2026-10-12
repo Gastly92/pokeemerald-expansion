@@ -9571,7 +9571,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHEDINJA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
             MOVE_DESTINY_BOND,
