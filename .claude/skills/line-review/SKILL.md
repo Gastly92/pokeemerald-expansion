@@ -72,8 +72,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
    `python3 .claude/skills/line-review/tools/forms.py <NAME>`, run from the repo
    root. That directory also holds `lines.py` (the lines a dex range covers),
    `line.py` (a species' rows and sets), `dex.py`, `users.py` (canon ability
-   users), and the `inn.py`/`addset.py` editors; each carries its usage in a
-   docstring.
+   users), `smogon.py` (Smogon's published sets, all gens and formats), and the
+   `inn.py`/`addset.py` editors; each carries its usage in a docstring.
    Rows and sets are routinely keyed on a form constant a bare name aliases to
    (`SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_MINIOR` → `_METEOR_RED` in two hops)
    and the reverse (`SPECIES_ALCREMIE` is `_STRAWBERRY_VANILLA_CREAM`). Grep
@@ -118,8 +118,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
    the PR body is not optional** either way: commits may group, the review record
    may not.
 5. **Watch for cross-line collisions** the batch makes visible — several lines
-   converging on the same held item (item scarcity is per drafted team) or the
-   same borrowed ability. Spread them.
+   converging on the same borrowed ability. Spread them.
 6. **Verify once at the end**, not per line — the two filtered `make check` runs
    are a build each, and CI runs the full suite on the PR. Running them and fixing
    whatever they name is the batch's real completion criterion; see "Verify and
@@ -267,19 +266,15 @@ Everything in "Do this" still applies **per line**, at the same depth.
   (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
   redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
   moves), singles sets want self-sufficiency. Held items are **one lens among
-  several** (iterate items for fun ideas, but many items are weak and not worth
-  building around — a set can start from a move, ability, or gimmick just as
-  well). **An item is also a scarcity cost:** only one of each item can appear per
-  drafted team (`src/battle_frontier.c` rejects a duplicate `heldItem`), so a set
-  on a crowded item is drafted less often — Leftovers is 21% of the roster and Life
-  Orb 17%. Take a crowded item when the set genuinely builds around it; when you're
-  reaching for Leftovers/Life Orb as a *default*, prefer a near-equivalent from the
-  long tail so the set actually shows up. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
+  several** (iterate items for fun ideas; a set can start from a move, ability, or
+  gimmick just as well). Pick the item the set wants; roster-wide item distribution (a per-item
+  set floor and a share cap) is gated by `test/fork/held_item_tracker.c`, so a
+  review needs no special handling for it. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
   improvements (Shell Bell, Leech Seed) when choosing moves and items —
   **deterministic does NOT mean "always happens"**: secondary effects land only on
   a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while
-  crit *items* give one guaranteed crit, and paralysis loses full-para and the
-  Speed drop entirely. **These flags CONVERT probabilistic mechanics into deterministic
+  crit *items* give one guaranteed crit, and paralysis trades full-para and the
+  Speed drop for a PP and priority tax. **These flags CONVERT probabilistic mechanics into deterministic
   ones; they rarely delete them** — before concluding anything is dead under one,
   go find what it was rebuilt into (Blunder Policy rearmed onto Protect and
   immunities, Focus Band into a Sash, Quick Claw into a consumed one-shot). In
@@ -293,24 +288,36 @@ Everything in "Do this" still applies **per line**, at the same depth.
   per species, so borrowing an implemented innate another species carries is intended,
   not a loophole. **`ABILITY_NONE` is banned** by a fourth roster test; free a slot with
   a fork override instead.
-- **Smogon is a legitimate input for EVALUATION, never for generation.** Competitive
-  analysis sharpens both parts of Step 3 — a second opinion on whether a move earns
-  its slot, whether a spread reaches a benchmark, whether a set is one you'd draft.
-  Three limits: it is **learnset-constrained**, so building *from* a Smogon set
-  re-imports the very gate the moveset rule above removes (generate from the creature
-  first, then let Smogon critique it — never let it bound the move pool); this fork's
-  **mechanics aren't vanilla**, so re-check any claim against `deterministic.h` /
-  `buff.h` (Blizzard is 4 PP here, secondaries need a super-effective hit, paralysis
-  is weaker, high-crit moves always crit through the gate); and the **format differs**
-  (Factory drafting, item scarcity, no teambuilding or team preview, AI opponents).
+- **Smogon is a legitimate input: read it after drafting from the creature, for
+  ideas and for evaluation.** Run `tools/smogon.py <NAME>` (every published set, all
+  gens and formats) rather than citing it from memory. It sharpens both parts of
+  Step 3 — a second opinion on whether a move earns its slot, whether a spread
+  reaches a benchmark, whether a set is one you'd draft — and its sets are a good
+  source of roles, items and moves once your own draft exists. **Inspiration, never
+  set-defining.** Two limits: it **knows nothing of this fork** — Smogon sets are
+  written for vanilla, so they never account for innates (a plan that fits Smogon can
+  work against an innate), the
+  `DETERMINISTIC_*` and `BUFF_*` changes (max PP is scaled by accuracy, secondaries
+  need a super-effective hit, paralysis is a PP and priority tax, high-crit moves
+  always crit through the gate), free gimmicks (no Mega Stone or Z-Crystal needed, so a Smogon Mega set's item
+  slot is free here, and the Mega isn't guaranteed: Mega is once per trainer and a
+  mon that Dynamaxes or Teras can't also Mega), or the Factory format (drafting, no team preview, AI opponents); and it
+  is **learnset-constrained**, so building *from* a Smogon set re-imports the very
+  gate the moveset rule above removes (generate from the creature first, then read
+  Smogon — never let it bound the move pool).
   **Flavor still governs** — a Smogon-optimal set that reads as nothing is a worse
-  outcome than a flavorful one that gives up power. Smogon breaks ties and catches
-  mistakes; it doesn't pick the concept. Flag it as recall (or fetch it) — it's not
-  in the repo.
-- **Build sets for the BASE form; the Mega is upside.** Gimmicks are **once per
-  trainer per battle** (`HasTrainerUsedGimmick`), and free gimmicks make the whole
-  drafted team eligible, so they compete for one slot — a given mon often won't
-  transform. A build that only works post-Mega is dead weight most battles. Corollary:
+  outcome than a flavorful one that gives up power. Smogon feeds ideas, breaks ties
+  and catches mistakes; flavor decides. Cite the generation and format of any set you
+  lean on.
+- **Build sets for the BASE form; every gimmick is upside.** A set must hold up in a
+  battle where it uses no gimmick at all; Mega, Z-Move, Dynamax and Tera are each a
+  possible bonus on top. Each gimmick type is **once
+  per trainer per battle** (`HasTrainerUsedGimmick`), and each mon gets **one gimmick**
+  (`monGimmickUsed`). Free gimmicks make the whole drafted team eligible, so
+  Mega-capable teammates compete for the one Mega, and a mon that Dynamaxes or
+  Terastallizes cannot also Mega; regular Frontier opponents get no gimmicks at all.
+  A given mon often won't get its gimmick. A build that only works post-Mega, or only
+  while Dynamaxed, is dead weight most battles. Corollary:
   several of a species' sets sharing one spread is usually a deliberate hedge, not
   monotony — don't "fix" it.
 - **Every set must be one you'd actually draft.** The Factory draws among a species'

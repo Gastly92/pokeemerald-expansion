@@ -175,8 +175,8 @@ Moving a set off a crowded item onto an uncrowded one makes that set appear more
 at no balance cost. That is the real prize in this audit — unused items are unused
 *capacity*, not just unused flavor.
 
-> `LINE_REVIEW.md` step 4 carries this rule for set authors. The numbers there are from
-> an earlier roster; these are current.
+> Line reviews do not apply this: a set picks the item it wants, and roster-wide item
+> distribution is gated by `test/fork/held_item_tracker.c` (see `LINE_REVIEW.md` Step 3).
 
 ## Never expected — the structural exclusions
 

@@ -220,6 +220,7 @@ from the repo root; each carries its usage in a docstring.
 | `users.py ABILITY…` | the canon users of an ability — the Step 1 signature gate |
 | `inn.py SPECIES… ABILITY…` | add innates to existing rows, keeping them alphabetical |
 | `addset.py NAME` | insert a new frontier set after that species' last one |
+| `smogon.py NAME…` | Smogon's published sets for a species and its formes, every generation and format (`python3 -I`; fetched from data.pkmn.cc and cached) |
 
 ### Working the batch
 
@@ -229,9 +230,7 @@ from the repo root; each carries its usage in a docstring.
   "How a review runs" is per line, and working them across lines re-derives every
   line at once.
 - **Cross-line coupling is real, so keep the batch in view.** Two lines in one
-  batch can reach for the same held item or the same borrowed ability. A batch is
-  the one vantage point where item crowding is visible — if three of the batch's
-  sets are converging on Leftovers, spread them (see the scarcity note in Step 3).
+  batch can reach for the same borrowed ability; spread them.
 - **Commit and push after every line — or after each adjacent group sharing a
   cause.** One commit per line, scoped to that line's rows, subject
   `Line review: <Line> line — <what changed>` — the subject a single-line PR would
@@ -825,38 +824,52 @@ anything Beedrill learns; and a cornered venomous defender wants **Baneful Bunke
 over plain Protect. None of the three are in its learnset, and all three read more
 truly than the moves that are.
 
-**Smogon is a legitimate input — for EVALUATION, never for generation.** Competitive
-analysis (Smogon dex entries, standard sets, spread benchmarks, what a species is
+**Smogon is a legitimate input — read it after drafting from the creature, for
+ideas and for evaluation.** `tools/smogon.py` prints every set Smogon has published
+for a species across all nine generations and every format, so this is real data,
+not recall. Competitive analysis (standard sets, spread benchmarks, what a species is
 actually considered good and bad at, what checks it) genuinely sharpens both parts of
 this step: it is a good second opinion on whether a move earns its slot, whether a
-spread reaches anything, and whether a set is one you would really draft. Use it to
-enhance the analysis. Three limits, because it is describing a different game:
+spread reaches anything, and whether a set is one you would really draft — and its
+sets are a good source of ideas (a role, an item, a move) once your own draft exists.
+**Treat it as inspiration, never as set-defining.** Two limits, because it is
+describing a different game:
 
+- **It knows nothing of this fork.** Smogon sets are written for vanilla, and every
+  fork change is invisible to them, so a plan that fits Smogon can be weak, wrong or
+  self-defeating here. Read a Smogon set against all of these before borrowing from it:
+  - **Innates.** A species here carries its whole innate row, not one ability, and a
+    Smogon plan can work against an innate. Read the plan against the row.
+  - **`DETERMINISTIC_*` mechanics.** A move's max PP is scaled by its accuracy
+    (`DETERMINISTIC_ACCURACY_EVASION`) and then raised by the facility's max PP Ups
+    (`B_FRONTIER_MAX_PP`, `src/battle_frontier.c`) — quote the in-battle number, not
+    the scaled base, for any move you are pricing; secondaries fire only on
+    super-effective hits; paralysis trades full-para and the Speed drop for a PP and
+    priority tax; high-crit moves always crit through the strong-hit gate.
+  - **`BUFF_*` changes.** Several items and moves behave differently here; see
+    `include/config/buff.h`.
+  - **Free gimmicks.** Mega Evolution and Z-Moves need no Mega Stone or Z-Crystal
+    (`FEATURE_FREE_GIMMICKS`), so a Smogon Mega set spends its item slot on a stone
+    this fork gives back. And the Mega Smogon assumes is not guaranteed: each gimmick
+    type is once per trainer, every Mega-capable teammate can claim it, and a mon that
+    Dynamaxes or Terastallizes cannot also Mega Evolve.
+  - **The Factory format.** No player-side teambuilding, no team preview, AI
+    opponents. Smogon assumes full teambuilding and free switching; its item and
+    spread advice does not transfer unexamined.
+
+  Re-check any Smogon-derived claim against `include/config/deterministic.h`,
+  `include/config/buff.h` and the innate row before acting on it.
 - **It is learnset-constrained, and this step is not.** Every Smogon set is legal by
   construction, so building *from* one silently re-imports the exact gate the
   generation rule above spends its length removing — the "narrow kit" failure, arrived
   at by a more respectable route. Generate from the creature first (dex, design, other
   media), *then* let Smogon critique what you built. Never let it bound the move pool.
-- **This fork's mechanics are not vanilla, so a competitive claim can be flatly wrong
-  here.** Blizzard's max PP is scaled by `DETERMINISTIC_ACCURACY_EVASION` (5 base
-  x 70 accuracy = 3) and then raised back to **4** by the facility's max PP Ups
-  (`B_FRONTIER_MAX_PP`, `src/battle_frontier.c`) — quote the in-battle number, not
-  the scaled base, for any move you are pricing;
-  secondaries fire only on super-effective hits; paralysis loses full-para and the Speed
-  drop; high-crit moves always crit through the strong-hit gate; Shell Bell and Leech
-  Seed are buffed. Re-check any Smogon-derived claim against
-  `include/config/deterministic.h` and `include/config/buff.h` before acting on it.
-- **The format is different.** Battle Factory drafting means item scarcity (one of each
-  item per team), no player-side teambuilding, no team preview, AI opponents, and
-  gimmicks competing for one slot per trainer. Smogon assumes full teambuilding and
-  free switching; its item and spread advice does not transfer unexamined.
 
 And **flavor still governs.** A Smogon-optimal set that reads as nothing in particular
 is a worse outcome here than a flavorful one that gives up some power — this doc is
 flavor-first by design, and competitive strength is welcome, not required. Smogon
-breaks ties and catches mistakes; it does not pick the concept. Same honesty rule as
-the other-media clause in Step 1: it is not in the repo, so flag it as recall (or fetch
-the actual analysis if the session has network) rather than presenting it as verified.
+feeds ideas, breaks ties and catches mistakes; flavor decides. Run `smogon.py` rather than
+citing Smogon from memory, and name the generation and format of any set you cite.
 
 **Step 3 runs in two parts, in order: Part A audits what is already there, Part B
 adds new sets.** Finish Part A before starting Part B — same reasoning as the step
@@ -904,9 +917,9 @@ than one whose existing set is about to be rewritten.
       to 2.0× and leaves Hyper Voice at 1.5×. The overwrite's consequences are
       **defensive and type-gated only** (matchups, items, abilities), never STAB.
 
-      Also: **Tera is a gimmick**, so under `FEATURE_FREE_GIMMICKS` it competes for
-      the one-per-trainer slot exactly like a Mega (see the free-gimmicks section
-      below). A set that *needs* to Tera to function is unreliable for the same
+      Also: **Tera is a gimmick**, so under `FEATURE_FREE_GIMMICKS` it is once per
+      trainer, every teammate can claim it, and a mon that Terastallizes cannot also
+      Mega Evolve or Dynamax (see the free-gimmicks section below). A set that *needs* to Tera to function is unreliable for the same
       reason a set that needs its Mega is. Tera is upside.
 
    b. **Moves — is each of the four earning its slot?** Look for redundant
@@ -931,14 +944,10 @@ than one whose existing set is about to be rewritten.
       friendship is `MAX_FRIENDSHIP`** (`src/battle_frontier.c`), so `Return` is
       always at full 102 BP. Write `Return`, never `Frustration`: with
       `B_FRONTIER_PREFER_RETURN` the builder turns any `Frustration` into `Return`.
-   c. **Held item — is it still doing anything, and is it too crowded?** Re-check
-      it against the set's moves and ability, and against the fork's changes
-      (`BUFF_*`, `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently
-      here than stock knowledge expects). Then check its **scarcity**: only one of
-      each item can appear per drafted team, so a set on Leftovers or Life Orb
-      (21% and 17% of the roster) is drafted measurably less often than one on a
-      tail item. See the scarcity note under point 4 below — an existing set
-      sitting on a default Leftovers is a prime candidate to move off it.
+   c. **Held item — is it still doing anything?** Re-check it against the set's
+      moves and ability, and against the fork's changes (`BUFF_*`,
+      `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently here than
+      stock knowledge expects).
    d. **Nature, EVs, IVs — does the spread match what the set actually does?**
       A nature dropping a stat the set uses, EVs invested in an unused attacking
       stat, or a Speed investment that reaches no relevant benchmark.
@@ -1136,45 +1145,15 @@ than one whose existing set is about to be rewritten.
    want self-sufficient sweeping/stalling. A set is `FORMAT_BOTH` only when it
    genuinely holds up in each; don't tag a doubles-support set `FORMAT_BOTH`.
 4. **Consider the held item, but as one lens among several — not the main
-   focus.** A good technique is to iterate through items and ask what would be
-   *fun* on this creature: an item can define a set (Choice Specs sweeper, a
-   pinch-Berry survivor, a weather-rock setter, a Toxic Orb + Poison Heal staller)
-   and the four Venusaur sets show that (each pivots on a different item — Black
-   Sludge, Leftovers, Rocky Helmet, Life Orb). But the item is a springboard, not
-   a requirement: plenty of items are weak or pointless and aren't worth building
-   around, and a set can just as well start from a move, an ability, or a gimmick
-   with `ITEM_LEFTOVERS` (or nothing special) attached. Don't force a themed item
-   onto every set.
+   focus.** A good technique is to iterate through the items and ask what would be
+   *fun* on this creature; sometimes an item defines a set. But the item is a
+   springboard, not a requirement: a set can just as well start from a move, an
+   ability, or a gimmick. Don't force a themed item onto every set.
 
-   **A held item is also a SCARCITY cost, not just a stat line — check how crowded
-   it is before choosing it.** The Factory draft rejects any candidate whose
-   `heldItem` already appears on the team being built (`src/battle_frontier.c`, the
-   "Ensure this Pokemon's held item isn't a duplicate" loop — a non-`ITEM_NONE`
-   match makes the draft skip that mon and roll again). Only **one of each item can
-   appear per team**, for the player's rental team and for each opponent's team
-   alike. So a set holding a heavily-used item is *drafted less often*: it loses
-   every roll where some other mon already took that item.
-
-   The distribution is extremely lopsided, so this matters more than it sounds.
-   Measure it before picking — `grep -o "\.heldItem = ITEM_[A-Z_0-9]*"
-   src/fork/frontier_extended_mons.c | sort | uniq -c | sort -rn` — which as of this
-   writing gives **Leftovers 217 sets (14%) and Life Orb 189 (12%)**, i.e. ~25% of
-   the roster fighting over two item slots, against 102 distinct items total and a
-   long tail of 45 items used once or twice.
-
-   **The tail is far wider than the roster uses.** Of the 239 items in the build with
-   a battle-relevant hold effect, 139 appear on no set at all — including all 17
-   Arceus plates, 14 of the 18 resist berries, and Wide Lens / Zoom Lens / Blunder
-   Policy / Razor Fang / Lansat Berry, every one of which this fork specifically
-   repaired and then shipped to nobody. [`HELD_ITEMS.md`](HELD_ITEMS.md) is the full
-   audit; read its Group A and Group D tables when you need an uncontested item.
-
-   Practical rule: when an item is a genuine build-around (Flame Orb on a Guts mon,
-   a weather rock, Choice Specs), take it regardless of crowding — the set needs it.
-   But when you are reaching for Leftovers or Life Orb as a **default** because
-   nothing else suggested itself, prefer a near-equivalent from the tail; the set
-   plays about as well and actually shows up. A Figy Berry on a Gluttony mon does a
-   comparable job to Leftovers *and* has essentially no competition.
+   **Roster-wide item distribution is not a line-review concern** — pick the item
+   the set wants. `test/fork/held_item_tracker.c` gates it separately (every drafted
+   item on at least two sets, none over `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` of the
+   roster, no set on an ignored item), and CI runs it.
 5. **Account for this fork's mechanics when picking moves and items** — they
    change what's good in ways stock knowledge misses:
    - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) replace the
@@ -1336,9 +1315,10 @@ that used to be a percentage, the first question is whether it now rides this ga
    Unburden; Starf raises the highest stat instead of a random one; paralysis
    traded its coin flips for a PP and priority tax. "This flag makes X impossible,
    so Y is dead" has been wrong nearly every time it has been said.
-4. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
-   *and* the Speed drop, replacing them with a PP and priority tax — so paralysis
-   is far weaker here, not stronger. `DETERMINISTIC_STATUS` turns confusion into a
+4. **Deterministic ≠ the same.** `DETERMINISTIC_PARALYSIS` replaces full-paralysis
+   *and* the Speed drop with a PP and priority tax — so paralysis is a different
+   penalty here, not the vanilla one: a paralyzed mon keeps its Speed and never
+   freezes up, but moves later in its priority bracket and burns PP faster. `DETERMINISTIC_STATUS` turns confusion into a
    single self-hit that a status move shakes off for free. Check the direction of
    each change before leaning on it.
 
@@ -1392,23 +1372,36 @@ Two practical notes when you add one of these sets:
   stays Bug/Steel, so a Drive is +40% *off*-STAB. A Memory and a Plate re-type their holder,
   so those are +40% *on top of* STAB. Do not price them the same.
 
-### Free gimmicks — a set *may* Mega, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
+### Free gimmicks — a set *may* use a gimmick, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
 
 This fork drops the held-item requirement for battle transformations, so **any
 eligible Factory set _may_ Mega Evolve (or Dynamax / Tera) with no stone**, turn one,
 via the gimmick picker.
 
-**But it is still one gimmick per trainer per battle.** `HasTrainerUsedGimmick()`
-(`src/battle_gimmick.c`) gates the trigger on a per-trainer `activated[]` flag, and the
-fork adds a per-mon `monGimmickUsed` record on top. Dropping the stone requirement means
+**But each gimmick type is still once per trainer per battle, and each mon gets one.**
+`HasTrainerUsedGimmick()` (`src/battle_gimmick.c`) gates the trigger on a per-trainer,
+per-gimmick `activated[][gimmick]` flag, so a trainer can use one Mega, one Z-Move, one
+Dynamax and one Tera in the same battle. The fork adds a per-mon `monGimmickUsed` record
+on top, so each mon spends at most **one** gimmick. Dropping the stone requirement means
 *every* mon on the drafted team is eligible — so as `src/fork/frontier_draft.c` puts it,
-"a team is no longer limited to one." They **compete** for that single slot, and a given
-mon Megas only when it wins that competition. Often it will not.
+"a team is no longer limited to one." Two kinds of competition follow:
 
-> **Therefore: build the set for the BASE form, and treat the Mega as upside.**
-> This is the easiest rule in Step 3 to get backwards, and getting it backwards
-> produces sets that are dead weight most of the time. A build that only makes sense
-> after transforming is a bad build, because most battles it never transforms. Check
+- **Teammates compete for each gimmick type.** Every Mega-capable mon on the team wants
+  the one Mega, every mon wants the one Dynamax, and so on.
+- **A mon's own gimmicks compete with each other.** A mon that Dynamaxes or
+  Terastallizes has spent its gimmick and cannot also Mega Evolve.
+
+And regular Frontier opponents get no gimmicks at all — they are reserved for the
+bosses (`B_FRONTIER_BOSS_ONLY_GIMMICKS`, see [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md)).
+So a given mon gets a given gimmick only when it wins both competitions, and often it
+will not.
+
+> **Therefore: build the set for the BASE form, and treat every gimmick as upside.**
+> A set must hold up in a battle where it uses no gimmick at all; Mega, Z-Move, Dynamax
+> and Tera are each a possible bonus on top. This is the easiest rule in Step 3 to get
+> backwards, and getting it backwards produces sets that are dead weight most of the
+> time. A build that only makes sense after transforming is a bad build, because most
+> battles it never transforms. Check
 > every set against the base stat line first: a physical Venusaur set reads fine off
 > Mega's 100 Atk and is *unplayable* off base Venusaur's 82.
 >
