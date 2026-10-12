@@ -178,7 +178,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HEAT_WAVE,
             MOVE_SLUDGE_BOMB,
-            MOVE_ENERGY_BALL,
+            MOVE_LEAF_STORM,
             MOVE_EARTH_POWER
         },
         .ability = ABILITY_GRASSY_SURGE,
