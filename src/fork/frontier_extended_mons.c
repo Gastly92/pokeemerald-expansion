@@ -4076,6 +4076,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
+    {
+        .species = SPECIES_CHANSEY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_EVIOLITE,
+        .moves =
+        {
+            MOVE_MINIMIZE,
+            MOVE_SOFT_BOILED,
+            MOVE_TOXIC,
+            MOVE_SEISMIC_TOSS
+        },
+        .ability = ABILITY_FLUFFY,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 0115
     {
