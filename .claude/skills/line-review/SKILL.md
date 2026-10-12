@@ -266,9 +266,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
   (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
   redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
   moves), singles sets want self-sufficiency. Held items are **one lens among
-  several** (iterate items for fun ideas, but many items are weak and not worth
-  building around — a set can start from a move, ability, or gimmick just as
-  well). Pick the item the set wants; roster-wide item distribution (a per-item
+  several** (iterate items for fun ideas; a set can start from a move, ability, or
+  gimmick just as well). Pick the item the set wants; roster-wide item distribution (a per-item
   set floor and a share cap) is gated by `test/fork/held_item_tracker.c`, so a
   review needs no special handling for it. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
   improvements (Shell Bell, Leech Seed) when choosing moves and items —

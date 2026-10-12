@@ -1131,8 +1131,7 @@ than one whose existing set is about to be rewritten.
 4. **Consider the held item, but as one lens among several — not the main
    focus.** A good technique is to iterate through the items and ask what would be
    *fun* on this creature; sometimes an item defines a set. But the item is a
-   springboard, not a requirement: plenty of items are weak or pointless and aren't
-   worth building around, and a set can just as well start from a move, an
+   springboard, not a requirement: a set can just as well start from a move, an
    ability, or a gimmick. Don't force a themed item onto every set.
 
    **Roster-wide item distribution is not a line-review concern** — pick the item
