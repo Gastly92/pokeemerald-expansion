@@ -179,7 +179,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_SLUDGE_BOMB,
             MOVE_ENERGY_BALL,
-            MOVE_GROWTH
+            MOVE_SYNTHESIS
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
