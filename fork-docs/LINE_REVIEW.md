@@ -840,12 +840,12 @@ describing a different game:
   self-defeating here. Read a Smogon set against all of these before borrowing from it:
   - **Innates.** A species here carries its whole innate row, not one ability, and a
     Smogon plan can work against an innate. Read the plan against the row.
-  - **`DETERMINISTIC_*` mechanics.** Blizzard's max PP is scaled by
-    `DETERMINISTIC_ACCURACY_EVASION` (5 base x 70 accuracy = 3) and then raised back
-    to **4** by the facility's max PP Ups (`B_FRONTIER_MAX_PP`, `src/battle_frontier.c`)
-    — quote the in-battle number, not the scaled base, for any move you are pricing;
-    secondaries fire only on super-effective hits; paralysis loses full-para and the
-    Speed drop; high-crit moves always crit through the strong-hit gate.
+  - **`DETERMINISTIC_*` mechanics.** A move's max PP is scaled by its accuracy
+    (`DETERMINISTIC_ACCURACY_EVASION`) and then raised by the facility's max PP Ups
+    (`B_FRONTIER_MAX_PP`, `src/battle_frontier.c`) — quote the in-battle number, not
+    the scaled base, for any move you are pricing; secondaries fire only on
+    super-effective hits; paralysis trades full-para and the Speed drop for a PP and
+    priority tax; high-crit moves always crit through the strong-hit gate.
   - **`BUFF_*` changes.** Several items and moves behave differently here; see
     `include/config/buff.h`.
   - **Free gimmicks.** Mega Evolution and Z-Moves need no Mega Stone or Z-Crystal
@@ -1315,9 +1315,10 @@ that used to be a percentage, the first question is whether it now rides this ga
    Unburden; Starf raises the highest stat instead of a random one; paralysis
    traded its coin flips for a PP and priority tax. "This flag makes X impossible,
    so Y is dead" has been wrong nearly every time it has been said.
-4. **Deterministic ≠ better.** `DETERMINISTIC_PARALYSIS` deletes full-paralysis
-   *and* the Speed drop, replacing them with a PP and priority tax — so paralysis
-   is far weaker here, not stronger. `DETERMINISTIC_STATUS` turns confusion into a
+4. **Deterministic ≠ the same.** `DETERMINISTIC_PARALYSIS` replaces full-paralysis
+   *and* the Speed drop with a PP and priority tax — so paralysis is a different
+   penalty here, not the vanilla one: a paralyzed mon keeps its Speed and never
+   freezes up, but moves later in its priority bracket and burns PP faster. `DETERMINISTIC_STATUS` turns confusion into a
    single self-hit that a status move shakes off for free. Check the direction of
    each change before leaning on it.
 

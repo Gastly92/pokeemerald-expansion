@@ -273,8 +273,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
   improvements (Shell Bell, Leech Seed) when choosing moves and items —
   **deterministic does NOT mean "always happens"**: secondary effects land only on
   a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while
-  crit *items* give one guaranteed crit, and paralysis loses full-para and the
-  Speed drop entirely. **These flags CONVERT probabilistic mechanics into deterministic
+  crit *items* give one guaranteed crit, and paralysis trades full-para and the
+  Speed drop for a PP and priority tax. **These flags CONVERT probabilistic mechanics into deterministic
   ones; they rarely delete them** — before concluding anything is dead under one,
   go find what it was rebuilt into (Blunder Policy rearmed onto Protect and
   immunities, Focus Band into a Sash, Quick Claw into a consumed one-shot). In
@@ -297,9 +297,9 @@ Everything in "Do this" still applies **per line**, at the same depth.
   set-defining.** Two limits: it **knows nothing of this fork** — Smogon sets are
   written for vanilla, so they never account for innates (a plan that fits Smogon can
   work against an innate), the
-  `DETERMINISTIC_*` and `BUFF_*` changes (Blizzard is 4 PP here, secondaries need a
-  super-effective hit, paralysis is weaker, high-crit moves always crit through the
-  gate), free gimmicks (no Mega Stone or Z-Crystal needed, so a Smogon Mega set's item
+  `DETERMINISTIC_*` and `BUFF_*` changes (max PP is scaled by accuracy, secondaries
+  need a super-effective hit, paralysis is a PP and priority tax, high-crit moves
+  always crit through the gate), free gimmicks (no Mega Stone or Z-Crystal needed, so a Smogon Mega set's item
   slot is free here, and the Mega isn't guaranteed: Mega is once per trainer and a
   mon that Dynamaxes or Teras can't also Mega), or the Factory format (drafting, no team preview, AI opponents); and it
   is **learnset-constrained**, so building *from* a Smogon set re-imports the very
