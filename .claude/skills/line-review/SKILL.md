@@ -293,8 +293,11 @@ Everything in "Do this" still applies **per line**, at the same depth.
   gens and formats) rather than citing it from memory. It sharpens both parts of
   Step 3 — a second opinion on whether a move earns its slot, whether a spread
   reaches a benchmark, whether a set is one you'd draft — and its sets are a good
-  source of roles, items and moves once your own draft exists.
-  Three limits: it is **learnset-constrained**, so building *from* a Smogon set
+  source of roles, items and moves once your own draft exists. **Inspiration, never
+  set-defining.** Four limits: it **ignores innates** — every Smogon set is built
+  around one ability, while here the species also carries its whole innate row, so a
+  plan that fits Smogon can fight an innate (a Curse tank that must stay in to keep
+  its boosts wastes innate Regenerator, which rewards switching out); it is **learnset-constrained**, so building *from* a Smogon set
   re-imports the very gate the moveset rule above removes (generate from the creature
   first, then read Smogon — never let it bound the move pool); this fork's
   **mechanics aren't vanilla**, so re-check any claim against `deterministic.h` /

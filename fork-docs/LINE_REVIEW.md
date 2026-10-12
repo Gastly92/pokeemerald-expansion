@@ -832,8 +832,15 @@ actually considered good and bad at, what checks it) genuinely sharpens both par
 this step: it is a good second opinion on whether a move earns its slot, whether a
 spread reaches anything, and whether a set is one you would really draft — and its
 sets are a good source of ideas (a role, an item, a move) once your own draft exists.
-Three limits, because it is describing a different game:
+**Treat it as inspiration, never as set-defining.** Four limits, because it is
+describing a different game:
 
+- **It ignores innates.** Every Smogon set is built around the species' one
+  ability; here the species also carries its whole innate row, and a plan that fits
+  Smogon can fight an innate. Worked example from the Venusaur pass: Smogon's Curse
+  tank stays in to keep its boosts and heals with Synthesis, which wastes Venusaur's
+  innate Regenerator — the innate that rewards switching out. Read a Smogon set
+  against the innate row before borrowing its plan.
 - **It is learnset-constrained, and this step is not.** Every Smogon set is legal by
   construction, so building *from* one silently re-imports the exact gate the
   generation rule above spends its length removing — the "narrow kit" failure, arrived
