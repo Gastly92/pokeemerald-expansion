@@ -8076,6 +8076,46 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
+    {
+        .species = SPECIES_BLISSEY,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .moves =
+        {
+            MOVE_WISH,
+            MOVE_TELEPORT,
+            MOVE_SEISMIC_TOSS,
+            MOVE_SOFT_BOILED
+        },
+        .ability = ABILITY_FLUFFY,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .def = 252,
+            .spd = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_BLISSEY,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_BRIGHT_POWDER,
+        .moves =
+        {
+            MOVE_MINIMIZE,
+            MOVE_SOFT_BOILED,
+            MOVE_SPITE,
+            MOVE_SEISMIC_TOSS
+        },
+        .ability = ABILITY_FLUFFY,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .def = 252,
+            .spd = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 0243
     {
