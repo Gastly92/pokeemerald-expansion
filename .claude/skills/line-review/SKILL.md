@@ -309,12 +309,15 @@ Everything in "Do this" still applies **per line**, at the same depth.
   outcome than a flavorful one that gives up power. Smogon feeds ideas, breaks ties
   and catches mistakes; flavor decides. Cite the generation and format of any set you
   lean on.
-- **Build sets for the BASE form; the Mega is upside.** Each gimmick type is **once
+- **Build sets for the BASE form; every gimmick is upside.** A set must hold up in a
+  battle where it uses no gimmick at all; Mega, Z-Move, Dynamax and Tera are each a
+  possible bonus on top. Each gimmick type is **once
   per trainer per battle** (`HasTrainerUsedGimmick`), and each mon gets **one gimmick**
   (`monGimmickUsed`). Free gimmicks make the whole drafted team eligible, so
   Mega-capable teammates compete for the one Mega, and a mon that Dynamaxes or
   Terastallizes cannot also Mega; regular Frontier opponents get no gimmicks at all.
-  A given mon often won't transform. A build that only works post-Mega is dead weight most battles. Corollary:
+  A given mon often won't get its gimmick. A build that only works post-Mega, or only
+  while Dynamaxed, is dead weight most battles. Corollary:
   several of a species' sets sharing one spread is usually a deliberate hedge, not
   monotony — don't "fix" it.
 - **Every set must be one you'd actually draft.** The Factory draws among a species'

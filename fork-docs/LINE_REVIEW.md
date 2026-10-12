@@ -1373,7 +1373,7 @@ Two practical notes when you add one of these sets:
   stays Bug/Steel, so a Drive is +40% *off*-STAB. A Memory and a Plate re-type their holder,
   so those are +40% *on top of* STAB. Do not price them the same.
 
-### Free gimmicks — a set *may* Mega, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
+### Free gimmicks — a set *may* use a gimmick, but is NOT guaranteed to (`FEATURE_FREE_GIMMICKS`)
 
 This fork drops the held-item requirement for battle transformations, so **any
 eligible Factory set _may_ Mega Evolve (or Dynamax / Tera) with no stone**, turn one,
@@ -1394,12 +1394,18 @@ on top, so each mon spends at most **one** gimmick. Dropping the stone requireme
 
 And regular Frontier opponents get no gimmicks at all — they are reserved for the
 bosses (`B_FRONTIER_BOSS_ONLY_GIMMICKS`, see [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md)).
-So a given mon Megas only when it wins both competitions, and often it will not.
+So a given mon gets a given gimmick only when it wins both competitions, and often it
+will not.
 
-> **Therefore: build the set for the BASE form, and treat the Mega as upside.**
-> This is the easiest rule in Step 3 to get backwards, and getting it backwards
-> produces sets that are dead weight most of the time. A build that only makes sense
-> after transforming is a bad build, because most battles it never transforms. Check
+> **Therefore: build the set for the BASE form, and treat every gimmick as upside.**
+> A set must hold up in a battle where it uses no gimmick at all; Mega, Z-Move, Dynamax
+> and Tera are each a possible bonus on top. This is the easiest rule in Step 3 to get
+> backwards, and getting it backwards produces sets that are dead weight most of the
+> time. A build that only makes sense after transforming is a bad build, because most
+> battles it never transforms. Worked example of doing it right: Venusaur's Choice
+> Specs set is a four-coverage Specs attacker with innate Regenerator on its own, and
+> Dynamax is the bonus that turns Heat Wave into Max Flare and sets sun for its
+> Chlorophyll. Check
 > every set against the base stat line first: a physical Venusaur set reads fine off
 > Mega's 100 Atk and is *unplayable* off base Venusaur's 82.
 >
