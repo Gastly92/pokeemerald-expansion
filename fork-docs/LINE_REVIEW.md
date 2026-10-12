@@ -229,9 +229,7 @@ from the repo root; each carries its usage in a docstring.
   "How a review runs" is per line, and working them across lines re-derives every
   line at once.
 - **Cross-line coupling is real, so keep the batch in view.** Two lines in one
-  batch can reach for the same held item or the same borrowed ability. A batch is
-  the one vantage point where item crowding is visible — if three of the batch's
-  sets are converging on Leftovers, spread them (see the scarcity note in Step 3).
+  batch can reach for the same borrowed ability; spread them.
 - **Commit and push after every line — or after each adjacent group sharing a
   cause.** One commit per line, scoped to that line's rows, subject
   `Line review: <Line> line — <what changed>` — the subject a single-line PR would
@@ -846,8 +844,7 @@ enhance the analysis. Three limits, because it is describing a different game:
   drop; high-crit moves always crit through the strong-hit gate; Shell Bell and Leech
   Seed are buffed. Re-check any Smogon-derived claim against
   `include/config/deterministic.h` and `include/config/buff.h` before acting on it.
-- **The format is different.** Battle Factory drafting means item scarcity (one of each
-  item per team), no player-side teambuilding, no team preview, AI opponents, and
+- **The format is different.** Battle Factory drafting means no player-side teambuilding, no team preview, AI opponents, and
   gimmicks competing for one slot per trainer. Smogon assumes full teambuilding and
   free switching; its item and spread advice does not transfer unexamined.
 
@@ -931,14 +928,10 @@ than one whose existing set is about to be rewritten.
       friendship is `MAX_FRIENDSHIP`** (`src/battle_frontier.c`), so `Return` is
       always at full 102 BP. Write `Return`, never `Frustration`: with
       `B_FRONTIER_PREFER_RETURN` the builder turns any `Frustration` into `Return`.
-   c. **Held item — is it still doing anything, and is it too crowded?** Re-check
-      it against the set's moves and ability, and against the fork's changes
-      (`BUFF_*`, `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently
-      here than stock knowledge expects). Then check its **scarcity**: only one of
-      each item can appear per drafted team, so a set on Leftovers or Life Orb
-      (21% and 17% of the roster) is drafted measurably less often than one on a
-      tail item. See the scarcity note under point 4 below — an existing set
-      sitting on a default Leftovers is a prime candidate to move off it.
+   c. **Held item — is it still doing anything?** Re-check it against the set's
+      moves and ability, and against the fork's changes (`BUFF_*`,
+      `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently here than
+      stock knowledge expects).
    d. **Nature, EVs, IVs — does the spread match what the set actually does?**
       A nature dropping a stat the set uses, EVs invested in an unused attacking
       stat, or a Speed investment that reaches no relevant benchmark.
@@ -1146,35 +1139,11 @@ than one whose existing set is about to be rewritten.
    with `ITEM_LEFTOVERS` (or nothing special) attached. Don't force a themed item
    onto every set.
 
-   **A held item is also a SCARCITY cost, not just a stat line — check how crowded
-   it is before choosing it.** The Factory draft rejects any candidate whose
-   `heldItem` already appears on the team being built (`src/battle_frontier.c`, the
-   "Ensure this Pokemon's held item isn't a duplicate" loop — a non-`ITEM_NONE`
-   match makes the draft skip that mon and roll again). Only **one of each item can
-   appear per team**, for the player's rental team and for each opponent's team
-   alike. So a set holding a heavily-used item is *drafted less often*: it loses
-   every roll where some other mon already took that item.
-
-   The distribution is extremely lopsided, so this matters more than it sounds.
-   Measure it before picking — `grep -o "\.heldItem = ITEM_[A-Z_0-9]*"
-   src/fork/frontier_extended_mons.c | sort | uniq -c | sort -rn` — which as of this
-   writing gives **Leftovers 217 sets (14%) and Life Orb 189 (12%)**, i.e. ~25% of
-   the roster fighting over two item slots, against 102 distinct items total and a
-   long tail of 45 items used once or twice.
-
-   **The tail is far wider than the roster uses.** Of the 239 items in the build with
-   a battle-relevant hold effect, 139 appear on no set at all — including all 17
-   Arceus plates, 14 of the 18 resist berries, and Wide Lens / Zoom Lens / Blunder
-   Policy / Razor Fang / Lansat Berry, every one of which this fork specifically
-   repaired and then shipped to nobody. [`HELD_ITEMS.md`](HELD_ITEMS.md) is the full
-   audit; read its Group A and Group D tables when you need an uncontested item.
-
-   Practical rule: when an item is a genuine build-around (Flame Orb on a Guts mon,
-   a weather rock, Choice Specs), take it regardless of crowding — the set needs it.
-   But when you are reaching for Leftovers or Life Orb as a **default** because
-   nothing else suggested itself, prefer a near-equivalent from the tail; the set
-   plays about as well and actually shows up. A Figy Berry on a Gluttony mon does a
-   comparable job to Leftovers *and* has essentially no competition.
+   **How often an item appears across the roster is not a line-review concern** —
+   pick the item the set wants. For ideas beyond the usual picks,
+   [`HELD_ITEMS.md`](HELD_ITEMS.md) lists the items this fork repaired or buffed
+   (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat Berry, the resist
+   berries, …).
 5. **Account for this fork's mechanics when picking moves and items** — they
    change what's good in ways stock knowledge misses:
    - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) replace the

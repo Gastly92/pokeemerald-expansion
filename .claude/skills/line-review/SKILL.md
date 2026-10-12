@@ -118,8 +118,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
    the PR body is not optional** either way: commits may group, the review record
    may not.
 5. **Watch for cross-line collisions** the batch makes visible — several lines
-   converging on the same held item (item scarcity is per drafted team) or the
-   same borrowed ability. Spread them.
+   converging on the same borrowed ability. Spread them.
 6. **Verify once at the end**, not per line — the two filtered `make check` runs
    are a build each, and CI runs the full suite on the PR. Running them and fixing
    whatever they name is the batch's real completion criterion; see "Verify and
@@ -269,12 +268,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
   moves), singles sets want self-sufficiency. Held items are **one lens among
   several** (iterate items for fun ideas, but many items are weak and not worth
   building around — a set can start from a move, ability, or gimmick just as
-  well). **An item is also a scarcity cost:** only one of each item can appear per
-  drafted team (`src/battle_frontier.c` rejects a duplicate `heldItem`), so a set
-  on a crowded item is drafted less often — Leftovers is 21% of the roster and Life
-  Orb 17%. Take a crowded item when the set genuinely builds around it; when you're
-  reaching for Leftovers/Life Orb as a *default*, prefer a near-equivalent from the
-  long tail so the set actually shows up. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
+  well). Pick the item the set wants; how often an item appears across the roster
+  is not a line-review concern. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
   improvements (Shell Bell, Leech Seed) when choosing moves and items —
   **deterministic does NOT mean "always happens"**: secondary effects land only on
   a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while
@@ -302,7 +297,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
   **mechanics aren't vanilla**, so re-check any claim against `deterministic.h` /
   `buff.h` (Blizzard is 4 PP here, secondaries need a super-effective hit, paralysis
   is weaker, high-crit moves always crit through the gate); and the **format differs**
-  (Factory drafting, item scarcity, no teambuilding or team preview, AI opponents).
+  (Factory drafting, no teambuilding or team preview, AI opponents).
   **Flavor still governs** — a Smogon-optimal set that reads as nothing is a worse
   outcome than a flavorful one that gives up power. Smogon breaks ties and catches
   mistakes; it doesn't pick the concept. Flag it as recall (or fetch it) — it's not

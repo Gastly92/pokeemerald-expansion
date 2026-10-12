@@ -133,7 +133,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BIG_ROOT,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SLEEP_POWDER,
