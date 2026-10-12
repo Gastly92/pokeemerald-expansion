@@ -268,8 +268,9 @@ Everything in "Do this" still applies **per line**, at the same depth.
   moves), singles sets want self-sufficiency. Held items are **one lens among
   several** (iterate items for fun ideas, but many items are weak and not worth
   building around — a set can start from a move, ability, or gimmick just as
-  well). Pick the item the set wants; how often an item appears across the roster
-  is not a line-review concern. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
+  well). Pick the item the set wants; roster-wide item distribution (a per-item
+  set floor and a share cap) is gated by `test/fork/held_item_tracker.c`, so a
+  review needs no special handling for it. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
   improvements (Shell Bell, Leech Seed) when choosing moves and items —
   **deterministic does NOT mean "always happens"**: secondary effects land only on
   a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while

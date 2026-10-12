@@ -1139,8 +1139,10 @@ than one whose existing set is about to be rewritten.
    with `ITEM_LEFTOVERS` (or nothing special) attached. Don't force a themed item
    onto every set.
 
-   **How often an item appears across the roster is not a line-review concern** —
-   pick the item the set wants. For ideas beyond the usual picks,
+   **Roster-wide item distribution is not a line-review concern** — pick the item
+   the set wants. `test/fork/held_item_tracker.c` gates it separately (every drafted
+   item on at least two sets, none over `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` of the
+   roster, no set on an ignored item), and CI runs it. For ideas beyond the usual picks,
    [`HELD_ITEMS.md`](HELD_ITEMS.md) lists the items this fork repaired or buffed
    (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat Berry, the resist
    berries, …).

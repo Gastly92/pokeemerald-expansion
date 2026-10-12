@@ -176,7 +176,7 @@ at no balance cost. That is the real prize in this audit — unused items are un
 *capacity*, not just unused flavor.
 
 > Line reviews do not apply this: a set picks the item it wants, and roster-wide item
-> distribution is not a line-review concern (see `LINE_REVIEW.md` Step 3).
+> distribution is gated by `test/fork/held_item_tracker.c` (see `LINE_REVIEW.md` Step 3).
 
 ## Never expected — the structural exclusions
 
