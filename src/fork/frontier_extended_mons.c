@@ -173,7 +173,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAT_ROCK,
+        .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
             MOVE_HEAT_WAVE,
