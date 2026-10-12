@@ -835,9 +835,9 @@ sets are a good source of ideas (a role, an item, a move) once your own draft ex
 **Treat it as inspiration, never as set-defining.** Four limits, because it is
 describing a different game:
 
-- **It ignores innates.** Smogon sets are written for vanilla, where a species has
-  one ability and no innate row; here it carries the whole row, and a plan that fits
-  Smogon can fight an innate. Worked example from the Venusaur pass: Smogon's Curse
+- **It knows nothing of innates.** Innates exist only in this fork; Smogon sets are
+  written for vanilla, where a species has one ability. Here the species carries its
+  whole innate row too, and a plan that fits Smogon can fight an innate. Worked example from the Venusaur pass: Smogon's Curse
   tank stays in to keep its boosts and heals with Synthesis, which wastes Venusaur's
   innate Regenerator — the innate that rewards switching out. Read a Smogon set
   against the innate row before borrowing its plan.

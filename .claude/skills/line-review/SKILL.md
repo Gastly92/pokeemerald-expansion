@@ -294,9 +294,9 @@ Everything in "Do this" still applies **per line**, at the same depth.
   Step 3 — a second opinion on whether a move earns its slot, whether a spread
   reaches a benchmark, whether a set is one you'd draft — and its sets are a good
   source of roles, items and moves once your own draft exists. **Inspiration, never
-  set-defining.** Four limits: it **ignores innates** — Smogon sets are written for
-  vanilla, where a species has one ability and no innate row, so a plan that fits
-  Smogon can fight an innate (a Curse tank that must stay in to keep
+  set-defining.** Four limits: it **knows nothing of innates** — they exist only in
+  this fork, and Smogon sets are written for vanilla, where a species has one
+  ability; so a plan that fits Smogon can fight an innate (a Curse tank that must stay in to keep
   its boosts wastes innate Regenerator, which rewards switching out); it is **learnset-constrained**, so building *from* a Smogon set
   re-imports the very gate the moveset rule above removes (generate from the creature
   first, then read Smogon — never let it bound the move pool); this fork's
