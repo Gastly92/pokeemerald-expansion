@@ -1,5 +1,6 @@
 #include "global.h"
 #include "test/battle.h"
+#include "battle_gimmick.h"
 #include "string_util.h"
 #include "text.h"
 #include "fork/frontier_battle_info.h"
@@ -157,4 +158,68 @@ TEST("Frontier INFO: the Speed page's HP column clears the widest own row")
     StringCopy(row, COMPOUND_STRING("You: WWWWWWWWWWWW  Spe 9999"));
     StringCopy(hpText, COMPOUND_STRING("HP 100%"));
     EXPECT_LT(GetStringWidth(FONT_NARROW, row, 0) + GetStringWidth(FONT_NARROW, hpText, 0) + 4, 28 * 8);
+}
+
+// Dynamax multiplies current and max HP alike, so the % tracks the (scaled) health bar: a mon
+// at 101/400 still reads 26 at 202/800. (Dynamaxed, status moves become Max Guard, so the
+// Substitute threshold only matters again once Dynamax ends - see the next two tests.)
+SINGLE_BATTLE_TEST("Frontier INFO: your HP % reads the same while Dynamaxed")
+{
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(400); HP(101); DynamaxLevel(10); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE, gimmick: GIMMICK_DYNAMAX); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_DYNAMAX_GROWTH, player);
+    } THEN {
+        EXPECT_EQ(GetActiveGimmick(B_BATTLER_0), GIMMICK_DYNAMAX);
+        EXPECT_EQ(player->maxHP, 800);
+        EXPECT_EQ(GetBattlerHpPercent(B_BATTLER_0), 26);
+    }
+}
+
+// No MaxHP() here: the test runner implements it by flagging HP hyper-trained, which makes the
+// end-of-Dynamax stat recalculation keep the doubled value. A natural max HP (490 for this
+// Wobbuffet) recalculates as in play. 123/490 is just over 1/4: it reads 26 once Dynamax ends,
+// and Substitute then works.
+SINGLE_BATTLE_TEST("Frontier INFO: your HP % reads 26 after Dynamax ends")
+{
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { HP(123); DynamaxLevel(10); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE, gimmick: GIMMICK_DYNAMAX); }
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_DYNAMAX_GROWTH, player);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_FORM_CHANGE, player); // Dynamax expires
+    } THEN {
+        EXPECT_NE(GetActiveGimmick(B_BATTLER_0), GIMMICK_DYNAMAX);
+        EXPECT_EQ(player->hp, 123);
+        EXPECT_EQ(player->maxHP, 490);
+        EXPECT_EQ(GetBattlerHpPercent(B_BATTLER_0), 26);
+    }
+}
+
+SINGLE_BATTLE_TEST("Frontier INFO: Substitute works after Dynamax ends at the HP that read 26")
+{
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { HP(123); DynamaxLevel(10); Moves(MOVE_CELEBRATE, MOVE_SUBSTITUTE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE, gimmick: GIMMICK_DYNAMAX); }
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_SUBSTITUTE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_DYNAMAX_GROWTH, player);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_FORM_CHANGE, player); // Dynamax expires
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SUBSTITUTE, player);
+    } THEN {
+        EXPECT_NE(GetActiveGimmick(B_BATTLER_0), GIMMICK_DYNAMAX);
+        EXPECT_EQ(player->maxHP, 490);
+        EXPECT_EQ(player->hp, 123 - 490 / 4);
+    }
 }
