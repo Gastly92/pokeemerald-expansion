@@ -1129,23 +1129,16 @@ than one whose existing set is about to be rewritten.
    want self-sufficient sweeping/stalling. A set is `FORMAT_BOTH` only when it
    genuinely holds up in each; don't tag a doubles-support set `FORMAT_BOTH`.
 4. **Consider the held item, but as one lens among several — not the main
-   focus.** A good technique is to iterate through items and ask what would be
-   *fun* on this creature: an item can define a set (Choice Specs sweeper, a
-   pinch-Berry survivor, a weather-rock setter, a Toxic Orb + Poison Heal staller)
-   and the four Venusaur sets show that (each pivots on a different item — Black
-   Sludge, Leftovers, Rocky Helmet, Life Orb). But the item is a springboard, not
-   a requirement: plenty of items are weak or pointless and aren't worth building
-   around, and a set can just as well start from a move, an ability, or a gimmick
-   with `ITEM_LEFTOVERS` (or nothing special) attached. Don't force a themed item
-   onto every set.
+   focus.** A good technique is to iterate through the items and ask what would be
+   *fun* on this creature; sometimes an item defines a set. But the item is a
+   springboard, not a requirement: plenty of items are weak or pointless and aren't
+   worth building around, and a set can just as well start from a move, an
+   ability, or a gimmick. Don't force a themed item onto every set.
 
    **Roster-wide item distribution is not a line-review concern** — pick the item
    the set wants. `test/fork/held_item_tracker.c` gates it separately (every drafted
    item on at least two sets, none over `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` of the
-   roster, no set on an ignored item), and CI runs it. For ideas beyond the usual picks,
-   [`HELD_ITEMS.md`](HELD_ITEMS.md) lists the items this fork repaired or buffed
-   (Wide Lens, Zoom Lens, Blunder Policy, Razor Fang, Lansat Berry, the resist
-   berries, …).
+   roster, no set on an ignored item), and CI runs it.
 5. **Account for this fork's mechanics when picking moves and items** — they
    change what's good in ways stock knowledge misses:
    - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) replace the
