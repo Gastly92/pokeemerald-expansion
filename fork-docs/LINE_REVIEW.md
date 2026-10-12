@@ -919,9 +919,9 @@ than one whose existing set is about to be rewritten.
       to 2.0× and leaves Hyper Voice at 1.5×. The overwrite's consequences are
       **defensive and type-gated only** (matchups, items, abilities), never STAB.
 
-      Also: **Tera is a gimmick**, so under `FEATURE_FREE_GIMMICKS` it competes for
-      the one-per-trainer slot exactly like a Mega (see the free-gimmicks section
-      below). A set that *needs* to Tera to function is unreliable for the same
+      Also: **Tera is a gimmick**, so under `FEATURE_FREE_GIMMICKS` it is once per
+      trainer, every teammate can claim it, and a mon that Terastallizes cannot also
+      Mega Evolve or Dynamax (see the free-gimmicks section below). A set that *needs* to Tera to function is unreliable for the same
       reason a set that needs its Mega is. Tera is upside.
 
    b. **Moves — is each of the four earning its slot?** Look for redundant
@@ -1379,12 +1379,22 @@ This fork drops the held-item requirement for battle transformations, so **any
 eligible Factory set _may_ Mega Evolve (or Dynamax / Tera) with no stone**, turn one,
 via the gimmick picker.
 
-**But it is still one gimmick per trainer per battle.** `HasTrainerUsedGimmick()`
-(`src/battle_gimmick.c`) gates the trigger on a per-trainer `activated[]` flag, and the
-fork adds a per-mon `monGimmickUsed` record on top. Dropping the stone requirement means
+**But each gimmick type is still once per trainer per battle, and each mon gets one.**
+`HasTrainerUsedGimmick()` (`src/battle_gimmick.c`) gates the trigger on a per-trainer,
+per-gimmick `activated[][gimmick]` flag, so a trainer can use one Mega, one Z-Move, one
+Dynamax and one Tera in the same battle. The fork adds a per-mon `monGimmickUsed` record
+on top, so each mon spends at most **one** gimmick. Dropping the stone requirement means
 *every* mon on the drafted team is eligible — so as `src/fork/frontier_draft.c` puts it,
-"a team is no longer limited to one." They **compete** for that single slot, and a given
-mon Megas only when it wins that competition. Often it will not.
+"a team is no longer limited to one." Two kinds of competition follow:
+
+- **Teammates compete for each gimmick type.** Every Mega-capable mon on the team wants
+  the one Mega, every mon wants the one Dynamax, and so on.
+- **A mon's own gimmicks compete with each other.** A mon that Dynamaxes or
+  Terastallizes has spent its gimmick and cannot also Mega Evolve.
+
+And regular Frontier opponents get no gimmicks at all — they are reserved for the
+bosses (`B_FRONTIER_BOSS_ONLY_GIMMICKS`, see [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md)).
+So a given mon Megas only when it wins both competitions, and often it will not.
 
 > **Therefore: build the set for the BASE form, and treat the Mega as upside.**
 > This is the easiest rule in Step 3 to get backwards, and getting it backwards
