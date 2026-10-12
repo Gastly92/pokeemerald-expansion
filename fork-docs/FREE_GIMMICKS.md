@@ -91,6 +91,24 @@ Mega no longer reads the held stone, which previously let a transformed Ditto *a
 Mega only for the form change to be silently refused after the gimmick was already
 spent. Z-Move, Dynamax and Tera stay available to a transformed Ditto.
 
+### 6. A blocked mon still reaches the picker
+
+Upstream sends FIGHT straight to Struggle when every move is blocked (e.g. choice-locked
+into a move that Cursed Body then disables), so the picker in the move menu was never
+reached. For a player-controlled mon that can still Z-Move or Dynamax, and where that
+gimmick would unlock at least one move, the menu now opens instead
+(`src/fork/free_gimmick_struggle.c`, hooked in `src/battle_main.c`):
+
+- **Z-Move / Dynamax armed** — the move goes through. These gimmicks lift Disable,
+  Encore, Torment, Taunt and the rest exactly as `TrySetCantSelectMoveBattleScript`
+  already lets them (a Z-Move still respects the choice lock, so it's the Z of the
+  locked move).
+- **Nothing armed** — picking any move Struggles, the same as before the menu existed.
+- **Mega or Tera armed** — these don't lift the blocks, so the mon Struggles and the
+  gimmick isn't spent. Mega/Tera alone never opens the menu.
+
+The AI and Battle Palace keep upstream's straight-to-Struggle behaviour.
+
 ## AI
 
 ### It uses everything

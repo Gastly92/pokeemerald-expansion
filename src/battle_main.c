@@ -80,6 +80,7 @@
 #include "constants/weather.h"
 #include "cable_club.h"
 #include "fork/deterministic_moves.h" // FORK: DETERMINISTIC_MOVE_RESULTS speed ties
+#include "fork/free_gimmick_struggle.h" // FORK: ShouldOpenMoveMenuForGimmick, ShouldStruggleFromGimmickMoveMenu
 
 extern const struct BgTemplate gBattleBgTemplates[];
 extern const struct WindowTemplate *const gBattleWindowTemplates[];
@@ -3874,7 +3875,8 @@ static void HandleTurnActionSelectionState(void)
                 switch (gBattleResources->bufferB[battler][1])
                 {
                 case B_ACTION_USE_MOVE:
-                    if (AreAllMovesUnusable(battler))
+                    // FORK: ShouldOpenMoveMenuForGimmick lets a free Z-Move/Dynamax reach the move menu (src/fork/free_gimmick_struggle.c).
+                    if (AreAllMovesUnusable(battler) && !ShouldOpenMoveMenuForGimmick(battler))
                     {
                         gBattleCommunication[battler] = STATE_SELECTION_SCRIPT;
                         gBattleStruct->battlerState[battler].selectionScriptFinished = FALSE;
@@ -4107,6 +4109,17 @@ static void HandleTurnActionSelectionState(void)
                         {
                             gBattleCommunication[battler] = STATE_BEFORE_ACTION_CHOSEN;
                             RecordedBattle_ClearBattlerAction(battler, 1);
+                        }
+                        // FORK: the menu ShouldOpenMoveMenuForGimmick opened falls back to Struggle when no Z-Move/Dynamax is armed.
+                        else if (ShouldStruggleFromGimmickMoveMenu(battler))
+                        {
+                            RecordedBattle_SetBattlerAction(battler, gBattleResources->bufferB[battler][2]);
+                            RecordedBattle_SetBattlerAction(battler, gBattleResources->bufferB[battler][3]);
+                            gBattleCommunication[battler] = STATE_SELECTION_SCRIPT;
+                            gBattleStruct->battlerState[battler].selectionScriptFinished = FALSE;
+                            gBattleStruct->stateIdAfterSelScript[battler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
+                            gBattleStruct->moveTarget[battler] = gBattleResources->bufferB[battler][3];
+                            return;
                         }
                         else if (TrySetCantSelectMoveBattleScript(battler))
                         {
