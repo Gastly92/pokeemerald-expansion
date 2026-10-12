@@ -295,8 +295,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
   reaches a benchmark, whether a set is one you'd draft — and its sets are a good
   source of roles, items and moves once your own draft exists. **Inspiration, never
   set-defining.** Two limits: it **knows nothing of this fork** — Smogon sets are
-  written for vanilla, so they never account for innates (a Curse tank that must stay
-  in to keep its boosts wastes innate Regenerator, which rewards switching out), the
+  written for vanilla, so they never account for innates (a plan that fits Smogon can
+  work against an innate), the
   `DETERMINISTIC_*` and `BUFF_*` changes (Blizzard is 4 PP here, secondaries need a
   super-effective hit, paralysis is weaker, high-crit moves always crit through the
   gate), free gimmicks (no Mega Stone or Z-Crystal needed, so a Smogon Mega set's item

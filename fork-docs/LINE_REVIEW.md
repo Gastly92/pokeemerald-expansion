@@ -839,17 +839,15 @@ describing a different game:
   fork change is invisible to them, so a plan that fits Smogon can be weak, wrong or
   self-defeating here. Read a Smogon set against all of these before borrowing from it:
   - **Innates.** A species here carries its whole innate row, not one ability, and a
-    Smogon plan can fight an innate. Worked example from the Venusaur pass: Smogon's
-    Curse tank stays in to keep its boosts and heals with Synthesis, which wastes
-    Venusaur's innate Regenerator — the innate that rewards switching out.
+    Smogon plan can work against an innate. Read the plan against the row.
   - **`DETERMINISTIC_*` mechanics.** Blizzard's max PP is scaled by
     `DETERMINISTIC_ACCURACY_EVASION` (5 base x 70 accuracy = 3) and then raised back
     to **4** by the facility's max PP Ups (`B_FRONTIER_MAX_PP`, `src/battle_frontier.c`)
     — quote the in-battle number, not the scaled base, for any move you are pricing;
     secondaries fire only on super-effective hits; paralysis loses full-para and the
     Speed drop; high-crit moves always crit through the strong-hit gate.
-  - **`BUFF_*` changes.** Shell Bell, Leech Seed, Gems, type items and the accuracy
-    items all behave differently here.
+  - **`BUFF_*` changes.** Several items and moves behave differently here; see
+    `include/config/buff.h`.
   - **Free gimmicks.** Mega Evolution and Z-Moves need no Mega Stone or Z-Crystal
     (`FEATURE_FREE_GIMMICKS`), so a Smogon Mega set spends its item slot on a stone
     this fork gives back. And the Mega Smogon assumes is not guaranteed: each gimmick
@@ -1402,10 +1400,7 @@ will not.
 > and Tera are each a possible bonus on top. This is the easiest rule in Step 3 to get
 > backwards, and getting it backwards produces sets that are dead weight most of the
 > time. A build that only makes sense after transforming is a bad build, because most
-> battles it never transforms. Worked example of doing it right: Venusaur's Choice
-> Specs set is a four-coverage Specs attacker with innate Regenerator on its own, and
-> Dynamax is the bonus that turns Heat Wave into Max Flare and sets sun for its
-> Chlorophyll. Check
+> battles it never transforms. Check
 > every set against the base stat line first: a physical Venusaur set reads fine off
 > Mega's 100 Atk and is *unplayable* off base Venusaur's 82.
 >
