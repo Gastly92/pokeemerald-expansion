@@ -16632,7 +16632,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SEED_FLARE,
             MOVE_EARTH_POWER,
             MOVE_AIR_SLASH,
-            MOVE_SYNTHESIS
+            MOVE_PROTECT
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
