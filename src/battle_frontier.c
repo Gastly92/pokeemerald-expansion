@@ -10,7 +10,7 @@
 #include "battle_tower.h"
 #include "battle_transition.h"
 #include "event_data.h"
-#include "fork/frontier_extended_mons.h" // FORK: GetRandomFrontierExtendedMonId
+#include "fork/frontier_extended_mons.h" // FORK: GetRandomFrontierExtendedMonIdForSlot
 #include "fork/frontier_draft.h"         // FORK: TeamHasGimmickItemConflict
 #include "fork/battle_tower_trainers.h"  // FORK: gym-leader boss parties
 #include "frontier_util.h"
@@ -297,7 +297,7 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
     while (i != monCount)
     {
     #if B_FRONTIER_EXTENDED_MONS
-        u16 monId = useExtendedRoster ? GetRandomFrontierExtendedMonId() : monSet[Random() % bfMonCount];
+        u16 monId = useExtendedRoster ? GetRandomFrontierExtendedMonIdForSlot(TIER_NORMAL, pseudoCount) : monSet[Random() % bfMonCount];
 
         // The competitive roster has no weak->strong tier ordering, so the Lv50
         // "high tier" gate doesn't apply when drawing from it.

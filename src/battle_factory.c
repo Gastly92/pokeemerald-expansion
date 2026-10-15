@@ -48,7 +48,9 @@ static void RestorePlayerPartyHeldItems(void);
 static void BackupFactoryRentalTeam(void);
 static void RestoreFactoryRentalTeam(void);
 #endif
+#if !B_FRONTIER_EXTENDED_MONS // FORK: the competitive roster draws via GetRandomFrontierExtendedMonIdForSlot
 static u16 GetFactoryMonId(enum FrontierLevelMode lvlMode, u8 challengeNum, bool8 useBetterRange);
+#endif
 static enum FactoryStyle GetMoveBattleStyle(enum Move move);
 
 // Number of moves needed on the team to be considered using a certain battle style
@@ -372,7 +374,15 @@ static void GenerateOpponentMons(void)
     i = 0;
     while (i != FRONTIER_PARTY_SIZE)
     {
+    #if B_FRONTIER_EXTENDED_MONS
+        // FORK: draw only among sets this slot's tier quota accepts, uniform per dex number
+        // among them. Rejection-filtering a whole-roster draw weighs a dex number by all its
+        // sets, so formes the slot can't take (base Kyurem in a mythical slot) diluted it.
+        // Test: "Frontier draft: each slot weighs every dex number it accepts equally".
+        u16 monId = GetRandomFrontierExtendedMonIdForSlot(slotTiers[i], pseudoCount);
+    #else
         u16 monId = GetFactoryMonId(lvlMode, challengeNum, FALSE);
+    #endif
 
         // Unown (FRONTIER_MON_UNOWN) is forbidden on opponent Factory teams.
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN)
@@ -569,10 +579,17 @@ static void GenerateInitialRentalMons(void)
     i = 0;
     while (i != PARTY_SIZE)
     {
+    #if B_FRONTIER_EXTENDED_MONS
+        // FORK: draw only among sets the tier quota accepts; see GenerateOpponentMons.
+        // The rentalRank "better range" only meant something on the vanilla tiered list.
+        (void)rentalRank, (void)challengeNum;
+        monId = GetRandomFrontierExtendedMonIdForSlot(TIER_NORMAL, pseudoCount);
+    #else
         if (i < rentalRank) // The more times the player has rented, the more initial rentals are generated from a better set of Pokémon
             monId = GetFactoryMonId(factoryLvlMode, challengeNum, TRUE);
         else
             monId = GetFactoryMonId(factoryLvlMode, challengeNum, FALSE);
+    #endif
 
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN)
             continue;
@@ -873,7 +890,15 @@ void FillFactoryBrainParty(void)
 
     while (i != FRONTIER_PARTY_SIZE)
     {
+    #if B_FRONTIER_EXTENDED_MONS
+        // FORK: draw only among sets this slot's tier quota accepts, uniform per dex number
+        // among them. Rejection-filtering a whole-roster draw weighs a dex number by all its
+        // sets, so formes the slot can't take (base Kyurem in a mythical slot) diluted it.
+        // Test: "Frontier draft: each slot weighs every dex number it accepts equally".
+        u16 monId = GetRandomFrontierExtendedMonIdForSlot(slotTiers[i], pseudoCount);
+    #else
         u16 monId = GetFactoryMonId(lvlMode, challengeNum, FALSE);
+    #endif
 
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN)
             continue;
@@ -949,18 +974,12 @@ void FillFactoryBrainParty(void)
     }
 }
 
+// FORK: unused under B_FRONTIER_EXTENDED_MONS. The competitive roster has no weak->strong
+// tier ordering, so its draft call sites bypass this per-challenge range ramp for
+// GetRandomFrontierExtendedMonIdForSlot (format- and tier-aware, uniform per dex number).
+#if !B_FRONTIER_EXTENDED_MONS
 static u16 GetFactoryMonId(enum FrontierLevelMode lvlMode, u8 challengeNum, bool8 useBetterRange)
 {
-#if B_FRONTIER_EXTENDED_MONS
-    // FORK: the competitive roster has no weak->strong tier ordering, so every mon
-    // is equally drawable from the start; the vanilla per-challenge range ramp
-    // (sInitialRentalMonRanges, the lvlMode/challengeNum/useBetterRange inputs) is
-    // bypassed in favor of a uniform pull across the whole list. We also reject any
-    // set not suited to the current battle format (singles vs doubles), so a
-    // singles-only set never appears in a doubles challenge and vice versa.
-    (void)lvlMode, (void)challengeNum, (void)useBetterRange;
-    return GetRandomFrontierExtendedMonId();
-#else
     u16 numMons, monId;
     u16 adder; // Used to skip past early mons for open level
 
@@ -996,8 +1015,8 @@ static u16 GetFactoryMonId(enum FrontierLevelMode lvlMode, u8 challengeNum, bool
     }
 
     return monId;
-#endif // B_FRONTIER_EXTENDED_MONS
 }
+#endif // !B_FRONTIER_EXTENDED_MONS
 
 u8 GetNumPastRentalsRank(u8 battleMode, enum FrontierLevelMode lvlMode)
 {

@@ -51,9 +51,9 @@ These already exist and are facility-agnostic; a conversion *extends* them:
   to include the new facility, reading **that facility's** win-streak array
   (`<fac>WinStreaks[battleMode][lvlMode]`, or `[lvlMode]` for Arena/Pike/Pyramid).
   Scaling is 2 BP/win in set 1, 4 in set 2, …; Brain win = the win number.
-- **Roster draw** — `GetRandomFrontierExtendedMonId()` (`src/fork/frontier_extended_mons.c`,
-  declared in `include/fork/frontier_extended_mons.h`): one uniform, format-aware pull
-  from the competitive roster. **Uniform = no difficulty scaling by streak.**
+- **Roster draw** — `GetRandomFrontierExtendedMonIdForSlot()` (`src/fork/frontier_extended_mons.c`,
+  declared in `include/fork/frontier_extended_mons.h`): one format- and tier-aware pull
+  from the competitive roster, uniform per dex number. **Uniform = no difficulty scaling by streak.**
 - **Draft rules** — `TeamHasGimmickItemConflict` / `TierRejectsCandidate` /
   `ReserveForcedTierSlot` (fork-owned `src/fork/frontier_draft.c`, declared in
   `include/fork/frontier_draft.h`): the at-most-one-Mega/Z guard, the per-slot tier
@@ -181,7 +181,7 @@ rest. It covers Singles and Doubles, with the player's own party.
 > difficulty ramp.
 
 There is **no scaling** at all: opponents' mons are drawn uniformly from the
-competitive roster via the shared `GetRandomFrontierExtendedMonId()` wired into
+competitive roster via the shared `GetRandomFrontierExtendedMonIdForSlot()` wired into
 `FillTrainerParty`, always at max IVs. The vanilla per-trainer themed `monSet` and
 high-tier gate are bypassed for the Tower only.
 
