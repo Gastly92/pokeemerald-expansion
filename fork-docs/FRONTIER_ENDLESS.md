@@ -193,12 +193,13 @@ challenge — the player can leave, come back, talk to the attendant and **choos
 fresh team** to continue (`tower_init` preserves an active streak; see "Rental vs
 own-party" above).
 
-### Every general opponent brings a Mega
+### General opponents
 
-The player hand-picks their own team, so opponents always carry one:
-`FillTrainerParty` reserves a random slot for a guaranteed Mega Stone holder, forbids
-Mega Stones elsewhere, and applies the shared gimmick rule from `frontier_draft.c`
-(which also caps Z-Crystals at one).
+`FillTrainerParty` drafts general opponents from the competitive roster under the shared
+gimmick-item rule from `frontier_draft.c` (at most one Mega Stone and one Z-Crystal).
+There is no guaranteed Mega: under `FEATURE_FREE_GIMMICKS` Mega Evolution needs no stone,
+the roster carries none, and general opponents are withheld every gimmick
+(`B_FRONTIER_BOSS_ONLY_GIMMICKS`) — Megas belong to the bosses.
 
 General opponents are **tier-gated like the Factory** — no legendaries or mythicals,
 at most one pseudo-legendary per team (`TierRejectsCandidate`, every slot

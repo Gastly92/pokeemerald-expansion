@@ -3,6 +3,7 @@
 #include "data.h"
 #include "battle_factory.h"
 #include "battle_frontier.h"
+#include "battle_setup.h"
 #include "event_data.h"
 #include "frontier_util.h"
 #include "pokemon.h"
@@ -187,4 +188,23 @@ TEST("Factory: the swap after the Frontier Brain offers the Brain's team")
         (void)hasLegendary;
     #endif
     }
+}
+
+// A regular (non-boss) Battle Tower opponent drafts from the competitive roster. Its draft
+// once reserved a slot that only a Mega Stone holder could fill; once free gimmicks took
+// the stones off every roster set, nothing could, and the draft looped forever. Any rule
+// that no roster set can satisfy hangs the same way, so fill a party in both formats.
+TEST("Frontier draft: a regular Battle Tower opponent's party fills")
+{
+    u32 i, mode;
+
+    PARAMETRIZE { mode = FRONTIER_MODE_SINGLES; }
+    PARAMETRIZE { mode = FRONTIER_MODE_DOUBLES; }
+
+    VarSet(VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_TOWER);
+    VarSet(VAR_FRONTIER_BATTLE_MODE, mode);
+    TRAINER_BATTLE_PARAM.opponentA = 0;
+    FillFrontierTrainerParty(FRONTIER_PARTY_SIZE);
+    for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+        EXPECT_NE(GetMonData(&gEnemyParty[i], MON_DATA_SPECIES), SPECIES_NONE);
 }

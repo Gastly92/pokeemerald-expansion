@@ -14,7 +14,6 @@
 #include "fork/frontier_draft.h"         // FORK: TeamHasGimmickItemConflict
 #include "fork/battle_tower_trainers.h"  // FORK: gym-leader boss parties
 #include "frontier_util.h"
-#include "item.h"                   // FORK: GetItemHoldEffect (exactly-1-mega rule)
 #include "overworld.h"
 #include "script.h"
 #include "string_util.h"
@@ -24,7 +23,6 @@
 #include "constants/abilities.h"
 #include "constants/battle_frontier.h"
 #include "constants/battle_frontier_mons.h"
-#include "constants/hold_effects.h" // FORK: HOLD_EFFECT_MEGA_STONE
 
 static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCount);
 
@@ -273,18 +271,17 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
     // only the mon source (and the always-max IVs the sets are tuned for) change.
     // Other facilities (Dome/Palace/Arena/Pyramid) keep their vanilla monSet.
     bool32 useExtendedRoster = (VarGet(VAR_FRONTIER_FACILITY) == FRONTIER_FACILITY_TOWER);
-    // FORK: exactly one Tower opponent slot holds a Mega Stone (the player gets to
-    // hand-pick their team, so opponents always bring a Mega). Reserve a random
-    // slot for the mega holder; heldItems[] tracks the team so the shared
-    // gimmick-conflict rule also caps Z-Crystals at one.
-    u32 megaSlot = 0;
+    // FORK: heldItems[] tracks the team for the shared gimmick-item rule (at most one
+    // Mega Stone and one Z-Crystal). There is no reserved Mega slot: under
+    // FEATURE_FREE_GIMMICKS Mega Evolution needs no stone, no roster set holds one, and
+    // regular Frontier opponents are withheld gimmicks (B_FRONTIER_BOSS_ONLY_GIMMICKS).
+    // Test: "Frontier draft: a regular Battle Tower opponent's party fills".
     u16 heldItems[MAX_FRONTIER_PARTY_SIZE] = {ITEM_NONE};
     u32 pseudoCount = 0; // FORK: tier quota — at most one pseudo on a Tower team
     if (useExtendedRoster)
     {
         gFacilityTrainerMons = GetFactoryMonsTable();
         fixedIV = MAX_PER_STAT_IVS;
-        megaSlot = Random() % monCount;
     }
     else
 #endif
@@ -304,14 +301,10 @@ static void FillTrainerParty(u16 trainerId, enum BattleTrainer trainer, u8 monCo
         if (!useExtendedRoster && (level == FRONTIER_MAX_LEVEL_50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER)
             continue;
 
-        // FORK: exactly one Mega Stone — the reserved slot must take a Mega holder,
-        // every other slot must not; plus the shared at-most-one-of-each gimmick
-        // rule (caps Z-Crystals at one).
+        // FORK: the shared at-most-one-of-each gimmick-item rule (one Mega Stone, one
+        // Z-Crystal).
         if (useExtendedRoster)
         {
-            bool32 candIsMega = (GetItemHoldEffect(gFacilityTrainerMons[monId].heldItem) == HOLD_EFFECT_MEGA_STONE);
-            if (candIsMega != (i == (s32)megaSlot))
-                continue;
             if (TeamHasGimmickItemConflict(heldItems, i, gFacilityTrainerMons[monId].heldItem))
                 continue;
             // FORK: Species Clause by dex number: upstream's duplicate check below compares
