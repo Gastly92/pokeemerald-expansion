@@ -193,12 +193,14 @@ challenge — the player can leave, come back, talk to the attendant and **choos
 fresh team** to continue (`tower_init` preserves an active streak; see "Rental vs
 own-party" above).
 
-### Every general opponent brings a Mega
+### General opponents
 
-The player hand-picks their own team, so opponents always carry one:
-`FillTrainerParty` reserves a random slot for a guaranteed Mega Stone holder, forbids
-Mega Stones elsewhere, and applies the shared gimmick rule from `frontier_draft.c`
-(which also caps Z-Crystals at one).
+`FillTrainerParty` drafts general opponents from the competitive roster under the shared
+gimmick-item rule from `frontier_draft.c` (at most one Mega Stone and one Z-Crystal).
+There is no guaranteed Mega Stone holder: under `FEATURE_FREE_GIMMICKS` Mega Evolution
+needs no stone and the roster carries none. General Tower opponents use **every** gimmick
+(Mega, Z-Move, Dynamax, Tera) — the player brings their own team here, unlike the
+Factory's rentals. See "Opponent tiers" below.
 
 General opponents are **tier-gated like the Factory** — no legendaries or mythicals,
 at most one pseudo-legendary per team (`TierRejectsCandidate`, every slot
@@ -247,12 +249,14 @@ available" message. The code and scripts are kept fully intact behind the flag.
 ## Opponent tiers
 
 This is the intended balance, not an accident of implementation: a fight gets the smart
-AI when the player brings their own team, and bosses get the full gimmick set wherever
-they appear.
+AI when the player brings their own team, bosses get the full gimmick set wherever they
+appear, and only the Factory, where the player is on rentals, holds gimmicks back from its
+regular opponents.
 
 | Battle | AI tier | Gimmicks (Mega / Z-Move / Dynamax / Tera) |
 | --- | --- | --- |
-| Regular opponent (Factory or Tower) | regular | none |
+| Regular Factory opponent | regular | none |
+| Regular Tower opponent | regular | all |
 | Factory milestone (10th, 20th, ... win) | regular | all |
 | Tower gym-leader boss (10th, 20th, ... win) | smart | all |
 | Frontier Brain (any facility) | smart | all |
@@ -277,9 +281,9 @@ test in `test/fork/frontier_draft.c`.
 - **AI tier:** `IsFrontierBossTrainer` → `GetFrontierAiFlags` (`src/fork/frontier_ai.c`),
   presets `B_FRONTIER_HARD_AI_FLAGS` / `B_FRONTIER_REGULAR_AI_FLAGS`.
 - **Gimmicks:** `B_FRONTIER_BOSS_ONLY_GIMMICKS` (`config/frontier.h`), enforced through
-  `IsGimmickWithheldFromFrontierOpponent`. A boss here is `IsFrontierBossTrainer` *or*
+  `IsGimmickWithheldFromFrontierOpponent`, in the Battle Factory only. A boss here is `IsFrontierBossTrainer` *or*
   `IsFactoryMilestoneBattle`, since the Factory milestone is a regular trainer id seeded
-  with a legendary. See [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md#boss-only-gimmicks-in-the-frontier).
+  with a legendary. See [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md#boss-only-gimmicks-in-the-battle-factory).
 - The player's side is never restricted. Tests: `test/fork/frontier_ai_difficulty.c`,
   `test/fork/frontier_boss_gimmicks.c`.
 

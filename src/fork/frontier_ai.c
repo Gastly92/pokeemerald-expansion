@@ -91,6 +91,11 @@ bool32 IsGimmickWithheldFromFrontierOpponent(enum BattlerId battler, enum Gimmic
         return FALSE;
     if (!(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) || IsOnPlayerSide(battler))
         return FALSE;
+    // Only the Battle Factory withholds them: the player fights there with rentals, so
+    // a regular opponent with gimmicks is a wall rather than a fight. Everywhere the
+    // player brings their own team (the Battle Tower), regular opponents use them all.
+    if (!(gBattleTypeFlags & BATTLE_TYPE_FACTORY))
+        return FALSE;
 
     if (IsFactoryMilestoneBattle())
         return FALSE;

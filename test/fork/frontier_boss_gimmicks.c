@@ -10,9 +10,10 @@
 #include "constants/trainers.h"
 
 // Guards B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h). Under
-// FEATURE_FREE_GIMMICKS a regular Frontier opponent may not Mega Evolve, Z-Move,
+// FEATURE_FREE_GIMMICKS a regular Battle Factory opponent may not Mega Evolve, Z-Move,
 // Dynamax or Terastallize; the Frontier Brain, the Tower's gym-leader bosses and
-// the Factory's milestone opponent (every 10th win) keep all four, and the
+// the Factory's milestone opponent (every 10th win) keep all four, regular Battle
+// Tower opponents keep all four (the player brings their own team there), and the
 // player's side is never restricted.
 // Battle tests can't put a battle in Frontier mode, so these drive the predicate
 // CanActivateGimmick consults directly, with the battle globals set by hand.
@@ -37,23 +38,44 @@ TEST("Frontier boss gimmicks: the Frontier Brain and gym-leader bosses may use e
     }
 }
 
+// BATTLE_TYPE_FRONTIER is the mask of every facility's flag, so name one: the Factory,
+// the only facility that withholds gimmicks. Tests for another facility override it.
 static void SetUpFrontierSingles(u16 opponentId)
 {
-    gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER;
+    gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_FACTORY;
     gBattlerPositions[B_BATTLER_0] = B_POSITION_PLAYER_LEFT;
     gBattlerPositions[B_BATTLER_1] = B_POSITION_OPPONENT_LEFT;
     TRAINER_BATTLE_PARAM.opponentA = opponentId;
 }
 
-TEST("Frontier boss gimmicks: a regular opponent's battler is withheld every gimmick")
+TEST("Frontier boss gimmicks: a regular Factory opponent's battler is withheld every gimmick")
 {
+    u8 savedBattleNum = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
+
     SetConfig(CONFIG_FEATURE_FREE_GIMMICKS, TRUE);
     SetUpFrontierSingles(0);
+    gSaveBlock2Ptr->frontier.curChallengeBattleNum = 0; // not the milestone
 
     EXPECT(IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_Z_MOVE));
     EXPECT(IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_DYNAMAX));
     EXPECT(IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_MEGA));
     EXPECT(IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_TERA));
+
+    gSaveBlock2Ptr->frontier.curChallengeBattleNum = savedBattleNum;
+    gBattleTypeFlags = 0;
+}
+
+// The player brings their own team to the Tower, so its regular opponents are not held back.
+TEST("Frontier boss gimmicks: a regular Battle Tower opponent may use every gimmick")
+{
+    SetConfig(CONFIG_FEATURE_FREE_GIMMICKS, TRUE);
+    SetUpFrontierSingles(0);
+    gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_BATTLE_TOWER;
+
+    EXPECT(!IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_Z_MOVE));
+    EXPECT(!IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_DYNAMAX));
+    EXPECT(!IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_MEGA));
+    EXPECT(!IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_TERA));
 
     gBattleTypeFlags = 0;
 }
@@ -124,7 +146,6 @@ TEST("Frontier boss gimmicks: the Battle Factory's milestone opponent may use ev
     // The same slot in another facility is not a Factory milestone.
     gBattleTypeFlags = BATTLE_TYPE_TRAINER | BATTLE_TYPE_BATTLE_TOWER;
     EXPECT(!IsFactoryMilestoneBattle());
-    EXPECT(IsGimmickWithheldFromFrontierOpponent(B_BATTLER_1, GIMMICK_Z_MOVE));
 
     gSaveBlock2Ptr->frontier.curChallengeBattleNum = savedBattleNum;
     gSaveBlock2Ptr->frontier.lvlMode = savedLvlMode;

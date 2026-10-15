@@ -115,19 +115,21 @@ The AI and Battle Palace keep upstream's straight-to-Struggle behaviour.
 
 `ShouldTrainerBattlerUseGimmick` returns TRUE for all gimmicks for AI battlers, so Tera
 and Dynamax are no longer opt-in and every eligible AI mon gimmicks (except regular
-Frontier opponents, below). With the
+Battle Factory opponents, below). With the
 per-type-once tracking, the team spreads its gimmicks across mons by priority (the
 existing `ShouldUseZMove` / `DecideTerastal` reconsideration still applies).
 
-### Boss-only gimmicks in the Frontier
+### Boss-only gimmicks in the Battle Factory
 
-Regular Frontier opponents get **no free gimmicks at all** — no Mega Evolution, Z-Move,
-Dynamax or Terastallization. All four are reserved for the fights meant to be a wall: the Frontier Brain,
-the Battle Tower's gym-leader bosses, and the Battle Factory's milestone opponent (both
-every 10th win). The Factory's milestone is a regular trainer id seeded with a legendary,
+Regular Battle Factory opponents get **no free gimmicks at all** — no Mega Evolution,
+Z-Move, Dynamax or Terastallization. All four are reserved for the fights meant to be a
+wall: the Factory Head and the Factory's milestone opponent (every 10th win). The
+restriction is Factory-only because the player fights there with rentals; in the Battle
+Tower the player brings their own team, so **regular Tower opponents use every gimmick**,
+as do its gym-leader bosses and the Salon Maiden. The Factory's milestone is a regular trainer id seeded with a legendary,
 so it is recognised by its slot in the set (`IsFactoryMilestoneBattle`) rather than by
 `IsFrontierBossTrainer`. The player's side is never restricted, and battles outside the
-Frontier are unaffected. A regular opponent's mon still carrying a now-inert Mega Stone or
+Factory are unaffected. A regular Factory opponent's mon still carrying a now-inert Mega Stone or
 Z-Crystal is withheld too: the gate sits above the per-gimmick checks. The full per-battle balance (AI tier plus gimmicks) is tabled
 in [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md#opponent-tiers).
 

@@ -150,10 +150,12 @@
                                      | AI_FLAG_SMART_TERA | AI_FLAG_SMART_Z_MOVE \
                                      | AI_FLAG_ASSUMPTIONS)
 
-// The gimmicks FEATURE_FREE_GIMMICKS hands out that only BOSS Frontier opponents
-// may use: the Frontier Brain, the Battle Tower's gym-leader bosses, and the
-// Battle Factory's milestone opponent (the legendary-seeded 10th, 20th, ... win). A regular Frontier opponent's mons never offer
+// The gimmicks FEATURE_FREE_GIMMICKS hands out that, in the Battle Factory, only BOSS
+// opponents may use: the Frontier Brain and the Factory's milestone opponent (the
+// legendary-seeded 10th, 20th, ... win). A regular Factory opponent's mons never offer
 // these, so by default they never Mega Evolve, Z-Move, Dynamax or Terastallize. The
+// Factory is the only facility restricted: the player fights it with rentals, while in
+// the Battle Tower they bring their own team, so Tower opponents use every gimmick. The
 // player's side is never restricted. A bitmask of
 // (1u << GIMMICK_*); 0 restores "every opponent uses every gimmick". Only
 // expanded at the use site (src/fork/frontier_ai.c), which includes

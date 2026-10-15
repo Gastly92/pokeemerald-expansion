@@ -161,7 +161,7 @@ void RefreshGimmickTriggerSprite(enum BattlerId battler)
 // Returns whether a battler is able to use a gimmick. Checks consumption and gimmick specific functions.
 bool32 CanActivateGimmick(enum BattlerId battler, enum Gimmick gimmick)
 {
-    // FORK (FEATURE_FREE_GIMMICKS): regular Frontier opponents don't get the boss-only
+    // FORK (FEATURE_FREE_GIMMICKS): regular Battle Factory opponents don't get the boss-only
     // gimmicks (B_FRONTIER_BOSS_ONLY_GIMMICKS). Gated here, the one place candidates are
     // built, so the AI's picker never sees them. See src/fork/frontier_ai.c.
     if (IsGimmickWithheldFromFrontierOpponent(battler, gimmick))
