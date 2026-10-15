@@ -1,7 +1,9 @@
 #include "global.h"
 #include "test/battle.h"
+#include "event_data.h"
 #include "string_util.h"
 #include "fork/damage_preview.h"
+#include "constants/battle_frontier.h"
 
 // B_MOVE_DAMAGE_PREVIEW. The move menu's "% of the foe's HP" range must (1) contain the
 // damage the move really does, whatever the foe's hidden spread, (2) never use anything the
@@ -471,5 +473,159 @@ SINGLE_BATTLE_TEST("Damage preview: the readout names the type the move is fired
         EXPECT_EQ(GetDamagePreviewMoveType(B_BATTLER_0, MOVE_WEATHER_BALL, GIMMICK_NONE), TYPE_FIRE);
         // Nothing the type resolution latches is left behind for the real move.
         EXPECT_EQ(gBattleStruct->dynamicMoveType, TYPE_NONE);
+    }
+}
+
+// The preview is asked in THEN, after the move: the held item and the entry-turn count are put
+// back to read what the menu showed before the item was used up.
+SINGLE_BATTLE_TEST("Damage preview: Acrobatics reads an item used up before the move as already gone, and one used up after as still held")
+{
+    enum Item item;
+    s16 damage;
+    u32 lo = 0, hi = 0, maxHP = 404, hp = 100;
+
+    // Quick Claw goes on the entry turn and Custap in its HP range, both before the move: doubled.
+    PARAMETRIZE { item = ITEM_QUICK_CLAW; }
+    PARAMETRIZE { item = ITEM_CUSTAP_BERRY; hp = 20; }
+    // King's Rock is used up at move end, after the damage: not doubled.
+    PARAMETRIZE { item = ITEM_KINGS_ROCK; }
+
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_ACROBATICS) == EFFECT_ACROBATICS);
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(item); MaxHP(100); HP(hp); Moves(MOVE_ACROBATICS); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(maxHP); HP(maxHP); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_ACROBATICS); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+    } THEN {
+        EXPECT_EQ(gBattleMons[B_BATTLER_0].item, ITEM_NONE);
+        gBattleMons[B_BATTLER_0].item = item;
+        gBattleStruct->battlerState[B_BATTLER_0].isFirstTurn = 1;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_ACROBATICS, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, maxHP, lo, hi));
+        EXPECT_EQ(gBattleMons[B_BATTLER_0].item, item);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a Quick Claw past its entry turn is still held for Acrobatics")
+{
+    u32 claw[2], none[2];
+
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_QUICK_CLAW); Moves(MOVE_ACROBATICS, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        gBattleMons[B_BATTLER_0].item = ITEM_QUICK_CLAW;
+        gBattleStruct->battlerState[B_BATTLER_0].isFirstTurn = 0;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_ACROBATICS, GIMMICK_NONE, &claw[0], &claw[1], &sKo));
+        gBattleMons[B_BATTLER_0].item = ITEM_NONE;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_ACROBATICS, GIMMICK_NONE, &none[0], &none[1], &sKo));
+        EXPECT_LT(claw[1], none[1]);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a held Scope Lens prices in its guaranteed crit")
+{
+    s16 damage;
+    u32 lo = 0, hi = 0, maxHP = 404;
+
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_SCOPE_LENS); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(maxHP); HP(maxHP); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+        MESSAGE("A critical hit!");
+    } THEN {
+        gBattleMons[B_BATTLER_0].item = ITEM_SCOPE_LENS;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, maxHP, lo, hi));
+    }
+}
+
+// Wobbuffet at Lv100 (base HP 190 / Def 58 / Sp. Def 58 / Speed 33) at the frail corner of its
+// spread: 0 IV / 0 EV / hindering nature, and the 31 IV / 0 EV / hindering nature corner the
+// Frontier's max IVs leave.
+#define WOBB_FRAIL_HP         490
+#define WOBB_FRAIL_DEF        108
+#define WOBB_SLOWEST_SPEED     63
+#define WOBB_FRONTIER_HP      521
+#define WOBB_FRONTIER_DEF     136
+
+SINGLE_BATTLE_TEST("Damage preview: a move that punishes a slow target is read against the slowest foe at the top end")
+{
+    enum Move move;
+    s16 damage;
+    u32 lo = 0, hi = 0;
+
+    // Electro Ball: 200 vs 63 Speed is 120 power, where the fastest foe gives 60.
+    PARAMETRIZE { move = MOVE_ELECTRO_BALL; }
+    // Bolt Beak: doubled when the user moves first, which it does only against the slow foe.
+    PARAMETRIZE { move = MOVE_BOLT_BEAK; }
+
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_ELECTRO_BALL) == EFFECT_ELECTRO_BALL);
+        ASSUME(GetMoveEffect(MOVE_BOLT_BEAK) == EFFECT_BOLT_BEAK);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(move == MOVE_ELECTRO_BALL ? 200 : 100); Moves(move); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(WOBB_FRAIL_HP); HP(WOBB_FRAIL_HP); Defense(WOBB_FRAIL_DEF); SpDefense(WOBB_FRAIL_DEF); Speed(WOBB_SLOWEST_SPEED); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, move); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+    } THEN {
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, GIMMICK_NONE, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, WOBB_FRAIL_HP, lo, hi));
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a Factory or Tower foe's HP and defences keep their 31 IVs at the top end")
+{
+    s16 damage;
+    u32 lo = 0, hi = 0, outsideHi = 0;
+
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(WOBB_FRONTIER_HP); HP(WOBB_FRONTIER_HP); Defense(WOBB_FRONTIER_DEF); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+    } THEN {
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &lo, &outsideHi, &sKo));
+        gBattleTypeFlags |= BATTLE_TYPE_FRONTIER;
+        VarSet(VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_TOWER);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &lo, &hi, &sKo));
+        // The frailest Frontier foe is this one, so its hit tops the range exactly.
+        EXPECT(PercentWithin(damage, WOBB_FRONTIER_HP, hi, hi));
+        EXPECT_LT(hi, outsideHi);
+        gBattleTypeFlags &= ~BATTLE_TYPE_FRONTIER;
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: Bolt Beak does not read the foe's true Speed from the AI's cache")
+{
+    u32 lo[2], hi[2];
+
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_BOLT_BEAK, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(150); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_BOLT_BEAK, GIMMICK_NONE, &lo[0], &hi[0], &sKo));
+        // As if the AI had cached a hidden Choice Scarf's Speed.
+        gAiLogicData->speedStats[B_BATTLER_1] = 999;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_BOLT_BEAK, GIMMICK_NONE, &lo[1], &hi[1], &sKo));
+        EXPECT_EQ(lo[0], lo[1]);
+        EXPECT_EQ(hi[0], hi[1]);
+        EXPECT_EQ(gAiLogicData->speedStats[B_BATTLER_1], 999);
     }
 }

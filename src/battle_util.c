@@ -9012,6 +9012,14 @@ static inline u32 GetHoldEffectCritChanceIncrease(enum BattlerId battler, enum H
     return critStageIncrease;
 }
 
+// FORK: DETERMINISTIC_HOLD_EFFECTS -- the crit-item rule IsCriticalHit applies, exported so the
+// AI's damage simulation (ShouldCalcCritDamage) predicts the same crit. Fork-only function; on
+// conflict keep it whole. Needs the file-static GetHoldEffectCritChanceIncrease, hence it lives here.
+bool32 IsDeterministicCritItemActive(enum BattlerId battler, enum HoldEffect holdEffect)
+{
+    return GetConfig(DETERMINISTIC_HOLD_EFFECTS) && GetHoldEffectCritChanceIncrease(battler, holdEffect) > 0;
+}
+
 s32 CalcCritChanceStage(struct DamageContext *ctx)
 {
     s32 critChance = 0;
@@ -9196,8 +9204,7 @@ static bool32 IsCriticalHit(struct DamageContext *ctx)
     // nudged). Crit-blocking is honored via the CRITICAL_HIT_BLOCKED branch above. Only
     // flag consumption on real execution (updateFlags); AI damage prediction reuses this
     // path but must not mutate state.
-    else if (GetConfig(DETERMINISTIC_HOLD_EFFECTS)
-          && GetHoldEffectCritChanceIncrease(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]) > 0)
+    else if (IsDeterministicCritItemActive(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]))
     {
         isCrit = TRUE;
         if (ctx->updateFlags)

@@ -46,6 +46,11 @@ bool32 DeterministicAdditionalEffectApplies(enum Type moveType, bool32 isSuperEf
 // stock RNG roll with the deterministic gate when the flag is on.
 bool32 TryTriggerAdditionalEffect(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, const struct AdditionalEffect *additionalEffect, u32 percentChance, u32 rngElement);
 
+// DETERMINISTIC_HOLD_EFFECTS: TRUE when the battler's crit item (Scope Lens / Razor Claw,
+// Lucky Punch on Chansey, Leek on Farfetch'd) guarantees its next landed attack a crit, as
+// IsCriticalHit applies it. Defined in src/battle_util.c beside the static it needs.
+bool32 IsDeterministicCritItemActive(enum BattlerId battler, enum HoldEffect holdEffect);
+
 // DETERMINISTIC_ACCURACY_EVASION: TRUE when `move` locks the user into a Hyper Beam-style
 // recharge turn (a damaging, non-sleep move that was exactly 50% accurate).
 bool32 MoveGainsDeterministicRecharge(enum Move move);
