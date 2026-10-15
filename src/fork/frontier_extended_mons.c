@@ -12654,17 +12654,17 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_WISH,
             MOVE_IRON_HEAD,
-            MOVE_STEALTH_ROCK,
+            MOVE_ZEN_HEADBUTT,
+            MOVE_PROTECT,
             MOVE_THUNDER_WAVE
         },
         .ability = ABILITY_BULLETPROOF,
-        .nature = NATURE(SPD_UP, SPA_DOWN),
+        .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .def = 4,
-            .spd = 252
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
         ),
         .teraType = TYPE_STEEL,
     },
@@ -16693,7 +16693,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_AIR_SLASH,
             MOVE_SEED_FLARE,
-            MOVE_SUBSTITUTE,
+            MOVE_PROTECT,
             MOVE_LEECH_SEED
         },
         .ability = ABILITY_WIND_RIDER,
