@@ -207,6 +207,7 @@ TEST("Frontier draft: a regular Battle Tower opponent's party fills")
     FillFrontierTrainerParty(FRONTIER_PARTY_SIZE);
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
         EXPECT_NE(GetMonData(&gEnemyParty[i], MON_DATA_SPECIES), SPECIES_NONE);
+}
 
 // Whether the dex run around roster index `id` holds a `format` set that a `slotTier` slot
 // rejects: those are the dex numbers the draft used to underweight in that slot (base
