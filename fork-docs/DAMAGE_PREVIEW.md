@@ -25,8 +25,15 @@ The player does not know the foe's spread, so the range covers every legal one a
 | **Low** (bulkiest) | 31 IV / 252 EV / boosting nature | lowest |
 | **High** (frailest) | 0 IV / 0 EV / hindering nature | highest |
 
+In the Battle Factory and Battle Tower the frailest end keeps **31 IVs** in HP, Defense and
+Sp. Def: those facilities build every foe with max IVs, and no roster set lowers one of those
+three (only Attack and Speed). 0 EVs and a hindering nature stay, since real sets use both.
+
 The foe's *offensive* stats and Speed are pushed the other way in each case, so moves that
-read the target's own stats (Foul Play, Gyro Ball) are bounded too. The health bar's current
+read the target's own stats (Foul Play, Gyro Ball) are bounded too. Speed follows the move:
+Electro Ball and Bolt Beak / Fishious Rend hit a *slower* foe harder, so for them the frailest
+end is also the slowest. Turn order (Bolt Beak, Payback) is judged from those spread speeds and
+the items the player has seen, never the foe's real Speed or a hidden Choice Scarf. The health bar's current
 fraction is kept, for moves that read the target's current HP. Under `DETERMINISTIC_DAMAGE`
 the roll is the fixed turn multiplier, so only the spread widens the range.
 

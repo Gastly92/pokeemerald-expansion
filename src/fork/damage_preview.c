@@ -19,6 +19,7 @@
 #include "battle_main.h"
 #include "battle_message.h"
 #include "battle_util.h"
+#include "event_data.h"
 #include "pokemon.h"
 #include "string_util.h"
 #include "text.h"
@@ -26,6 +27,7 @@
 #include "fork/damage_preview.h"
 #include "fork/innate_abilities.h"
 #include "constants/battle.h"
+#include "constants/battle_frontier.h"
 #include "constants/characters.h"
 
 // The two ends of the defender's unknown spread, mirroring CalculateMonStats() (src/pokemon.c).
@@ -92,18 +94,54 @@ static bool32 IsItemUsedUpBeforeMove(enum BattlerId battler, enum Move move)
     return TRUE;
 }
 
+// Factory and Tower foes are built with 31 IVs (GetFactoryMonFixedIV under B_FRONTIER_MAX_IVS,
+// the Tower's useExtendedRoster and its brain / boss teams in src/fork/battle_tower_trainers.c),
+// and no roster set overrides an HP, Defense or Sp. Def IV -- only Attack and Speed. So there the
+// frail end keeps 31 in those three; EVs and a hindering nature stay open, since sets use both.
+static bool32 AreFoeDefensiveIvsMaxed(void)
+{
+    if (!(gBattleTypeFlags & BATTLE_TYPE_FRONTIER))
+        return FALSE;
+    switch (VarGet(VAR_FRONTIER_FACILITY))
+    {
+    case FRONTIER_FACILITY_FACTORY:
+        return B_FRONTIER_MAX_IVS;
+    case FRONTIER_FACILITY_TOWER:
+        return B_FRONTIER_EXTENDED_MONS;
+    default:
+        return FALSE;
+    }
+}
+
+// Moves that hit harder the slower the target is: Electro Ball off the speed ratio, and Bolt
+// Beak / Fishious Rend, which double only when the user moves first.
+static bool32 DoesSlowerTargetTakeMore(enum Move move)
+{
+    switch (GetMoveEffect(move))
+    {
+    case EFFECT_ELECTRO_BALL:
+    case EFFECT_BOLT_BEAK:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 // One end of the spread. `frail` is the top of the range: the least HP and defences the foe can
 // have. Its offences are pushed the *other* way at the same time, so a move that reads the
 // target's own stats (Foul Play off its Attack, Gyro Ball off its Speed) also lands at its worst
 // for the foe in the frail case -- the two cases are the outer bounds, whichever way a move leans.
-static void ApplySpreadBound(struct BattlePokemon *mon, const struct BattlePokemon *real, enum Species species, u32 level, u32 hpScaleNum, u32 hpScaleDen, bool32 frail)
+// Speed follows the move: a move that punishes a slow target gets the slowest foe in the frail
+// case instead (`slowFrail`).
+static void ApplySpreadBound(struct BattlePokemon *mon, const struct BattlePokemon *real, enum Species species, u32 level, u32 hpScaleNum, u32 hpScaleDen, bool32 frail, bool32 defIvsMaxed, bool32 slowFrail)
 {
-    u32 defIv = frail ? 0 : MAX_PER_STAT_IVS;
+    u32 defIv = (frail && !defIvsMaxed) ? 0 : MAX_PER_STAT_IVS;
     u32 defEv = frail ? 0 : MAX_PER_STAT_EVS;
     u32 defNature = frail ? NATURE_HINDERING : NATURE_BOOSTING;
     u32 offIv = frail ? MAX_PER_STAT_IVS : 0;
     u32 offEv = frail ? MAX_PER_STAT_EVS : 0;
     u32 offNature = frail ? NATURE_BOOSTING : NATURE_HINDERING;
+    bool32 fast = (frail != slowFrail);
     u32 maxHP = CalcHpBound(species, level, defIv, defEv) * hpScaleNum / hpScaleDen;
 
     if (maxHP == 0)
@@ -123,7 +161,8 @@ static void ApplySpreadBound(struct BattlePokemon *mon, const struct BattlePokem
     mon->spDefense = CalcStatBound(GetSpeciesBaseSpDefense(species), level, defIv, defEv, defNature);
     mon->attack    = CalcStatBound(GetSpeciesBaseAttack(species),    level, offIv, offEv, offNature);
     mon->spAttack  = CalcStatBound(GetSpeciesBaseSpAttack(species),  level, offIv, offEv, offNature);
-    mon->speed     = CalcStatBound(GetSpeciesBaseSpeed(species),     level, offIv, offEv, offNature);
+    mon->speed     = CalcStatBound(GetSpeciesBaseSpeed(species),     level,
+                                   fast ? MAX_PER_STAT_IVS : 0, fast ? MAX_PER_STAT_EVS : 0, fast ? NATURE_BOOSTING : NATURE_HINDERING);
 }
 
 // Why a damaging move came out at 0: a matchup the player knows is immune (a type immunity, a
@@ -263,12 +302,14 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     enum Ability savedAiAbilities[MAX_BATTLERS_COUNT];
     enum Item savedAiItems[MAX_BATTLERS_COUNT];
     enum HoldEffect savedAiHoldEffects[MAX_BATTLERS_COUNT];
+    u32 savedAiSpeeds[MAX_BATTLERS_COUNT];
     u32 savedDragonDarts;
     u32 savedHpPercent;
     enum Species species;
     u32 level, hpScaleNum, hpScaleDen;
     u32 lo = UINT32_MAX, hi = 0;
     bool32 any = FALSE, immune = FALSE, koAlways = TRUE, koMaybe = FALSE, endures, armedForm;
+    bool32 defIvsMaxed = AreFoeDefensiveIvsMaxed(), slowFrail = DoesSlowerTargetTakeMore(move);
     uq4_12_t typeEffectiveness = UQ_4_12(1.0);
 
     if (move == MOVE_NONE || IsBattleMoveStatus(move) || !IsBattlerAlive(battlerDef) || gBattleMons[battlerDef].maxHP == 0)
@@ -312,6 +353,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         savedAiAbilities[b] = gAiLogicData->abilities[b];
         savedAiItems[b] = gAiLogicData->items[b];
         savedAiHoldEffects[b] = gAiLogicData->holdEffects[b];
+        savedAiSpeeds[b] = gAiLogicData->speedStats[b];
     }
 
     // The AI's calc reads abilities and items from its own knowledge model, which under
@@ -373,7 +415,12 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         struct SimulatedDamage dmg;
         u32 maxHP;
 
-        ApplySpreadBound(&gBattleMons[battlerDef], &realDef, species, level, hpScaleNum, hpScaleDen, frail);
+        ApplySpreadBound(&gBattleMons[battlerDef], &realDef, species, level, hpScaleNum, hpScaleDen, frail, defIvsMaxed, slowFrail);
+        // The AI's turn-order guess (Bolt Beak, Payback) reads its cached speeds, which hold the
+        // foe's true Speed and hidden Choice Scarf. Re-derive them from this spread and from
+        // what the player knows.
+        for (enum BattlerId b = 0; b < gBattlersCount; b++)
+            gAiLogicData->speedStats[b] = GetBattlerTotalSpeedStat(b, gAiLogicData->abilities[b], gAiLogicData->holdEffects[b]);
         maxHP = gBattleMons[battlerDef].maxHP;
         dmg = AI_CalcDamage(&aiCalc, battlerAtk, battlerDef);
         typeEffectiveness = aiCalc.typeEffectiveness;
@@ -406,6 +453,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         gAiLogicData->abilities[b] = savedAiAbilities[b];
         gAiLogicData->items[b] = savedAiItems[b];
         gAiLogicData->holdEffects[b] = savedAiHoldEffects[b];
+        gAiLogicData->speedStats[b] = savedAiSpeeds[b];
     }
     gAiLogicData->dragonDartsHitsBothTarget = savedDragonDarts;
     gAiLogicData->hpPercents[battlerDef] = savedHpPercent;
