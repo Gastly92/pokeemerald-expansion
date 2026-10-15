@@ -12656,7 +12656,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_WISH,
             MOVE_IRON_HEAD,
-            MOVE_STEALTH_ROCK,
+            MOVE_PROTECT,
             MOVE_THUNDER_WAVE
         },
         .ability = ABILITY_BULLETPROOF,
@@ -16693,7 +16693,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_AIR_SLASH,
             MOVE_SEED_FLARE,
-            MOVE_SUBSTITUTE,
+            MOVE_PROTECT,
             MOVE_LEECH_SEED
         },
         .ability = ABILITY_WIND_RIDER,
