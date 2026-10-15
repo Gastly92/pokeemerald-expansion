@@ -280,9 +280,10 @@ base forme and the crystal to the Origin forme? — turned out to have a mechani
 The park rested on two claims and **both were false**:
 
 - *"Reaching two sets means doubling the orb onto a second set of the same forme, which adds
-  no reach under one-species-per-team."* The draw is uniform over **sets**
-  (`GetRandomFrontierExtendedMonId()`), so a second set holding an item does roughly double
-  its appearance rate. One-item-per-team stops two sets appearing **together**; it does not
+  no reach under one-species-per-team."* The draw was uniform over **sets** at the time, so
+  a second set holding an item roughly doubled its appearance rate. (It is now uniform per dex
+  number, `GetRandomFrontierExtendedMonIdForSlot()`, so a second set splits its Pokémon's share
+  instead.) One-item-per-team stops two sets appearing **together**; it does not
   stop either being drawn.
 - *"Dialga-Origin must keep its Adamant Crystal, so only two legal sets remain."* No — this
   doc's own [forme-set finding](#a-forme-set-is-not-compelled-to-hold-its-item) says
@@ -376,9 +377,11 @@ are worth keeping here so the error is not repeated for some other species-locke
   opponents, plus fixed boss teams. **The player can never rent one fresh.**
 - **The draft rejects duplicate species**, so one Arceus per team means **one plate per
   team, ever** — the 17 are mutually exclusive, not additive.
-- **The draw is uniform over sets** (`GetRandomFrontierExtendedMonId()`), so set count
-  scales appearance rate directly. Measured after the batch landed: **19 Arceus sets against
-  an 84-set mythical pool, 22.6%.**
+- **The draw was uniform over sets** at the time, so set count scaled appearance rate
+  directly. Measured after the batch landed: **19 Arceus sets against an 84-set mythical
+  pool, 22.6%.** (Superseded: the draw is now uniform per dex number within each slot's tier,
+  `GetRandomFrontierExtendedMonIdForSlot()`, so Arceus has the same share as every other
+  mythical however many plates it carries.)
 
 That share was reviewed and **accepted**, on the grounds that it is a *different* Arceus each
 time — 17 formes sharing no typing, no moveset and no item — so the variety the audit cares
