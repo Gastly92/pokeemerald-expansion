@@ -207,4 +207,88 @@ TEST("Frontier draft: a regular Battle Tower opponent's party fills")
     FillFrontierTrainerParty(FRONTIER_PARTY_SIZE);
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
         EXPECT_NE(GetMonData(&gEnemyParty[i], MON_DATA_SPECIES), SPECIES_NONE);
+
+// Whether the dex run around roster index `id` holds a `format` set that a `slotTier` slot
+// rejects: those are the dex numbers the draft used to underweight in that slot (base
+// Kyurem is TIER_LEGENDARY, Kyurem-Black/White TIER_MYTHICAL).
+static bool32 DexRunHasRejectedSet(u32 id, u32 format, enum SpeciesTier slotTier, u32 pseudoCount)
+{
+    enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[id].species);
+    u32 i = id;
+
+    while (i > 0 && SpeciesToNationalPokedexNum(gFrontierExtendedMons[i - 1].species) == dexNum)
+        i--;
+    for (; i < gFrontierExtendedMonsCount && SpeciesToNationalPokedexNum(gFrontierExtendedMons[i].species) == dexNum; i++)
+    {
+        if ((gFrontierExtendedMons[i].tags & format)
+         && TierRejectsCandidate(slotTier, GetSpeciesTier(gFrontierExtendedMons[i].species), pseudoCount))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static bool32 SlotAcceptsSet(u32 id, u32 format, enum SpeciesTier slotTier, u32 pseudoCount)
+{
+    return (gFrontierExtendedMons[id].tags & format)
+        && !TierRejectsCandidate(slotTier, GetSpeciesTier(gFrontierExtendedMons[id].species), pseudoCount);
+}
+
+// Every draft slot must give each Pokémon it can take the same chance, whatever that
+// Pokémon's other formes are. The old draw weighed a dex number by all its sets and
+// rejected the ones the slot couldn't take, so Kyurem, with four mythical and two
+// legendary sets, won its mythical-slot draws only 4/6 of the time. Measured over the
+// slot's straddling dex numbers together: equal weighting gives them their head-count
+// share of the draws; the old draw gave the forced slots roughly 70% of it. The ordinary
+// slots have too few straddlers for a sampling test this size, so they only check that
+// every draw is one the slot accepts (the weighting is the same code path).
+TEST("Frontier draft: each slot weighs every dex number it accepts equally")
+{
+    u32 i, draws = 3000, slotDexNums = 0, mixedDexNums = 0, mixedDraws = 0, rejected = 0;
+    enum SpeciesTier slotTier;
+    u32 pseudoCount;
+    bool32 checkWeights;
+
+    PARAMETRIZE { slotTier = TIER_MYTHICAL;  pseudoCount = 0; checkWeights = TRUE; }
+    PARAMETRIZE { slotTier = TIER_LEGENDARY; pseudoCount = 0; checkWeights = TRUE; }
+    PARAMETRIZE { slotTier = TIER_NORMAL;    pseudoCount = 0; checkWeights = FALSE; }
+    PARAMETRIZE { slotTier = TIER_NORMAL;    pseudoCount = 1; checkWeights = FALSE; }
+
+    VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
+    // Count the slot's dex numbers once each, at the first accepted set of each dex run.
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[i].species);
+        u32 j = i;
+        bool32 firstAccepted = TRUE;
+
+        if (!SlotAcceptsSet(i, FORMAT_SINGLES, slotTier, pseudoCount))
+            continue;
+        while (j > 0 && SpeciesToNationalPokedexNum(gFrontierExtendedMons[j - 1].species) == dexNum)
+        {
+            j--;
+            if (SlotAcceptsSet(j, FORMAT_SINGLES, slotTier, pseudoCount))
+                firstAccepted = FALSE;
+        }
+        if (!firstAccepted)
+            continue;
+        slotDexNums++;
+        if (DexRunHasRejectedSet(i, FORMAT_SINGLES, slotTier, pseudoCount))
+            mixedDexNums++;
+    }
+    // Vacuous unless the roster still has dex numbers that straddle the slot's quota.
+    if (checkWeights)
+        ASSUME(mixedDexNums > 0);
+
+    for (i = 0; i < draws; i++)
+    {
+        u16 id = GetRandomFrontierExtendedMonIdForSlot(slotTier, pseudoCount);
+        if (!SlotAcceptsSet(id, FORMAT_SINGLES, slotTier, pseudoCount))
+            rejected++;
+        else if (DexRunHasRejectedSet(id, FORMAT_SINGLES, slotTier, pseudoCount))
+            mixedDraws++;
+    }
+    EXPECT_EQ(rejected, 0);
+    // Expected share is draws * mixed / slot; allow 15% under it for sampling noise.
+    if (checkWeights)
+        EXPECT_GT(mixedDraws * slotDexNums * 100, draws * mixedDexNums * 85);
 }

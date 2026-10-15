@@ -2,6 +2,7 @@
 #define GUARD_FRONTIER_EXTENDED_MONS_H
 
 #include "data.h"
+#include "fork/species_tiers.h"
 
 // Which battle format(s) an extended-roster set is suited for. Stored in
 // the otherwise-unused struct TrainerMon.tags field (the Battle Factory never
@@ -161,9 +162,10 @@ STATIC_ASSERT(IVS(SPD, 7, SPA, 6, SPE, 5, DEF, 4, ATK, 3)
 extern const struct TrainerMon gFrontierExtendedMons[];
 extern const u16 gFrontierExtendedMonsCount;
 
-// format-aware draw from the competitive roster, uniform per National Dex
-// number (not per set), shared by any facility (Battle Factory, Battle Tower)
-// whose opponents pull from it.
-u16 GetRandomFrontierExtendedMonId(void);
+// Format-aware draw for one draft slot from the competitive roster, shared by any
+// facility (Battle Factory, Battle Tower) that pulls from it: only sets the slot's tier
+// quota accepts (see TierRejectsCandidate), uniform per National Dex number (not per
+// set) among the Pokémon that slot can take.
+u16 GetRandomFrontierExtendedMonIdForSlot(enum SpeciesTier slotTier, u32 pseudoCount);
 
 #endif // GUARD_FRONTIER_EXTENDED_MONS_H

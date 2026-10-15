@@ -1,6 +1,8 @@
 #include "global.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/species_shorthand.h"
+#include "fork/frontier_draft.h"
+#include "fork/species_tiers.h"
 #include "event_data.h"
 #include "pokemon.h"
 #include "random.h"
@@ -34244,11 +34246,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
 const u16 gFrontierExtendedMonsCount = ARRAY_COUNT(gFrontierExtendedMons);
 
-// Number of sets in the contiguous same-National-Dex run containing `id` that are
-// valid for `formatTag`. Relies on the ORDER invariant above (every build of one
-// dex number is contiguous), which TEST("Frontier extended roster: sets are
-// sorted by National Dex number") enforces.
-static u32 CountFormatSetsInDexRun(u16 id, u32 formatTag)
+// The draft slot a draw is for: its slot tier and the team's pseudo count so far, the
+// same inputs TierRejectsCandidate takes.
+struct DraftSlot
+{
+    enum SpeciesTier tier;
+    u32 pseudoCount;
+};
+
+// Whether set `id` can be drawn for `formatTag` and the slot's tier quota accepts it.
+static bool32 IsDrawableSet(u32 id, u32 formatTag, const struct DraftSlot *slot)
+{
+    if (!(gFrontierExtendedMons[id].tags & formatTag))
+        return FALSE;
+    return !TierRejectsCandidate(slot->tier, GetSpeciesTier(gFrontierExtendedMons[id].species), slot->pseudoCount);
+}
+
+// Number of drawable sets (see IsDrawableSet) in the contiguous same-National-Dex run
+// containing `id`. Relies on the ORDER invariant above (every build of one dex number
+// is contiguous), which TEST("Frontier extended roster: sets are sorted by National
+// Dex number") enforces.
+static u32 CountDrawableSetsInDexRun(u16 id, u32 formatTag, const struct DraftSlot *slot)
 {
     enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[id].species);
     u32 first = id, last = id, count = 0, i;
@@ -34259,25 +34277,28 @@ static u32 CountFormatSetsInDexRun(u16 id, u32 formatTag)
         last++;
     for (i = first; i <= last; i++)
     {
-        if (gFrontierExtendedMons[i].tags & formatTag)
+        if (IsDrawableSet(i, formatTag, slot))
             count++;
     }
     return count;
 }
 
-// Draw one random roster index whose set is valid for the current battle
-// format (singles/doubles). The draw is uniform per *National Dex number*, not per
-// set: a Pokémon with seventeen sets (Silvally, Arceus — one per type form) is no
-// more likely to be drafted than one with a single set. A uniformly drawn set is
-// kept with probability 1/n, where n is how many format-valid sets its dex number
-// has, so every dex number carries equal total weight and each of its sets 1/n
-// of it. There is no difficulty scaling by streak (the roster has no weak->strong
-// tier ordering). Lives here, with the roster data, rather than in the upstream
-// battle_factory.c, and is shared so any facility (Battle Factory, Battle Tower)
-// can field opponents from the competitive list; callers handle their own
-// species/held-item dedup and tier quotas on top of this.
-u16 GetRandomFrontierExtendedMonId(void)
+// Draw one random roster index for a draft slot: a set valid for the current battle
+// format (singles/doubles) that the slot's tier quota accepts (TierRejectsCandidate).
+// The draw is uniform per *National Dex number* among the Pokémon the slot can take,
+// not per set: a uniformly drawn drawable set is kept with probability 1/n, where n is
+// how many drawable sets its dex number has, so every dex number carries equal total
+// weight and each of its sets 1/n of it. Seventeen Silvally or Arceus sets are no more
+// likely than one set, and counting n over the slot's own filter keeps a dex number
+// whose formes span tiers (Kyurem is TIER_LEGENDARY, Kyurem-Black/White TIER_MYTHICAL)
+// from being diluted by sets that slot could never take. There is no difficulty
+// scaling by streak (the roster has no weak->strong tier ordering). Lives here, with
+// the roster data, rather than in the upstream battle_factory.c, and is shared so any
+// facility (Battle Factory, Battle Tower) can field teams from the competitive list;
+// callers handle their own species/held-item dedup on top of this.
+u16 GetRandomFrontierExtendedMonIdForSlot(enum SpeciesTier slotTier, u32 pseudoCount)
 {
+    struct DraftSlot slot = { .tier = slotTier, .pseudoCount = pseudoCount };
     u32 formatTag = (VarGet(VAR_FRONTIER_BATTLE_MODE) == FRONTIER_MODE_DOUBLES)
                   ? FORMAT_DOUBLES : FORMAT_SINGLES;
     u16 id;
@@ -34285,9 +34306,9 @@ u16 GetRandomFrontierExtendedMonId(void)
     for (;;)
     {
         id = Random() % gFrontierExtendedMonsCount;
-        if (!(gFrontierExtendedMons[id].tags & formatTag))
+        if (!IsDrawableSet(id, formatTag, &slot))
             continue;
-        if (Random() % CountFormatSetsInDexRun(id, formatTag) == 0)
+        if (Random() % CountDrawableSetsInDexRun(id, formatTag, &slot) == 0)
             return id;
     }
 }

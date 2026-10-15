@@ -29,17 +29,21 @@ too, since the roster has no tier ordering, so there is no 849-entry ceiling.
 
 The list is ordered by National Pokédex number, and carries **several distinct builds
 per species**, so an opponent's exact set can't be read off its species. Each set is
-tagged `FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`, and `GetFactoryMonId` only
-draws sets valid for the current battle format.
+tagged `FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`, and the draft only draws sets
+valid for the current battle format.
 
 ### Draft weighting
 
-`GetRandomFrontierExtendedMonId()` gives every National Dex number the same odds, however
-many sets it has: a uniformly drawn set is kept with probability 1/n, where n is the
-number of format-valid sets sharing its dex number. Without this, Silvally and Arceus (one
+`GetRandomFrontierExtendedMonIdForSlot()` gives every National Dex number the same odds,
+however many sets it has: a uniformly drawn set is kept with probability 1/n, where n is the
+number of sets sharing its dex number that fit the current format **and the slot being
+filled** (its tier quota, below). Without this, Silvally and Arceus (one
 set per type form) were drafted ~17× as often as a single-set Pokémon. Formes and regional
 variants share their dex number's weight (Ninetales and Alolan Ninetales split one share).
-This relies on each dex number's sets being contiguous, which a roster test enforces.
+Counting n per slot means a dex number whose formes span tiers isn't diluted by sets the
+slot can't take: Kyurem-Black/White (mythical) and base Kyurem (legendary) each get a full
+share in their own slot, as do Ursaluna (pseudo) and Bloodmoon Ursaluna (legendary). This
+relies on each dex number's sets being contiguous, which a roster test enforces.
 
 ### Species Clause
 
@@ -201,7 +205,9 @@ Via `TierRejectsCandidate`, using the tier map above:
 | Frontier Brain | **One legendary + one mythical** at two random slots; the other four drafted normally |
 
 Forced slots are reserved with `ReserveForcedTierSlot` **before** drafting, so the
-special mon's party position is randomized rather than always landing last.
+special mon's party position is randomized rather than always landing last. Every slot,
+forced or ordinary, draws only among sets its quota accepts (see "Draft weighting"), so all
+the Pokémon a slot can take are equally likely in it.
 
 ### Illusion stays functional
 

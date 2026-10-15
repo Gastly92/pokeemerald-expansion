@@ -1520,7 +1520,7 @@ TEST("Frontier extended roster: no set holds a signature type item its species c
 }
 
 // The roster is sorted by National Dex number (see its ORDER note). Two things lean on that:
-// GetRandomFrontierExtendedMonId weighs every dex number equally by counting the sets in the
+// GetRandomFrontierExtendedMonIdForSlot weighs every dex number equally by counting the sets in the
 // *contiguous* run around a drawn set, so a dex number split across the list would be
 // drafted more often; and authors find a species' sets, and insert new ones, by dex position.
 // Non-decreasing order implies contiguity, so this one check guards both.
@@ -1552,7 +1552,7 @@ TEST("Frontier extended roster: the draft weighs each dex number equally, not ea
     VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
     for (i = 0; i < 5000; i++)
     {
-        if (SpeciesToNationalPokedexNum(gFrontierExtendedMons[GetRandomFrontierExtendedMonId()].species) == NATIONAL_DEX_SILVALLY)
+        if (SpeciesToNationalPokedexNum(gFrontierExtendedMons[GetRandomFrontierExtendedMonIdForSlot(TIER_NORMAL, 0)].species) == NATIONAL_DEX_SILVALLY)
             silvally++;
     }
     EXPECT_LT(silvally, 25);
