@@ -334,9 +334,11 @@ caught a defect the per-line pass had walked past — 55 ally-hitting spread mov
 the first time, and three or four items in each of the last four batches. Five
 gates cover the whole dex unconditionally (they were ratchets bounded by a
 reviewed-through-dex constant until the sweep finished; both constants are gone,
-so there is nothing to bump), plus two added after it: a damaging move on the stat
-a set dumped, two sets on one species that are the same set, and an item none of
-the set's moves can activate. On a batch that touches many sets, run one filtered
+so there is nothing to bump), plus four added after it: a damaging move on the stat
+a set dumped, two sets on one species that are the same set, two sets on one species
+holding the same item (exemptions and not-yet-split pairs live in
+`sSharedItemExceptions[]` — delete a pair's row when you split it), and an item none
+of the set's moves can activate. On a batch that touches many sets, run one filtered
 check **early**, after two or three lines — a systematic mistake caught on line 3
 costs one fix, the same mistake caught on line 60 costs sixty.
 Keep rows in dex order. Update `fork-docs/FORK.md` only if the change warrants an

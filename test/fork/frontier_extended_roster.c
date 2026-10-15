@@ -1121,6 +1121,124 @@ TEST("Frontier extended roster: no species carries two sets that are the same se
     EXPECT_EQ(offenders, 0);
 }
 
+// Two sets of one species holding the same item are usually one plan written twice: the item is
+// most of what makes a set a set, so a second Leftovers Jellicent is a near-copy of the first and
+// the species is less varied than its row count says. This is the item-side companion to the
+// same-moves gate above.
+//
+// Some species legitimately want one item on every set -- a signature item that IS the species'
+// plan (Thick Club, Light Ball), Eviolite on an NFE, Black Sludge on a Poison-type staller, Toxic
+// Orb on Poison Heal Gliscor. Those are listed below with the reason. The "awaiting a line review"
+// block is different: those pairs predate this gate and should be split, and each row is deleted
+// in the same commit that gives one of the two sets a new item.
+struct SharedItemException
+{
+    u16 species;
+    u16 item;
+    const char *why;
+};
+
+static const struct SharedItemException sSharedItemExceptions[] =
+{
+    // ---- The item is the species' plan ----
+    { SPECIES_MAROWAK,           ITEM_THICK_CLUB,     "signature item; Marowak has no other way to reach a usable Attack" },
+    { SPECIES_MAROWAK_ALOLA,     ITEM_THICK_CLUB,     "signature item; Marowak has no other way to reach a usable Attack" },
+    { SPECIES_PIKACHU,           ITEM_LIGHT_BALL,     "signature item; Pikachu has no other way to reach usable offences" },
+    { SPECIES_GIRATINA_ORIGIN,   ITEM_GRISEOUS_CORE,  "the item is what holds the Origin forme" },
+    { SPECIES_DUSCLOPS,          ITEM_EVIOLITE,       "niche NFE; Eviolite is the reason it is on the roster" },
+    { SPECIES_PORYGON2,          ITEM_EVIOLITE,       "niche NFE; Eviolite is the reason it is on the roster" },
+    { SPECIES_TOXAPEX,           ITEM_BLACK_SLUDGE,   "Poison-type staller; Black Sludge is strictly its best Leftovers" },
+    { SPECIES_SLOWKING_GALAR,    ITEM_BLACK_SLUDGE,   "Poison-type staller; Black Sludge is strictly its best Leftovers" },
+    { SPECIES_GLISCOR,           ITEM_TOXIC_ORB,      "Poison Heal recovery is the whole plan" },
+
+    // ---- Awaiting a line review: split these, then delete the row ----
+    { SPECIES_ABOMASNOW,         ITEM_ICY_ROCK,       "awaiting a line review" },
+    { SPECIES_CARBINK,           ITEM_LIGHT_CLAY,     "awaiting a line review" },
+    { SPECIES_CHATOT,            ITEM_THROAT_SPRAY,   "awaiting a line review" },
+    { SPECIES_DUDUNSPARCE,       ITEM_LEFTOVERS,      "awaiting a line review" },
+    { SPECIES_GARGANACL,         ITEM_LEFTOVERS,      "awaiting a line review" },
+    { SPECIES_GREEDENT,          ITEM_SITRUS_BERRY,   "awaiting a line review" },
+    { SPECIES_JELLICENT,         ITEM_LEFTOVERS,      "awaiting a line review" },
+    { SPECIES_LUCARIO,           ITEM_LIFE_ORB,       "awaiting a line review" },
+    { SPECIES_PECHARUNT,         ITEM_LEFTOVERS,      "awaiting a line review" },
+    { SPECIES_TOUCANNON,         ITEM_LIFE_ORB,       "awaiting a line review" },
+    { SPECIES_WEEZING_GALAR,     ITEM_LEFTOVERS,      "awaiting a line review" },
+};
+
+static const struct SharedItemException *SharedItemException(u32 species, u32 item)
+{
+    for (u32 i = 0; i < ARRAY_COUNT(sSharedItemExceptions); i++)
+    {
+        if (sSharedItemExceptions[i].species == species && sSharedItemExceptions[i].item == item)
+            return &sSharedItemExceptions[i];
+    }
+    return NULL;
+}
+
+static u32 CountSetsOfSpeciesHolding(u32 species, u32 item)
+{
+    u32 count = 0;
+
+    for (u32 i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        if (gFrontierExtendedMons[i].species == species && gFrontierExtendedMons[i].heldItem == item)
+            count++;
+    }
+    return count;
+}
+
+TEST("Frontier extended roster: no species carries two sets holding the same item")
+{
+    u32 i, j;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *a = &gFrontierExtendedMons[i];
+
+        checked++;
+        if (a->heldItem == ITEM_NONE || SharedItemException(a->species, a->heldItem) != NULL)
+            continue;
+        for (j = i + 1; j < gFrontierExtendedMonsCount; j++)
+        {
+            const struct TrainerMon *b = &gFrontierExtendedMons[j];
+
+            if (a->species != b->species || a->heldItem != b->heldItem)
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("roster[%d] and roster[%d] %S: both hold %S -- give one of them a different item, or a reasoned row to sSharedItemExceptions[] if the item is the species' plan",
+                            i, j, gSpeciesInfo[a->species].speciesName, GetItemName(a->heldItem));
+        }
+    }
+
+    EXPECT_GT(checked, 1000);
+    EXPECT_EQ(offenders, 0);
+}
+
+// An exception row that no longer excuses a shared item hides the next real one, so each row has
+// to justify itself every run -- in particular, splitting an "awaiting a line review" pair must
+// delete its row.
+TEST("Frontier extended roster: no stale shared-item exception")
+{
+    u32 stale = 0;
+
+    for (u32 i = 0; i < ARRAY_COUNT(sSharedItemExceptions); i++)
+    {
+        const struct SharedItemException *row = &sSharedItemExceptions[i];
+
+        if (CountSetsOfSpeciesHolding(row->species, row->item) >= 2)
+            continue;
+
+        stale++;
+        Test_MgbaPrintf("exception %S / %S: fewer than two sets share this item now -- delete the row (\"%s\")",
+                        gSpeciesInfo[row->species].speciesName, GetItemName(row->item), row->why);
+    }
+
+    EXPECT_EQ(stale, 0);
+}
+
 // Some items can only ever fire if the set carries a move that meets their precondition,
 // so holding one without that move is a slot spent on nothing for the whole battle. Popplio
 // shipped a Throat Spray set whose four moves were Hydro Pump, Moonblast, Energy Ball and

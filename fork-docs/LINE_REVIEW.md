@@ -1075,6 +1075,13 @@ than one whose existing set is about to be rewritten.
       Band sets share three moves but are genuinely different plans (guaranteed
       first Fishious Rend vs. raw power), so they both stay. The test is whether
       you would draft them differently.
+      **Two sets holding the same item** are CI-gated too: every set of a species
+      must hold a different item, since the item is most of what makes a set a set.
+      Where one item genuinely *is* the species' plan (Thick Club, Eviolite, Poison
+      Heal Gliscor's Toxic Orb) it gets a reasoned row in `sSharedItemExceptions[]`
+      (`test/fork/frontier_extended_roster.c`). That table also holds the pairs that
+      predate the gate under "awaiting a line review" — when a review splits one,
+      delete its row in the same commit; a stale-row test enforces it.
    5. **An untyped Hidden Power**, which is a 60 BP **Normal** move — the worst
       slot on any set, and it was sitting on a Grass special attacker (Lurantis).
 
