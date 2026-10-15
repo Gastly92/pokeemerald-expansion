@@ -188,3 +188,73 @@ TEST("Factory: the swap after the Frontier Brain offers the Brain's team")
     #endif
     }
 }
+
+// Whether the dex run around roster index `id` holds a `format` set of a tier other than
+// `tier`: those are the dex numbers a forced-tier draw used to underweight (base Kyurem
+// is TIER_LEGENDARY, Kyurem-Black/White TIER_MYTHICAL).
+static bool32 DexRunHasOtherTierSet(u32 id, u32 format, enum SpeciesTier tier)
+{
+    enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[id].species);
+    u32 i = id;
+
+    while (i > 0 && SpeciesToNationalPokedexNum(gFrontierExtendedMons[i - 1].species) == dexNum)
+        i--;
+    for (; i < gFrontierExtendedMonsCount && SpeciesToNationalPokedexNum(gFrontierExtendedMons[i].species) == dexNum; i++)
+    {
+        if ((gFrontierExtendedMons[i].tags & format) && GetSpeciesTier(gFrontierExtendedMons[i].species) != tier)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// The Frontier Brain's mythical slot and the set-milestone/Brain legendary slot must give
+// every dex number in that tier the same chance, whatever its other formes are. The old
+// draw weighed a dex number by all its sets and rejected the off-tier ones, so Kyurem,
+// with four mythical and two legendary sets, won its mythical draws only 4/6 of the time.
+// Measured over the tier's mixed dex numbers together: equal weighting gives them their
+// head-count share of the draws; the old draw gave them roughly 70% of it.
+TEST("Frontier draft: a forced tier slot weighs each dex number in that tier equally")
+{
+    u32 i, draws = 3000, tierDexNums = 0, mixedDexNums = 0, mixedDraws = 0, wrongTier = 0;
+    enum SpeciesTier tier;
+
+    PARAMETRIZE { tier = TIER_MYTHICAL; }
+    PARAMETRIZE { tier = TIER_LEGENDARY; }
+
+    VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
+    // Count the tier's dex numbers once each, at the first tier set of each dex run.
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[i].species);
+        u32 j = i;
+        bool32 firstTierSet = TRUE;
+
+        if (!(gFrontierExtendedMons[i].tags & FORMAT_SINGLES) || GetSpeciesTier(gFrontierExtendedMons[i].species) != tier)
+            continue;
+        while (j > 0 && SpeciesToNationalPokedexNum(gFrontierExtendedMons[j - 1].species) == dexNum)
+        {
+            j--;
+            if ((gFrontierExtendedMons[j].tags & FORMAT_SINGLES) && GetSpeciesTier(gFrontierExtendedMons[j].species) == tier)
+                firstTierSet = FALSE;
+        }
+        if (!firstTierSet)
+            continue;
+        tierDexNums++;
+        if (DexRunHasOtherTierSet(i, FORMAT_SINGLES, tier))
+            mixedDexNums++;
+    }
+    // Vacuous unless the roster still has dex numbers that straddle tiers.
+    ASSUME(mixedDexNums > 0);
+
+    for (i = 0; i < draws; i++)
+    {
+        u16 id = GetRandomFrontierExtendedMonIdOfTier(tier);
+        if (GetSpeciesTier(gFrontierExtendedMons[id].species) != tier || !(gFrontierExtendedMons[id].tags & FORMAT_SINGLES))
+            wrongTier++;
+        else if (DexRunHasOtherTierSet(id, FORMAT_SINGLES, tier))
+            mixedDraws++;
+    }
+    EXPECT_EQ(wrongTier, 0);
+    // Expected share is draws * mixed / tier; allow 15% under it for sampling noise.
+    EXPECT_GT(mixedDraws * tierDexNums * 100, draws * mixedDexNums * 85);
+}

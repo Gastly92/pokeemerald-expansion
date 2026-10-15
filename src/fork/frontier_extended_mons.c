@@ -1,6 +1,7 @@
 #include "global.h"
 #include "fork/frontier_extended_mons.h"
 #include "fork/species_shorthand.h"
+#include "fork/species_tiers.h"
 #include "event_data.h"
 #include "pokemon.h"
 #include "random.h"
@@ -34164,11 +34165,20 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
 const u16 gFrontierExtendedMonsCount = ARRAY_COUNT(gFrontierExtendedMons);
 
-// Number of sets in the contiguous same-National-Dex run containing `id` that are
-// valid for `formatTag`. Relies on the ORDER invariant above (every build of one
-// dex number is contiguous), which TEST("Frontier extended roster: sets are
-// sorted by National Dex number") enforces.
-static u32 CountFormatSetsInDexRun(u16 id, u32 formatTag)
+// Whether set `id` can be drawn for `formatTag`, and, when `tier` is non-NULL, whether
+// its species is exactly that tier.
+static bool32 IsDrawableSet(u32 id, u32 formatTag, const enum SpeciesTier *tier)
+{
+    if (!(gFrontierExtendedMons[id].tags & formatTag))
+        return FALSE;
+    return tier == NULL || GetSpeciesTier(gFrontierExtendedMons[id].species) == *tier;
+}
+
+// Number of drawable sets (see IsDrawableSet) in the contiguous same-National-Dex run
+// containing `id`. Relies on the ORDER invariant above (every build of one dex number
+// is contiguous), which TEST("Frontier extended roster: sets are sorted by National
+// Dex number") enforces.
+static u32 CountDrawableSetsInDexRun(u16 id, u32 formatTag, const enum SpeciesTier *tier)
 {
     enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[id].species);
     u32 first = id, last = id, count = 0, i;
@@ -34179,24 +34189,18 @@ static u32 CountFormatSetsInDexRun(u16 id, u32 formatTag)
         last++;
     for (i = first; i <= last; i++)
     {
-        if (gFrontierExtendedMons[i].tags & formatTag)
+        if (IsDrawableSet(i, formatTag, tier))
             count++;
     }
     return count;
 }
 
-// Draw one random roster index whose set is valid for the current battle
-// format (singles/doubles). The draw is uniform per *National Dex number*, not per
-// set: a Pokémon with seventeen sets (Silvally, Arceus — one per type form) is no
-// more likely to be drafted than one with a single set. A uniformly drawn set is
-// kept with probability 1/n, where n is how many format-valid sets its dex number
-// has, so every dex number carries equal total weight and each of its sets 1/n
-// of it. There is no difficulty scaling by streak (the roster has no weak->strong
-// tier ordering). Lives here, with the roster data, rather than in the upstream
-// battle_factory.c, and is shared so any facility (Battle Factory, Battle Tower)
-// can field opponents from the competitive list; callers handle their own
-// species/held-item dedup and tier quotas on top of this.
-u16 GetRandomFrontierExtendedMonId(void)
+// A uniformly drawn drawable set is kept with probability 1/n, where n is how many
+// drawable sets its dex number has, so every dex number carries equal total weight.
+// Counting n over the same filter the draw uses is what keeps that true: a dex number
+// whose formes span tiers (Kyurem is TIER_LEGENDARY, Kyurem-Black/White TIER_MYTHICAL)
+// must not be diluted in a tier draw by sets that draw could never pick.
+static u16 DrawFrontierExtendedMonId(const enum SpeciesTier *tier)
 {
     u32 formatTag = (VarGet(VAR_FRONTIER_BATTLE_MODE) == FRONTIER_MODE_DOUBLES)
                   ? FORMAT_DOUBLES : FORMAT_SINGLES;
@@ -34205,9 +34209,31 @@ u16 GetRandomFrontierExtendedMonId(void)
     for (;;)
     {
         id = Random() % gFrontierExtendedMonsCount;
-        if (!(gFrontierExtendedMons[id].tags & formatTag))
+        if (!IsDrawableSet(id, formatTag, tier))
             continue;
-        if (Random() % CountFormatSetsInDexRun(id, formatTag) == 0)
+        if (Random() % CountDrawableSetsInDexRun(id, formatTag, tier) == 0)
             return id;
     }
+}
+
+// Draw one random roster index whose set is valid for the current battle
+// format (singles/doubles). The draw is uniform per *National Dex number*, not per
+// set: a Pokémon with seventeen sets (Silvally, Arceus — one per type form) is no
+// more likely to be drafted than one with a single set (see DrawFrontierExtendedMonId).
+// There is no difficulty scaling by streak (the roster has no weak->strong
+// tier ordering). Lives here, with the roster data, rather than in the upstream
+// battle_factory.c, and is shared so any facility (Battle Factory, Battle Tower)
+// can field opponents from the competitive list; callers handle their own
+// species/held-item dedup and tier quotas on top of this.
+u16 GetRandomFrontierExtendedMonId(void)
+{
+    return DrawFrontierExtendedMonId(NULL);
+}
+
+// As GetRandomFrontierExtendedMonId, restricted to sets whose species is exactly `tier`:
+// every dex number with at least one such set is equally likely, however many sets or
+// other-tier formes it has. Used to fill the draft's forced legendary/mythical slots.
+u16 GetRandomFrontierExtendedMonIdOfTier(enum SpeciesTier tier)
+{
+    return DrawFrontierExtendedMonId(&tier);
 }

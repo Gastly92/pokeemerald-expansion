@@ -2,6 +2,7 @@
 #define GUARD_FRONTIER_EXTENDED_MONS_H
 
 #include "data.h"
+#include "fork/species_tiers.h"
 
 // Which battle format(s) an extended-roster set is suited for. Stored in
 // the otherwise-unused struct TrainerMon.tags field (the Battle Factory never
@@ -165,5 +166,7 @@ extern const u16 gFrontierExtendedMonsCount;
 // number (not per set), shared by any facility (Battle Factory, Battle Tower)
 // whose opponents pull from it.
 u16 GetRandomFrontierExtendedMonId(void);
+// The same draw restricted to one exact tier, uniform per dex number within that tier.
+u16 GetRandomFrontierExtendedMonIdOfTier(enum SpeciesTier tier);
 
 #endif // GUARD_FRONTIER_EXTENDED_MONS_H

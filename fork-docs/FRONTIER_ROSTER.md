@@ -201,7 +201,11 @@ Via `TierRejectsCandidate`, using the tier map above:
 | Frontier Brain | **One legendary + one mythical** at two random slots; the other four drafted normally |
 
 Forced slots are reserved with `ReserveForcedTierSlot` **before** drafting, so the
-special mon's party position is randomized rather than always landing last.
+special mon's party position is randomized rather than always landing last. A forced slot
+draws with `GetRandomFrontierExtendedMonIdOfTier()`, which applies the per-dex weighting
+above to that tier's sets alone: every dex number with a set in the tier is equally likely,
+however many sets it has and whatever tier its other formes are (Kyurem-Black/White are
+mythical, base Kyurem legendary).
 
 ### Illusion stays functional
 

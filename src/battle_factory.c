@@ -373,6 +373,15 @@ static void GenerateOpponentMons(void)
     while (i != FRONTIER_PARTY_SIZE)
     {
         u16 monId = GetFactoryMonId(lvlMode, challengeNum, FALSE);
+    #if B_FRONTIER_EXTENDED_MONS
+        // FORK: a forced legendary/mythical slot draws from its own tier, uniform per dex
+        // number within it, instead of rejection-filtering the whole-roster draw above:
+        // that one weighs a dex number by all its sets, so formes of another tier (base
+        // Kyurem vs Kyurem-Black) diluted it. Test: "Frontier draft: a forced tier slot
+        // weighs each dex number in that tier equally".
+        if (slotTiers[i] != TIER_NORMAL)
+            monId = GetRandomFrontierExtendedMonIdOfTier(slotTiers[i]);
+    #endif
 
         // Unown (FRONTIER_MON_UNOWN) is forbidden on opponent Factory teams.
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN)
@@ -874,6 +883,15 @@ void FillFactoryBrainParty(void)
     while (i != FRONTIER_PARTY_SIZE)
     {
         u16 monId = GetFactoryMonId(lvlMode, challengeNum, FALSE);
+    #if B_FRONTIER_EXTENDED_MONS
+        // FORK: a forced legendary/mythical slot draws from its own tier, uniform per dex
+        // number within it, instead of rejection-filtering the whole-roster draw above:
+        // that one weighs a dex number by all its sets, so formes of another tier (base
+        // Kyurem vs Kyurem-Black) diluted it. Test: "Frontier draft: a forced tier slot
+        // weighs each dex number in that tier equally".
+        if (slotTiers[i] != TIER_NORMAL)
+            monId = GetRandomFrontierExtendedMonIdOfTier(slotTiers[i]);
+    #endif
 
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN)
             continue;
