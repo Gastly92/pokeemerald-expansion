@@ -9653,7 +9653,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SHEDINJA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_FOCUS_BAND,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
             MOVE_DESTINY_BOND,
@@ -9669,6 +9669,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_SHEDINJA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_POLTERGEIST,
+            MOVE_SHADOW_SNEAK,
+            MOVE_WILL_O_WISP,
+            MOVE_DESTINY_BOND
+        },
+        .ability = ABILITY_WONDER_GUARD,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
     },
 
     // 0295

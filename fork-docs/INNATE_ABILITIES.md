@@ -2842,7 +2842,7 @@ pure-boon mirror**) / Duskull / Flittle / Espathra / Munkidori / Wigglytuff / Ex
 / Sentret / Yanma / Stantler / Wyrdeer / Phantump / Pumpkaboo (all sizes) / Gourgeist (all sizes) / Noibat /
 Orbeetle (+ Gmax) / Impidimp lines; **Forewarn** -> the Munna / Drowzee / Smoochum lines; **Anticipation** ->
 Ferrothorn / the Barboach / Flittle / Ponyta-Galar / Eevee-Starter / Wormadam (all cloaks) / Croagunk /
-Hatenna (+ Gmax) lines. **Flittle carries both Frisk and Anticipation**, matching its real ability data. No
+Hatenna (+ Gmax) lines, plus one non-canon pick: **Shedinja** gets Anticipation, because under Wonder Guard the shudder tells the player whether the foe has the one kind of move that can hit it. **Flittle carries both Frisk and Anticipation**, matching its real ability data. No
 species is sole-ability for any of the three, so there are no redundant omissions or override rows. **Step 3.5**:
 the ~14 frontier sets that hardcoded chosen Frisk / Anticipation now carry it innately, so they keep their
 now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the

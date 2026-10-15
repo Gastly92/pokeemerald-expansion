@@ -3711,6 +3711,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0292
         SPECIES_SHEDINJA,
         INNATES(
+            ABILITY_ANTICIPATION,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE
         )
