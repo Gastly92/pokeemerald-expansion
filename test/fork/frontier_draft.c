@@ -206,7 +206,7 @@ TEST("Frontier draft: a regular Battle Tower opponent's party fills")
     TRAINER_BATTLE_PARAM.opponentA = 0;
     FillFrontierTrainerParty(FRONTIER_PARTY_SIZE);
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
-        EXPECT_NE(GetMonData(&gEnemyParty[i], MON_DATA_SPECIES), SPECIES_NONE);
+        EXPECT_NE(GetMonData(&gParties[B_TRAINER_OPPONENT_A][i], MON_DATA_SPECIES), SPECIES_NONE);
 }
 
 // Whether the dex run around roster index `id` holds a `format` set that a `slotTier` slot
