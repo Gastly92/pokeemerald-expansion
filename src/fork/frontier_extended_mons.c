@@ -1264,6 +1264,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_PSYCHIC,
     },
+    {
+        .species = SPECIES_CLEFABLE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_STICKY_BARB,
+        .moves =
+        {
+            MOVE_STEALTH_ROCK,
+            MOVE_MOONBLAST,
+            MOVE_MOONLIGHT,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_MISTY_SURGE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0038
     {
@@ -2175,11 +2195,11 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS,
+        .heldItem = ITEM_STICKY_BARB,
         .moves =
         {
             MOVE_PSYCHIC,
-            MOVE_PSYSHOCK,
+            MOVE_FOCUS_BLAST,
             MOVE_SHADOW_BALL,
             MOVE_TRICK
         },
@@ -20362,7 +20382,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BOUFFALANT,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_STICKY_BARB,
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HEAD_CHARGE,
@@ -23308,7 +23328,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AVALUGG_HISUI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_STICKY_BARB,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_ICE_FANG,

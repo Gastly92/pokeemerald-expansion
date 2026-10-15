@@ -335,7 +335,7 @@ measured against the roster rather than judged by feel:
 | **Room Service** | Needs Trick Room up; the roster sets Trick Room on **49 sets**. |
 | **Binding Band** | Boosts the holder's *own* binding move, which is a benefit, not a cost. **10 sets** carry one (Infestation, Magma Storm, Whirlpool, Wrap, Bind, Clamp, Snap Trap). |
 | **Lagging Tail, Full Incense** | An exact duplicate pair — both are `HOLD_EFFECT_LAGGING_TAIL`. Moving last is a benefit for **Avalanche, Counter and Mirror Coat**, which is **10 sets**. Note it is *not* a Trick Room synergy: Trick Room already inverts the speed order, and the item forces the holder last regardless, so the two work against each other. |
-| **Sticky Barb** | Chip on the holder, but it **transfers to an attacker on contact**, so it is a trade rather than a pure cost. |
+| **Sticky Barb** | Its contact transfer rarely fires here, because it only moves to an attacker holding **no item** — so a non-Magic Guard holder just pays 1/8 a turn. It lives on species with **innate Magic Guard**, which never pay the chip: Clefable (Smogon's Stealth Rock / Knock Off set) and Alakazam (Trick it onto the foe). |
 
 #### Assessed and rejected as buff candidates
 
