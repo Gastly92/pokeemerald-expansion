@@ -1391,8 +1391,9 @@ on top, so each mon spends at most **one** gimmick. Dropping the stone requireme
 - **A mon's own gimmicks compete with each other.** A mon that Dynamaxes or
   Terastallizes has spent its gimmick and cannot also Mega Evolve.
 
-And regular Frontier opponents get no gimmicks at all — they are reserved for the
+And regular Battle Factory opponents get no gimmicks at all — they are reserved for the
 bosses (`B_FRONTIER_BOSS_ONLY_GIMMICKS`, see [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md)).
+Regular Battle Tower opponents use them all.
 So a given mon gets a given gimmick only when it wins both competitions, and often it
 will not.
 

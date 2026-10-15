@@ -24,9 +24,10 @@ bool32 IsFrontierBossTrainer(u16 trainerId);
 // the regular tier for everyone else.
 u64 GetFrontierAiFlags(u16 trainerId);
 
-// FEATURE_FREE_GIMMICKS: whether a Frontier opponent may use a gimmick.
+// FEATURE_FREE_GIMMICKS: whether a Battle Factory opponent may use a gimmick.
 // Bosses (above) may use them all; a regular opponent may use everything except
 // B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h: Mega, Z-Move, Dynamax and Tera).
+// Outside the Factory nothing is withheld (IsGimmickWithheldFromFrontierOpponent).
 bool32 FrontierOpponentMayUseGimmick(u16 trainerId, enum Gimmick gimmick);
 
 // TRUE during the Battle Factory's set-milestone battle (the 10th, 20th, ... win of
@@ -41,9 +42,10 @@ bool32 IsFactoryMilestoneBattle(void);
 void Script_IsNextFactoryBattleMilestone(void);
 
 // The battler-level check CanActivateGimmick uses: TRUE when this battler is a
-// regular Frontier opponent's mon and `gimmick` is boss-only. Never TRUE for the
-// player's side, outside the Frontier, with FEATURE_FREE_GIMMICKS off, for a boss
-// trainer, or in the Factory's milestone battle (IsFactoryMilestoneBattle).
+// regular Battle Factory opponent's mon and `gimmick` is boss-only. Never TRUE for
+// the player's side, outside the Battle Factory (the Tower's regular opponents use
+// every gimmick), with FEATURE_FREE_GIMMICKS off, for a boss trainer, or in the
+// Factory's milestone battle (IsFactoryMilestoneBattle).
 bool32 IsGimmickWithheldFromFrontierOpponent(enum BattlerId battler, enum Gimmick gimmick);
 
 #endif // GUARD_FORK_FRONTIER_AI_H
