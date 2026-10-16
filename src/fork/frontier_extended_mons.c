@@ -33428,7 +33428,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_MOONBLAST,
             MOVE_AURA_SPHERE,
-            MOVE_PSYSHOCK
+            MOVE_THUNDERBOLT
         },
         .ability = ABILITY_QUARK_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
