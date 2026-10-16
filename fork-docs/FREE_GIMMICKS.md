@@ -17,7 +17,7 @@ designated user. That competition is the feature.
 - **Tests:** `test/fork/free_gimmicks.c`
 
 > **Building Factory sets under this flag?** The set-authoring consequences — build for
-> the base form, the Mega is upside; spreads steer which X/Y Mega you get; the Mega
+> the base form, the Mega is upside; spreads steer which of two Megas you get; the Mega
 > form's innate row is what's live — are in
 > [`LINE_REVIEW.md`](LINE_REVIEW.md) under "Free gimmicks". This doc is the engine side.
 
@@ -37,15 +37,29 @@ side, and only in a free-gimmicks-**off** build. The same goes for the key items
 game hands out under `START_WITH_BATTLE_GIMMICK_ITEMS` — they matter only with this
 flag off.
 
-### 2. Stat-based X/Y Megas
+### 2. Stat-based choice between two Megas
 
-With no stone to disambiguate, `GetMegaStoneForBattler()` (`src/battle_util.c`) picks
-the form from the battler's stats: **physical → X** when Attack ≥ Sp. Atk, **special →
-Y** otherwise, so a tie defaults to X. It does this by feeding the stat-appropriate
-stone into the existing item-driven form-change machinery, so eligibility, the form
-change itself and the fork's Speed-Boost AI override all resolve through one path.
+With no stone to disambiguate, `FindMegaStoneForStats()` (`include/fork/free_gimmicks.h`)
+picks the form from the battler's own Attack and Sp. Atk: when Attack ≥ Sp. Atk it takes
+the Mega whose base stats lean most physical (largest Attack minus Sp. Atk), otherwise the
+one that leans most special, so a tie goes to the physical form. It does this by feeding
+the matching stone into the existing item-driven form-change machinery, so eligibility,
+the form change itself and the fork's Speed-Boost AI override all resolve through one
+path. The INFO viewer's projected form calls the same function, so the two always agree.
 
-Only Charizard and Mewtwo have X/Y forms.
+Species with two Megas, and which one each kind of build gets:
+
+| Species | Attack ≥ Sp. Atk | Sp. Atk > Attack |
+| --- | --- | --- |
+| Charizard | Mega X | Mega Y |
+| Mewtwo | Mega X | Mega Y |
+| Raichu | Mega X | Mega Y |
+| Absol | **Mega Z** | Mega |
+| Garchomp | Mega | Mega Z |
+| Lucario | Mega | Mega Z |
+
+Absol is the one that inverts: Mega Absol Z (154 / 75) is more physical than Mega Absol
+(150 / 115), so a physical Absol becomes the Z form.
 
 ### 3. Item-free Z derivation
 
