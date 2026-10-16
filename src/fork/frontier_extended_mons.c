@@ -4591,7 +4591,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CRUNCH,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOTOR_DRIVE,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -4611,7 +4611,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_FANG,
             MOVE_PROTECT
         },
-        .ability = ABILITY_MOTOR_DRIVE,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -4631,7 +4631,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WATERFALL,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_MOTOR_DRIVE,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
