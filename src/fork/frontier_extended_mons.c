@@ -9467,7 +9467,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BRELOOM,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_BERSERK_GENE,
+        .heldItem = ITEM_TOXIC_ORB,
         .moves =
         {
             MOVE_SPORE,
@@ -11648,7 +11648,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BANETTE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BERSERK_GENE,
+        .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
             MOVE_POLTERGEIST,
@@ -18549,6 +18549,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_LILLIGANT_HISUI,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BERSERK_GENE,
+        .moves =
+        {
+            MOVE_CLOSE_COMBAT,
+            MOVE_LEAF_BLADE,
+            MOVE_ACROBATICS,
+            MOVE_TRIPLE_AXEL
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
 
     // 0550
     {
@@ -24728,6 +24748,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAVY_SLAM,
             MOVE_STEALTH_ROCK,
             MOVE_TOXIC
+        },
+        .ability = ABILITY_EARTH_EATER,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
+        .species = SPECIES_MUDSDALE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_BERSERK_GENE,
+        .moves =
+        {
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_HEAVY_SLAM,
+            MOVE_CLOSE_COMBAT,
+            MOVE_ROCK_SLIDE
         },
         .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
