@@ -34,5 +34,12 @@ void ApplyDraftGimmickReadiness(const struct TrainerMon *fmon, struct Pokemon *d
 // Restore max friendship on a Battle Factory swapped-in mon (upstream zeroes it for
 // Frustration). No-op unless B_FRONTIER_PREFER_RETURN. Called from CopySwappedMonData.
 void ApplySwappedMonFriendship(struct Pokemon *mon);
+// B_FRONTIER_MAX_PP: max out PP Ups on every move slot and refill PP. No-op otherwise.
+void ApplyFrontierMaxPP(struct Pokemon *mon);
+// Re-apply CreateFacilityMon's fork extras to a Battle Factory rental rebuilt from
+// the save by upstream's CreateRentalMon (src/battle_factory.c), which bypasses
+// CreateFacilityMon: Return over Frustration, max PP, per-set .iv, the unset-ball
+// default and ApplyDraftGimmickReadiness. Recalculates stats.
+void ApplyRentalMonForkExtras(const struct TrainerMon *fmon, struct Pokemon *dst);
 
 #endif // GUARD_FRONTIER_DRAFT_H

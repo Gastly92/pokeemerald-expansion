@@ -331,6 +331,27 @@ have been caught by reading the diff:
   merged commit before assuming the fork is innocent: here it passed there and failed here,
   which is what turned "upstream ships a flaky AI test" into a two-line fork bug.
 
+Three more from the Oct 2026 sync to upstream #10906 (14 commits, 2 conflicted files).
+None of them got a conflict marker:
+
+- **An untagged fork line deleted cleanly.** #10906 removed `if (fmon->iv) SetMonData(dst,
+  MON_DATA_IVS, ...)` from `CreateFacilityMon`. The fork's roster depends on per-set `.iv`
+  (Trick Room 0-Speed sets), but those lines were upstream's own, so the deletion merged
+  without a conflict. Now restored with a `FORK:` tag. **Lesson: when the fork *depends* on
+  an upstream line it didn't write, tag it anyway.**
+- **A new upstream builder that bypasses the fork's chokepoint.** The same PR rebuilds Battle
+  Factory parties from the save with a new `CreateRentalMon` instead of `CreateFacilityMon`.
+  Every fork edit inside `CreateFacilityMon` (Return over Frustration, max PP, per-set IVs,
+  gimmick readiness) silently stopped running on that path. Now re-hooked through
+  `ApplyRentalMonForkExtras`. **Lesson: after a sync, grep for new upstream functions that do
+  the same job as a function the fork hooks, e.g. anything else that creates a mon from a
+  `TrainerMon`.**
+- **An upstream "don't use" marker that the fork's feature flag contradicts.** #10910 marks
+  facility mons without `.teraType` with `TYPE_MYSTERY` and `BLOCK_AI_DYNAMAX`, so the AI
+  doesn't use gimmicks they didn't ask for. With `FEATURE_FREE_GIMMICKS` the AI uses every
+  gimmick anyway, so the marker became the mon's actual Tera Type: it would Terastallize into
+  Mystery. `ApplyDraftGimmickReadiness` now clears both markers when the feature is on.
+
 The general shape: a clean merge proves nothing about behaviour. Budget for a full
 `make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
 the upstream commit behind any test that changed state.

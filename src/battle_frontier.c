@@ -389,17 +389,18 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
     enum PokeBall ball = (fmon->ball == 0xFF) ? Random() % POKEBALL_COUNT
         : (fmon->ball == BALL_STRANGE) ? BALL_POKE : fmon->ball;
     enum Move move;
-    u32 personality = 0, friendship, j;
-    enum Ability ability;
+    u32 friendship, j;
+    u32 data;
 
+    u32 personality = (Random32() & 0xFFFFDF00) + 0x1000;
+    u32 genderValue = Random32();
     if (fmon->gender == TRAINER_MON_MALE)
-    {
-        personality = GeneratePersonalityForGender(MON_MALE, fmon->species) + 0x1000;
-    }
+        genderValue = GeneratePersonalityForGender(MON_MALE, fmon->species, genderValue);
     else if (fmon->gender == TRAINER_MON_FEMALE)
-    {
-        personality = GeneratePersonalityForGender(MON_FEMALE, fmon->species) + 0x1000;
-    }
+        genderValue = GeneratePersonalityForGender(MON_FEMALE, fmon->species, genderValue);
+    else
+        genderValue = genderValue & 0x000000FF;
+    personality |= genderValue;
 
     ModifyPersonalityForNature(&personality, fmon->nature);
     CreateMonWithIVs(dst, fmon->species, level, personality, OTID_STRUCT_PRESET(otID), fixedIV);
@@ -424,46 +425,22 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
             friendship = 0;  // Frustration is more powerful the lower the Pokémon's friendship is.
     }
 
-#if B_FRONTIER_MAX_PP
-    // FORK: give facility mons max PP. SetMonMoveSlot assigns base PP, so
-    // afterwards we max the PP Up bonus on every slot (gPPUpGetMask[j] holds the
-    // 3-PP-Up mask for slot j; OR'd together that's full bonus on all four) and
-    // recompute each move's PP. Applied to every mon built here, so it covers all
-    // facilities that route through CreateFacilityMon (see B_FRONTIER_MAX_PP).
-    {
-        u8 ppBonuses = 0;
-        for (j = 0; j < MAX_MON_MOVES; j++)
-            ppBonuses |= gPPUpGetMask[j];
-        SetMonData(dst, MON_DATA_PP_BONUSES, &ppBonuses);
-        for (j = 0; j < MAX_MON_MOVES; j++)
-        {
-            u8 pp = CalculatePPWithBonus(GetMonData(dst, MON_DATA_MOVE1 + j), ppBonuses, j);
-            SetMonData(dst, MON_DATA_PP1 + j, &pp);
-        }
-    }
-#endif
+    // FORK: give facility mons max PP (B_FRONTIER_MAX_PP). Logic lives in the
+    // fork-owned ApplyFrontierMaxPP (src/fork/frontier_draft.c), shared with the
+    // Factory's CreateRentalMon rebuild; keep the call after the move loop.
+    ApplyFrontierMaxPP(dst);
 
     SetMonData(dst, MON_DATA_FRIENDSHIP, &friendship);
     SetMonData(dst, MON_DATA_HELD_ITEM, &fmon->heldItem);
 
     // try to set ability. Otherwise, random of non-hidden as per vanilla
-    if (fmon->ability != ABILITY_NONE)
+    if (fmon->ability)
     {
-        const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[fmon->species];
-        u32 maxAbilities = ARRAY_COUNT(speciesInfo->abilities);
-        // FORK: match through GetSpeciesAbility (not speciesInfo->abilities[]
-        // directly) so fork ability overrides (src/species_ability_overrides.c) are
-        // visible here; otherwise an overridden ability could not be selected and
-        // would fall back to slot 0. Identical to the array read where no override
-        // exists. Keep this on the accessor on upstream sync.
-        for (ability = 0; ability < maxAbilities; ++ability)
-        {
-            if (GetSpeciesAbility(fmon->species, ability) == fmon->ability)
-                break;
-        }
-        if (ability >= maxAbilities)
-            ability = 0;
-        SetMonData(dst, MON_DATA_ABILITY_NUM, &ability);
+        // FORK: overrides-aware via SetCorrectAbilityNum (src/trainer_util.c), which
+        // matches through GetSpeciesAbility so fork ability overrides
+        // (src/species_ability_overrides.c) are selectable. On conflict keep the
+        // accessor inside that helper rather than re-inlining a loop here.
+        SetCorrectAbilityNum(dst, fmon->species, fmon->ability);
     }
 
     if (fmon->ev != NULL)
@@ -476,25 +453,48 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
         SetMonData(dst, MON_DATA_SPEED_EV, &(fmon->ev[5]));
     }
 
+    // FORK: upstream #10906 dropped per-set IVs from facility mons; the fork roster
+    // relies on .iv (Trick Room 0-Speed sets, 0-Atk sets). Keep this on sync.
+    // Guarded by test/fork/frontier_extended_roster.c.
     if (fmon->iv)
         SetMonData(dst, MON_DATA_IVS, &(fmon->iv));
 
     if (fmon->isShiny)
     {
-        u32 data = TRUE;
+        data = TRUE;
         SetMonData(dst, MON_DATA_IS_SHINY, &data);
     }
-    // FORK: grant max-gimmick readiness at draft time (maximum Dynamax Level by
-    // default + the Gigantamax Factor for gmax-capable species). Logic lives in the
-    // fork-owned ApplyDraftGimmickReadiness (src/fork/frontier_draft.c) so the only
-    // upstream edit is this call; on conflict, port changes there, not back inline.
-    ApplyDraftGimmickReadiness(fmon, dst);
+    if (fmon->shouldUseDynamax)
+    {
+        data = fmon->dynamaxLevel;
+    }
+    else
+    {
+        data = BLOCK_AI_DYNAMAX;
+    }
+    SetMonData(dst, MON_DATA_DYNAMAX_LEVEL, &data);
+    if (fmon->gigantamaxFactor)
+    {
+        data = fmon->gigantamaxFactor;
+        SetMonData(dst, MON_DATA_GIGANTAMAX_FACTOR, &data);
+    }
     if (fmon->teraType)
     {
-        u32 data = fmon->teraType;
+        data = fmon->teraType;
         SetMonData(dst, MON_DATA_TERA_TYPE, &data);
     }
-
+    else
+    {
+        data = TYPE_MYSTERY;
+        SetMonData(dst, MON_DATA_TERA_TYPE, &data);
+    }
+    // FORK: grant max-gimmick readiness at draft time (maximum Dynamax Level by
+    // default + the Gigantamax Factor for gmax-capable species), and with
+    // FEATURE_FREE_GIMMICKS undo the "don't Dynamax/Tera" markers set just above.
+    // Logic lives in the fork-owned ApplyDraftGimmickReadiness
+    // (src/fork/frontier_draft.c); it must run after the dynamax and tera blocks
+    // above. On conflict, port changes there, not back inline.
+    ApplyDraftGimmickReadiness(fmon, dst);
 
     SetMonData(dst, MON_DATA_POKEBALL, &ball);
     CalculateMonStats(dst);

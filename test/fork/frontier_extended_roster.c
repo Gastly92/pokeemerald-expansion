@@ -3,6 +3,8 @@
 #include "data.h"
 #include "event_data.h" // VarSet (draft-weighting test)
 #include "battle_frontier.h"
+#include "battle_factory.h" // CallBattleFactoryFunction (rental rebuild test)
+#include "constants/battle_factory.h"
 #include "constants/battle_frontier.h" // FLAG_FRONTIER_MON_FACTORY
 #include "config_changes.h"
 #include "item.h" // gItemsInfo (accuracy-item redundancy test)
@@ -411,6 +413,9 @@ TEST("Frontier extended roster: drafted mon gets Gigantamax Factor iff its speci
 TEST("Frontier extended roster: drafted mon gets the maximum Dynamax Level by default")
 {
     struct Pokemon mon;
+    // Upstream marks sets that don't opt in to Dynamax/Tera as "AI must not"; the fork
+    // undoes that only under FEATURE_FREE_GIMMICKS (force-disabled in tests, on in game).
+    SetConfig(CONFIG_FEATURE_FREE_GIMMICKS, TRUE);
     const struct TrainerMon defaultSet = { .species = SPECIES_SALAMENCE, .moves = { MOVE_TACKLE } };
     const struct TrainerMon explicitSet = { .species = SPECIES_SALAMENCE, .moves = { MOVE_TACKLE }, .dynamaxLevel = 5 };
 
@@ -454,6 +459,88 @@ TEST("Frontier extended roster: a Factory swapped-in mon keeps max friendship fo
     ApplySwappedMonFriendship(&mon);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_MOVE1), MOVE_RETURN);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_FRIENDSHIP), MAX_FRIENDSHIP);
+}
+
+// Per-set .iv (Trick Room 0-Speed sets, 0-Atk sets) must reach the drafted mon.
+// Upstream #10906 deleted this from CreateFacilityMon; the fork keeps it.
+TEST("Frontier extended roster: drafted mon gets its set's per-stat IVs")
+{
+    struct Pokemon mon;
+    const u32 ivs = TRAINER_PARTY_IVS(31, 0, 31, 0, 31, 31);
+    const struct TrainerMon ivSet = { .species = SPECIES_SNORLAX, .moves = { MOVE_TACKLE }, .iv = ivs };
+
+    CreateFacilityMon(&ivSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_IVS), ivs);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_SPEED_IV), 0);
+}
+
+// Upstream #10910 marks a facility mon with no .teraType as TYPE_MYSTERY ("AI must
+// not Tera"). With FEATURE_FREE_GIMMICKS every AI mon may Tera, so that marker would
+// Terastallize it into no type at all; ApplyDraftGimmickReadiness clears it.
+TEST("Frontier extended roster: drafted mon without a set Tera Type keeps a real one")
+{
+    struct Pokemon mon;
+    // Upstream marks sets that don't opt in to Dynamax/Tera as "AI must not"; the fork
+    // undoes that only under FEATURE_FREE_GIMMICKS (force-disabled in tests, on in game).
+    SetConfig(CONFIG_FEATURE_FREE_GIMMICKS, TRUE);
+    const struct TrainerMon set = { .species = SPECIES_SNORLAX, .moves = { MOVE_TACKLE } };
+    const struct TrainerMon teraSet = { .species = SPECIES_SNORLAX, .moves = { MOVE_TACKLE }, .teraType = TYPE_GHOST };
+
+    CreateFacilityMon(&set, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_TERA_TYPE), TYPE_NORMAL);
+    CreateFacilityMon(&teraSet, 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+    EXPECT_EQ(GetMonData(&mon, MON_DATA_TERA_TYPE), TYPE_GHOST);
+}
+
+// Upstream #10906 rebuilds the Factory parties from the save with its own
+// CreateRentalMon instead of CreateFacilityMon, so none of CreateFacilityMon's fork
+// edits ran on that path. ApplyRentalMonForkExtras re-applies them; this drives the
+// real BATTLE_FACTORY_FUNC_SET_PARTIES with a roster set that has a per-set .iv and
+// one that carries Return.
+TEST("Frontier extended roster: Factory party rebuild keeps the fork's facility-mon extras")
+{
+    const struct TrainerMon *roster = GetFactoryMonsTable();
+    u32 ivSet = 0xFFFF, returnSet = 0xFFFF, i, j;
+
+    for (i = 0; i < gFrontierExtendedMonsCount && (ivSet == 0xFFFF || returnSet == 0xFFFF); i++)
+    {
+        if (ivSet == 0xFFFF && roster[i].iv)
+            ivSet = i;
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            if (returnSet == 0xFFFF && roster[i].moves[j] == MOVE_RETURN && !roster[i].iv)
+                returnSet = i;
+        }
+    }
+    ASSUME(ivSet != 0xFFFF);
+    ASSUME(returnSet != 0xFFFF);
+
+    gSaveBlock2Ptr->frontier.lvlMode = FRONTIER_LVL_OPEN;
+    for (i = 0; i < FRONTIER_PARTY_SIZE * 2; i++)
+    {
+        gSaveBlock2Ptr->frontier.rentalMons[i].monId = (i % 2 == 0) ? ivSet : returnSet;
+        gSaveBlock2Ptr->frontier.rentalMons[i].personality = 0;
+        gSaveBlock2Ptr->frontier.rentalMons[i].ivs = MAX_PER_STAT_IVS;
+        gSaveBlock2Ptr->frontier.rentalMons[i].abilityNum = 0;
+    }
+    gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_SET_PARTIES;
+    CallBattleFactoryFunction();
+
+    for (i = 0; i < 2; i++)
+    {
+        struct Pokemon *ivMon = (i == 0) ? &gParties[B_TRAINER_PLAYER][0] : &gParties[B_TRAINER_OPPONENT_A][0];
+        struct Pokemon *returnMon = (i == 0) ? &gParties[B_TRAINER_PLAYER][1] : &gParties[B_TRAINER_OPPONENT_A][1];
+
+        EXPECT_EQ(GetMonData(ivMon, MON_DATA_IVS), roster[ivSet].iv);
+        if (B_FRONTIER_MAX_PP)
+            EXPECT_EQ(GetMonData(ivMon, MON_DATA_PP_BONUSES), 0xFF);
+        if (B_FRONTIER_PREFER_RETURN)
+        {
+            for (j = 0; j < MAX_MON_MOVES; j++)
+                EXPECT_NE(GetMonData(returnMon, MON_DATA_MOVE1 + j), MOVE_FRUSTRATION);
+            EXPECT_EQ(GetMonData(returnMon, MON_DATA_FRIENDSHIP), MAX_FRIENDSHIP);
+        }
+    }
 }
 
 // ============================================================================
