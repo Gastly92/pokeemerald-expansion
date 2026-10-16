@@ -467,13 +467,15 @@ static void DrawFieldPage(u8 windowId)
         y += LINE_H;
     }
 
+    // Remaining turns in brackets, like the Field row; a timer of 0 means the weather
+    // or terrain is indefinite (primal/ability weather) or absent, so nothing is shown.
     p = StringCopy(line, COMPOUND_STRING("Weather: "));
-    StringAppend(p, GetInfoWeatherName());
+    AppendTimedEntry(p, GetInfoWeatherName(), gBattleWeather ? gBattleStruct->weatherDuration : 0);
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
     p = StringCopy(line, COMPOUND_STRING("Terrain: "));
-    StringAppend(p, GetInfoTerrainName());
+    AppendTimedEntry(p, GetInfoTerrainName(), gFieldTimers.terrain ? gFieldTimers.terrainTimer : 0);
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 

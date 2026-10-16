@@ -51,7 +51,9 @@ path.
 
 The whole-field row (`BuildFieldEffectLine`) lists effects that belong to neither
 side and are neither weather nor terrain, each with its turns left where it has a
-timer. Entries are ordered by how often they decide a turn - **Trick Room first** -
+timer. The Weather and Terrain rows likewise show their turns left, e.g.
+`Weather: Rain(3)`; indefinite weather (primal, or ability weather where that has
+no timer) shows no count. Entries are ordered by how often they decide a turn - **Trick Room first** -
 because the row is a fixed height and clips at the window edge if several stack, so
 the ordering decides what survives.
 
