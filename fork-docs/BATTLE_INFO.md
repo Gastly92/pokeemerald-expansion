@@ -42,7 +42,7 @@ path.
 |---|---|
 | **Speed Tiers** | Each revealed foe's *possible* Speed range vs. your effective Speed (see below) |
 | **Field** | Weather, terrain, whole-field effects (Trick Room, Gravity, Magic/Wonder Room, the Sports, Fairy Lock, Ion Deluge) with turns left, plus entry hazards and side screens for both sides |
-| **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides |
+| **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides, with turns left where the duration is knowable (see below) |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
 | **Battle Log** | Every move used this battle, newest first, with the damage it dealt as a % of the target's max HP (see below) |
 | **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, current `HP n%` (title row, rounded **up** so it reads safely against the [damage preview](DAMAGE_PREVIEW.md#display)'s rounded-down range; 99 at most below full) or `FNT` when fainted, moves/PP/ability/held item |
@@ -51,9 +51,18 @@ path.
 
 The whole-field row (`BuildFieldEffectLine`) lists effects that belong to neither
 side and are neither weather nor terrain, each with its turns left where it has a
-timer. Entries are ordered by how often they decide a turn - **Trick Room first** -
+timer. The Weather and Terrain rows likewise show their turns left, e.g.
+`Weather: Rain(3)`; indefinite weather (primal, or ability weather where that has
+no timer) shows no count. Entries are ordered by how often they decide a turn - **Trick Room first** -
 because the row is a fixed height and clips at the window edge if several stack, so
 the ordering decides what survives.
+
+The Conditions row (`BuildConditionLine`) shows a duration only where the game makes it
+knowable: fixed timers (Taunt/Encore/Disable at Gen 5+, Heal Block, Embargo, Magnet Rise,
+Telekinesis, Torment, Yawn, the Perish count) always; sleep, infatuation and binding only
+when `DETERMINISTIC_STATUS` / `DETERMINISTIC_MOVE_RESULTS` fix them, since a random roll
+would leak hidden information. Sleep counts the actions still lost, ignoring Early Bird so
+it does not reveal the ability; confusion never shows one.
 
 Under `DETERMINISTIC_DAMAGE` the Field page also prints the current turn and that
 turn's fixed damage multiplier, so the player can read the exact roll

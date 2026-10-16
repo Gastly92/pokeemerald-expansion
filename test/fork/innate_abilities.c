@@ -5846,6 +5846,56 @@ TEST("Innate abilities: no ability override or frontier set names a reserved abi
     EXPECT_EQ(offenders, 0);
 }
 
+// Dark Aura is a legends-only pick. It powers every Dark move on the field, partners included, so on
+// an ordinary Dark mon it read as broken; only species the fork tiers as TIER_LEGENDARY or
+// TIER_MYTHICAL (src/fork/species_tiers.c) may get it from an override row or name it on a set.
+// Yveltal keeps its canon slot regardless. Absol, Alolan Persian, Honchkrow, Weavile, Obstagoon and
+// Lokix were repointed off it; this keeps them off.
+static bool32 MayHaveDarkAura(u16 species)
+{
+    enum SpeciesTier tier = GetSpeciesTier(species);
+
+    return tier == TIER_LEGENDARY || tier == TIER_MYTHICAL;
+}
+
+TEST("Innate abilities: only legendary or mythical species get Dark Aura from an override or set")
+{
+    u32 species, slot, i;
+    u32 offenders = 0;
+
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    EXPECT(MayHaveDarkAura(SPECIES_YVELTAL));
+    EXPECT(!MayHaveDarkAura(SPECIES_ABSOL));
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (MayHaveDarkAura(species))
+            continue;
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            if (GetSpeciesAbilityOverride(species, slot) != ABILITY_DARK_AURA)
+                continue;
+            offenders++;
+            Test_MgbaPrintf("override %S slot %d: Dark Aura is legendary/mythical-only -- pick another never-an-innate ability",
+                            gSpeciesInfo[species].speciesName, slot);
+        }
+    }
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        if (set->ability != ABILITY_DARK_AURA || MayHaveDarkAura(set->species))
+            continue;
+        offenders++;
+        Test_MgbaPrintf("roster[%d] %S: Dark Aura is legendary/mythical-only -- repoint the set",
+                        i, gSpeciesInfo[set->species].speciesName);
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
 // ===== Status-condition immunities (Magma Armor / Water Veil / Own Tempo /
 // Inner Focus / Leaf Guard / Overcoat) =====
 // All 1:1 clean-upside copies of the real ability, wired at the shared trait chokepoints

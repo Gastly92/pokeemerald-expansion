@@ -690,8 +690,15 @@ line:
    which is often somebody's signature. Absol is the clearest case: its dex is
    "senses even subtle changes in the sky and the land to predict natural
    disasters", which is Forewarn exactly, and Forewarn is innate-capable. Forewarn
-   became its innate; the observable slot still holds Yveltal's Dark Aura. When
-   this happens, say so in the PR body rather than reaching for a worse pick.
+   became its innate, and the observable slot holds No Guard. When this happens,
+   say so in the PR body rather than reaching for a worse pick.
+
+   **Dark Aura is legends-only.** Only a species tiered `TIER_LEGENDARY` or
+   `TIER_MYTHICAL` in `src/fork/species_tiers.c` may get it from an override row
+   or name it on a set; it boosts every Dark move on the field, partners
+   included, and read as broken on ordinary Dark mons. Gated by `TEST("Innate
+   abilities: only legendary or mythical species get Dark Aura from an override
+   or set")`.
 3. **Don't override a base form to hand it its Mega's ability.** Under
    `FEATURE_FREE_GIMMICKS` a base Factory set Mega Evolves on its own (see the
    free-gimmicks note in Step 3) and *becomes* the Mega, gaining the Mega's real
