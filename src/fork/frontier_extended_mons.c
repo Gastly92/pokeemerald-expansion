@@ -14526,6 +14526,30 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        // The special set: Sp. Atk ending above Attack is what makes free-gimmick Mega Evolution
+        // pick Mega Garchomp Z (mono-Dragon, 151 Spe / 141 SpA, innate Levitate) over the physical
+        // Mega. 0 Atk IVs keep the margin at level 50, where Timid alone leaves Attack higher.
+        .species = SPECIES_GARCHOMP,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_LIFE_ORB,
+        .moves =
+        {
+            MOVE_DRACO_METEOR,
+            MOVE_EARTH_POWER,
+            MOVE_FIRE_BLAST,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SAND_STREAM,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .iv = IVS(ATK, 0),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_DRAGON,
+    },
 
     // 0448
     {

@@ -1,5 +1,8 @@
 #include "global.h"
 #include "test/battle.h"
+#include "battle_frontier.h"
+#include "fork/free_gimmicks.h"
+#include "fork/frontier_extended_mons.h"
 
 // Coverage for FEATURE_FREE_GIMMICKS (config/feature.h). The flag drops the
 // held-item / key-item / charge requirements for the battle transformation
@@ -61,6 +64,129 @@ SINGLE_BATTLE_TEST("FREE_GIMMICKS: an equal-stat mon defaults to the X Mega form
         TURN { MOVE(player, MOVE_CELEBRATE, gimmick: GIMMICK_MEGA); }
     } THEN {
         EXPECT_EQ(player->species, SPECIES_CHARIZARD_MEGA_X);
+    }
+}
+
+// Every species with two Megas, and the stone (hence form) FindMegaStoneForStats should pick for a
+// physical and a special build. The pick follows the Megas' own base stats, not their letters, so
+// it is not always "X physical": Mega Absol Z out-leans Mega Absol physically. `unreachedStone`
+// names a form no roster set Mega Evolves into, which the roster test below would otherwise flag.
+struct TwoMegaPick
+{
+    u16 species;
+    u16 physicalStone;
+    u16 specialStone;
+    u16 unreachedStone;
+};
+
+static const struct TwoMegaPick sTwoMegaPicks[] =
+{
+    { SPECIES_CHARIZARD, ITEM_CHARIZARDITE_X, ITEM_CHARIZARDITE_Y, ITEM_NONE },
+    { SPECIES_RAICHU,    ITEM_RAICHUNITE_X,   ITEM_RAICHUNITE_Y,   ITEM_NONE },
+    { SPECIES_MEWTWO,    ITEM_MEWTWONITE_X,   ITEM_MEWTWONITE_Y,   ITEM_NONE },
+    // All three Absol sets are physical, so only a special Absol would ever reach plain Mega Absol.
+    { SPECIES_ABSOL,     ITEM_ABSOLITE_Z,     ITEM_ABSOLITE,       ITEM_ABSOLITE },
+    { SPECIES_GARCHOMP,  ITEM_GARCHOMPITE,    ITEM_GARCHOMPITE_Z,  ITEM_NONE },
+    { SPECIES_LUCARIO,   ITEM_LUCARIONITE,    ITEM_LUCARIONITE_Z,  ITEM_NONE },
+};
+
+static u32 CountMegaStones(u32 species)
+{
+    const struct FormChange *formChanges = GetSpeciesFormChanges(species);
+    u32 i, count = 0;
+
+    if (formChanges == NULL)
+        return 0;
+    for (i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+    {
+        if (formChanges[i].method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM)
+            count++;
+    }
+    return count;
+}
+
+static const struct TwoMegaPick *FindTwoMegaPick(u32 species)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sTwoMegaPicks); i++)
+    {
+        if (sTwoMegaPicks[i].species == species)
+            return &sTwoMegaPicks[i];
+    }
+    return NULL;
+}
+
+TEST("FREE_GIMMICKS: every species with two Megas picks the right one from its stats")
+{
+    u32 i, species;
+
+    for (i = 0; i < ARRAY_COUNT(sTwoMegaPicks); i++)
+    {
+        EXPECT_EQ(FindMegaStoneForStats(sTwoMegaPicks[i].species, 200, 100), sTwoMegaPicks[i].physicalStone);
+        EXPECT_EQ(FindMegaStoneForStats(sTwoMegaPicks[i].species, 100, 200), sTwoMegaPicks[i].specialStone);
+        EXPECT_EQ(FindMegaStoneForStats(sTwoMegaPicks[i].species, 150, 150), sTwoMegaPicks[i].physicalStone);
+    }
+
+    // The table must be complete: a species upstream gives a second Mega fails here until it gets a
+    // row, so its pick is a decision rather than whatever the base stats happen to say. Mega, Primal
+    // and G-Max forms share their base's form-change table, so only the base species is checked.
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (!IsSpeciesEnabled(species) || gSpeciesInfo[species].isMegaEvolution
+         || gSpeciesInfo[species].isPrimalReversion || gSpeciesInfo[species].isGigantamax)
+            continue;
+        if (CountMegaStones(species) < 2)
+            continue;
+        if (FindTwoMegaPick(species) == NULL)
+            Test_MgbaPrintf("%S (species %d) has two Megas but no sTwoMegaPicks row", gSpeciesInfo[species].speciesName, species);
+        EXPECT(FindTwoMegaPick(species) != NULL);
+    }
+}
+
+// The roster side of the same question: the pick reads the drafted mon's real Attack and Sp. Atk,
+// so a species' sets decide which of its Megas can ever appear in the Frontier. Every Mega must be
+// reached by at least one set (or be named in unreachedStone), and each set must pick the same form
+// at level 50 and level 100, so a spread that sits on the boundary cannot flip between the two.
+// Because it builds real mons, this also catches a set that does not get the nature it names: it
+// first failed on Mewtwo's Jolly set, which CreateFacilityMon turned into Lax (a u32 underflow when
+// moving a zero personality to any nature above 12; upstream fixed it in #10906).
+TEST("FREE_GIMMICKS: the roster's sets reach every Mega of a two-Mega species")
+{
+    u32 i, j;
+    struct Pokemon mon;
+
+    for (i = 0; i < ARRAY_COUNT(sTwoMegaPicks); i++)
+    {
+        const struct TwoMegaPick *pick = &sTwoMegaPicks[i];
+        bool32 reachedPhysical = FALSE, reachedSpecial = FALSE;
+
+        for (j = 0; j < gFrontierExtendedMonsCount; j++)
+        {
+            u16 stoneAt50, stoneAt100;
+
+            if (gFrontierExtendedMons[j].species != pick->species)
+                continue;
+            CreateFacilityMon(&gFrontierExtendedMons[j], 50, MAX_PER_STAT_IVS, 0, 0, &mon);
+            stoneAt50 = FindMegaStoneForStats(pick->species, GetMonData(&mon, MON_DATA_ATK), GetMonData(&mon, MON_DATA_SPATK));
+            CreateFacilityMon(&gFrontierExtendedMons[j], 100, MAX_PER_STAT_IVS, 0, 0, &mon);
+            stoneAt100 = FindMegaStoneForStats(pick->species, GetMonData(&mon, MON_DATA_ATK), GetMonData(&mon, MON_DATA_SPATK));
+
+            if (stoneAt50 != stoneAt100)
+                Test_MgbaPrintf("%S set %d picks a different Mega at level 50 and 100", gSpeciesInfo[pick->species].speciesName, j);
+            EXPECT_EQ(stoneAt50, stoneAt100);
+            if (stoneAt50 == pick->physicalStone)
+                reachedPhysical = TRUE;
+            if (stoneAt50 == pick->specialStone)
+                reachedSpecial = TRUE;
+        }
+
+        // An unreachedStone entry must still be true, or it is stale and should be removed.
+        if (reachedPhysical == (pick->unreachedStone == pick->physicalStone)
+         || reachedSpecial == (pick->unreachedStone == pick->specialStone))
+            Test_MgbaPrintf("%S: physical Mega reached=%d, special Mega reached=%d", gSpeciesInfo[pick->species].speciesName, reachedPhysical, reachedSpecial);
+        EXPECT_EQ(reachedPhysical, pick->unreachedStone != pick->physicalStone);
+        EXPECT_EQ(reachedSpecial, pick->unreachedStone != pick->specialStone);
     }
 }
 
