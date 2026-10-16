@@ -331,6 +331,27 @@ have been caught by reading the diff:
   merged commit before assuming the fork is innocent: here it passed there and failed here,
   which is what turned "upstream ships a flaky AI test" into a two-line fork bug.
 
+Three more from the Oct 2026 sync to upstream #10906 (14 commits, 2 conflicted files).
+None of them got a conflict marker:
+
+- **An untagged fork line deleted cleanly.** #10906 removed `if (fmon->iv) SetMonData(dst,
+  MON_DATA_IVS, ...)` from `CreateFacilityMon`. The fork's roster depends on per-set `.iv`
+  (Trick Room 0-Speed sets), but those lines were upstream's own, so the deletion merged
+  without a conflict. Now restored with a `FORK:` tag. **Lesson: when the fork *depends* on
+  an upstream line it didn't write, tag it anyway.**
+- **A new upstream builder that bypasses the fork's chokepoint.** The same PR rebuilds Battle
+  Factory parties from the save with a new `CreateRentalMon` instead of `CreateFacilityMon`.
+  Every fork edit inside `CreateFacilityMon` (Return over Frustration, max PP, per-set IVs,
+  gimmick readiness) silently stopped running on that path. Now re-hooked through
+  `ApplyRentalMonForkExtras`. **Lesson: after a sync, grep for new upstream functions that do
+  the same job as a function the fork hooks, e.g. anything else that creates a mon from a
+  `TrainerMon`.**
+- **An upstream "don't use" marker that the fork's feature flag contradicts.** #10910 marks
+  facility mons without `.teraType` with `TYPE_MYSTERY` and `BLOCK_AI_DYNAMAX`, so the AI
+  doesn't use gimmicks they didn't ask for. With `FEATURE_FREE_GIMMICKS` the AI uses every
+  gimmick anyway, so the marker became the mon's actual Tera Type: it would Terastallize into
+  Mystery. `ApplyDraftGimmickReadiness` now clears both markers when the feature is on.
+
 The general shape: a clean merge proves nothing about behaviour. Budget for a full
 `make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
 the upstream commit behind any test that changed state.
@@ -738,6 +759,11 @@ make -j$(nproc) release        # optimized build -> pokeemerald-release.gba
   produces bogus failures (e.g. a spurious non-zero `check` exit). Serialize them,
   or `rm -rf build` between configs. To wait on a background build, block on its
   completion (a single bounded wait) rather than firing off the next `make`.
+- **A full `make check` takes more than 10 minutes in a web session**, and a
+  foreground Bash call is capped at 10. Run it with `run_in_background` and a
+  generous `timeout` (e.g. 5400000 ms). A background command's `timeout` is its
+  kill deadline, so a 600000 ms one gets killed partway through and the run is
+  wasted (this happened in the Oct 2026 sync).
 
 ### Chasing a bug the maintainer saw in play
 

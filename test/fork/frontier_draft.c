@@ -1,5 +1,6 @@
 #include "global.h"
 #include "test/test.h"
+#include "config_changes.h" // SetConfig
 #include "data.h"
 #include "battle_factory.h"
 #include "battle_frontier.h"
@@ -158,6 +159,11 @@ TEST("Factory: the swap after the Frontier Brain offers the Brain's team")
 {
     u32 run, i;
 
+    // The roster's abilities resolve through the fork's override table, gated by
+    // FEATURE_INNATE_ABILITIES (force-disabled in tests); the real frontier runs with it on,
+    // and SetCorrectAbilityNum asserts on an ability the species cannot have.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
     gSaveBlock2Ptr->frontier.lvlMode = FRONTIER_LVL_50;
     VarSet(VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_FACTORY);
     VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
@@ -197,6 +203,11 @@ TEST("Factory: the swap after the Frontier Brain offers the Brain's team")
 TEST("Frontier draft: a regular Battle Tower opponent's party fills")
 {
     u32 i, mode;
+
+    // The roster's abilities resolve through the fork's override table, gated by
+    // FEATURE_INNATE_ABILITIES (force-disabled in tests); the real frontier runs with it on,
+    // and SetCorrectAbilityNum asserts on an ability the species cannot have.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
 
     PARAMETRIZE { mode = FRONTIER_MODE_SINGLES; }
     PARAMETRIZE { mode = FRONTIER_MODE_DOUBLES; }

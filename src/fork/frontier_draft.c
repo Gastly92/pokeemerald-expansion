@@ -135,10 +135,28 @@ bool32 IllusionMonRejectsSlot(u32 slot, u32 partySize, const struct TrainerMon *
 //   - Gigantamax Factor: granted to any species that has a G-Max form, so
 //     gmax-capable mons Gigantamax instead of plain Dynamaxing with no per-entry
 //     annotation; an explicit .gigantamaxFactor still forces it on.
+//
+// CreateFacilityMon first writes upstream's AI markers: BLOCK_AI_DYNAMAX as the
+// Dynamax Level unless the entry sets .shouldUseDynamax, and TYPE_MYSTERY as the
+// Tera Type unless it sets .teraType. Roster entries set neither, so with
+// FEATURE_FREE_GIMMICKS (every AI mon may use every gimmick) both are undone here:
+// a Mystery Tera Type would Terastallize into no type at all, and the blocked
+// Dynamax Level would give no HP boost. With the feature off, upstream's markers
+// stand, so the AI never Dynamaxes/Teras a set that did not ask for it.
 void ApplyDraftGimmickReadiness(const struct TrainerMon *fmon, struct Pokemon *dst)
 {
-    u32 dynamaxLevel = (fmon->dynamaxLevel > 0) ? fmon->dynamaxLevel : MAX_DYNAMAX_LEVEL;
-    SetMonData(dst, MON_DATA_DYNAMAX_LEVEL, &dynamaxLevel);
+    if (fmon->shouldUseDynamax || GetConfig(FEATURE_FREE_GIMMICKS))
+    {
+        u32 dynamaxLevel = (fmon->dynamaxLevel > 0) ? fmon->dynamaxLevel : MAX_DYNAMAX_LEVEL;
+        SetMonData(dst, MON_DATA_DYNAMAX_LEVEL, &dynamaxLevel);
+    }
+
+    if (!fmon->teraType && GetConfig(FEATURE_FREE_GIMMICKS))
+    {
+        // TYPE_NONE = "unmodified": GetMonData derives it from the personality.
+        u32 teraType = TYPE_NONE;
+        SetMonData(dst, MON_DATA_TERA_TYPE, &teraType);
+    }
 
     if (fmon->gigantamaxFactor || DoesSpeciesHaveFormChangeMethod(fmon->species, FORM_CHANGE_BATTLE_GIGANTAMAX))
     {
@@ -161,4 +179,55 @@ void ApplySwappedMonFriendship(struct Pokemon *mon)
 #else
     (void)mon;
 #endif
+}
+
+void ApplyFrontierMaxPP(struct Pokemon *mon)
+{
+#if B_FRONTIER_MAX_PP
+    // SetMonMoveSlot assigns base PP, so afterwards max the PP Up bonus on every
+    // slot (gPPUpGetMask[j] holds the 3-PP-Up mask for slot j; OR'd together that's
+    // full bonus on all four) and recompute each move's PP.
+    u32 j;
+    u8 ppBonuses = 0;
+    for (j = 0; j < MAX_MON_MOVES; j++)
+        ppBonuses |= gPPUpGetMask[j];
+    SetMonData(mon, MON_DATA_PP_BONUSES, &ppBonuses);
+    for (j = 0; j < MAX_MON_MOVES; j++)
+    {
+        u8 pp = CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + j), ppBonuses, j);
+        SetMonData(mon, MON_DATA_PP1 + j, &pp);
+    }
+#else
+    (void)mon;
+#endif
+}
+
+// Upstream's CreateRentalMon rebuilds the Factory parties from the save (rentalMons:
+// monId, personality, abilityNum, ivs) without going through CreateFacilityMon, so
+// none of that function's fork edits run there. Without this the rebuilt team would
+// carry Frustration at 0 friendship, base PP, uniform IVs (a 0-Speed Trick Room set
+// rebuilt at its saved Atk IV) and no free-gimmick readiness.
+void ApplyRentalMonForkExtras(const struct TrainerMon *fmon, struct Pokemon *dst)
+{
+#if B_FRONTIER_PREFER_RETURN
+    for (u32 j = 0; j < MAX_MON_MOVES; j++)
+    {
+        if (GetMonData(dst, MON_DATA_MOVE1 + j) == MOVE_FRUSTRATION)
+            SetMonMoveSlot(dst, MOVE_RETURN, j);
+    }
+    ApplySwappedMonFriendship(dst);
+#endif
+    ApplyFrontierMaxPP(dst);
+
+    if (fmon->iv)
+        SetMonData(dst, MON_DATA_IVS, &(fmon->iv));
+
+    if (fmon->ball == BALL_STRANGE)
+    {
+        u32 ball = BALL_POKE;
+        SetMonData(dst, MON_DATA_POKEBALL, &ball);
+    }
+
+    ApplyDraftGimmickReadiness(fmon, dst);
+    CalculateMonStats(dst);
 }
