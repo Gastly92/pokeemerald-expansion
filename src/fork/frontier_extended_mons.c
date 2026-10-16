@@ -16686,13 +16686,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_DARKRAI,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
-            MOVE_NASTY_PLOT,
+            MOVE_DARK_VOID,
+            MOVE_SUBSTITUTE,
             MOVE_DARK_PULSE,
-            MOVE_SLUDGE_BOMB,
-            MOVE_ICE_BEAM
+            MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
