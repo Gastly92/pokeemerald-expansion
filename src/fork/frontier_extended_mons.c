@@ -66,7 +66,7 @@
 // IMPORTANT: every .ability must resolve to a real ability slot for the species
 // (CreateFacilityMon, src/battle_frontier.c, silently falls back to slot 0 on an
 // unmatched ability). For an ability-locked innate species whose only real ability
-// is the one now granted innately (Rotom, Hydreigon, the lake trio, ...), the
+// is the one now granted innately (Rotom, Hydreigon, the lake trio, the Paradox mons, ...), the
 // complementary ability is made selectable via src/fork/species_ability_overrides.c
 // rather than by editing upstream species data. test/fork/frontier_extended_roster.c
 // enforces that every .ability is legal through that hook, so a typo can't silently
@@ -32532,7 +32532,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_ICE_SPINNER
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -32552,7 +32552,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BODY_PRESS,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32574,7 +32574,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DAZZLING_GLEAM,
             MOVE_ENCORE
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32594,7 +32594,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_WISH
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32616,7 +32616,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPORE,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_MYCELIUM_MIGHT,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32636,7 +32636,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SEED_BOMB,
             MOVE_PROTECT
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_MYCELIUM_MIGHT,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32658,7 +32658,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_CALM_MIND
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -32678,7 +32678,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -32698,7 +32698,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_PROTECT
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -32720,7 +32720,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_FLARE_BLITZ
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32740,7 +32740,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRST_IMPRESSION,
             MOVE_FLARE_BLITZ
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -32762,7 +32762,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VOLT_SWITCH,
             MOVE_FLASH_CANNON
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_STATIC,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -32782,7 +32782,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_STATIC,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32804,7 +32804,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_VOLT_SWITCH
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -32824,7 +32824,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RAPID_SPIN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_MOTOR_DRIVE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32846,7 +32846,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLIP_TURN,
             MOVE_ICE_BEAM
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -32866,7 +32866,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICY_WIND,
             MOVE_PROTECT
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -32888,7 +32888,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FAKE_OUT,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32908,7 +32908,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_PUNCH,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32930,7 +32930,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -32950,7 +32950,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HURRICANE,
             MOVE_FIRE_BLAST
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -32972,7 +32972,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ENERGY_BALL,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -32992,7 +32992,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_MORNING_SUN
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -33014,7 +33014,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STOMPING_TANTRUM,
             MOVE_THUNDER_PUNCH
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -33034,7 +33034,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -33368,7 +33368,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_ROOST
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -33388,7 +33388,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_DARK_AURA,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -33410,7 +33410,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_SPIRIT_BREAK
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -33430,7 +33430,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -33536,7 +33536,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -33556,7 +33556,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_FLIP_TURN
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -33578,7 +33578,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYBLADE,
             MOVE_CLOSE_COMBAT
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -33598,7 +33598,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SACRED_SWORD,
             MOVE_WIDE_GUARD
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -34023,7 +34023,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_HIGH_HORSEPOWER
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -34043,7 +34043,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_CLAW,
             MOVE_MORNING_SUN
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -34065,7 +34065,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_PULSE,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -34085,7 +34085,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_PROTOSYNTHESIS,
+        .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -34107,7 +34107,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_HORSEPOWER,
             MOVE_ZEN_HEADBUTT
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SAND_SPIT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -34127,7 +34127,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILD_CHARGE,
             MOVE_EARTHQUAKE
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_SAND_SPIT,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -34149,7 +34149,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_NOISE,
             MOVE_FOCUS_BLAST
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -34169,7 +34169,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TACHYON_CUTTER,
             MOVE_PSYCHIC_NOISE
         },
-        .ability = ABILITY_QUARK_DRIVE,
+        .ability = ABILITY_BULLETPROOF,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

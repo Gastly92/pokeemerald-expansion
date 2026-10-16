@@ -681,15 +681,18 @@ entries**, reserved to the **Paradox mons** — Protosynthesis to the ten ancien
 (Great Tusk, Flutter Mane, Roaring Moon, Sandy Shocks, Scream Tail, Slither Wing,
 Brute Bonnet, Walking Wake, Gouging Fire, Raging Bolt) and Quark Drive to the ten
 future ones (Iron Treads, Iron Valiant, Iron Moth, Iron Hands, Iron Jugulis, Iron
-Thorns, Iron Bundle, Iron Leaves, Iron Boulder, Iron Crown). Like Illusion these are
-never-an-innate, so the innate-capable gate waves them through; what disqualifies
-them is identity. The pair *is* what a Paradox mon is — a Booster-Energy/weather
+Thorns, Iron Bundle, Iron Leaves, Iron Boulder, Iron Crown). Unlike Illusion they
+are innate-capable, but what keeps them off other species is identity, not mechanics. The pair *is* what a Paradox mon is — a Booster-Energy/weather
 stat spike on the creature's highest stat — so giving either to an ordinary species
 reads as that species being a Paradox form, which is a claim the fork should not
 make by accident. One override row had borrowed Protosynthesis (Sunflora, for its
 "convert solar energy into nutrition" dex line, which is exactly the tempting
-misread); it now carries Seed Sower. The twenty canon carriers keep theirs through
-the vanilla-carrier exemption, so all 42 of their frontier sets are unaffected.
+misread); it now carries Seed Sower. The twenty canon carriers hold theirs as an
+**innate**, the one case where a reserved ability is also innate-capable: the gate
+below lets an `INNATES(...)` row name a reserved ability only for a species that
+carries it in vanilla, so the Paradox mons have it and nobody else can. Their freed
+observable slot takes an override — see
+[`ABILITY_PROTOSYNTHESIS / ABILITY_QUARK_DRIVE`](#ability_protosynthesis--ability_quark_drive).
 
 The list lives in `sReservedAbilities[]` in `test/fork/innate_abilities.c`, next to
 the gate that enforces it:
@@ -700,9 +703,9 @@ make check TESTS="Innate abilities: no ability override"   # runs both gates
 
 To reserve another ability, add it to that array and say why in the header comment
 of `src/fork/species_ability_overrides.c`; the test then names every offending row
-and set. A reserved ability may not be on `sImplementedInnates[]` either — the test
-checks that too, since an innate is by definition something other species can be
-given.
+and set. A reserved ability may also be on `sImplementedInnates[]`, but then the test
+checks every `INNATES(...)` row too and fails on any species declaring it that does not
+carry it in vanilla.
 
 ## Contradicting abilities: the observable slot may not invert its own innates
 
@@ -4436,3 +4439,53 @@ spore-scatterer), the **Victreebel** line (a carnivorous pitcher plant), the **R
 poison — Poison Point is its contact reaction) and the **Cottonee** line (wind mischief; Gossifleur/Eldegoss
 already cover the cotton-plant niche canonically). Those exclusions are pinned by test so the boundary is
 recorded rather than re-litigated.
+
+### ABILITY_PROTOSYNTHESIS / ABILITY_QUARK_DRIVE
+
+**1:1 clean-upside copies, and the only reserved innates.** Each raises the holder's highest stat
+(×1.3, Speed ×1.5) in harsh sunlight (Protosynthesis) or Electric Terrain (Quark Drive), or once
+Booster Energy is used. The real abilities never hurt their holder, so there is no divergence to
+drop. Like the real ability, a transformed battler never gets the boost.
+
+**Carriers: the twenty canon Paradox mons and nobody else.** Protosynthesis goes on the ten ancient
+ones, Quark Drive on the ten future ones. Both stay [reserved](#reserved-abilities-welded-to-one-line-banned-everywhere-else):
+`TEST("Innate abilities: no ability override or frontier set names a reserved ability")` now also
+sweeps every `INNATES(...)` row and fails on any species declaring a reserved ability it does not
+carry in vanilla. Going innate frees each Paradox mon's only real slot, so each takes a
+never-an-innate override in slot 1 that all of its frontier sets name:
+
+| Ancient | Override | Future | Override |
+|---|---|---|---|
+| Great Tusk | Earth Eater | Iron Treads | Motor Drive |
+| Scream Tail | Soundproof | Iron Bundle | Snow Warning |
+| Brute Bonnet | Mycelium Might | Iron Hands | Lightning Rod |
+| Flutter Mane | Perish Body | Iron Jugulis | Sheer Force |
+| Slither Wing | Flame Body | Iron Moth | Toxic Debris |
+| Sandy Shocks | Static | Iron Thorns | Sand Stream |
+| Roaring Moon | Dark Aura | Iron Valiant | Trace |
+| Walking Wake | Water Absorb | Iron Leaves | Sap Sipper |
+| Gouging Fire | Flash Fire | Iron Boulder | Sand Spit |
+| Raging Bolt | Volt Absorb | Iron Crown | Bulletproof |
+
+With the feature off the overrides are off too, so a set naming one falls back to slot 0 and runs the
+real ability: the roster degrades to vanilla rather than losing the boost.
+
+**Wiring.** Every upstream site reads the chosen ability; each gets an innate clause beside it, all
+through `GetInnateParadoxAbility()` (`src/fork/innate_abilities.c`), which returns `ABILITY_NONE` when the
+chosen ability already is one so nothing double-applies:
+
+- **Activation** — `AbilityBattleEffects`' `ABILITYEFFECT_ON_WEATHER` / `ON_TERRAIN` cases switch on the
+  chosen ability, so a hook after each switch calls `TryActivateInnateParadoxOnField()`, which mirrors the
+  upstream case (same guards, latched stat and script) and points the pop-up and message at the innate.
+  Switch-in activation reaches it through the same cases.
+- **Booster Energy** — `TryBoosterEnergy` and `BS_TryBoosterEnergy` resolve the ability through
+  `GetBattlerParadoxAbility()`; the pop-up and `{B_SCR_ABILITY}` name the innate.
+- **Stat modifiers** — clauses after the attack- and defense-stat ability switches in `battle_util.c`, and
+  two `else if` lines beside the Speed ones in `GetBattlerTotalSpeedStat` (field check first: hot AI path).
+- **Field end** — `ResetParadoxWeatherStat` / `ResetParadoxTerrainStat` unlatch the stat for an innate holder.
+- **AI** — `DoesInnateBenefitFromWeather` / `DoesInnateBenefitFromTerrain`, the Utility Umbrella sun read,
+  and the switch-in sim in `SetBattlerVolatilesForSwitchin`.
+
+Tests: `test/fork/innate_paradox.c` (sun / terrain / switch-in activation, the damage and Speed boosts,
+Booster Energy, Gastro Acid, feature off). Upstream's own Protosynthesis, Quark Drive and Booster Energy
+tests run flag-off and are unaffected.

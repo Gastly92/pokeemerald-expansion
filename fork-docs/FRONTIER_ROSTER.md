@@ -71,7 +71,7 @@ sets alongside the sweepers.
 
 **All regional forms** (Alolan, Galarian, Paldean, Hisuian) and their cross-gen
 evolutions appear as their own entries, slotted at their base species' National Dex
-number — alongside Paradox Pokémon (with Booster Energy + Protosynthesis/Quark Drive),
+number — alongside Paradox Pokémon (Booster Energy, innate Protosynthesis/Quark Drive),
 Ultra Beasts, and notable formes (Therian, Necrozma, Origin Dialga/Palkia, Urshifu,
 Calyrex riders, Ogerpon masks, Bloodmoon Ursaluna, the appliance Rotoms).
 
