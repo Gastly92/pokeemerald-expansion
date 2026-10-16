@@ -4633,9 +4633,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGIROCK,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_FILTER,
             ABILITY_PRESSURE,
             ABILITY_REGENERATOR,
             ABILITY_SAND_FORCE,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
@@ -4643,10 +4645,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGICE,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_FILTER,
             ABILITY_ICE_BODY,
             ABILITY_PRESSURE,
             ABILITY_REGENERATOR,
             ABILITY_SNOW_CLOAK,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
@@ -4654,10 +4658,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGISTEEL,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_FILTER,
             ABILITY_LIGHT_METAL,
             ABILITY_LIMBER,
             ABILITY_PRESSURE,
             ABILITY_REGENERATOR,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
@@ -5854,6 +5860,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGIGIGAS,
         INNATES(
             ABILITY_CLEAR_BODY,
+            ABILITY_FILTER,
             ABILITY_PRESSURE,
             ABILITY_STAMINA
         )
