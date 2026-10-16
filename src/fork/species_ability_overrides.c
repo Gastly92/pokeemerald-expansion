@@ -1283,6 +1283,9 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_GARCHOMP_MEGA, 2,
         ABILITY_SAND_STREAM
     },
+    // Mega Garchomp Z's upstream ability is LEVITATE, which these rows overwrite with the base
+    // form's Sand Stream, so its innate row carries Levitate (a mono-Dragon that floats is the
+    // form's whole point) -- the same "Mega's own ability rides the innate row" pattern as Mega Venusaur.
     { // 0445
         SPECIES_GARCHOMP_MEGA_Z, 0,
         ABILITY_SAND_STREAM
@@ -1315,6 +1318,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_LUCARIO_MEGA, 2,
         ABILITY_SHEER_FORCE
     },
+    // Mega Lucario Z's upstream ability is AURA_GUARD, which these rows overwrite and which is not
+    // carried as an innate. That costs nothing today -- upstream ships Aura Guard unimplemented -- but
+    // once upstream implements it, this form loses it silently: decide then whether it becomes an
+    // innate (wire it into sImplementedInnates[]) or these rows stop covering it.
     { // 0448
         SPECIES_LUCARIO_MEGA_Z, 0,
         ABILITY_SHEER_FORCE

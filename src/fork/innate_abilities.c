@@ -5402,6 +5402,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0445
         SPECIES_GARCHOMP_MEGA_Z,
         INNATES(
+            ABILITY_LEVITATE,
             ABILITY_ROUGH_SKIN,
             ABILITY_SAND_VEIL,
             ABILITY_STRONG_JAW
