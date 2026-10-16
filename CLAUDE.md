@@ -759,6 +759,11 @@ make -j$(nproc) release        # optimized build -> pokeemerald-release.gba
   produces bogus failures (e.g. a spurious non-zero `check` exit). Serialize them,
   or `rm -rf build` between configs. To wait on a background build, block on its
   completion (a single bounded wait) rather than firing off the next `make`.
+- **A full `make check` takes more than 10 minutes in a web session**, and a
+  foreground Bash call is capped at 10. Run it with `run_in_background` and a
+  generous `timeout` (e.g. 5400000 ms). A background command's `timeout` is its
+  kill deadline, so a 600000 ms one gets killed partway through and the run is
+  wasted (this happened in the Oct 2026 sync).
 
 ### Chasing a bug the maintainer saw in play
 
