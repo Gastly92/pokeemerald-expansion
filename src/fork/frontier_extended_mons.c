@@ -11795,7 +11795,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHIMECHO,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY,
+        .heldItem = ITEM_METRONOME,
         .moves =
         {
             MOVE_HEAL_BELL,
@@ -14489,7 +14489,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_PERSIM_BERRY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -22822,7 +22822,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANTRUM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_PERSIM_BERRY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -23807,7 +23807,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VOLCANION,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_STARF_BERRY,
         .moves =
         {
             MOVE_SUBSTITUTE,
@@ -28895,7 +28895,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FROSMOTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_STARF_BERRY,
         .moves =
         {
             MOVE_QUIVER_DANCE,
@@ -32524,7 +32524,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GREAT_TUSK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PERSIM_BERRY,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_HEADLONG_RUSH,
@@ -32586,7 +32586,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCREAM_TAIL,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_METRONOME,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_HELPING_HAND,
@@ -32650,7 +32650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_STARF_BERRY,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -32675,7 +32675,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_MOONBLAST,
             MOVE_SHADOW_BALL,
-            MOVE_POWER_GEM,
+            MOVE_MYSTICAL_FIRE,
             MOVE_THUNDERBOLT
         },
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -32695,7 +32695,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_MOONBLAST,
             MOVE_SHADOW_BALL,
-            MOVE_DAZZLING_GLEAM,
+            MOVE_MYSTICAL_FIRE,
             MOVE_PROTECT
         },
         .ability = ABILITY_PROTOSYNTHESIS,
@@ -32738,7 +32738,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FACADE,
             MOVE_CLOSE_COMBAT,
             MOVE_FIRST_IMPRESSION,
-            MOVE_LEECH_LIFE
+            MOVE_FLARE_BLITZ
         },
         .ability = ABILITY_PROTOSYNTHESIS,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -32802,7 +32802,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HIGH_HORSEPOWER,
             MOVE_IRON_HEAD,
             MOVE_RAPID_SPIN,
-            MOVE_ICE_SPINNER
+            MOVE_VOLT_SWITCH
         },
         .ability = ABILITY_QUARK_DRIVE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -32970,7 +32970,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIERY_DANCE,
             MOVE_SLUDGE_BOMB,
             MOVE_ENERGY_BALL,
-            MOVE_TERA_BLAST
+            MOVE_THUNDERBOLT
         },
         .ability = ABILITY_QUARK_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -33032,7 +33032,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_STONE_EDGE,
             MOVE_EARTHQUAKE,
-            MOVE_THUNDER_WAVE
+            MOVE_WILD_CHARGE
         },
         .ability = ABILITY_QUARK_DRIVE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -33386,7 +33386,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_KNOCK_OFF,
             MOVE_EARTHQUAKE,
-            MOVE_U_TURN
+            MOVE_FIRE_FANG
         },
         .ability = ABILITY_PROTOSYNTHESIS,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -33422,12 +33422,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_VALIANT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
+            MOVE_CALM_MIND,
             MOVE_MOONBLAST,
             MOVE_AURA_SPHERE,
-            MOVE_PSYSHOCK,
             MOVE_THUNDERBOLT
         },
         .ability = ABILITY_QUARK_DRIVE,
@@ -34015,7 +34015,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOUGING_FIRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_STARF_BERRY,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -34063,7 +34063,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_THUNDERCLAP,
             MOVE_DRAGON_PULSE,
-            MOVE_THUNDERBOLT
+            MOVE_FLAMETHROWER
         },
         .ability = ABILITY_PROTOSYNTHESIS,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -34083,7 +34083,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERCLAP,
             MOVE_DRACO_METEOR,
             MOVE_THUNDERBOLT,
-            MOVE_THUNDER_WAVE
+            MOVE_FLAMETHROWER
         },
         .ability = ABILITY_PROTOSYNTHESIS,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -34099,7 +34099,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_BOULDER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PERSIM_BERRY,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -34124,7 +34124,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_MIGHTY_CLEAVE,
             MOVE_PSYCHO_CUT,
-            MOVE_STONE_EDGE,
+            MOVE_WILD_CHARGE,
             MOVE_EARTHQUAKE
         },
         .ability = ABILITY_QUARK_DRIVE,
