@@ -156,6 +156,11 @@ TEST("FREE_GIMMICKS: the roster's sets reach every Mega of a two-Mega species")
     u32 i, j;
     struct Pokemon mon;
 
+    // The real frontier builds these mons with the fork ability layer on, so the override table
+    // resolves each set's chosen ability. TestInitConfigData force-disables it, and without it
+    // CreateFacilityMon rejects override-only abilities (Charizard's Flash Fire) as illegal.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
     for (i = 0; i < ARRAY_COUNT(sTwoMegaPicks); i++)
     {
         const struct TwoMegaPick *pick = &sTwoMegaPicks[i];
