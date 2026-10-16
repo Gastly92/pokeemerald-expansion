@@ -1773,7 +1773,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_U_TURN
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -1793,7 +1793,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PARTING_SHOT,
             MOVE_TAUNT
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -1813,7 +1813,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SNARL,
             MOVE_HYPER_VOICE
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -11845,7 +11845,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_SUCKER_PUNCH
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11865,7 +11865,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_PSYCHO_CUT
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -11885,7 +11885,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_SWORDS_DANCE
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_NO_GUARD,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14183,7 +14183,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_IRON_HEAD,
             MOVE_SUPERPOWER
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14203,7 +14203,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHT_SLASH,
             MOVE_PSYCHO_CUT
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14223,7 +14223,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_PROTECT
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -14875,7 +14875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_SHARD,
             MOVE_LOW_KICK
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -14895,7 +14895,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICICLE_CRASH,
             MOVE_ICE_SHARD
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -28399,7 +28399,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -28419,7 +28419,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -28439,7 +28439,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_OBSTRUCT
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -30745,7 +30745,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_LIFE,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -30765,7 +30765,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUCKER_PUNCH,
             MOVE_THROAT_CHOP
         },
-        .ability = ABILITY_DARK_AURA,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

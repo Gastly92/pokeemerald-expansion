@@ -235,7 +235,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0053
         SPECIES_PERSIAN_ALOLA, 2,
-        ABILITY_DARK_AURA
+        ABILITY_RIVALRY
     },
     { // 0055
         SPECIES_GOLDUCK, 2,
@@ -1019,31 +1019,31 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0359
         SPECIES_ABSOL, 2,
-        ABILITY_DARK_AURA
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_ABSOL_MEGA, 0,
-        ABILITY_DARK_AURA
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_ABSOL_MEGA, 1,
-        ABILITY_DARK_AURA
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_ABSOL_MEGA, 2,
-        ABILITY_DARK_AURA
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_ABSOL_MEGA_Z, 0,
-        ABILITY_DARK_AURA
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_ABSOL_MEGA_Z, 1,
-        ABILITY_DARK_AURA
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_ABSOL_MEGA_Z, 2,
-        ABILITY_DARK_AURA
+        ABILITY_NO_GUARD
     },
     { // 0365
         SPECIES_WALREIN, 1,
@@ -1245,7 +1245,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0430
         SPECIES_HONCHKROW, 1,
-        ABILITY_DARK_AURA
+        ABILITY_SHEER_FORCE
     },
     { // 0432
         SPECIES_PURUGLY, 0,
@@ -1337,7 +1337,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0461
         SPECIES_WEAVILE, 1,
-        ABILITY_DARK_AURA
+        ABILITY_POISON_TOUCH
     },
     { // 0462
         SPECIES_MAGNEZONE, 2,
@@ -2280,7 +2280,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0862
         SPECIES_OBSTAGOON, 0,
-        ABILITY_DARK_AURA
+        ABILITY_SOUNDPROOF
     },
     { // 0863
         SPECIES_PERRSERKER, 1,
@@ -2432,7 +2432,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0920
         SPECIES_LOKIX, 1,
-        ABILITY_DARK_AURA
+        ABILITY_SHEER_FORCE
     },
     { // 0925
         SPECIES_MAUSHOLD, 1,
