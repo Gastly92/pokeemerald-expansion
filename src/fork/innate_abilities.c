@@ -4636,6 +4636,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRESSURE,
             ABILITY_REGENERATOR,
             ABILITY_SAND_FORCE,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
@@ -4647,6 +4648,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_PRESSURE,
             ABILITY_REGENERATOR,
             ABILITY_SNOW_CLOAK,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
@@ -4658,6 +4660,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LIMBER,
             ABILITY_PRESSURE,
             ABILITY_REGENERATOR,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
