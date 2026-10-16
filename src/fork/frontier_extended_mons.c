@@ -32524,7 +32524,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GREAT_TUSK,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PERSIM_BERRY,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_HEADLONG_RUSH,
@@ -32586,7 +32586,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SCREAM_TAIL,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_METRONOME,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_HELPING_HAND,
@@ -32650,7 +32650,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FLUTTER_MANE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_STARF_BERRY,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_MOONBLAST,
@@ -33422,13 +33422,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_VALIANT,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_SPECS,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
+            MOVE_CALM_MIND,
             MOVE_MOONBLAST,
             MOVE_AURA_SPHERE,
-            MOVE_PSYSHOCK,
-            MOVE_THUNDERBOLT
+            MOVE_PSYSHOCK
         },
         .ability = ABILITY_QUARK_DRIVE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -34015,7 +34015,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GOUGING_FIRE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_STARF_BERRY,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -34099,7 +34099,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_IRON_BOULDER,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_PERSIM_BERRY,
+        .heldItem = ITEM_BOOSTER_ENERGY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
