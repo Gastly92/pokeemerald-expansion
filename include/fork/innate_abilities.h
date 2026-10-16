@@ -267,6 +267,12 @@
 //   a tight spore/powder flavor set — the canon carriers' line-mates (Oddish/Gloom, Hoppip/Skiploom,
 //   Scatterbug/Spewpa, Cutiefly) and the powder/fungus identities Butterfree (+ Gmax, whose G-Max Befuddle
 //   applies MOVE_EFFECT_EFFECT_SPORE_SIDE), Venonat/Venomoth and Toedscool/Toedscruel.
+//   PROTOSYNTHESIS / QUARK_DRIVE (1:1 clean-upside copies, RESERVED to their canon Paradox carriers — a
+//   test fails on any other species declaring either): the highest stat rises in harsh sunlight / Electric
+//   Terrain or with Booster Energy. Innate clauses sit beside every upstream chosen-ability site
+//   (activation, Booster Energy, the attack/defense/Speed modifiers, the field-end reset, the AI's
+//   field-benefit and switch-in reads), all through GetInnateParadoxAbility(). Each Paradox mon's freed
+//   slot carries a species ability override.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
@@ -426,5 +432,10 @@ enum MoveEndResult MoveEndColorChangeInnate(struct BattleCalcValues *cv);
 void RedirectSheerForceSkipToInnates(void);
 bool32 AI_IsInnateOnSide(enum BattlerId battlerId, enum Ability ability);
 bool32 IsMoxieTypeInnateActive(u32 battler); // innate-aware Moxie / Chilling Neigh / Grim Neigh
+
+// Innate Protosynthesis / Quark Drive (reserved to the Paradox mons -- see the matching .c).
+enum Ability GetInnateParadoxAbility(enum BattlerId battler, enum Ability chosenAbility);
+enum Ability GetBattlerParadoxAbility(enum BattlerId battler, enum Ability chosenAbility);
+bool32 TryActivateInnateParadoxOnField(enum BattlerId battler, enum Ability paradoxAbility);
 
 #endif // GUARD_INNATE_ABILITIES_H

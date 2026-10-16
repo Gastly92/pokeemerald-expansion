@@ -1,6 +1,8 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_util.h"
+#include "battle_message.h" // PREPARE_STAT_BUFFER (innate Protosynthesis / Quark Drive)
+#include "battle_scripts.h" // BattleScript_ProtosynthesisActivates / BattleScript_QuarkDriveActivates
 #include "fork/innate_abilities.h"
 #include "fork/species_shorthand.h"
 #include "constants/abilities.h"
@@ -12450,6 +12452,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GREAT_TUSK,
         INNATES(
             ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS,
             ABILITY_SAND_FORCE,
             ABILITY_SOLID_ROCK,
             ABILITY_STURDY
@@ -12461,6 +12464,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_COMPETITIVE,
             ABILITY_FRIEND_GUARD,
             ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS,
             ABILITY_THICK_FAT
         )
     },
@@ -12470,6 +12474,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_EFFECT_SPORE,
             ABILITY_OVERCOAT,
             ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS,
             ABILITY_REGENERATOR
         )
     },
@@ -12479,7 +12484,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS
         )
     },
     { // 0988
@@ -12488,6 +12494,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_COMPOUND_EYES,
             ABILITY_GUTS,
             ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS,
             ABILITY_SWARM
         )
     },
@@ -12497,6 +12504,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANALYTIC,
             ABILITY_MAGNET_PULL,
             ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS,
             ABILITY_STURDY
         )
     },
@@ -12504,6 +12512,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_IRON_TREADS,
         INNATES(
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_SAND_FORCE,
             ABILITY_SOLID_ROCK,
             ABILITY_STURDY
@@ -12514,7 +12523,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ICE_BODY,
             ABILITY_INSOMNIA,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE
         )
     },
     { // 0992
@@ -12523,6 +12533,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_GUTS,
             ABILITY_IRON_FIST,
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_THICK_FAT
         )
     },
@@ -12532,6 +12543,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_KEEN_EYE,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_UNNERVE
         )
     },
@@ -12541,6 +12553,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_COMPOUND_EYES,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_SWARM
         )
     },
@@ -12549,6 +12562,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_IRON_BARBS,
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_SAND_VEIL,
             ABILITY_UNNERVE
         )
@@ -12652,7 +12666,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_MOXIE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS
         )
     },
     { // 1006
@@ -12660,6 +12675,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_SHARPNESS,
             ABILITY_STEADFAST,
             ABILITY_TELEPATHY
@@ -12687,7 +12703,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_WALKING_WAKE,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS
         )
     },
     { // 1010
@@ -12695,6 +12712,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_SHARPNESS
         )
     },
@@ -12861,14 +12879,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOUGING_FIRE,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS
         )
     },
     { // 1021
         SPECIES_RAGING_BOLT,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_PROTOSYNTHESIS
         )
     },
     { // 1022
@@ -12876,6 +12896,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_SHARPNESS
         )
     },
@@ -12884,6 +12905,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
+            ABILITY_QUARK_DRIVE,
             ABILITY_SHARPNESS
         )
     },
@@ -13708,4 +13730,80 @@ bool32 IsMoxieTypeInnateActive(u32 battler)
         || IsInnateActive(battler, ABILITY_CHILLING_NEIGH)
         || IsInnateActive(battler, ABILITY_GRIM_NEIGH)
         || IsInnateActive(battler, ABILITY_BEAST_BOOST);
+}
+
+// Innate Protosynthesis / Quark Drive (FEATURE_INNATE_ABILITIES). Both are RESERVED to the Paradox mons:
+// Protosynthesis to the ten ancient ones, Quark Drive to the ten future ones, and a test
+// ("reserved innates are declared only by their canon carriers", test/fork/innate_abilities.c) keeps
+// any other species from declaring either. Making them innate frees each Paradox mon's one observable
+// slot for a species ability override (src/fork/species_ability_overrides.c).
+//
+// The innate is a 1:1 copy of the real ability -- it never hurts its holder, so there is no downside to
+// drop. Every upstream site reads the chosen ability; each one gets an innate clause beside it that goes
+// through the two helpers below, so the boost activates in harsh sunlight / Electric Terrain, uses
+// Booster Energy, raises the same highest stat by the same amount, and fades with the field exactly as
+// the real one does. Like the real ability, a transformed battler never gets the boost.
+
+// The Paradox ability an ACTIVE innate grants `battler`, or ABILITY_NONE. Returns ABILITY_NONE when the
+// chosen ability is already Protosynthesis / Quark Drive, because the upstream site handles that case
+// and the innate clause beside it must not apply the boost a second time.
+enum Ability GetInnateParadoxAbility(enum BattlerId battler, enum Ability chosenAbility)
+{
+    if (chosenAbility == ABILITY_PROTOSYNTHESIS || chosenAbility == ABILITY_QUARK_DRIVE)
+        return ABILITY_NONE;
+    if (gBattleMons[battler].volatiles.transformed)
+        return ABILITY_NONE;
+    if (IsInnateActive(battler, ABILITY_PROTOSYNTHESIS))
+        return ABILITY_PROTOSYNTHESIS;
+    if (IsInnateActive(battler, ABILITY_QUARK_DRIVE))
+        return ABILITY_QUARK_DRIVE;
+    return ABILITY_NONE;
+}
+
+// The battler's Paradox ability from either source: the chosen ability when it is Protosynthesis /
+// Quark Drive, else the active innate one. For sites that only ask "which Paradox ability does this
+// battler run?" (Booster Energy), so one reassignment makes the whole site innate-aware.
+enum Ability GetBattlerParadoxAbility(enum BattlerId battler, enum Ability chosenAbility)
+{
+    enum Ability innate = GetInnateParadoxAbility(battler, chosenAbility);
+
+    return innate != ABILITY_NONE ? innate : chosenAbility;
+}
+
+// The activation an innate Protosynthesis / Quark Drive gets when sunlight / Electric Terrain starts or
+// the holder switches into it. Hooked at the end of AbilityBattleEffects' ABILITYEFFECT_ON_WEATHER /
+// ABILITYEFFECT_ON_TERRAIN cases (src/battle_util.c), which switch on the CHOSEN ability and so never
+// reach the innate. Mirrors the upstream ABILITY_PROTOSYNTHESIS / ABILITY_QUARK_DRIVE cases there -- same
+// guards, same latched stat, same script -- plus the pop-up / message override every innate needs.
+bool32 TryActivateInnateParadoxOnField(enum BattlerId battler, enum Ability paradoxAbility)
+{
+    if (GetInnateParadoxAbility(battler, GetBattlerAbility(battler)) != paradoxAbility)
+        return FALSE;
+    if (gBattleMons[battler].volatiles.boosterEnergyActivated)
+        return FALSE;
+
+    if (paradoxAbility == ABILITY_PROTOSYNTHESIS)
+    {
+        if (gBattleMons[battler].volatiles.weatherAbilityDone || !(GetWeather() & B_WEATHER_SUN))
+            return FALSE;
+        gBattleMons[battler].volatiles.weatherAbilityDone = TRUE;
+    }
+    else
+    {
+        if (gBattleMons[battler].volatiles.terrainAbilityDone || gFieldTimers.terrain != B_TERRAIN_ELECTRIC)
+            return FALSE;
+        gBattleMons[battler].volatiles.terrainAbilityDone = TRUE;
+    }
+
+    gBattleMons[battler].volatiles.paradoxBoostedStat = GetParadoxHighestStatId(battler);
+    PREPARE_STAT_BUFFER(gBattleTextBuff1, gBattleMons[battler].volatiles.paradoxBoostedStat);
+    gBattlerAbility = gBattleScripting.battler = battler;
+    // CreateAbilityPopUp reads the chosen slot and the message text reads gLastUsedAbility, so point
+    // both at the innate (the Speed Boost / Download precedent).
+    gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = paradoxAbility;
+    if (paradoxAbility == ABILITY_PROTOSYNTHESIS)
+        BattleScriptCall(BattleScript_ProtosynthesisActivates);
+    else
+        BattleScriptCall(BattleScript_QuarkDriveActivates);
+    return TRUE;
 }

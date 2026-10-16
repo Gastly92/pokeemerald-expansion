@@ -3138,4 +3138,20 @@ static void SetBattlerVolatilesForSwitchin(enum BattlerId battler, u32 weather, 
      && IsInnateActive(battler, ABILITY_WIND_POWER)
      && (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND))
         gBattleMons[battler].volatiles.chargeTimer = 2;
+
+    // FORK: an innate Protosynthesis / Quark Drive (chosen ability differs, so the switch above missed it)
+    // arms its boost on switch-in like the real ability, so the AI's switch-in sim reflects it.
+    switch (GetInnateParadoxAbility(battler, gAiLogicData->abilities[battler]))
+    {
+    case ABILITY_QUARK_DRIVE:
+        if (gFieldTimers.terrain == B_TERRAIN_ELECTRIC || gAiLogicData->holdEffects[battler] == HOLD_EFFECT_BOOSTER_ENERGY)
+            gBattleMons[battler].volatiles.boosterEnergyActivated = TRUE;
+        break;
+    case ABILITY_PROTOSYNTHESIS:
+        if ((weather & B_WEATHER_SUN) || gAiLogicData->holdEffects[battler] == HOLD_EFFECT_BOOSTER_ENERGY)
+            gBattleMons[battler].volatiles.boosterEnergyActivated = TRUE;
+        break;
+    default:
+        break;
+    }
 }

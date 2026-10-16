@@ -53,7 +53,8 @@ struct SpeciesAbilityOverride
 //
 // SOME ABILITIES ARE RESERVED TO ONE LINE (or one family) and no row may name them: ILLUSION
 // (Zorua/Zoroark) first, plus PROTOSYNTHESIS and QUARK_DRIVE, welded to the ancient and future
-// Paradox mons respectively.
+// Paradox mons respectively. Those two are innate on their carriers, which is why each Paradox mon
+// has a row below giving its sets an observable ability in slot 1.
 // The never-an-innate rule above does not catch these -- Illusion is never-an-innate, so that gate is
 // happy with it; what disqualifies it is identity. The disguise is that line's whole design, and the
 // roster machinery assumes it (IllusionMonRejectsSlot in src/fork/frontier_draft.c, the INFO viewer's
@@ -2502,6 +2503,54 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_KINGAMBIT, 2,
         ABILITY_SHEER_FORCE
     },
+    { // 0984
+        SPECIES_GREAT_TUSK, 1,
+        ABILITY_EARTH_EATER
+    },
+    { // 0985
+        SPECIES_SCREAM_TAIL, 1,
+        ABILITY_SOUNDPROOF
+    },
+    { // 0986
+        SPECIES_BRUTE_BONNET, 1,
+        ABILITY_MYCELIUM_MIGHT
+    },
+    { // 0987
+        SPECIES_FLUTTER_MANE, 1,
+        ABILITY_PERISH_BODY
+    },
+    { // 0988
+        SPECIES_SLITHER_WING, 1,
+        ABILITY_FLAME_BODY
+    },
+    { // 0989
+        SPECIES_SANDY_SHOCKS, 1,
+        ABILITY_STATIC
+    },
+    { // 0990
+        SPECIES_IRON_TREADS, 1,
+        ABILITY_MOTOR_DRIVE
+    },
+    { // 0991
+        SPECIES_IRON_BUNDLE, 1,
+        ABILITY_SNOW_WARNING
+    },
+    { // 0992
+        SPECIES_IRON_HANDS, 1,
+        ABILITY_LIGHTNING_ROD
+    },
+    { // 0993
+        SPECIES_IRON_JUGULIS, 1,
+        ABILITY_SHEER_FORCE
+    },
+    { // 0994
+        SPECIES_IRON_MOTH, 1,
+        ABILITY_TOXIC_DEBRIS
+    },
+    { // 0995
+        SPECIES_IRON_THORNS, 1,
+        ABILITY_SAND_STREAM
+    },
     { // 0998
         SPECIES_BAXCALIBUR, 1,
         ABILITY_NO_GUARD
@@ -2509,6 +2558,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 1000
         SPECIES_GHOLDENGO, 1,
         ABILITY_SHEER_FORCE
+    },
+    { // 1005
+        SPECIES_ROARING_MOON, 1,
+        ABILITY_DARK_AURA
+    },
+    { // 1006
+        SPECIES_IRON_VALIANT, 1,
+        ABILITY_TRACE
+    },
+    { // 1009
+        SPECIES_WALKING_WAKE, 1,
+        ABILITY_WATER_ABSORB
+    },
+    { // 1010
+        SPECIES_IRON_LEAVES, 1,
+        ABILITY_SAP_SIPPER
     },
     { // 1013
         SPECIES_SINISTCHA, 2,
@@ -2533,6 +2598,22 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 1019
         SPECIES_HYDRAPPLE, 2,
         ABILITY_GRASSY_SURGE
+    },
+    { // 1020
+        SPECIES_GOUGING_FIRE, 1,
+        ABILITY_FLASH_FIRE
+    },
+    { // 1021
+        SPECIES_RAGING_BOLT, 1,
+        ABILITY_VOLT_ABSORB
+    },
+    { // 1022
+        SPECIES_IRON_BOULDER, 1,
+        ABILITY_SAND_SPIT
+    },
+    { // 1023
+        SPECIES_IRON_CROWN, 1,
+        ABILITY_BULLETPROOF
     },
 };
 

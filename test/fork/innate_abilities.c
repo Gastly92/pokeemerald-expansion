@@ -5473,6 +5473,8 @@ static const enum Ability sImplementedInnates[] =
         ABILITY_MAGIC_BOUNCE,
         ABILITY_DANCER,
         ABILITY_EFFECT_SPORE,
+        // Reserved as well as innate: only their canon Paradox carriers may declare them (gate (7)).
+        ABILITY_PROTOSYNTHESIS, ABILITY_QUARK_DRIVE,
 };
 
 static bool32 IsImplementedInnate(enum Ability ability)
@@ -5743,6 +5745,11 @@ TEST("Innate abilities: no species sets the weather its own speed-doubler innate
 // slot, and the INFO viewer reads the disguise species so a foe never leaks). Those rows were
 // repointed at ordinary picks; this test keeps them repointed.
 //
+// A reserved ability MAY also be an innate, but then only its canon carriers may declare it: the
+// innate sweep below fails on any INNATES(...) row naming a reserved ability its species does not
+// carry in vanilla. Protosynthesis and Quark Drive are the case -- innate on the twenty Paradox mons,
+// so each one's observable slot is free for an override, and still nobody else's.
+//
 // To reserve another ability: add it here and give the reason in the header comment of
 // src/fork/species_ability_overrides.c. To un-reserve one, delete it here.
 static const enum Ability sReservedAbilities[] =
@@ -5751,9 +5758,8 @@ static const enum Ability sReservedAbilities[] =
     // The Paradox signatures. Protosynthesis is welded to the ten ANCIENT Paradox mons and
     // Quark Drive to the ten FUTURE ones -- they are what those creatures ARE, and handing
     // either to an ordinary species reads as that species being a Paradox form. Both are
-    // never-an-innate, so the (6) gate is perfectly happy with them; what disqualifies them
-    // is identity, which is exactly what this list is for. The canon carriers keep theirs
-    // through the SpeciesHasVanillaAbility exemption below.
+    // innates on their canon carriers (src/fork/innate_abilities.c), which the innate sweep
+    // below allows through the SpeciesHasVanillaAbility exemption and denies everyone else.
     ABILITY_PROTOSYNTHESIS,
     ABILITY_QUARK_DRIVE,
 };
@@ -5804,14 +5810,24 @@ TEST("Innate abilities: no ability override or frontier set names a reserved abi
     EXPECT(SpeciesHasVanillaAbility(SPECIES_IRON_TREADS, ABILITY_QUARK_DRIVE));
     EXPECT(!SpeciesHasVanillaAbility(SPECIES_SUNFLORA, ABILITY_PROTOSYNTHESIS));
 
-    for (i = 0; i < ARRAY_COUNT(sReservedAbilities); i++)
+    // A reserved innate stays with its canon line: no INNATES(...) row may hand it to a species
+    // that does not carry it in vanilla.
+    EXPECT(SpeciesHasInnate(SPECIES_GREAT_TUSK, ABILITY_PROTOSYNTHESIS)); // the sweep has something to check
+    EXPECT(SpeciesHasInnate(SPECIES_IRON_TREADS, ABILITY_QUARK_DRIVE));
+    for (i = 0; i < GetSpeciesInnatesEntryCount(); i++)
     {
-        if (!IsImplementedInnate(sReservedAbilities[i]))
-            continue;
+        u16 innateSpecies;
+        const enum Ability *list = GetSpeciesInnatesEntry(i, &innateSpecies);
 
-        offenders++;
-        Test_MgbaPrintf("reserved %S is also on sImplementedInnates[] -- a reserved ability belongs to one line, so it cannot be an innate anything else can be given",
-                        gAbilitiesInfo[sReservedAbilities[i]].name);
+        for (slot = 0; list[slot] != ABILITY_NONE; slot++)
+        {
+            if (!IsReservedAbility(list[slot]) || SpeciesHasVanillaAbility(innateSpecies, list[slot]))
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("innate row %S: %S is reserved to its canon line -- only a species that carries it in vanilla may declare it",
+                            gSpeciesInfo[innateSpecies].speciesName, gAbilitiesInfo[list[slot]].name);
+        }
     }
 
     for (species = 1; species < NUM_SPECIES; species++)

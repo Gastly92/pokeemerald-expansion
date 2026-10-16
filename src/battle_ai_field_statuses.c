@@ -173,7 +173,8 @@ static bool32 DoesInnateBenefitFromWeather(enum BattlerId battler, u32 weather)
         || ((weather & B_WEATHER_ICY_ANY)   && IsInnateActive(battler, ABILITY_SNOW_CLOAK))
         || ((weather & B_WEATHER_SUN)          && IsInnateActive(battler, ABILITY_LEAF_GUARD))   // FORK: innate Leaf Guard values sun (status-immune)
         || ((weather & B_WEATHER_DAMAGING_ANY) && IsInnateActive(battler, ABILITY_OVERCOAT))     // FORK: innate Overcoat values damaging weather (ignores chip)
-        || ((weather & B_WEATHER_DAMAGING_ANY) && IsInnateActive(battler, ABILITY_MAGIC_GUARD)); // FORK: innate Magic Guard values damaging weather (ignores chip)
+        || ((weather & B_WEATHER_DAMAGING_ANY) && IsInnateActive(battler, ABILITY_MAGIC_GUARD)) // FORK: innate Magic Guard values damaging weather (ignores chip)
+        || ((weather & B_WEATHER_SUN)          && IsInnateActive(battler, ABILITY_PROTOSYNTHESIS)); // FORK: innate Protosynthesis values sun
 }
 
 static bool32 DoesAbilityBenefitFromWeather(enum Ability ability, u32 weather)
@@ -243,7 +244,8 @@ static bool32 DoesAbilityBenefitFromTerrain(enum Ability ability, enum BattleTer
 static bool32 DoesInnateBenefitFromTerrain(enum BattlerId battler, enum BattleTerrain terrain)
 {
     return (terrain == B_TERRAIN_ELECTRIC && IsInnateActive(battler, ABILITY_SURGE_SURFER))
-        || (terrain == B_TERRAIN_GRASSY   && IsInnateActive(battler, ABILITY_GRASS_PELT));
+        || (terrain == B_TERRAIN_GRASSY   && IsInnateActive(battler, ABILITY_GRASS_PELT))
+        || (terrain == B_TERRAIN_ELECTRIC && IsInnateActive(battler, ABILITY_QUARK_DRIVE)); // FORK: innate Quark Drive values Electric Terrain
 }
 
 static bool32 IsLightSensitiveMove(enum Move move)
@@ -282,7 +284,8 @@ static enum FieldEffectOutcome BenefitsFromSun(enum BattlerId battler)
 
     if (gAiLogicData->holdEffects[battler] == HOLD_EFFECT_UTILITY_UMBRELLA)
     {
-        if (ability == ABILITY_PROTOSYNTHESIS)
+        if (ability == ABILITY_PROTOSYNTHESIS
+         || IsInnateActive(battler, ABILITY_PROTOSYNTHESIS)) // FORK: innate-aware
             return FIELD_EFFECT_POSITIVE;
         else
             return FIELD_EFFECT_NEUTRAL;

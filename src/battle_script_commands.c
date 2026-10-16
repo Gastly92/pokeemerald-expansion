@@ -10583,6 +10583,7 @@ void BS_TryBoosterEnergy(void)
             continue;
 
         enum Ability ability = GetBattlerAbility(battler);
+        ability = GetBattlerParadoxAbility(battler, ability); // FORK: innate Protosynthesis / Quark Drive (FEATURE_INNATE_ABILITIES)
         if (!(ability == ABILITY_PROTOSYNTHESIS && cmd->onFieldStatus != ON_TERRAIN)
          && !(ability == ABILITY_QUARK_DRIVE && cmd->onFieldStatus != ON_WEATHER))
             continue;

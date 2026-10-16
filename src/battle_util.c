@@ -5293,6 +5293,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         default:
             break;
         }
+        // FORK: the switch above reads the CHOSEN ability, so an innate Protosynthesis
+        // (FEATURE_INNATE_ABILITIES, reserved to the Paradox mons) activates here instead.
+        // See TryActivateInnateParadoxOnField() in src/fork/innate_abilities.c.
+        if (effect == 0 && TryActivateInnateParadoxOnField(battler, ABILITY_PROTOSYNTHESIS))
+            effect++;
         break;
     case ABILITYEFFECT_ON_TERRAIN:  // For ability effects that activate when the field terrain changes.
         gLastUsedAbility = GetBattlerAbility(battler);
@@ -5325,6 +5330,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         default:
             break;
         }
+        // FORK: innate Quark Drive (FEATURE_INNATE_ABILITIES) -- the terrain counterpart of the
+        // innate Protosynthesis hook in ABILITYEFFECT_ON_WEATHER above.
+        if (effect == 0 && TryActivateInnateParadoxOnField(battler, ABILITY_QUARK_DRIVE))
+            effect++;
         break;
     }
 
@@ -5686,11 +5695,19 @@ static void ResetParadoxWeatherStat(enum BattlerId battler)
     if (gBattleMons[battler].ability == ABILITY_PROTOSYNTHESIS
      && !gBattleMons[battler].volatiles.boosterEnergyActivated)
         gBattleMons[battler].volatiles.paradoxBoostedStat = 0;
+    // FORK: an innate Protosynthesis (FEATURE_INNATE_ABILITIES) unlatches its stat with the sun too.
+    if (SpeciesHasInnate(gBattleMons[battler].species, ABILITY_PROTOSYNTHESIS)
+     && !gBattleMons[battler].volatiles.boosterEnergyActivated)
+        gBattleMons[battler].volatiles.paradoxBoostedStat = 0;
 }
 
 static void ResetParadoxTerrainStat(enum BattlerId battler)
 {
     if (gBattleMons[battler].ability == ABILITY_QUARK_DRIVE
+     && !gBattleMons[battler].volatiles.boosterEnergyActivated)
+        gBattleMons[battler].volatiles.paradoxBoostedStat = 0;
+    // FORK: an innate Quark Drive (FEATURE_INNATE_ABILITIES) unlatches its stat with the terrain too.
+    if (SpeciesHasInnate(gBattleMons[battler].species, ABILITY_QUARK_DRIVE)
      && !gBattleMons[battler].volatiles.boosterEnergyActivated)
         gBattleMons[battler].volatiles.paradoxBoostedStat = 0;
 }
@@ -7859,6 +7876,20 @@ static inline u32 CalcAttackStat(struct DamageContext *ctx)
         break;
     }
 
+    // FORK: innate Protosynthesis / Quark Drive (FEATURE_INNATE_ABILITIES, reserved to the Paradox mons)
+    // boost the holder's highest attacking stat exactly like the chosen-ability cases in the switch above;
+    // GetInnateParadoxAbility() returns ABILITY_NONE when the chosen ability already is one, so a mon never
+    // double-applies. The field checks come first to keep the innate lookup off the common path.
+    if ((ctx->weather & B_WEATHER_SUN || ctx->terrain == B_TERRAIN_ELECTRIC
+      || gBattleMons[battlerAtk].volatiles.boosterEnergyActivated)
+     && ctx->innatesEnabled)
+    {
+        enum Ability innateParadox = GetInnateParadoxAbility(battlerAtk, ctx->abilities[battlerAtk]);
+        if ((innateParadox == ABILITY_PROTOSYNTHESIS && (ctx->weather & B_WEATHER_SUN || gBattleMons[battlerAtk].volatiles.boosterEnergyActivated))
+         || (innateParadox == ABILITY_QUARK_DRIVE && (ctx->terrain == B_TERRAIN_ELECTRIC || gBattleMons[battlerAtk].volatiles.boosterEnergyActivated)))
+            modifier = uq4_12_multiply(modifier, GetParadoxAbilityModifier(battlerAtk, move, STAT_ATK, STAT_SPATK));
+    }
+
     // FORK: innate pinch abilities (Overgrow/Blaze/Torrent/Swarm). The chosen-ability switch above
     // leaves a real pinch ability vanilla (boost only while currently <= 1/3 HP); the INNATE version
     // is a pure-boon divergence that LATCHES — once the holder has reached <= 1/3 HP this battle
@@ -8140,6 +8171,18 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
         break;
     default:
         break;
+    }
+
+    // FORK: innate Protosynthesis / Quark Drive (FEATURE_INNATE_ABILITIES) -- the defensive half of the
+    // innate clause in the attack-stat modifiers, mirroring the chosen-ability cases in the switch above.
+    if ((ctx->weather & B_WEATHER_SUN || ctx->terrain == B_TERRAIN_ELECTRIC
+      || gBattleMons[battlerDef].volatiles.boosterEnergyActivated)
+     && ctx->innatesEnabled)
+    {
+        enum Ability innateParadox = GetInnateParadoxAbility(battlerDef, ctx->abilities[battlerDef]);
+        if ((innateParadox == ABILITY_PROTOSYNTHESIS && (ctx->weather & B_WEATHER_SUN || gBattleMons[battlerDef].volatiles.boosterEnergyActivated))
+         || (innateParadox == ABILITY_QUARK_DRIVE && (ctx->terrain == B_TERRAIN_ELECTRIC || gBattleMons[battlerDef].volatiles.boosterEnergyActivated)))
+            modifier = uq4_12_multiply(modifier, GetParadoxAbilityModifier(battlerDef, move, STAT_DEF, STAT_SPDEF));
     }
 
     // FORK: an innate Fur Coat (FEATURE_INNATE_ABILITIES) doubles the holder's Defense against physical

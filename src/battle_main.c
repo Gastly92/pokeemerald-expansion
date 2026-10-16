@@ -4438,6 +4438,14 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
         speed = (GetParadoxBoostedStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
     else if (ability == ABILITY_QUARK_DRIVE && !(gBattleMons[battler].volatiles.transformed) && (gFieldTimers.terrain == B_TERRAIN_ELECTRIC || gBattleMons[battler].volatiles.boosterEnergyActivated))
         speed = (GetParadoxBoostedStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
+    // FORK: innate Protosynthesis / Quark Drive (FEATURE_INNATE_ABILITIES, reserved to the Paradox mons)
+    // raise Speed like the chosen ability. Booster Energy is already covered by the Protosynthesis line
+    // above (its boosterEnergyActivated clause is ability-agnostic), so only the field triggers remain;
+    // they come first so the innate lookup stays off this hot AI turn-order path.
+    else if ((weather & B_WEATHER_SUN) && GetInnateParadoxAbility(battler, ability) == ABILITY_PROTOSYNTHESIS)
+        speed = (GetParadoxBoostedStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
+    else if (gFieldTimers.terrain == B_TERRAIN_ELECTRIC && GetInnateParadoxAbility(battler, ability) == ABILITY_QUARK_DRIVE)
+        speed = (GetParadoxBoostedStatId(battler) == STAT_SPEED) ? (speed * 150) / 100 : speed;
     // FORK: Unburden is also supported as an innate (FEATURE_INNATE_ABILITIES, Batch T); crediting
     // IsInnateActive() here doubles Speed once the holder's item is consumed/lost (the unburdenActive
     // flag is armed innate-aware in CheckSetUnburden) and, since the AI's turn-order prediction runs

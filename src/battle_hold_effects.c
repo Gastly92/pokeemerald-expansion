@@ -61,6 +61,10 @@ enum ItemEffect TryBoosterEnergy(enum BattlerId battler, enum Ability ability)
     if (gBattleMons[battler].volatiles.boosterEnergyActivated || gBattleMons[battler].volatiles.transformed)
         return ITEM_NO_EFFECT;
 
+    // FORK: an innate Protosynthesis / Quark Drive (FEATURE_INNATE_ABILITIES) uses Booster Energy like the
+    // chosen ability; a mon with neither keeps `ability` unchanged and falls through as before.
+    ability = GetBattlerParadoxAbility(battler, ability);
+
     if (((ability == ABILITY_PROTOSYNTHESIS) && !(GetWeather() & B_WEATHER_SUN))
      || ((ability == ABILITY_QUARK_DRIVE) && gFieldTimers.terrain != B_TERRAIN_ELECTRIC))
     {
@@ -69,6 +73,8 @@ enum ItemEffect TryBoosterEnergy(enum BattlerId battler, enum Ability ability)
         gBattlerAbility = gBattleScripting.battler = battler;
         gBattleMons[battler].volatiles.boosterEnergyActivated = TRUE;
         RecordAbilityBattle(battler, ability);
+        if (ability != GetBattlerAbility(battler)) // FORK: the pop-up and {B_SCR_ABILITY} name the innate
+            gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ability;
         BattleScriptCall(BattleScript_BoosterEnergy);
         effect = ITEM_EFFECT_OTHER;
     }
