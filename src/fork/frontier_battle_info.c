@@ -467,13 +467,15 @@ static void DrawFieldPage(u8 windowId)
         y += LINE_H;
     }
 
+    // Remaining turns in brackets, like the Field row; a timer of 0 means the weather
+    // or terrain is indefinite (primal/ability weather) or absent, so nothing is shown.
     p = StringCopy(line, COMPOUND_STRING("Weather: "));
-    StringAppend(p, GetInfoWeatherName());
+    AppendTimedEntry(p, GetInfoWeatherName(), gBattleWeather ? gBattleStruct->weatherDuration : 0);
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
     p = StringCopy(line, COMPOUND_STRING("Terrain: "));
-    StringAppend(p, GetInfoTerrainName());
+    AppendTimedEntry(p, GetInfoTerrainName(), gFieldTimers.terrain ? gFieldTimers.terrainTimer : 0);
     PrintLine(windowId, line, 0, y);
     y += LINE_H;
 
@@ -917,19 +919,30 @@ static const u8 *GetStatus1Name(u32 status1)
 // Builds a space-separated list of the battler's primary status + notable
 // volatile conditions, or "None". Curated to the conditions a player would
 // track, not every internal volatile flag.
+// Turns left are shown in brackets, counted like the Field page's (n = ends at the
+// end of the n-th turn from now, this one included). A duration only shows when
+// the game makes it knowable: a random roll (vanilla sleep, older-gen Taunt/Encore/
+// Disable, binding moves) stays hidden, as it would in a cartridge battle. Confusion
+// never shows one - under DETERMINISTIC_STATUS it is a one-time self-hit, not a timer.
 static void BuildConditionLine(u8 *dst, enum BattlerId battler)
 {
     u8 *p = dst;
     const u8 *status = GetStatus1Name(gBattleMons[battler].status1);
     struct Volatiles *v = &gBattleMons[battler].volatiles;
+    bool32 fixedStatus = GetConfig(DETERMINISTIC_STATUS);
 
     *p = EOS;
-    if (status != NULL)
+    // Sleep: the counter is decremented on each move attempt and the battler wakes
+    // and acts on the attempt that zeroes it, so counter - 1 is the actions it still
+    // loses. Early Bird (which halves that) is not reflected, so as not to reveal it.
+    if (status != NULL && (gBattleMons[battler].status1 & STATUS1_SLEEP) && fixedStatus)
+        p = AppendTimedEntry(p, status, (gBattleMons[battler].status1 & STATUS1_SLEEP) - 1);
+    else if (status != NULL)
         p = AppendEntry(p, status, 1);
     if (v->confusionTimer)
         p = AppendEntry(p, COMPOUND_STRING("Confusion"), 1);
     if (v->infatuation)
-        p = AppendEntry(p, COMPOUND_STRING("Infatuation"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Infatuation"), fixedStatus ? v->infatuationTimer : 0);
     if (v->leechSeed)
         p = AppendEntry(p, COMPOUND_STRING("Leech Seed"), 1);
     if (v->nightmare)
@@ -937,35 +950,35 @@ static void BuildConditionLine(u8 *dst, enum BattlerId battler)
     if (v->cursed)
         p = AppendEntry(p, COMPOUND_STRING("Curse"), 1);
     if (v->perishSong)
-        p = AppendEntry(p, COMPOUND_STRING("Perish Song"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Perish Song"), v->perishSongTimer + 1); // faints when the count reaches 0
     if (v->yawn)
-        p = AppendEntry(p, COMPOUND_STRING("Drowsy"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Drowsy"), v->yawn);
     if (v->saltCure)
         p = AppendEntry(p, COMPOUND_STRING("Salt Cure"), 1);
     if (v->wrapped)
-        p = AppendEntry(p, COMPOUND_STRING("Trapped"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Trapped"), GetConfig(DETERMINISTIC_MOVE_RESULTS) ? v->wrapTurns + 1 : 0); // freed the end-turn after the last hit
     if (v->substitute)
         p = AppendEntry(p, COMPOUND_STRING("Substitute"), 1);
     if (v->tauntTimer)
-        p = AppendEntry(p, COMPOUND_STRING("Taunt"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Taunt"), GetConfig(B_TAUNT_TURNS) >= GEN_5 ? v->tauntTimer : 0);
     if (v->encoredMove)
-        p = AppendEntry(p, COMPOUND_STRING("Encore"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Encore"), GetConfig(B_ENCORE_TURNS) >= GEN_5 ? v->encoreTimer : 0);
     if (v->disabledMove)
-        p = AppendEntry(p, COMPOUND_STRING("Disable"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Disable"), B_DISABLE_TURNS >= GEN_5 ? v->disableTimer : 0);
     if (v->torment)
-        p = AppendEntry(p, COMPOUND_STRING("Torment"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Torment"), v->tormentTimer);
     if (v->healBlockTimer)
-        p = AppendEntry(p, COMPOUND_STRING("Heal Block"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Heal Block"), v->healBlockTimer);
     if (v->embargoTimer)
-        p = AppendEntry(p, COMPOUND_STRING("Embargo"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Embargo"), v->embargoTimer);
     if (v->root)
         p = AppendEntry(p, COMPOUND_STRING("Ingrain"), 1);
     if (v->aquaRing)
         p = AppendEntry(p, COMPOUND_STRING("Aqua Ring"), 1);
     if (v->magnetRiseTimer)
-        p = AppendEntry(p, COMPOUND_STRING("Magnet Rise"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Magnet Rise"), v->magnetRiseTimer);
     if (v->telekinesis)
-        p = AppendEntry(p, COMPOUND_STRING("Telekinesis"), 1);
+        p = AppendTimedEntry(p, COMPOUND_STRING("Telekinesis"), v->telekinesisTimer);
     if (v->smackDown)
         p = AppendEntry(p, COMPOUND_STRING("Grounded"), 1);
     if (v->electrified)
