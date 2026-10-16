@@ -3069,6 +3069,10 @@ TEST("Innate abilities: Mega forms inherit later-added base innates")
     EXPECT(SpeciesHasInnate(SPECIES_GARCHOMP, ABILITY_SAND_VEIL));
     EXPECT(SpeciesHasInnate(SPECIES_GARCHOMP_MEGA, ABILITY_SAND_VEIL));
     EXPECT(SpeciesHasInnate(SPECIES_GARCHOMP_MEGA_Z, ABILITY_SAND_VEIL));
+    // Mega Garchomp Z's own upstream ability is Levitate; the override table repoints every real
+    // slot at Sand Stream, so the innate is the only place it survives.
+    EXPECT(gSpeciesInfo[SPECIES_GARCHOMP_MEGA_Z].abilities[0] == ABILITY_LEVITATE);
+    EXPECT(SpeciesHasInnate(SPECIES_GARCHOMP_MEGA_Z, ABILITY_LEVITATE));
     // Absol's Pressure rides through both Mega variants.
     EXPECT(SpeciesHasInnate(SPECIES_ABSOL_MEGA, ABILITY_PRESSURE));
     EXPECT(SpeciesHasInnate(SPECIES_ABSOL_MEGA_Z, ABILITY_PRESSURE));
@@ -10871,9 +10875,10 @@ TEST("Innate abilities: every pre-evolution of a species with innates has a row"
 // Mega Darkrai had lost base Darkrai's Bad Dreams (a live trait loss, since Bad Dreams is Darkrai's
 // sole real ability and its sets take an override), and Rockruff-Own-Tempo's row was a copy of base
 // Rockruff's, missing the one ability the two species differ by. Both are now fixed and pinned by
-// their own assertions above. The remaining six stay as they are: Riolu (the same Steadfast carve-out
+// their own assertions above. Mega Garchomp Z (missing its own Levitate) has since been fixed the
+// same way. The remaining ones stay as they are: Riolu (the same Steadfast carve-out
 // as Lucario), Duraludon and its G-Max (Heavy Metal, which contradicts their innate Light Metal),
-// Mega Garchomp Z, and the 62 Alcremie decoration forms, which have no innate row at all -- a
+// and the 62 Alcremie decoration forms, which have no innate row at all -- a
 // separate gap rather than this one. Widening this gate to the dex is a one-line change here, once
 // those rows are settled.
 

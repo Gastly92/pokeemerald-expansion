@@ -1668,9 +1668,8 @@ row did not say. That one was never a loss in battle (Own Tempo is the form's on
 ability, so it is always the chosen one too) — it is redundant-but-correct, the way the
 Oricorio forms carry Dancer, and it survives a Skill Swap or Gastro Acid.
 
-The other six are fine as they are: Riolu (Lucario's carve-out again), Duraludon and its
-G-Max (Heavy Metal against their innate Light Metal), Mega Garchomp Z, and the 62
-Alcremie decoration forms, which have no innate row at all — a separate gap, not this one.
+The rest are either the same contradiction carve-outs as the roster's exemptions or forms
+with no innate row at all — a separate gap, not this one.
 
 The general lesson is the Mega Darkrai one: **a gate is worth dry-running one scope wider
 than you intend to ship it.** The roster scope found nothing; the scope around it found a

@@ -1250,8 +1250,8 @@ alone: innates are a battle-only feature (no battle state out of battle). Canon-
 picks — evasion is a contentious, can-be-frustrating mechanic, so like Prankster / the potent
 abilities the set stays tight to species whose ability data carries it in any slot): the signature
 survives whichever slot a build picks (Garchomp's slot-1 Sand Veil, Gliscor's, Donphan's HA, etc.).
-Forms are listed only where the form's ability data still carries it (Garchomp-Mega-Z keeps Sand Veil,
-but the regular Garchomp-Mega swaps to Sand Force and is omitted; Sandaconda-Gmax keeps Sand Veil;
+Forms are listed only where the form's ability data still carries it, plus the Mega mirrors (both
+Garchomp Megas keep it, though their own data swaps to Sand Force / Levitate; Sandaconda-Gmax keeps Sand Veil;
 Vanilluxe / Cetitan / Tyranitar lose it on evolving and are omitted, so only the pre-evos get it).
 Many species already carry other innates (Sandshrew/Sandslash's Sand Rush, the Geodude line and
 Donphan's Sturdy, Stunfisk's Limber, the Swinub line's Oblivious, Articuno's Pressure, the Vanillite
