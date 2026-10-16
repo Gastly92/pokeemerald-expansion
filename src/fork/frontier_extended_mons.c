@@ -11795,7 +11795,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHIMECHO,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY,
+        .heldItem = ITEM_METRONOME,
         .moves =
         {
             MOVE_HEAL_BELL,
@@ -14489,7 +14489,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GARCHOMP,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_PERSIM_BERRY,
         .moves =
         {
             MOVE_SWORDS_DANCE,
@@ -22822,7 +22822,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_TYRANTRUM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_PERSIM_BERRY,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -23807,7 +23807,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VOLCANION,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_STARF_BERRY,
         .moves =
         {
             MOVE_SUBSTITUTE,
@@ -28895,7 +28895,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_FROSMOTH,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_STARF_BERRY,
         .moves =
         {
             MOVE_QUIVER_DANCE,
