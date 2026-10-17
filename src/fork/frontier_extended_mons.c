@@ -1249,7 +1249,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CLEFABLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_WEAKNESS_POLICY,
+        .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
             MOVE_COSMIC_POWER,
