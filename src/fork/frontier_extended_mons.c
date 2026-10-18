@@ -4173,7 +4173,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRILL_RUN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -4193,7 +4193,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AGILITY,
             MOVE_ICICLE_CRASH
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
