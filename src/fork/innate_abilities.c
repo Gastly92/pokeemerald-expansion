@@ -111,7 +111,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0005
         SPECIES_CHARMELEON,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_REKINDLE
         )
     },
     { // 0006
@@ -119,7 +120,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_COMPETITIVE,
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_REKINDLE
         )
     },
     { // 0006
@@ -128,6 +130,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_COMPETITIVE,
             ABILITY_DEFIANT,
+            ABILITY_REKINDLE,
             ABILITY_TOUGH_CLAWS
         )
     },
@@ -136,7 +139,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_COMPETITIVE,
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_REKINDLE
         )
     },
     { // 0006
@@ -144,7 +148,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_COMPETITIVE,
-            ABILITY_DEFIANT
+            ABILITY_DEFIANT,
+            ABILITY_REKINDLE
         )
     },
     { // 0007
@@ -13223,6 +13228,7 @@ static bool32 IsActiveOnHitAttackerInnate(enum Ability ability)
     case ABILITY_CHILLING_NEIGH: // raises Attack +1 for each foe the holder knocks out this move (Moxie clone)
     case ABILITY_GRIM_NEIGH:     // raises Sp. Atk +1 for each foe the holder knocks out this move (Moxie clone)
     case ABILITY_BEAST_BOOST:    // raises the holder's HIGHEST stat +1 for each foe it knocks out this move (Moxie, best-stat edition)
+    case ABILITY_REKINDLE:       // heals 1/4 max HP for each battler the holder knocks out this move (Moxie's trigger, a heal)
         return TRUE;
     default:
         return FALSE;

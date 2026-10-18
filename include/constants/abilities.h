@@ -366,6 +366,7 @@ enum __attribute__((packed)) Ability
     ABILITY_HALO = FORK_ABILITY_BASE, // FORK: field-wide damage cap, paid for in the holder's PP. See src/fork/halo.c + fork-docs/NEW_ABILITIES.md.
     ABILITY_PSYCHIC_AFFINITY,         // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.
     ABILITY_WATER_AFFINITY,           // FORK: "Affinity" family — grants a latent 3rd type in battle. See src/fork/type_affinity.c + fork-docs/NEW_ABILITIES.md.
+    ABILITY_REKINDLE,                 // FORK: heals 1/4 max HP per battler the holder knocks out; designed as an innate. See src/fork/rekindle.c + fork-docs/NEW_ABILITIES.md.
 
     // FORK: was `= ABILITIES_COUNT_GEN9`; it now has to span the fork block above.
     // On conflict, keep this definition and re-apply upstream's change to

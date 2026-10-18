@@ -273,6 +273,11 @@
 //   (activation, Booster Energy, the attack/defense/Speed modifiers, the field-end reset, the AI's
 //   field-benefit and switch-in reads), all through GetInnateParadoxAbility(). Each Paradox mon's freed
 //   slot carries a species ability override.
+//   REKINDLE (the fork's own ability, the first one designed as an innate): heals 1/4 max HP for each
+//   battler the holder knocks out with a move. Rides the attacker-side on-hit driver exactly like Moxie —
+//   a one-line addition to IsActiveOnHitAttackerInnate delegating to the ABILITYEFFECT_MOVE_END_FOES_FAINTED
+//   case, whose logic lives in src/fork/rekindle.c. Not breakable; no AI wiring. Carriers: Charmeleon and
+//   every Charizard form.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

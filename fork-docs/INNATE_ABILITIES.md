@@ -4489,3 +4489,24 @@ chosen ability already is one so nothing double-applies:
 Tests: `test/fork/innate_paradox.c` (sun / terrain / switch-in activation, the damage and Speed boosts,
 Booster Energy, Gastro Acid, feature off). Upstream's own Protosynthesis, Quark Drive and Booster Energy
 tests run flag-off and are unaffected.
+
+### ABILITY_REKINDLE
+
+**The fork's own ability, and the first one designed as an innate** (its definition and
+rationale are in [`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-rekindle)). Heals 1/4 max HP
+for each battler the holder knocks out with a move.
+
+**Wiring.** A one-line addition to `IsActiveOnHitAttackerInnate` (`src/fork/innate_abilities.c`),
+the attacker-side on-hit driver Moxie uses. It delegates to the
+`ABILITYEFFECT_MOVE_END_FOES_FAINTED` case, whose `ABILITY_REKINDLE` arm calls
+`TryActivateRekindle()` in `src/fork/rekindle.c`. The pop-up is overwritten to the innate when
+the chosen ability differs (the Moxie precedent), and an innate equal to the chosen ability is
+skipped, so it never fires twice.
+
+**No `DETERMINISTIC_*` surface and no AI wiring.** It fires at 100% on a KO. Not breakable;
+suppressed by Gastro Acid and Neutralizing Gas through `IsInnateActive()`.
+
+**Species.** Charmeleon and every Charizard form (base, Mega X, Mega Y, Gmax). Charmander is
+left out: its flavor is the tail flame as life force, not fighting spirit. No frontier set gave
+any of these a chosen Rekindle, so there is no Step 3.5 work.
+

@@ -19,6 +19,10 @@ a different shape of effect: where an Affinity ability changes only its *holder*
 **aura** whose effect applies to every battler on the field, and where Affinity pays for
 itself with a type weakness, Halo pays for itself in **PP**.
 
+A third, **`Rekindle`** (an innate of **Charmeleon** and every **Charizard** form), is the
+exception to the design rule below: it has no downside and was built to be an
+**innate**. See its [case study](#case-study-rekindle).
+
 ## Design first: is this an ability, or an innate?
 
 Before writing any code, decide which fork mechanism you want — they are **opposites**, and
@@ -39,6 +43,13 @@ downside disqualifies it as an innate, which conversely makes it a maximally **s
 for the ability-override table — the innate sweeps that periodically re-point override
 abilities never have to touch it (see the stability rule in
 `src/fork/species_ability_overrides.c`).
+
+**The exception: a new ability built to be an innate.** When no existing ability expresses the
+pure boon you want for a line, define a new one and put it on the innate allowlist instead of an
+override. It has to pass the innate gates ([`INNATE_ABILITIES.md`](INNATE_ABILITIES.md)) instead
+of having a downside, and it gets both recipes: this doc's Steps 1-4 for the ability itself, and
+the innate doc's Steps 2-5 for the allowlist, the driver hook and the species rows. Rekindle is
+the worked example.
 
 ## Where custom ability ids live
 
@@ -315,3 +326,33 @@ Covered by `test/battle/ability/halo.c`.
 species (Togekiss, Comfey, Blissey, Audino, Sylveon, Alcremie) can simply be given the same
 ability rather than a variant of it. Wigglytuff was the first such addition, via the Jigglypuff
 line review.
+
+## Case study: Rekindle
+
+**`Rekindle`** (`ABILITY_REKINDLE`) is the fork's first ability designed to be an
+**innate**: a pure boon with no downside.
+
+> Each battler the holder knocks out with a move restores **1/4 of its max HP**
+> (`REKINDLE_HEAL_FRACTION`). A double KO heals twice as much.
+
+**Flavor.** It completes a set: Venusaur has an innate Regenerator and Blastoise an innate Rain
+Dish, so with Rekindle on Charmeleon and Charizard all three Kanto starters can heal through
+an innate. The name is about fighting spirit, not fire, so it can go on non-Fire lines.
+
+**Trigger.** It is Moxie's trigger with a heal in place of a stat boost. The
+`ABILITYEFFECT_MOVE_END_FOES_FAINTED` case in `src/battle_util.c` calls
+`TryActivateRekindle()` (`src/fork/rekindle.c`) with `NumFaintedBattlersByAttacker()`, so it
+counts exactly what Moxie and Beast Boost count, the holder's own ally included. As an innate
+it goes through the attacker-side on-hit driver (`IsActiveOnHitAttackerInnate`), which
+delegates to that same case.
+
+**It does not fire** at full HP, under Heal Block, or when the KO ends the battle. The heal is
+based on the non-Dynamax max HP, like Rain Dish, and never overshoots max HP. There is no
+randomness and no AI wiring yet.
+
+**Script.** It reuses upstream's `BattleScript_AbilityHpHeal` (pop-up, heal animation, HP bar),
+like Rain Dish. Like Moxie and the other HP-healing abilities, it has no message of its own;
+the pop-up says what happened.
+
+Covered by `test/fork/rekindle.c`. The first carriers are Charmeleon and Charizard (base,
+Mega X, Mega Y, Gmax). A sweep for other lines with fitting flavor is a planned follow-up.
