@@ -19,7 +19,7 @@ a different shape of effect: where an Affinity ability changes only its *holder*
 **aura** whose effect applies to every battler on the field, and where Affinity pays for
 itself with a type weakness, Halo pays for itself in **PP**.
 
-A third, **`Rekindle`** (an innate of **Charmeleon** and every **Charizard** form), is the
+A third, **`Rekindle`** (an innate of Charizard and other Fire lines), is the
 exception to the design rule below: it has no downside and was built to be an
 **innate**. See its [case study](#case-study-rekindle).
 
@@ -336,7 +336,7 @@ line review.
 > (`REKINDLE_HEAL_FRACTION`). A double KO heals twice as much.
 
 **Flavor.** It completes a set: Venusaur has an innate Regenerator and Blastoise an innate Rain
-Dish, so with Rekindle on Charmeleon and Charizard all three Kanto starters can heal through
+Dish, so with Rekindle on the Charmander line all three Kanto starters can heal through
 an innate. The name is about fighting spirit, not fire, so it can go on non-Fire lines.
 
 **Trigger.** It is Moxie's trigger with a heal in place of a stat boost. The
@@ -354,5 +354,5 @@ randomness and no AI wiring yet.
 like Rain Dish. Like Moxie and the other HP-healing abilities, it has no message of its own;
 the pop-up says what happened.
 
-Covered by `test/fork/rekindle.c`. The first carriers are Charmeleon and Charizard (base,
-Mega X, Mega Y, Gmax). A sweep for other lines with fitting flavor is a planned follow-up.
+Covered by `test/fork/rekindle.c`. It is carried by a "burning fire" set of Fire lines; the list
+and rationale are in [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_rekindle).

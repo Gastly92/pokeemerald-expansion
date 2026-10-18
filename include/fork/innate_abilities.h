@@ -276,8 +276,8 @@
 //   REKINDLE (the fork's own ability, the first one designed as an innate): heals 1/4 max HP for each
 //   battler the holder knocks out with a move. Rides the attacker-side on-hit driver exactly like Moxie —
 //   a one-line addition to IsActiveOnHitAttackerInnate delegating to the ABILITYEFFECT_MOVE_END_FOES_FAINTED
-//   case, whose logic lives in src/fork/rekindle.c. Not breakable; no AI wiring. Carriers: Charmeleon and
-//   every Charizard form.
+//   case, whose logic lives in src/fork/rekindle.c. Not breakable; no AI wiring. Carriers: a "burning
+//   fire" flavor set of Fire lines (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

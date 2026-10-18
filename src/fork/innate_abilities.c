@@ -105,7 +105,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0004
         SPECIES_CHARMANDER,
         INNATES(
-            ABILITY_BLAZE
+            ABILITY_BLAZE,
+            ABILITY_REKINDLE
         )
     },
     { // 0005
@@ -878,7 +879,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRISK,
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_REKINDLE
         )
     },
     { // 0058
@@ -886,6 +888,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
+            ABILITY_REKINDLE,
             ABILITY_ROCK_HEAD
         )
     },
@@ -896,6 +899,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
             ABILITY_JUSTIFIED,
+            ABILITY_REKINDLE,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -904,6 +908,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
+            ABILITY_REKINDLE,
             ABILITY_ROCK_HEAD,
             ABILITY_STRONG_JAW
         )
@@ -1120,6 +1125,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PONYTA,
         INNATES(
             ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST
         )
     },
@@ -1136,6 +1142,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RAPIDASH,
         INNATES(
             ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST
         )
     },
@@ -1745,6 +1752,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_IRON_FIST,
+            ABILITY_REKINDLE,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -2015,7 +2023,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_MAGMA_ARMOR,
             ABILITY_PRESSURE,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_REKINDLE
         )
     },
     { // 0146
@@ -2141,7 +2150,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_INTIMIDATE,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_REKINDLE
         )
     },
     { // 0156
@@ -2149,7 +2159,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_INTIMIDATE,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_REKINDLE
         )
     },
     { // 0157
@@ -2157,7 +2168,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_INTIMIDATE,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_REKINDLE
         )
     },
     { // 0157
@@ -2166,7 +2178,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_FRISK,
             ABILITY_INTIMIDATE,
-            ABILITY_QUICK_FEET
+            ABILITY_QUICK_FEET,
+            ABILITY_REKINDLE
         )
     },
     { // 0158
@@ -3223,6 +3236,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MAGBY,
         INNATES(
             ABILITY_IRON_FIST,
+            ABILITY_REKINDLE,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -3260,6 +3274,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS,
             ABILITY_MAGMA_ARMOR,
             ABILITY_PRESSURE,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST
         )
     },
@@ -3318,6 +3333,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_PRESSURE,
             ABILITY_REGENERATOR,
+            ABILITY_REKINDLE,
             ABILITY_SERENE_GRACE
         )
     },
@@ -3372,6 +3388,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_IRON_FIST,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST
         )
     },
@@ -3381,6 +3398,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_IRON_FIST,
             ABILITY_RECKLESS,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST
         )
     },
@@ -3390,6 +3408,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_IRON_FIST,
             ABILITY_RECKLESS,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST
         )
     },
@@ -3399,6 +3418,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_IRON_FIST,
             ABILITY_RECKLESS,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST
         )
     },
@@ -4836,7 +4856,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_INNER_FOCUS,
             ABILITY_IRON_FIST,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_REKINDLE
         )
     },
     { // 0391
@@ -4845,7 +4866,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_INNER_FOCUS,
             ABILITY_IRON_FIST,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_REKINDLE
         )
     },
     { // 0392
@@ -4854,7 +4876,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_INNER_FOCUS,
             ABILITY_IRON_FIST,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_REKINDLE
         )
     },
     { // 0393
@@ -5623,6 +5646,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INTIMIDATE,
             ABILITY_IRON_FIST,
             ABILITY_MEGA_LAUNCHER,
+            ABILITY_REKINDLE,
             ABILITY_VITAL_SPIRIT
         )
     },
@@ -6075,6 +6099,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VICTINI,
         INNATES(
             ABILITY_PRESSURE,
+            ABILITY_REKINDLE,
             ABILITY_SERENE_GRACE,
             ABILITY_SUPER_LUCK,
             ABILITY_TELEPATHY
@@ -6110,6 +6135,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_GLUTTONY,
+            ABILITY_REKINDLE,
             ABILITY_THICK_FAT
         )
     },
@@ -6118,6 +6144,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_GLUTTONY,
+            ABILITY_REKINDLE,
             ABILITY_THICK_FAT
         )
     },
@@ -6128,6 +6155,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_GLUTTONY,
             ABILITY_IRON_FIST,
             ABILITY_RECKLESS,
+            ABILITY_REKINDLE,
             ABILITY_THICK_FAT
         )
     },
@@ -6139,6 +6167,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_IRON_FIST,
             ABILITY_MOLD_BREAKER,
             ABILITY_RECKLESS,
+            ABILITY_REKINDLE,
             ABILITY_THICK_FAT
         )
     },
@@ -6273,7 +6302,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_GLUTTONY,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE
         )
     },
     { // 0514
@@ -6281,7 +6311,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_GLUTTONY,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE
         )
     },
     { // 0515
@@ -6683,7 +6714,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DARUMAKA,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE
         )
     },
     { // 0554
@@ -6698,14 +6730,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DARMANITAN,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE
         )
     },
     { // 0555
         SPECIES_DARMANITAN_ZEN,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE
         )
     },
     { // 0555
@@ -7271,6 +7305,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_REKINDLE,
             ABILITY_SHADOW_TAG
         )
     },
@@ -7280,6 +7315,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_REKINDLE,
             ABILITY_SHADOW_TAG
         )
     },
@@ -7289,6 +7325,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_REKINDLE,
             ABILITY_SHADOW_TAG
         )
     },
@@ -7298,6 +7335,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_REKINDLE,
             ABILITY_SHADOW_TAG
         )
     },
@@ -7514,6 +7552,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GLUTTONY,
             ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE,
             ABILITY_WHITE_SMOKE
         )
     },
@@ -7903,6 +7942,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BIG_PECKS,
             ABILITY_GALE_WINGS,
+            ABILITY_REKINDLE,
             ABILITY_STAKEOUT
         )
     },
@@ -7911,6 +7951,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BIG_PECKS,
             ABILITY_GALE_WINGS,
+            ABILITY_REKINDLE,
             ABILITY_STAKEOUT
         )
     },
@@ -8459,6 +8500,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_MOXIE,
+            ABILITY_REKINDLE,
             ABILITY_UNNERVE
         )
     },
@@ -8467,6 +8509,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_MOXIE,
+            ABILITY_REKINDLE,
             ABILITY_UNNERVE
         )
     },
@@ -8475,6 +8518,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_MOXIE,
+            ABILITY_REKINDLE,
             ABILITY_UNNERVE
         )
     },
@@ -9359,7 +9403,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_INTIMIDATE,
-            ABILITY_IRON_FIST
+            ABILITY_IRON_FIST,
+            ABILITY_REKINDLE
         )
     },
     { // 0726
@@ -9367,7 +9412,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_INTIMIDATE,
-            ABILITY_IRON_FIST
+            ABILITY_IRON_FIST,
+            ABILITY_REKINDLE
         )
     },
     { // 0727
@@ -9375,7 +9421,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_INTIMIDATE,
-            ABILITY_IRON_FIST
+            ABILITY_IRON_FIST,
+            ABILITY_REKINDLE
         )
     },
     { // 0728
@@ -10555,6 +10602,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SCORBUNNY,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST,
             ABILITY_THICK_FAT
         )
@@ -10563,6 +10611,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RABOOT,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST,
             ABILITY_THICK_FAT
         )
@@ -10571,6 +10620,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CINDERACE,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST,
             ABILITY_THICK_FAT
         )
@@ -10579,6 +10629,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CINDERACE_GMAX,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_REKINDLE,
             ABILITY_SPEED_BOOST,
             ABILITY_THICK_FAT
         )
@@ -11713,6 +11764,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_HEALER,
             ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE,
             ABILITY_UNAWARE
         )
     },
@@ -11961,7 +12013,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHARCADET,
         INNATES(
             ABILITY_BATTLE_ARMOR,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE
         )
     },
     { // 0936
@@ -11970,7 +12023,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BATTLE_ARMOR,
             ABILITY_FILTER,
             ABILITY_MAGMA_ARMOR,
-            ABILITY_MEGA_LAUNCHER
+            ABILITY_MEGA_LAUNCHER,
+            ABILITY_REKINDLE
         )
     },
     { // 0937
@@ -11979,6 +12033,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BATTLE_ARMOR,
             ABILITY_CURSED_BODY,
             ABILITY_MAGMA_ARMOR,
+            ABILITY_REKINDLE,
             ABILITY_SHARPNESS
         )
     },
