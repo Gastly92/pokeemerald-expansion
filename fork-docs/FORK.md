@@ -19,7 +19,7 @@ doc below. A row records only what neither of those can — status, and the poin
 |---|---|
 | [`DETERMINISM.md`](DETERMINISM.md) | The `DETERMINISTIC_*` project — rationale + per-flag mechanics |
 | [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) | Innate abilities, the species ability-override table, per-ability wiring, how to add one |
-| [`NEW_ABILITIES.md`](NEW_ABILITIES.md) | Custom abilities (Affinity, Halo) and how to add one |
+| [`NEW_ABILITIES.md`](NEW_ABILITIES.md) | Custom abilities (Affinity, Halo, Rekindle) and how to add one |
 | [`NEW_TYPES.md`](NEW_TYPES.md) | Re-typing a species |
 | [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md) | Converting a facility to 6v6 + endless, per-facility status, the Factory and Tower as worked examples |
 | [`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md) | The extended roster, the species tier map, and the draft rules |
@@ -112,6 +112,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | New types | `FEATURE_NEW_TYPES` | `config/feature.h`, `src/fork/new_types.c` | ✅ | Re-types selected species everywhere from one hook (first: Galarian Ponyta/Rapidash → Fire/Fairy). [Details](NEW_TYPES.md) · `test/fork/new_types.c` |
 | Custom abilities (Affinity family) | _(data; no flag)_ | `src/fork/type_affinity.c` | ✅ | An Affinity gives its holder a latent third type in battle, weaknesses included. [Details](NEW_ABILITIES.md) |
 | Custom abilities (Halo) | _(data; no flag)_ | `src/fork/halo.c` | ✅ | While its holder is out, no single hit can take more than 40% of any battler's max HP; the holder pays +1 PP per move. [Details](NEW_ABILITIES.md#case-study-halo) |
+| Custom abilities (Rekindle) | _(data; no flag)_ | `src/fork/rekindle.c` | ✅ | Heals 1/4 max HP for each battler its holder knocks out; built as an innate, on Charmeleon and Charizard. [Details](NEW_ABILITIES.md#case-study-rekindle) · `test/fork/rekindle.c` |
 | Item-free battle gimmicks | `FEATURE_FREE_GIMMICKS` | `config/feature.h`, `src/battle_gimmick.c` | ✅ | Mega, Z-Moves, Ultra Burst, Tera and Dynamax need no items, with a per-mon picker among them. [Details](FREE_GIMMICKS.md) · `test/fork/free_gimmicks.c` |
 | Sand Spit weather animation fix | _(fix; no new flag)_ | `src/battle_util.c`, `src/battle_script_commands.c` | ✅ | Sand Spit no longer plays a garbage animation that could hang the battle. `test/fork/weather_ability_animation.c` |
 | Illusion survives a form-change gfx reload | _(fix; no new flag)_ | `src/battle_gfx_sfx_util.c` | ✅ | A disguised battler's sprite is no longer repainted as its true species when Dynamax ends. `test/fork/illusion_dynamax.c` |

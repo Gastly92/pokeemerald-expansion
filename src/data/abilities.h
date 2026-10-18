@@ -2600,4 +2600,14 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Also gains a Water type."),
         .aiRating = 5,
     },
+
+    // FORK: the first custom ability designed to be an innate (a pure boon, no downside). Each
+    // battler the holder knocks out with a move restores 1/4 of its max HP -- Moxie's trigger with
+    // a heal instead of a stat boost. See src/fork/rekindle.c and fork-docs/NEW_ABILITIES.md.
+    [ABILITY_REKINDLE] =
+    {
+        .name = _("Rekindle"),
+        .description = COMPOUND_STRING("Heals 1/4 HP on each KO."),
+        .aiRating = 6,
+    },
 };

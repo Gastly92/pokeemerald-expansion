@@ -11,6 +11,7 @@
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
 #include "fork/halo.h" // FORK: Halo (field-wide per-hit damage cap)
+#include "fork/rekindle.h" // FORK: Rekindle (heal on KO)
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "battle_interface.h"
 #include "battle_setup.h"
@@ -5040,6 +5041,9 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                     effect = TRUE;
                 }
             }
+            break;
+        case ABILITY_REKINDLE: // FORK: heal on KO, chosen or innate. Logic in src/fork/rekindle.c; keep this case on conflict.
+            effect = TryActivateRekindle(battler, ability, NumFaintedBattlersByAttacker(battler));
             break;
         case ABILITY_BATTLE_BOND:
             {

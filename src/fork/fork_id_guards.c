@@ -42,7 +42,8 @@ STATIC_ASSERT(ABILITY_HALO == FORK_ABILITY_BASE, ForkAbilityBlockNotAtBase);
 // The fork block must stay contiguous and ordered, so ABILITIES_COUNT spans all of it.
 STATIC_ASSERT(ABILITY_PSYCHIC_AFFINITY == ABILITY_HALO + 1, ForkAbilityBlockNotContiguous1);
 STATIC_ASSERT(ABILITY_WATER_AFFINITY == ABILITY_PSYCHIC_AFFINITY + 1, ForkAbilityBlockNotContiguous2);
-STATIC_ASSERT(ABILITY_WATER_AFFINITY < ABILITIES_COUNT, ForkAbilityIdOutOfRange);
+STATIC_ASSERT(ABILITY_REKINDLE == ABILITY_WATER_AFFINITY + 1, ForkAbilityBlockNotContiguous3);
+STATIC_ASSERT(ABILITY_REKINDLE < ABILITIES_COUNT, ForkAbilityIdOutOfRange);
 
 // gAbilitiesInfo[] is now sparse between upstream's run and the fork block. Anything
 // that ITERATES the ability space (rather than indexing a known ability) has to skip
