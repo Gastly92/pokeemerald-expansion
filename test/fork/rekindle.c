@@ -123,22 +123,37 @@ SINGLE_BATTLE_TEST("Rekindle does not activate when a foe faints to indirect dam
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle heals Charizard when it knocks out a foe")
+// The innate tests use whichever species carries Rekindle first, so they test the wiring rather
+// than any one species row. The carrier list itself lives in src/fork/innate_abilities.c.
+static enum Species FindRekindleCarrier(void)
+{
+    enum Species species;
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_REKINDLE))
+            return species;
+    }
+    return SPECIES_NONE;
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle heals the holder when it knocks out a foe")
 {
     bool32 enabled;
+    enum Species species = FindRekindleCarrier();
     PARAMETRIZE { enabled = TRUE; }
     PARAMETRIZE { enabled = FALSE; }
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_CHARIZARD, ABILITY_REKINDLE));
+        ASSUME(species != SPECIES_NONE);
+        ASSUME(gSpeciesInfo[species].abilities[0] != ABILITY_REKINDLE);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_CHARIZARD) { Ability(ABILITY_BLAZE); HP(1); Moves(MOVE_SCRATCH); } // chosen Blaze; Rekindle only as innate
+        PLAYER(species) { Ability(gSpeciesInfo[species].abilities[0]); HP(1); Moves(MOVE_SCRATCH); } // Rekindle only as innate
         OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
         OPPONENT(SPECIES_ZIGZAGOON);
     } WHEN {
         TURN { MOVE(player, MOVE_SCRATCH); SEND_OUT(opponent, 1); }
     } SCENE {
         if (enabled) {
-            ABILITY_POPUP(player, ABILITY_REKINDLE); // pop-up shows the innate, not the chosen Blaze
+            ABILITY_POPUP(player, ABILITY_REKINDLE); // pop-up shows the innate, not the chosen ability
             HP_BAR(player);
         } else {
             NONE_OF { ABILITY_POPUP(player, ABILITY_REKINDLE); }
@@ -148,47 +163,16 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle heals Charizard wh
     }
 }
 
-// The "burning fire" flavor set (fork-docs/INNATE_ABILITIES.md#ability_rekindle).
-static const u16 sRekindleCarriers[] =
-{
-    SPECIES_CHARMANDER, SPECIES_CHARMELEON, SPECIES_CHARIZARD, SPECIES_CHARIZARD_MEGA_X,
-    SPECIES_CHARIZARD_MEGA_Y, SPECIES_CHARIZARD_GMAX,
-    SPECIES_GROWLITHE, SPECIES_ARCANINE, SPECIES_GROWLITHE_HISUI, SPECIES_ARCANINE_HISUI,
-    SPECIES_PONYTA, SPECIES_RAPIDASH,
-    SPECIES_MAGBY, SPECIES_MAGMAR, SPECIES_MAGMORTAR,
-    SPECIES_MOLTRES, SPECIES_ENTEI, SPECIES_HO_OH, SPECIES_VICTINI,
-    SPECIES_CYNDAQUIL, SPECIES_QUILAVA, SPECIES_TYPHLOSION, SPECIES_TYPHLOSION_HISUI,
-    SPECIES_TORCHIC, SPECIES_COMBUSKEN, SPECIES_BLAZIKEN, SPECIES_BLAZIKEN_MEGA,
-    SPECIES_CHIMCHAR, SPECIES_MONFERNO, SPECIES_INFERNAPE,
-    SPECIES_TEPIG, SPECIES_PIGNITE, SPECIES_EMBOAR, SPECIES_EMBOAR_MEGA,
-    SPECIES_PANSEAR, SPECIES_SIMISEAR,
-    SPECIES_DARUMAKA, SPECIES_DARMANITAN_STANDARD, SPECIES_DARMANITAN_ZEN,
-    SPECIES_LITWICK, SPECIES_LAMPENT, SPECIES_CHANDELURE, SPECIES_CHANDELURE_MEGA,
-    SPECIES_HEATMOR,
-    SPECIES_FLETCHINDER, SPECIES_TALONFLAME,
-    SPECIES_LITLEO, SPECIES_PYROAR, SPECIES_PYROAR_MEGA,
-    SPECIES_LITTEN, SPECIES_TORRACAT, SPECIES_INCINEROAR,
-    SPECIES_SCORBUNNY, SPECIES_RABOOT, SPECIES_CINDERACE, SPECIES_CINDERACE_GMAX,
-    SPECIES_SKELEDIRGE,
-    SPECIES_CHARCADET, SPECIES_ARMAROUGE, SPECIES_CERULEDGE,
-};
-
-TEST("Rekindle is an innate of every species in its flavor set")
-{
-    u32 i;
-    for (i = 0; i < ARRAY_COUNT(sRekindleCarriers); i++)
-        EXPECT(SpeciesHasInnate(sRekindleCarriers[i], ABILITY_REKINDLE));
-}
-
 // Sheer Force skips the move-end steps that hold the KO abilities; the innate step is detoured
 // back in by RedirectSheerForceSkipToInnates(), so an innate Rekindle still fires.
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle still heals after a Sheer Force boosted KO")
 {
+    enum Species species = FindRekindleCarrier();
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_DARMANITAN_STANDARD, ABILITY_REKINDLE));
+        ASSUME(species != SPECIES_NONE);
         ASSUME(MoveIsAffectedBySheerForce(MOVE_FLAMETHROWER));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_DARMANITAN_STANDARD) { Ability(ABILITY_SHEER_FORCE); HP(1); Moves(MOVE_FLAMETHROWER); }
+        PLAYER(species) { Ability(ABILITY_SHEER_FORCE); HP(1); Moves(MOVE_FLAMETHROWER); }
         OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
         OPPONENT(SPECIES_ZIGZAGOON);
     } WHEN {

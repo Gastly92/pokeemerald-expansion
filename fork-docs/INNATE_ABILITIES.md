@@ -4514,7 +4514,7 @@ not qualify. Megas and Gmax forms mirror their base.
 - **Starter lines:** Charmander, Charmeleon, Charizard (+ Mega X, Mega Y, Gmax); Cyndaquil,
   Quilava, Typhlosion (+ Hisuian); Torchic, Combusken, Blaziken (+ Mega); Chimchar, Monferno,
   Infernape; Tepig, Pignite, Emboar (+ Mega); Litten, Torracat, Incineroar; Scorbunny, Raboot,
-  Cinderace (+ Gmax); Skeledirge.
+  Cinderace (+ Gmax); Fuecoco, Crocalor, Skeledirge.
 - **Fighting spirit:** Charcadet, Armarouge, Ceruledge ("a fiery fighting spirit"); Darumaka,
   Darmanitan (Standard + Zen); Magby, Magmar, Magmortar (the flame is its health); Ponyta,
   Rapidash; Fletchinder, Talonflame; Growlithe, Arcanine (+ Hisuian forms); Pansear, Simisear;
