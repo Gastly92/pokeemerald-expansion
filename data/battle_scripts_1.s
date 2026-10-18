@@ -5166,18 +5166,6 @@ BattleScript_HaloActivates::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-@ FORK: Rekindle ability (src/fork/rekindle.c) -- heals the attacker after it knocks out a battler.
-@ BattleScript_AbilityHpHeal's heal, plus a line saying why it happened.
-BattleScript_RekindleActivates::
-	call BattleScript_AbilityPopUp
-	playanimation BS_ATTACKER, B_ANIM_SIMPLE_HEAL
-	waitanimation
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER, ASSURANCE_DOUBLE
-	printstring STRINGID_REKINDLEDSPIRIT
-	waitmessage B_WAIT_TIME_LONG
-	return
-
 BattleScript_ActivateAsOne::
 	call BattleScript_AbilityPopUp
 	printfromtable gSwitchInAbilityStringIds

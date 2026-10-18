@@ -30,6 +30,7 @@ bool32 TryActivateRekindle(enum BattlerId battler, enum Ability ability, u32 num
         gBattleScripting.abilityPopupOverwrite = ability;
     gBattlerAbility = battler;
     SetHealAmount(battler, healAmount);
-    BattleScriptCall(BattleScript_RekindleActivates);
+    // The same pop-up + HP bar as Rain Dish / Ice Body, with no message of its own.
+    BattleScriptCall(BattleScript_AbilityHpHeal);
     return TRUE;
 }

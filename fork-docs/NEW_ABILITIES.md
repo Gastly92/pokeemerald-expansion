@@ -337,8 +337,7 @@ line review.
 
 **Flavor.** It completes a set: Venusaur has an innate Regenerator and Blastoise an innate Rain
 Dish, so with Rekindle on Charmeleon and Charizard all three Kanto starters can heal through
-an innate. The name is about fighting spirit, not fire, so it can go on non-Fire lines, and
-the message says so: *"Charizard's fighting spirit was rekindled!"*
+an innate. The name is about fighting spirit, not fire, so it can go on non-Fire lines.
 
 **Trigger.** It is Moxie's trigger with a heal in place of a stat boost. The
 `ABILITYEFFECT_MOVE_END_FOES_FAINTED` case in `src/battle_util.c` calls
@@ -351,8 +350,9 @@ delegates to that same case.
 based on the non-Dynamax max HP, like Rain Dish, and never overshoots max HP. There is no
 randomness and no AI wiring yet.
 
-**Script.** `BattleScript_RekindleActivates` is `BattleScript_AbilityHpHeal` (pop-up, heal
-animation, HP bar) plus the `STRINGID_REKINDLEDSPIRIT` line.
+**Script.** It reuses upstream's `BattleScript_AbilityHpHeal` (pop-up, heal animation, HP bar),
+like Rain Dish. Like Moxie and the other HP-healing abilities, it has no message of its own;
+the pop-up says what happened.
 
 Covered by `test/fork/rekindle.c`. The first carriers are Charmeleon and Charizard (base,
 Mega X, Mega Y, Gmax). A sweep for other lines with fitting flavor is a planned follow-up.

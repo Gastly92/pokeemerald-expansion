@@ -18,7 +18,7 @@ SINGLE_BATTLE_TEST("Rekindle heals 1/4 of max HP when the holder knocks out a fo
     } SCENE {
         MESSAGE("The opposing Wobbuffet fainted!");
         ABILITY_POPUP(player, ABILITY_REKINDLE);
-        MESSAGE("Wobbuffet's fighting spirit was rekindled!");
+        HP_BAR(player);
     } THEN {
         EXPECT_EQ(player->hp, 1 + player->maxHP / REKINDLE_HEAL_FRACTION);
     }
@@ -34,10 +34,7 @@ SINGLE_BATTLE_TEST("Rekindle does not activate at full HP")
         TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); }
     } SCENE {
         MESSAGE("The opposing Wobbuffet fainted!");
-        NONE_OF {
-            ABILITY_POPUP(player, ABILITY_REKINDLE);
-            MESSAGE("Wobbuffet's fighting spirit was rekindled!");
-        }
+        NONE_OF { ABILITY_POPUP(player, ABILITY_REKINDLE); }
     } THEN {
         EXPECT_EQ(player->hp, player->maxHP);
     }
@@ -104,7 +101,7 @@ DOUBLE_BATTLE_TEST("Rekindle heals once for each battler the holder knocks out, 
     } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_EARTHQUAKE, playerLeft);
         ABILITY_POPUP(playerLeft, ABILITY_REKINDLE);
-        MESSAGE("Wobbuffet's fighting spirit was rekindled!");
+        HP_BAR(playerLeft);
     } THEN {
         EXPECT_EQ(playerLeft->hp, 1 + 3 * (playerLeft->maxHP / REKINDLE_HEAL_FRACTION));
     }
@@ -142,7 +139,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle heals Charizard wh
     } SCENE {
         if (enabled) {
             ABILITY_POPUP(player, ABILITY_REKINDLE); // pop-up shows the innate, not the chosen Blaze
-            MESSAGE("Charizard's fighting spirit was rekindled!");
+            HP_BAR(player);
         } else {
             NONE_OF { ABILITY_POPUP(player, ABILITY_REKINDLE); }
         }

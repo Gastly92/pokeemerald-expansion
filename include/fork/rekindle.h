@@ -14,7 +14,7 @@
 // Each KO heals max HP / REKINDLE_HEAL_FRACTION.
 #define REKINDLE_HEAL_FRACTION 4
 
-// Heals `battler` for `numFainted` KOs and queues BattleScript_RekindleActivates. Returns TRUE
+// Heals `battler` for `numFainted` KOs and queues BattleScript_AbilityHpHeal. Returns TRUE
 // when it fired. `ability` is the Rekindle being processed (chosen or innate).
 bool32 TryActivateRekindle(enum BattlerId battler, enum Ability ability, u32 numFainted);
 
