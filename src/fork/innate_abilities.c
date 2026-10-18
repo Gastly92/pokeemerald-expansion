@@ -1891,6 +1891,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_HYDRATION,
             ABILITY_SWIFT_SWIM
+        )
     },
     { // 0135
         SPECIES_JOLTEON,
