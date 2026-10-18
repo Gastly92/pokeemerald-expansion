@@ -10,8 +10,8 @@
 #include "constants/trainers.h"
 
 // Guards B_FRONTIER_BOSS_ONLY_GIMMICKS (config/frontier.h). Under
-// FEATURE_FREE_GIMMICKS a regular Battle Factory opponent may not Mega Evolve, Z-Move,
-// Dynamax or Terastallize; the Frontier Brain, the Tower's gym-leader bosses and
+// FEATURE_FREE_GIMMICKS a regular Battle Factory opponent may not Mega Evolve, Ultra Burst,
+// Z-Move, Dynamax or Terastallize; the Frontier Brain, the Tower's gym-leader bosses and
 // the Factory's milestone opponent (every 10th win) keep all four, regular Battle
 // Tower opponents keep all four (the player brings their own team there), and the
 // player's side is never restricted.
@@ -24,11 +24,12 @@ TEST("Frontier boss gimmicks: a regular opponent may not Mega, Z-Move, Dynamax o
     EXPECT(!FrontierOpponentMayUseGimmick(0, GIMMICK_TERA));
     EXPECT(!FrontierOpponentMayUseGimmick(0, GIMMICK_Z_MOVE));
     EXPECT(!FrontierOpponentMayUseGimmick(0, GIMMICK_DYNAMAX));
+    EXPECT(!FrontierOpponentMayUseGimmick(0, GIMMICK_ULTRA_BURST));
 }
 
 TEST("Frontier boss gimmicks: the Frontier Brain and gym-leader bosses may use every gimmick")
 {
-    enum Gimmick gimmicks[] = { GIMMICK_MEGA, GIMMICK_TERA, GIMMICK_Z_MOVE, GIMMICK_DYNAMAX };
+    enum Gimmick gimmicks[] = { GIMMICK_MEGA, GIMMICK_TERA, GIMMICK_Z_MOVE, GIMMICK_DYNAMAX, GIMMICK_ULTRA_BURST };
 
     for (u32 g = 0; g < ARRAY_COUNT(gimmicks); g++)
     {

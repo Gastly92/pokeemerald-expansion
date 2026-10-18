@@ -50,4 +50,25 @@ static inline u16 FindMegaStoneForStats(enum Species species, u32 attack, u32 sp
     return bestItem;
 }
 
+// FEATURE_FREE_GIMMICKS: Ultra Burst is item-free too. The Ultra Burst form change is still
+// keyed on a held item (Ultranecrozium Z), so return the item the species' Ultra Burst entry
+// asks for and let GetBattleFormChangeTargetSpecies (src/battle_util.c) pretend it is held,
+// exactly as FindMegaStoneForStats does for Mega Stones. ITEM_NONE if the species has no
+// Ultra Burst form.
+static inline u16 FindUltraBurstItem(enum Species species)
+{
+    const struct FormChange *formChanges = GetSpeciesFormChanges(species);
+
+    if (formChanges == NULL)
+        return ITEM_NONE;
+
+    for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+    {
+        if (formChanges[i].method == FORM_CHANGE_BATTLE_ULTRA_BURST)
+            return formChanges[i].param1;
+    }
+
+    return ITEM_NONE;
+}
+
 #endif // GUARD_FORK_FREE_GIMMICKS_H

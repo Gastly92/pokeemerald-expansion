@@ -240,6 +240,44 @@ SINGLE_BATTLE_TEST("FREE_GIMMICKS: a mon can use a Z-Move without holding a Z-Cr
     }
 }
 
+SINGLE_BATTLE_TEST("FREE_GIMMICKS: Necrozma can Ultra Burst and use Light That Burns the Sky without Ultranecrozium Z")
+{
+    u32 species;
+    PARAMETRIZE { species = SPECIES_NECROZMA_DUSK_MANE; }
+    PARAMETRIZE { species = SPECIES_NECROZMA_DAWN_WINGS; }
+    GIVEN {
+        WITH_CONFIG(FEATURE_FREE_GIMMICKS, TRUE);
+        PLAYER(species) { Moves(MOVE_PHOTON_GEYSER, MOVE_CELEBRATE); } // no item
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE, gimmick: GIMMICK_ULTRA_BURST); }
+        TURN { MOVE(player, MOVE_PHOTON_GEYSER, gimmick: GIMMICK_Z_MOVE); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_ULTRA_BURST, player);
+        MESSAGE("Necrozma regained its true power through Ultra Burst!");
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_ZMOVE_ACTIVATE, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_LIGHT_THAT_BURNS_THE_SKY, player);
+    } THEN {
+        EXPECT_EQ(player->species, SPECIES_NECROZMA_ULTRA);
+    }
+}
+
+SINGLE_BATTLE_TEST("FREE_GIMMICKS: base Necrozma has no Ultra Burst, so Photon Geyser becomes Shattered Psyche")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_FREE_GIMMICKS, TRUE);
+        PLAYER(SPECIES_NECROZMA) { Moves(MOVE_PHOTON_GEYSER); } // no item, no Ultra Burst form
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_PHOTON_GEYSER, gimmick: GIMMICK_Z_MOVE); }
+    } SCENE {
+        NOT ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_ULTRA_BURST, player);
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SHATTERED_PSYCHE, player);
+    } THEN {
+        EXPECT_EQ(player->species, SPECIES_NECROZMA);
+    }
+}
+
 SINGLE_BATTLE_TEST("FREE_GIMMICKS: the player can Terastallize without a Tera Orb")
 {
     GIVEN {

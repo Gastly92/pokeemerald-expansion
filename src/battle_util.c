@@ -9877,7 +9877,8 @@ bool32 CanUltraBurst(enum BattlerId battler)
     enum BattlerPosition position = GetBattlerPosition(battler);
 
     // Check if Player has a Z-Ring
-    if (!TESTING && (position == B_POSITION_PLAYER_LEFT
+    // FORK (FEATURE_FREE_GIMMICKS): skipped with item-free gimmicks, as in CanUseZMove.
+    if (!GetConfig(FEATURE_FREE_GIMMICKS) && !TESTING && (position == B_POSITION_PLAYER_LEFT
         || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && position == B_POSITION_PLAYER_RIGHT))
         && !CheckBagHasItem(ITEM_Z_POWER_RING, 1))
         return FALSE;
@@ -9898,6 +9899,12 @@ bool32 CanUltraBurst(enum BattlerId battler)
 
     // Check if there is an entry in the form change table for Ultra Burst and battler is holding a Z-Crystal.
     if (GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_ULTRA_BURST, ability) != gBattleMons[battler].species && holdEffect == HOLD_EFFECT_Z_CRYSTAL)
+        return TRUE;
+
+    // FORK (FEATURE_FREE_GIMMICKS): no Z-Crystal needed; GetBattleFormChangeTargetSpecies
+    // supplies the Ultranecrozium Z the form change is keyed on (FindUltraBurstItem).
+    if (GetConfig(FEATURE_FREE_GIMMICKS)
+     && GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_ULTRA_BURST, ability) != gBattleMons[battler].species)
         return TRUE;
 
     // No checks passed, the mon CAN'T ultra burst.
@@ -9992,6 +9999,13 @@ enum Species GetBattleFormChangeTargetSpecies(enum BattlerId battler, enum FormC
         u16 megaStone = FindMegaStoneForStats(species, gBattleMons[battler].attack, gBattleMons[battler].spAttack);
         if (megaStone != ITEM_NONE)
             heldItem = megaStone;
+    }
+    // FORK: likewise Ultra Burst, keyed on Ultranecrozium Z (FindUltraBurstItem).
+    if (GetConfig(FEATURE_FREE_GIMMICKS) && method == FORM_CHANGE_BATTLE_ULTRA_BURST)
+    {
+        u16 ultraItem = FindUltraBurstItem(species);
+        if (ultraItem != ITEM_NONE)
+            heldItem = ultraItem;
     }
 
     struct FormChangeContext ctx =
