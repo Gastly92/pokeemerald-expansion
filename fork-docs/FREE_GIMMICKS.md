@@ -25,10 +25,11 @@ designated user. That competition is the feature.
 
 ### 1. Item-free enablement
 
-Mega Evolution needs no Mega Stone, Z-Moves no Z-Crystal, Terastallization no Tera Orb
+Mega Evolution needs no Mega Stone, Z-Moves no Z-Crystal, Ultra Burst no Ultranecrozium Z,
+Terastallization no Tera Orb
 (nor the `B_FLAG_TERA_ORB_*` charge flags), Dynamax no Dynamax Band (nor
 `B_FLAG_DYNAMAX_BATTLE`). The bag, hold-item and charge checks in `CanMegaEvolve` /
-`CanUseZMove` / `CanTerastallize` / `CanDynamax` are skipped.
+`CanUseZMove` / `CanUltraBurst` / `CanTerastallize` / `CanDynamax` are skipped.
 
 AI battlers skip those gates **unconditionally**, flag or no flag.
 
@@ -65,6 +66,12 @@ Absol is the one that inverts: Mega Absol Z (154 / 75) is more physical than Meg
 
 Any move becomes its signature Z-Move (matched on species + move) or, failing that, its
 type-based Z-Move.
+
+Ultra Burst works the same way as the Mega pick: `FindUltraBurstItem()`
+(`include/fork/free_gimmicks.h`) feeds the Ultranecrozium Z that the form change is keyed on.
+So Necrozma-Dusk-Mane or -Dawn-Wings Ultra Bursts with any item and then turns Photon Geyser
+into Light That Burns the Sky; Ultra Burst does not use up the mon's one gimmick. Base
+Necrozma has no Ultra Burst form and gets Shattered Psyche.
 
 ### 4. The picker
 
@@ -136,7 +143,7 @@ existing `ShouldUseZMove` / `DecideTerastal` reconsideration still applies).
 ### Boss-only gimmicks in the Battle Factory
 
 Regular Battle Factory opponents get **no free gimmicks at all** — no Mega Evolution,
-Z-Move, Dynamax or Terastallization. All four are reserved for the fights meant to be a
+Ultra Burst, Z-Move, Dynamax or Terastallization. All of them are reserved for the fights meant to be a
 wall: the Factory Head and the Factory's milestone opponent (every 10th win). The
 restriction is Factory-only because the player fights there with rentals; in the Battle
 Tower the player brings their own team, so **regular Tower opponents use every gimmick**,
@@ -203,7 +210,6 @@ letting any priority move Dynamax. Regression test in `test/battle/gimmick/dynam
 
 ## Known limitations
 
-- **Ultra Burst is out of scope** — Necrozma still needs to hold Ultranecrozium Z.
 - **The AI's gimmick choice is a fixed preference order** (`AI_GIMMICK_PREFERENCE_ORDER`),
   not situationally scored; only its *timing* varies. A Mega-capable mon still always
   picks Mega over Dynamax/Tera — it just may not fire it on turn 1.
