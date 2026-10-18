@@ -123,22 +123,37 @@ SINGLE_BATTLE_TEST("Rekindle does not activate when a foe faints to indirect dam
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle heals Charizard when it knocks out a foe")
+// The innate tests use whichever species carries Rekindle first, so they test the wiring rather
+// than any one species row. The carrier list itself lives in src/fork/innate_abilities.c.
+static enum Species FindRekindleCarrier(void)
+{
+    enum Species species;
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_REKINDLE))
+            return species;
+    }
+    return SPECIES_NONE;
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle heals the holder when it knocks out a foe")
 {
     bool32 enabled;
+    enum Species species = FindRekindleCarrier();
     PARAMETRIZE { enabled = TRUE; }
     PARAMETRIZE { enabled = FALSE; }
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_CHARIZARD, ABILITY_REKINDLE));
+        ASSUME(species != SPECIES_NONE);
+        ASSUME(gSpeciesInfo[species].abilities[0] != ABILITY_REKINDLE);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_CHARIZARD) { Ability(ABILITY_BLAZE); HP(1); Moves(MOVE_SCRATCH); } // chosen Blaze; Rekindle only as innate
+        PLAYER(species) { Ability(gSpeciesInfo[species].abilities[0]); HP(1); Moves(MOVE_SCRATCH); } // Rekindle only as innate
         OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
         OPPONENT(SPECIES_ZIGZAGOON);
     } WHEN {
         TURN { MOVE(player, MOVE_SCRATCH); SEND_OUT(opponent, 1); }
     } SCENE {
         if (enabled) {
-            ABILITY_POPUP(player, ABILITY_REKINDLE); // pop-up shows the innate, not the chosen Blaze
+            ABILITY_POPUP(player, ABILITY_REKINDLE); // pop-up shows the innate, not the chosen ability
             HP_BAR(player);
         } else {
             NONE_OF { ABILITY_POPUP(player, ABILITY_REKINDLE); }
@@ -148,11 +163,24 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle heals Charizard wh
     }
 }
 
-TEST("Rekindle is an innate of Charmeleon and every Charizard form")
+// Sheer Force skips the move-end steps that hold the KO abilities; the innate step is detoured
+// back in by RedirectSheerForceSkipToInnates(), so an innate Rekindle still fires.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Rekindle still heals after a Sheer Force boosted KO")
 {
-    EXPECT(SpeciesHasInnate(SPECIES_CHARMELEON, ABILITY_REKINDLE));
-    EXPECT(SpeciesHasInnate(SPECIES_CHARIZARD, ABILITY_REKINDLE));
-    EXPECT(SpeciesHasInnate(SPECIES_CHARIZARD_MEGA_X, ABILITY_REKINDLE));
-    EXPECT(SpeciesHasInnate(SPECIES_CHARIZARD_MEGA_Y, ABILITY_REKINDLE));
-    EXPECT(SpeciesHasInnate(SPECIES_CHARIZARD_GMAX, ABILITY_REKINDLE));
+    enum Species species = FindRekindleCarrier();
+    GIVEN {
+        ASSUME(species != SPECIES_NONE);
+        ASSUME(MoveIsAffectedBySheerForce(MOVE_FLAMETHROWER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(species) { Ability(ABILITY_SHEER_FORCE); HP(1); Moves(MOVE_FLAMETHROWER); }
+        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_ZIGZAGOON);
+    } WHEN {
+        TURN { MOVE(player, MOVE_FLAMETHROWER); SEND_OUT(opponent, 1); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_REKINDLE);
+        HP_BAR(player);
+    } THEN {
+        EXPECT_EQ(player->hp, 1 + player->maxHP / REKINDLE_HEAL_FRACTION);
+    }
 }

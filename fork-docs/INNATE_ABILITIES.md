@@ -4506,7 +4506,26 @@ skipped, so it never fires twice.
 **No `DETERMINISTIC_*` surface and no AI wiring.** It fires at 100% on a KO. Not breakable;
 suppressed by Gastro Acid and Neutralizing Gas through `IsInnateActive()`.
 
-**Species.** Charmeleon and every Charizard form (base, Mega X, Mega Y, Gmax). Charmander is
-left out: its flavor is the tail flame as life force, not fighting spirit. No frontier set gave
-any of these a chosen Rekindle, so there is no Step 3.5 work.
+**Species: a "burning fire" flavor set.** The sweep read every species' Pokédex entry and
+picked the ones whose fire burns with their spirit or vitality: it flares in battle or anger,
+dims when they tire, or is fed by what they defeat. Fire used only as a weapon or as heat did
+not qualify. Megas and Gmax forms mirror their base.
+
+- **Starter lines:** Charmander, Charmeleon, Charizard (+ Mega X, Mega Y, Gmax); Cyndaquil,
+  Quilava, Typhlosion (+ Hisuian); Torchic, Combusken, Blaziken (+ Mega); Chimchar, Monferno,
+  Infernape; Tepig, Pignite, Emboar (+ Mega); Litten, Torracat, Incineroar; Scorbunny, Raboot,
+  Cinderace (+ Gmax); Fuecoco, Crocalor, Skeledirge.
+- **Fighting spirit:** Charcadet, Armarouge, Ceruledge ("a fiery fighting spirit"); Darumaka,
+  Darmanitan (Standard + Zen); Magby, Magmar, Magmortar (the flame is its health); Ponyta,
+  Rapidash; Fletchinder, Talonflame; Growlithe, Arcanine (+ Hisuian forms); Pansear, Simisear;
+  Litleo, Pyroar (+ Mega).
+- **Fed by the defeated:** Litwick, Lampent, Chandelure (+ Mega), which burn the life force they
+  absorb; Heatmor, which consumes the Durant it burns through.
+- **Legends:** Moltres ("burns and heals itself" in magma), Ho-Oh, Entei, Victini.
+
+Moltres and Ho-Oh also have Regenerator, Skeledirge has Healer, and Litleo and Pyroar have
+Moxie; each pairing is deliberate. Galarian Ponyta, Rapidash, Moltres and Darmanitan are left
+out (not Fire-type). Under a chosen Sheer Force (Darmanitan), the KO step is still reached
+through `RedirectSheerForceSkipToInnates()`, so the innate fires. No frontier set gave any of
+these a chosen Rekindle, so there is no Step 3.5 work.
 
