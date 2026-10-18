@@ -2671,6 +2671,13 @@ static enum CancelerResult CancelerSubstitute(struct BattleCalcValues *cv)
      || (cv->moveEffect == EFFECT_TRANSFORM && GetConfig(B_TRANSFORM_SUBSTITUTE_FAIL) < GEN_5))
         return CANCELER_RESULT_SUCCESS;
 
+    // UPSTREAM: field moves (hazards, weather, terrain, rooms) don't target a battler, so a foe's
+    // Substitute can't block them; without this Stealth Rock into a Substitute "failed".
+    // Regression test: test/fork/field_moves_substitute.c.
+    enum MoveTarget moveTarget = GetBattlerMoveTargetType(cv->battlerAtk, cv->move);
+    if (moveTarget == TARGET_FIELD || moveTarget == TARGET_OPPONENTS_FIELD)
+        return CANCELER_RESULT_SUCCESS;
+
     for (enum BattlerId battler = 0; battler < gBattlersCount; battler++)
     {
         if (ShouldSkipFailureCheckOnBattler(cv->battlerAtk, cv->battlerDef))
