@@ -6774,6 +6774,48 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate P
     }
 }
 
+// ----- innate Harvest and Pickup on one battler -----
+// tryrecycleitem reads the target's used item for Pickup and the holder's own for Harvest. It used
+// to pick Pickup's slot whenever the battler merely HAD Pickup, so innate Harvest silently failed on
+// any species carrying both (Skwovet / Greedent). Both tests pin each ability to its own slot.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Harvest and Pickup -- Harvest restores the holder's own Berry")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GREEDENT, ABILITY_HARVEST));
+        ASSUME(SpeciesHasInnate(SPECIES_GREEDENT, ABILITY_PICKUP));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_GREEDENT) { Ability(ABILITY_CHEEK_POUCH); MaxHP(500); HP(251); Item(ITEM_SITRUS_BERRY); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SCRATCH); } // drops Greedent below half -> Sitrus eaten
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_HARVEST);
+        MESSAGE("Greedent harvested its Sitrus Berry!");
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_SITRUS_BERRY);
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES + DETERMINISTIC_ABILITIES: innate Harvest and Pickup -- Pickup still grabs the foe's consumed item")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_GREEDENT, ABILITY_HARVEST));
+        ASSUME(SpeciesHasInnate(SPECIES_GREEDENT, ABILITY_PICKUP));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_GREEDENT) { Ability(ABILITY_CHEEK_POUCH); } // no item, no used Berry: Harvest has nothing to do
+        OPPONENT(SPECIES_MAGIKARP) { MaxHP(500); HP(260); Item(ITEM_SITRUS_BERRY); } // survives the Scratch; not Wobbuffet: its innate Harvest would re-grow the Berry first
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); } // foe drops below half -> eats Sitrus
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_HARVEST); }
+        ABILITY_POPUP(player, ABILITY_PICKUP);
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_SITRUS_BERRY);
+    }
+}
+
 // ----- Bad Dreams (chips sleeping foes 1/8 max HP) -----
 // Munna/Musharna are the dream-eater flavor vehicles (their canon abilities are all non-Bad-Dreams).
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Bad Dreams chips a sleeping foe")
