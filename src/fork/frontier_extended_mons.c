@@ -197,7 +197,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CLEAR_AMULET,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_DRAGON_DANCE,
@@ -15657,7 +15657,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GALLADE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LIFE_ORB,
+        .heldItem = ITEM_CLEAR_AMULET,
         .moves =
         {
             MOVE_SWORDS_DANCE,
