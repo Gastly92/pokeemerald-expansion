@@ -137,7 +137,9 @@ a fixed ladder of public facts (higher base Speed, then lighter, then higher HP%
 resolves to: your 329 against a foe topping out at 329 reads `▼` when you win the tie, and a foe
 whose *floor* is your 329 reads `▲` when it wins. The ladder is asked of the same
 known-information view of the foe, so a hidden Light Metal or Float Stone never decides it.
-With the flag off, or every rung tied, an edge tie stays blank.
+Only a tie on every rung falls back to the random roll, which in practice means the same
+species at the same HP% (a mirror match at full HP), so an edge tie almost always gets an
+arrow. With the flag off, or in that mirror case, it stays blank.
 
 Two deliberate choices here:
 
