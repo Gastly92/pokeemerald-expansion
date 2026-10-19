@@ -7918,7 +7918,12 @@ static void Cmd_tryrecycleitem(void)
 
     enum Item *usedHeldItem;
 
-    if (gCurrentMove == MOVE_NONE && BattlerHasAbility(gBattlerAttacker, ABILITY_PICKUP)) // FORK: innate-aware (end-turn Pickup grabs the target's used item)
+    // FORK: upstream tests GetBattlerAbility(attacker) == ABILITY_PICKUP. With innates a battler can
+    // carry Pickup AND Harvest (Skwovet / Greedent), so "has Pickup" is the wrong question: Harvest's
+    // recycle would read the target's slot and fail. Key on the ability actually activating, which
+    // AbilityBattleEffects stores in gLastUsedAbility for both the chosen and the innate path.
+    // On conflict keep this test. Regression: test/fork/innate_abilities.c "innate Harvest and Pickup".
+    if (gCurrentMove == MOVE_NONE && gLastUsedAbility == ABILITY_PICKUP)
         usedHeldItem = &GetBattlerPartyState(gBattlerTarget)->usedHeldItem;
     else
         usedHeldItem = &GetBattlerPartyState(gBattlerAttacker)->usedHeldItem;
