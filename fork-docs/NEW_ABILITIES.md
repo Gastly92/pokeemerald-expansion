@@ -21,7 +21,9 @@ itself with a type weakness, Halo pays for itself in **PP**.
 
 A third, **`Rekindle`** (an innate of Charizard and other Fire lines), is the
 exception to the design rule below: it has no downside and was built to be an
-**innate**. See its [case study](#case-study-rekindle).
+**innate**. See its [case study](#case-study-rekindle). A fourth, **`Willpower`**
+(Stamina's Sp. Def twin, an innate of Azelf and the Medicham line), was built the same way; see its
+[case study](#case-study-willpower).
 
 ## Design first: is this an ability, or an innate?
 
@@ -356,3 +358,28 @@ the pop-up says what happened.
 
 Covered by `test/fork/rekindle.c`. It is carried by a "burning fire" set of Fire lines; the list
 and rationale are in [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_rekindle).
+
+## Case study: Willpower
+
+**`Willpower`** (`ABILITY_WILLPOWER`) is the fork's second ability designed to be an
+**innate**, and the Sp. Def twin of upstream's Stamina.
+
+> Each time the holder is hit by a move, its **Sp. Def rises by 1 stage**.
+
+**Flavor.** Stamina toughens the body; Willpower toughens the mind, the way Sp. Def is usually
+framed as mental resilience. It goes only on species whose Pokédex text is about a strong will,
+starting with Azelf, the "Willpower Pokémon"; a species that merely has the stats for it does not
+qualify.
+
+**Trigger.** Stamina's, word for word. The `ABILITYEFFECT_MOVE_END` case in `src/battle_util.c`
+has an `ABILITY_WILLPOWER` arm right beside `ABILITY_STAMINA` that calls
+`TryActivateWillpower()` (`src/fork/willpower.c`) with the same conditions: a move that
+damaged the holder (not its Substitute), not the holder hitting itself, and room left below +6.
+It fires on physical and special hits alike, and once per hit of a multi-hit move. As an innate
+it goes through the on-hit driver (`IsActiveOnHitInnate`), which delegates to that same case.
+
+**Script.** It reuses upstream's `BattleScript_AbilityStatChange`, like Stamina. There is no
+randomness and no AI wiring, matching Stamina, which has no AI avoid-read upstream either.
+
+Covered by `test/fork/willpower.c`. Its carriers are listed in
+[`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_willpower).

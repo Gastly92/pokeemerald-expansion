@@ -1548,7 +1548,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS,
             ABILITY_IRON_FIST,
             ABILITY_KEEN_EYE,
-            ABILITY_VITAL_SPIRIT
+            ABILITY_VITAL_SPIRIT,
+            ABILITY_WILLPOWER
         )
     },
     { // 0108
@@ -3896,7 +3897,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INNER_FOCUS,
             ABILITY_PURE_POWER,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_WILLPOWER
         )
     },
     { // 0308
@@ -3905,7 +3907,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
             ABILITY_PURE_POWER,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_WILLPOWER
         )
     },
     { // 0308
@@ -3914,7 +3917,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
             ABILITY_PURE_POWER,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_WILLPOWER
         )
     },
     { // 0309
@@ -5848,7 +5852,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INNER_FOCUS,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_WILLPOWER
         )
     },
     { // 0483
@@ -13230,6 +13235,7 @@ static bool32 IsActiveOnHitInnate(enum Ability ability)
     case ABILITY_CURSED_BODY:   // 30% (always under DETERMINISTIC_ABILITIES) to disable the move that hit the holder
     case ABILITY_JUSTIFIED:     // raises Attack +1 when hit by a Dark move
     case ABILITY_STAMINA:       // raises Defense +1 when hit by any move
+    case ABILITY_WILLPOWER:     // raises Sp. Def +1 when hit by any move (the fork's Stamina twin)
     case ABILITY_WATER_COMPACTION: // raises Defense +2 when hit by a Water move
     case ABILITY_ANGER_POINT:   // maxes Attack when the holder takes a critical hit
     case ABILITY_RATTLED:       // raises Speed +1 when hit by a Dark/Ghost/Bug move
