@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 #include "fork/frontier_battle_info.h"
+#include "fork/innate_abilities.h"
 
 // B_FRONTIER_BATTLE_INFO. The Speed Tiers page's foe range starts from base Speed alone (0 IV /
 // 0 EV / hindering nature up to 31 / 252 / boosting) and is then scaled by everything the player
@@ -125,5 +126,25 @@ SINGLE_BATTLE_TEST("Frontier INFO speed: a foe Transformed into your mon has you
         GetFoeSpeedRange(0, &lo, &hi);
         EXPECT_EQ(lo, 250);
         EXPECT_EQ(hi, 250);
+    }
+}
+
+// Innates are species data, so they count from the moment the foe is seen, unlike its chosen ability.
+SINGLE_BATTLE_TEST("Frontier INFO speed: an innate Swift Swim doubles the range in rain without a reveal")
+{
+    u32 lo, hi;
+
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        ASSUME(SpeciesHasInnate(SPECIES_SQUIRTLE, ABILITY_SWIFT_SWIM));
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_RAIN_DANCE); }
+        OPPONENT(SPECIES_SQUIRTLE) { Ability(ABILITY_TORRENT); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_RAIN_DANCE); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT(!(gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & 1u));
+        GetFoeSpeedRange(0, &lo, &hi);
+        EXPECT_EQ(lo, 162); // base 43: 81-203, doubled
+        EXPECT_EQ(hi, 406);
     }
 }
