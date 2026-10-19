@@ -3358,7 +3358,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_NASTY_PLOT
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3378,7 +3378,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_DESTINY_BOND
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3398,7 +3398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_TRICK
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3418,7 +3418,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_PAIN_SPLIT
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3438,7 +3438,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLUDGE_BOMB,
             MOVE_ALLY_SWITCH
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -3458,7 +3458,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PROTECT,
             MOVE_SHADOW_BALL
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_PERISH_BODY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -3837,7 +3837,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_FIRE_PUNCH
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14435,7 +14435,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_REST
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -14455,7 +14455,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_WILL_O_WISP,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_WANDERING_SPIRIT,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -30558,7 +30558,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -30578,7 +30578,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SLACK_OFF,
             MOVE_WILL_O_WISP
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -30598,7 +30598,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_SLACK_OFF
         },
-        .ability = ABILITY_MUMMY,
+        .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

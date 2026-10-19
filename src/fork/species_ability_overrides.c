@@ -316,23 +316,23 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0094
         SPECIES_GENGAR, 1,
-        ABILITY_MUMMY
+        ABILITY_PERISH_BODY
     },
     {
         SPECIES_GENGAR_MEGA, 0,
-        ABILITY_MUMMY
+        ABILITY_PERISH_BODY
     },
     {
         SPECIES_GENGAR_MEGA, 1,
-        ABILITY_MUMMY
+        ABILITY_PERISH_BODY
     },
     {
         SPECIES_GENGAR_MEGA, 2,
-        ABILITY_MUMMY
+        ABILITY_PERISH_BODY
     },
     {
         SPECIES_GENGAR_GMAX, 1,
-        ABILITY_MUMMY
+        ABILITY_PERISH_BODY
     },
     { // 0097
         SPECIES_HYPNO, 1,
@@ -365,10 +365,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0103
         SPECIES_EXEGGUTOR_ALOLA, 1,
         ABILITY_SAP_SIPPER
-    },
-    { // 0105
-        SPECIES_MAROWAK, 0,
-        ABILITY_MUMMY
     },
     { // 0106
         SPECIES_HITMONLEE, 2,
@@ -1270,7 +1266,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0442
         SPECIES_SPIRITOMB, 1,
-        ABILITY_MUMMY
+        ABILITY_WANDERING_SPIRIT
     },
     { // 0445
         SPECIES_GARCHOMP, 1,
@@ -2421,7 +2417,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0911
         SPECIES_SKELEDIRGE, 1,
-        ABILITY_MUMMY
+        ABILITY_FLAME_BODY
     },
     { // 0914
         SPECIES_QUAQUAVAL, 1,
