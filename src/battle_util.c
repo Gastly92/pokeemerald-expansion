@@ -12,6 +12,7 @@
 #include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
 #include "fork/halo.h" // FORK: Halo (field-wide per-hit damage cap)
 #include "fork/rekindle.h" // FORK: Rekindle (heal on KO)
+#include "fork/willpower.h" // FORK: Willpower (Sp. Def twin of Stamina)
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "battle_interface.h"
 #include "battle_setup.h"
@@ -4274,6 +4275,9 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 BattleScriptCall(BattleScript_AbilityStatChange);
                 effect++;
             }
+            break;
+        case ABILITY_WILLPOWER: // FORK: Stamina's Sp. Def twin, chosen or innate. Logic in src/fork/willpower.c; keep this case on conflict.
+            effect = TryActivateWillpower(battler, gLastUsedAbility);
             break;
         case ABILITY_WEAK_ARMOR:
             if (IsBattlerTurnDamaged(battler, EXCLUDING_SUBSTITUTES)

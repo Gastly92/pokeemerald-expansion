@@ -278,6 +278,11 @@
 //   a one-line addition to IsActiveOnHitAttackerInnate delegating to the ABILITYEFFECT_MOVE_END_FOES_FAINTED
 //   case, whose logic lives in src/fork/rekindle.c. Not breakable; no AI wiring. Carriers: a "burning
 //   fire" flavor set of Fire lines (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
+//   WILLPOWER (the fork's own ability, designed as an innate): Stamina's Sp. Def twin, +1 Sp. Def each
+//   time the holder is hit by a move. Rides the on-hit driver exactly like Stamina — a one-line addition
+//   to IsActiveOnHitInnate delegating to the ABILITYEFFECT_MOVE_END case, whose logic lives in
+//   src/fork/willpower.c. Not breakable; no AI wiring. Carriers: a "strong will" flavor set
+//   (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

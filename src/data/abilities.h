@@ -2610,4 +2610,14 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Heals 1/4 HP on each KO."),
         .aiRating = 6,
     },
+
+    // FORK: Stamina's Sp. Def twin, designed as an innate (a pure boon, no downside). Raises the
+    // holder's Sp. Def by 1 whenever it is hit by a move. See src/fork/willpower.c and
+    // fork-docs/NEW_ABILITIES.md.
+    [ABILITY_WILLPOWER] =
+    {
+        .name = _("Willpower"),
+        .description = COMPOUND_STRING("Raises Sp. Def when hit."),
+        .aiRating = 6,
+    },
 };

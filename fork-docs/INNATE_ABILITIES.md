@@ -4529,3 +4529,30 @@ out (not Fire-type). Under a chosen Sheer Force (Darmanitan), the KO step is sti
 through `RedirectSheerForceSkipToInnates()`, so the innate fires. No frontier set gave any of
 these a chosen Rekindle, so there is no Step 3.5 work.
 
+
+### ABILITY_WILLPOWER
+
+**The fork's own ability, and its second one designed as an innate** (its definition and
+rationale are in [`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-willpower)). Stamina's Sp. Def
+twin: +1 Sp. Def each time the holder is hit by a move.
+
+**Wiring.** A one-line addition to `IsActiveOnHitInnate` (`src/fork/innate_abilities.c`), the
+on-hit driver Stamina uses. It delegates to the `ABILITYEFFECT_MOVE_END` case, whose
+`ABILITY_WILLPOWER` arm calls `TryActivateWillpower()` in `src/fork/willpower.c`. The pop-up is
+overwritten to the innate when the chosen ability differs (the Stamina precedent), and an
+innate equal to the chosen ability is skipped, so it never fires twice.
+
+**No `DETERMINISTIC_*` surface and no AI wiring.** It fires at 100% on a hit. Not breakable;
+suppressed by Gastro Acid and Neutralizing Gas through `IsInnateActive()`.
+
+**Species: a "strong will" flavor set,** picked by reading every Pokédex entry for mental
+resilience:
+
+- **Azelf**, whose official category is the "Willpower Pokémon".
+- **Meditite, Medicham** (+ Mega), the "Meditate Pokémon"; Mega Medicham's entry says it "uses
+  its amped-up willpower" to create extra arms.
+- **Hitmonchan**, whose "indomitable spirit means that it will never give up".
+
+Species with no such flavor were left out on purpose, whether special walls (Mantine, Goodra) or
+Sylveon, which it was first proposed for: Sylveon's entry is about lowering the *foe's* guard. No frontier set
+gives any carrier a chosen Willpower, so there is no Step 3.5 work.
