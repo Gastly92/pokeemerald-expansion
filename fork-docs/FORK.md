@@ -108,7 +108,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Feature | Flag(s) | Where | Status | Notes |
 |---|---|---|---|---|
 | Innate abilities | `FEATURE_INNATE_ABILITIES` | `config/feature.h`, `src/fork/innate_abilities.c` | ✅ | Some species gain always-on innate abilities on top of their chosen one; an innate is a pure boon. [Details](INNATE_ABILITIES.md) · `test/fork/innate_abilities.c` |
-| Species ability overrides | `FEATURE_INNATE_ABILITIES` | `src/fork/species_ability_overrides.c` | ✅ | Replaces a species' ability slot without editing `gSpeciesInfo`, CI-gated against innate clashes. [Details](INNATE_ABILITIES.md#direction) |
+| Species ability overrides | `FEATURE_INNATE_ABILITIES` | `src/fork/species_ability_overrides.c` | ✅ | Replaces a species' ability slot without editing `gSpeciesInfo`, CI-gated against innate clashes, and against displacing a species' own usable vanilla ability. [Details](INNATE_ABILITIES.md#direction) |
 | New types | `FEATURE_NEW_TYPES` | `config/feature.h`, `src/fork/new_types.c` | ✅ | Re-types selected species everywhere from one hook (first: Galarian Ponyta/Rapidash → Fire/Fairy). [Details](NEW_TYPES.md) · `test/fork/new_types.c` |
 | Custom abilities (Affinity family) | _(data; no flag)_ | `src/fork/type_affinity.c` | ✅ | An Affinity gives its holder a latent third type in battle, weaknesses included. [Details](NEW_ABILITIES.md) |
 | Custom abilities (Halo) | _(data; no flag)_ | `src/fork/halo.c` | ✅ | While its holder is out, no single hit can take more than 40% of any battler's max HP; the holder pays +1 PP per move. [Details](NEW_ABILITIES.md#case-study-halo) |

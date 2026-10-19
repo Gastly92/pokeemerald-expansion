@@ -183,6 +183,13 @@ Everything in "Do this" still applies **per line**, at the same depth.
   ability override or frontier set names a reserved ability")`. Only repurpose a
   *real* slot that's redundant and not test-pinned; filling an empty slot is always
   safe.
+- **No override where the species already owns a usable pick.** If a vanilla slot
+  holds a never-an-innate ability the species doesn't carry innately, the frontier
+  sets run *that*, not a borrow, unless the ability is on `sLowValueAbilities[]`
+  (Run Away, Rivalry, Plus/Minus, Klutz, Stall, ...). Gated by `TEST("Innate
+  abilities: no frontier set runs an override over its species' own usable
+  ability")`. An override is for species whose every vanilla slot is innate-capable,
+  already innate, or low-value.
 - **Pre-evolutions get no override rows and no frontier sets.** An override exists
   to be selected by a set, and a pre-evo set is drafted against fully-evolved mons
   and loses — so both are dead data on a Vulpix or an Ivysaur. Spend them on the

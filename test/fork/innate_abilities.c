@@ -10991,6 +10991,89 @@ TEST("Innate abilities: every roster species carries its own innate-capable abil
     EXPECT_EQ(missing, 0);
 }
 
+// The never-an-innate half of the gate above. An override row hands a species an observable
+// ability it does not have in vanilla, which is the right tool when every vanilla slot is innate-
+// capable, already an innate, or worthless in a Factory battle. It is the WRONG tool when the
+// species already owns a usable never-an-innate ability: the borrow then displaces the species'
+// own canon pick. Seaking ran a borrowed Sheer Force over its own Lightning Rod, and Marowak ran a
+// borrowed Mummy over its own Lightning Rod, before this gate existed.
+//
+// "Usable" excludes sLowValueAbilities[] below: abilities that do nothing, or next to nothing, in a
+// Factory battle, so an override replacing one costs the species nothing.
+static const enum Ability sLowValueAbilities[] =
+{
+    ABILITY_RUN_AWAY,     // fleeing wild battles
+    ABILITY_HONEY_GATHER, // overworld item pickup
+    ABILITY_RIVALRY,      // a gender coin flip: as often a nerf as a boost
+    ABILITY_PLUS,         // needs a Plus/Minus partner the draft never guarantees
+    ABILITY_MINUS,
+    ABILITY_COSTAR,       // copies an ally's boosts, so doubles-only and partner-dependent
+    ABILITY_DAMP,         // only blocks Explosion, Self-Destruct, Misty Explosion and Aftermath
+    ABILITY_SCREEN_CLEANER, // only clears screens on entry
+    ABILITY_KLUTZ,        // a drawback: disables the holder's own item
+    ABILITY_STALL,        // a drawback: always moves last
+};
+
+static bool32 IsLowValueAbility(enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sLowValueAbilities); i++)
+    {
+        if (ability == sLowValueAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// A vanilla ability a set could name instead of an override: real, never an innate, and worth
+// running.
+static bool32 IsUsableVanillaAbility(u16 species, enum Ability ability)
+{
+    return ability != ABILITY_NONE
+        && !IsImplementedInnate(ability)
+        && !SpeciesHasInnate(species, ability)
+        && !IsLowValueAbility(ability);
+}
+
+TEST("Innate abilities: no frontier set runs an override over its species' own usable ability")
+{
+    u32 i, slot;
+    u32 overrideSets = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < ARRAY_COUNT(sLowValueAbilities); i++)
+        EXPECT(!IsImplementedInnate(sLowValueAbilities[i])); // an innate-capable entry is dead weight
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        // A chosen ability found in the vanilla slots is the species' own pick, so it is fine.
+        if (set->ability == ABILITY_NONE || SpeciesHasVanillaAbility(set->species, set->ability))
+            continue;
+
+        overrideSets++;
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability vanilla = gSpeciesInfo[set->species].abilities[slot];
+
+            if (!IsUsableVanillaAbility(set->species, vanilla))
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: runs override %S, but vanilla slot %d already holds usable %S -- repoint the set at %S and drop the override, or add %S to sLowValueAbilities[] if it is worthless in the Factory",
+                            i, gSpeciesInfo[set->species].speciesName, gAbilitiesInfo[set->ability].name,
+                            slot, gAbilitiesInfo[vanilla].name, gAbilitiesInfo[vanilla].name, gAbilitiesInfo[vanilla].name);
+            break;
+        }
+    }
+
+    // Guard against a vacuous pass: the roster leans on override rows heavily.
+    EXPECT_GT(overrideSets, 100);
+    EXPECT_EQ(offenders, 0);
+}
+
 // A species needs at least one ability slot that can hold its *observable* ability -- one
 // whose post-override value is never-an-innate. When every real slot is innate-capable, no set can
 // legally name an ability for that species at all, because a set's chosen ability may not be one of
