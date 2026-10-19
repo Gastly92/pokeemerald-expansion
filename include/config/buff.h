@@ -319,4 +319,33 @@
 // which is a u32:8 bitfield -- keep it <= 255. Ignored when BUFF_CONFUSION_SELF_DAMAGE is FALSE.
 #define BUFF_CONFUSION_SELF_DAMAGE_POWER 60
 
+// When TRUE, No Guard turns the accuracy a move gave up into power ("wild swings"). Under
+// DETERMINISTIC_ACCURACY_EVASION every move already hits, which left vanilla No Guard with
+// almost nothing to do: its whole point was letting a mon run the strong-but-inaccurate moves
+// (Dynamic Punch, Stone Edge, Focus Blast, Hurricane) without the risk, and that risk no longer
+// exists. This gives the trade back in a form that still means something here. A damaging move
+// used BY or AGAINST a No Guard battler has its power multiplied by
+//     (BUFF_NO_GUARD_POWER_BASE - accuracy) / 100
+// so at the default base of 200: a 90% move hits 1.1x, 80% 1.2x, 70% 1.3x, 50% 1.5x. Moves that
+// are 100% accurate or never miss (accuracy 0) are unchanged, as are OHKO moves (a fixed
+// percentage of max HP under the deterministic flag).
+//   - Two-sided, like vanilla No Guard: the foe's Stone Edge into a No Guard holder is boosted
+//     too. Applied once even when both battlers have No Guard.
+//   - Reads the move's BASE accuracy, the same figure the max-PP scaling prices it at, so the
+//     inaccurate move still costs its reduced PP and now buys more power with it. Weather that
+//     would make Thunder / Hurricane / Blizzard sure-hit does not cancel the boost.
+//   - Only active together with DETERMINISTIC_ACCURACY_EVASION. With accuracy rolls on, No
+//     Guard's stock sure-hit is already the benefit, and this would double-pay it.
+//   - Lives in the base-power modifier chain, so the AI's damage estimates and the
+//     B_MOVE_DAMAGE_PREVIEW readout pick it up from the same calc (a foe's No Guard counts in
+//     the preview only once the player has seen it).
+// See GetNoGuardWildSwingModifier() in include/fork/buff_no_guard.h and its one call site in
+// CalcMoveBasePowerAfterModifiers(), src/battle_util.c.
+#define BUFF_NO_GUARD TRUE
+
+// The "200" in BUFF_NO_GUARD's (base - accuracy) / 100 multiplier. Raise it to make every
+// inaccurate move hit harder under No Guard (and make 100% moves gain too once it passes 200),
+// lower it toward 100 to shrink the bonus. Ignored when BUFF_NO_GUARD is FALSE.
+#define BUFF_NO_GUARD_POWER_BASE 200
+
 #endif // GUARD_CONFIG_BUFF_H

@@ -15,6 +15,7 @@
 #include "fork/willpower.h" // FORK: Willpower (Sp. Def twin of Stamina)
 #include "fork/pacify.h" // FORK: Pacify (Sp. Atk twin of Intimidate)
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
+#include "fork/buff_no_guard.h" // FORK: BUFF_NO_GUARD (No Guard "wild swings" power)
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -7627,6 +7628,10 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
     default:
         break;
     }
+
+    // FORK: BUFF_NO_GUARD -- a move used by or against a No Guard battler turns its lost accuracy
+    // into power. Rides this base-power modifier chain so the AI calc and the damage preview follow.
+    modifier = uq4_12_multiply(modifier, GetNoGuardWildSwingModifier(ctx));
 
     // Terastallization boosts weak, non-priority, non-multi hit moves after modifiers to 60 BP.
     if (GetActiveGimmick(battlerAtk) == GIMMICK_TERA
