@@ -2620,4 +2620,14 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Raises Sp. Def when hit."),
         .aiRating = 6,
     },
+
+    // FORK: Intimidate's Sp. Atk twin, designed as an innate (a pure boon, no downside). Lowers
+    // every opposing battler's Sp. Atk by 1 when the holder enters battle. See src/fork/pacify.c and
+    // fork-docs/NEW_ABILITIES.md.
+    [ABILITY_PACIFY] =
+    {
+        .name = _("Pacify"),
+        .description = COMPOUND_STRING("Lowers foes' Sp. Atk on entry."),
+        .aiRating = 7,
+    },
 };

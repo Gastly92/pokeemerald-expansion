@@ -13,6 +13,7 @@
 #include "fork/halo.h" // FORK: Halo (field-wide per-hit damage cap)
 #include "fork/rekindle.h" // FORK: Rekindle (heal on KO)
 #include "fork/willpower.h" // FORK: Willpower (Sp. Def twin of Stamina)
+#include "fork/pacify.h" // FORK: Pacify (Sp. Atk twin of Intimidate)
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "battle_interface.h"
 #include "battle_setup.h"
@@ -3530,6 +3531,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 break;
             BattleScriptCall(BattleScript_HaloActivates);
             effect++;
+            break;
+        case ABILITY_PACIFY: // FORK: Intimidate's Sp. Atk twin, chosen or innate. Logic in src/fork/pacify.c; keep this case on conflict.
+            if (shouldAbilityTrigger)
+                effect = TryActivatePacify(battler, gLastUsedAbility);
             break;
         case ABILITY_DRIZZLE:
             if (shouldAbilityTrigger && TryChangeWeatherWithAbility(battler, BATTLE_WEATHER_RAIN, gLastUsedAbility))

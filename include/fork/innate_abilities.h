@@ -283,6 +283,11 @@
 //   to IsActiveOnHitInnate delegating to the ABILITYEFFECT_MOVE_END case, whose logic lives in
 //   src/fork/willpower.c. Not breakable; no AI wiring. Carriers: a "strong will" flavor set
 //   (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
+//   PACIFY (the fork's own ability, designed as an innate): Intimidate's Sp. Atk twin, -1 Sp. Atk on every
+//   foe at switch-in. Rides the switch-in driver exactly like Intimidate — a one-line addition to
+//   SwitchInInnateAbilityEffect mapping it to the ABILITYEFFECT_ON_SWITCHIN case, whose logic lives in
+//   src/fork/pacify.c. An ordinary stat drop, so the reactions keyed on Intimidate by name skip it. No AI
+//   wiring. Carriers: a "calming" flavor set (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
