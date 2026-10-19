@@ -1888,6 +1888,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_VAPOREON,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION,
             ABILITY_HYDRATION,
             ABILITY_SWIFT_SWIM
         )
@@ -1896,6 +1897,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_JOLTEON,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION,
             ABILITY_QUICK_FEET,
             ABILITY_ROUGH_SKIN
         )
@@ -1904,8 +1906,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_FLAREON,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION,
             ABILITY_GUTS,
-            ABILITY_MAGMA_ARMOR
+            ABILITY_REKINDLE
         )
     },
     { // 0137
@@ -2560,8 +2563,11 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ESPEON,
         INNATES(
             ABILITY_ADAPTABILITY,
-            ABILITY_FOREWARN,
-            ABILITY_MAGIC_BOUNCE
+            ABILITY_ANTICIPATION,
+            ABILITY_CUTE_CHARM,
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGIC_BOUNCE,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0197
@@ -2569,7 +2575,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ADAPTABILITY,
             ABILITY_ANTICIPATION,
-            ABILITY_INNER_FOCUS
+            ABILITY_CUTE_CHARM,
+            ABILITY_INNER_FOCUS,
+            ABILITY_MAGIC_BOUNCE,
+            ABILITY_MAGIC_GUARD
         )
     },
     { // 0198
@@ -5672,6 +5681,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_LEAFEON,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION,
             ABILITY_CHLOROPHYLL,
             ABILITY_LEAF_GUARD
         )
@@ -5680,6 +5690,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GLACEON,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_ANTICIPATION,
             ABILITY_ICE_BODY,
             ABILITY_SNOW_CLOAK
         )
@@ -9015,8 +9026,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_SYLVEON,
         INNATES(
             ABILITY_ADAPTABILITY,
-            ABILITY_CUTE_CHARM,
-            ABILITY_STAKEOUT
+            ABILITY_ANTICIPATION,
+            ABILITY_CUTE_CHARM
         )
     },
     { // 0701
