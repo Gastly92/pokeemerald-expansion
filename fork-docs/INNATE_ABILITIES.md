@@ -673,7 +673,7 @@ G-Max, Sudowoodo, Latias, Latios, Liepard, Marshadow, Grimmsnarl. Beyond the fla
 dilution, the roster machinery is written *for* that line:
 `IllusionMonRejectsSlot` (`src/fork/frontier_draft.c`) keeps an Illusion mon out of
 the last party slot so its disguise can form, and the INFO viewer reads the disguise
-species so a foe never leaks. Those rows now carry ordinary picks (Mummy, Sap Sipper,
+species so a foe never leaks. Those rows now carry ordinary picks (Perish Body, Sap Sipper,
 Synchronize ×2, Contrary, Trace, Fluffy).
 
 **`ABILITY_PROTOSYNTHESIS` and `ABILITY_QUARK_DRIVE` are the second and third

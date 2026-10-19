@@ -382,8 +382,11 @@ For each species/form in the line:
      case good enough to survive the comparison, and the PR body should name who it
      is borrowed from. It is **not a veto**. The maintainer settled this in Aug 2026
      after four batches of raising it: the rows that prompted the question (Dancer,
-     Cotton Down, Mummy, Wandering Spirit, Well-Baked Body, Victory Star and the
-     rest) stand, and a new borrow is judged on flavor like any other pick.
+     Cotton Down, Wandering Spirit, Well-Baked Body, Victory Star and the rest)
+     stand, and a new borrow is judged on flavor like any other pick. Mummy was
+     the exception the flavor test caught later (Oct 2026): it had spread to
+     Gengar, Marowak, Spiritomb and Skeledirge as a generic "ghost curse", and
+     now sits only on the Yamask line and the bandage-wrapped Dusclops line.
    - **Many users → read the family, then check the species actually belongs.**
      Moxie's 16 (Krookodile, Scrafty, Gyarados, Pinsir, Honchkrow, Heracross …) are
      uniformly swaggering predators, so it misreads on a creature whose dex says it
