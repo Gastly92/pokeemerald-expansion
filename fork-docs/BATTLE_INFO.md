@@ -131,6 +131,14 @@ The fastest of your active mons anchors a per-foe comparison **glyph**:
 | `▲` (`CHAR_UP_ARROW`) | even the bottom of the foe's range exceeds yours |
 | blank | the ranges overlap |
 
+**A Speed tie is not a coin flip here.** Under `DETERMINISTIC_MOVE_RESULTS` a tie is settled by
+a fixed ladder of public facts (higher base Speed, then lighter, then higher HP%;
+`DeterministicSpeedTieWins`), so a tie exactly at the edge of a foe's range gets the arrow it
+resolves to: your 329 against a foe topping out at 329 reads `▼` when you win the tie, and a foe
+whose *floor* is your 329 reads `▲` when it wins. The ladder is asked of the same
+known-information view of the foe, so a hidden Light Metal or Float Stone never decides it.
+With the flag off, or every rung tied, an edge tie stays blank.
+
 Two deliberate choices here:
 
 - **A glyph, not a colour** — legible for colour-blind players (cf. the `COLOR_BLIND`
@@ -146,7 +154,7 @@ right-aligned **`TRICK ROOM`** marker on its title row while the room is up
 (`PrintTrickRoomMarker`). It costs no body line, which matters: with two player rows
 and six revealed foes the page is already full. The Field page carries the turn count.
 
-Code: `DrawSpeedPage` / `GetFoeSpeedRange` / `ApplyKnownSpeedModifiers` / `AppendSpeedGlyph`,
+Code: `DrawSpeedPage` / `GetFoeSpeedRange` / `ApplyKnownSpeedModifiers` / `GetFoeSpeedGlyph`,
 with `CalcSpeedBound` mirroring `CalculateMonStats`. Tests: `test/fork/frontier_battle_info_speed.c`.
 
 ## Reveal gating — the part that keeps breaking

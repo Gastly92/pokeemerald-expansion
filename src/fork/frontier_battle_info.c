@@ -13,6 +13,7 @@
 #include "battle_util.h"
 #include "bg.h"
 #include "config_changes.h" // GetConfig(FEATURE_INNATE_ABILITIES)
+#include "fork/deterministic_moves.h" // DeterministicSpeedTieWins for the Speed page's tie glyphs
 #include "fork/free_gimmicks.h" // FindMegaStoneForStats, shared with the live form change
 #include "fork/innate_abilities.h" // FEATURE_INNATE_ABILITIES
 #include "fork/frontier_battle_info.h"
@@ -1689,7 +1690,9 @@ static enum BattlerId GetFoeBattlerForSlot(u32 foeIndex)
 // A benched foe is priced as if it switched in now: on a borrowed foe battler, with fresh
 // stat stages and volatiles (Unburden and Slow Start reset on switching) but its own status.
 // Under Illusion the disguise is priced and nothing of the real mon's reveals is used.
-static void ApplyKnownSpeedModifiers(struct Pokemon *foeParty, u32 foeIndex, enum Species displaySpecies, u32 *lo, u32 *hi)
+// `tie` gets how a Speed tie with your fastest mon(s) (`refMask`) would resolve, from the same
+// view (see GetFoeSpeedRange).
+static void ApplyKnownSpeedModifiers(struct Pokemon *foeParty, u32 foeIndex, enum Species displaySpecies, u32 refMask, u32 *lo, u32 *hi, s32 *tie)
 {
     enum BattlerId battler = GetFoeBattlerForSlot(foeIndex);
     bool32 benched = (battler == MAX_BATTLERS_COUNT);
@@ -1728,6 +1731,8 @@ static void ApplyKnownSpeedModifiers(struct Pokemon *foeParty, u32 foeIndex, enu
         for (u32 i = 0; i < NUM_BATTLE_STATS; i++)
             gBattleMons[battler].statStages[i] = DEFAULT_STAT_STAGE;
         gBattleMons[battler].status1 = GetMonData(&foeParty[foeIndex], MON_DATA_STATUS, NULL);
+        gBattleMons[battler].hp = GetMonData(&foeParty[foeIndex], MON_DATA_HP, NULL);
+        gBattleMons[battler].maxHP = GetMonData(&foeParty[foeIndex], MON_DATA_MAX_HP, NULL);
         gBattleMons[battler].ability = abilityKnown ? gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][foeIndex] : ABILITY_NONE;
         gBattleMons[battler].item = itemKnown ? GetMonData(&foeParty[foeIndex], MON_DATA_HELD_ITEM, NULL) : ITEM_NONE;
     }
@@ -1772,12 +1777,64 @@ static void ApplyKnownSpeedModifiers(struct Pokemon *foeParty, u32 foeIndex, enu
     gBattleMons[battler].speed = *hi;
     *hi = GetBattlerTotalSpeedStat(battler, ability, holdEffect);
 
+    // DETERMINISTIC_MOVE_RESULTS settles a Speed tie by a fixed ladder of public facts (base
+    // Speed, weight, HP%), so a tie is no coin flip. Asked of this same view so a hidden Light
+    // Metal or Float Stone never decides it. The ladder flips under Trick Room to follow turn
+    // order; flipped back here, since the glyphs stay on the number axis (TRICK ROOM marker).
+    // You win if any of your fastest mons wins; the foe only if it beats all of them.
+    *tie = 0;
+    if (GetConfig(DETERMINISTIC_MOVE_RESULTS) && refMask != 0)
+    {
+        bool32 anyWin = FALSE, allLose = TRUE;
+
+        for (enum BattlerId b = 0; b < gBattlersCount; b++)
+        {
+            s32 r;
+
+            if (!(refMask & (1u << b)))
+                continue;
+            r = DeterministicSpeedTieWins(b, battler);
+            if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+                r = -r;
+            if (r > 0)
+                anyWin = TRUE;
+            if (r >= 0)
+                allLose = FALSE;
+        }
+        *tie = anyWin ? 1 : (allLose ? -1 : 0);
+    }
+
     gBattleMons[battler] = saved;
     gBattlerPartyIndexes[battler] = savedPartyIndex;
 }
 
-void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi)
+// The fastest effective Speed among your active mons, and which of them have it.
+static u32 GetPlayerSpeedRef(u32 *refMask)
 {
+    u32 ref = 0;
+
+    *refMask = 0;
+    for (enum BattlerId b = 0; b < gBattlersCount; b++)
+    {
+        u32 spe;
+
+        if (!IsOnPlayerSide(b) || !IsBattlerAlive(b))
+            continue;
+        spe = GetBattlerTotalSpeedStat(b, GetBattlerAbility(b), GetBattlerHoldEffect(b));
+        if (*refMask == 0 || spe > ref)
+        {
+            ref = spe;
+            *refMask = 0;
+        }
+        if (spe == ref)
+            *refMask |= 1u << b;
+    }
+    return ref;
+}
+
+void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi, s32 *tie)
+{
+    u32 refMask;
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
     // The display mon, so an active Illusion reports the disguise's Speed tier
     // (what the player believes they face), not the real mon's.
@@ -1788,7 +1845,25 @@ void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi)
 
     *lo = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
     *hi = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
-    ApplyKnownSpeedModifiers(foeParty, foeIndex, displaySpecies, lo, hi);
+    GetPlayerSpeedRef(&refMask);
+    ApplyKnownSpeedModifiers(foeParty, foeIndex, displaySpecies, refMask, lo, hi, tie);
+}
+
+u32 GetFoeSpeedGlyph(u32 foeIndex)
+{
+    u32 refMask, ref = GetPlayerSpeedRef(&refMask);
+    u32 lo, hi;
+    s32 tie;
+
+    if (refMask == 0)
+        return 0;
+    GetFoeSpeedRange(foeIndex, &lo, &hi, &tie);
+    // A tie at the edge of the range counts the way the tie ladder settles it.
+    if (hi < ref || (hi == ref && tie > 0))
+        return CHAR_DOWN_ARROW;
+    if (lo > ref || (lo == ref && tie < 0))
+        return CHAR_UP_ARROW;
+    return 0;
 }
 
 // Append a speed-comparison glyph to a foe row. The reference is the
@@ -1800,18 +1875,15 @@ void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi)
 // known Speed vs the foe's *possible* Speed), NOT a guarantee of turn order. A
 // down arrow means your Speed already exceeds the foe's best case; an up arrow
 // that even the foe's worst case exceeds yours; no arrow that it depends on the
-// foe's unseen investment. Colour-free on purpose (the arrows read for everyone).
-static u8 *AppendSpeedGlyph(u8 *p, bool32 haveRef, u32 ref, u32 lo, u32 hi)
+// foe's unseen investment. A tie exactly at the edge goes the way the
+// DETERMINISTIC_MOVE_RESULTS tie ladder settles it (GetFoeSpeedGlyph).
+// Colour-free on purpose (the arrows read for everyone).
+static u8 *AppendSpeedGlyph(u8 *p, u32 glyph)
 {
-    if (haveRef && hi < ref)
+    if (glyph != 0)
     {
         *p++ = CHAR_SPACE;
-        *p++ = CHAR_DOWN_ARROW;
-    }
-    else if (haveRef && lo > ref)
-    {
-        *p++ = CHAR_SPACE;
-        *p++ = CHAR_UP_ARROW;
+        *p++ = glyph;
     }
     *p = EOS;
     return p;
@@ -1827,8 +1899,6 @@ static void DrawSpeedPage(u8 windowId)
     u32 los[PARTY_SIZE];
     u32 his[PARTY_SIZE];
     u32 n = 0;
-    u32 ref = 0;
-    bool32 haveRef = FALSE;
 
     PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"));
     PrintTrickRoomMarker(windowId);
@@ -1837,7 +1907,8 @@ static void DrawSpeedPage(u8 windowId)
     // The player's active mons: their actual *effective* Speed - everything the
     // player already knows about their own side (Choice Scarf, Tailwind,
     // paralysis, stat stages) is folded in, so the foe ranges read against a
-    // concrete reference. The fastest such mon anchors the comparison arrows.
+    // concrete reference. The fastest such mon anchors the comparison arrows
+    // (GetPlayerSpeedRef).
     for (u32 battler = 0; battler < gBattlersCount; battler++)
     {
         u32 spe;
@@ -1846,11 +1917,6 @@ static void DrawSpeedPage(u8 windowId)
             continue;
 
         spe = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
-        if (!haveRef || spe > ref)
-        {
-            ref = spe;
-            haveRef = TRUE;
-        }
 
         p = StringCopy(line, COMPOUND_STRING("You: "));
         p = StringCopy(p, gBattleMons[battler].nickname);
@@ -1872,6 +1938,7 @@ static void DrawSpeedPage(u8 windowId)
     for (u32 i = 0; i < PARTY_SIZE; i++)
     {
         enum Species species = GetMonData(&foeParty[i], MON_DATA_SPECIES, NULL);
+        s32 tie;
 
         if (species == SPECIES_NONE || GetMonData(&foeParty[i], MON_DATA_IS_EGG, NULL))
             continue;
@@ -1879,7 +1946,7 @@ static void DrawSpeedPage(u8 windowId)
             continue;
 
         slots[n] = i;
-        GetFoeSpeedRange(i, &los[n], &his[n]);
+        GetFoeSpeedRange(i, &los[n], &his[n], &tie);
         n++;
     }
 
@@ -1922,7 +1989,7 @@ static void DrawSpeedPage(u8 windowId)
             p = ConvertIntToDecimalStringN(p, los[k], STR_CONV_MODE_LEFT_ALIGN, 4);
             *p++ = CHAR_HYPHEN;
             p = ConvertIntToDecimalStringN(p, his[k], STR_CONV_MODE_LEFT_ALIGN, 4);
-            AppendSpeedGlyph(p, haveRef, ref, los[k], his[k]);
+            AppendSpeedGlyph(p, GetFoeSpeedGlyph(slots[k]));
             PrintLine(windowId, line, 0, y);
             // Current HP, right-aligned: the row is ~160px at its longest ("Foe 6: " + a
             // 12-letter name + " 9999-9999 ^"), so "HP 100%" (~35px) clears it in 224px.
