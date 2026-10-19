@@ -4045,7 +4045,7 @@ Haxorus ×2 — its only non-innate slot Rivalry is a drawback — Pangoro ×2, 
 ×2, Veluza ×2, Ogerpon-Hearthflame), so they kept their now-redundant chosen Mold Breaker (still correct: the
 chosen runs it; the innate is redundant-but-skipped there) and were **deferred** — the same all-abilities-innate case. **Resolved via fork overrides:**
 Haxorus repointed to its real slot-0 **Rivalry** (`:x:`, no override); **Sawk** (slot-1 → Sheer Force), **Pangoro**
-(slot-0 → Tough Claws), **Hawlucha** (slot-1 → Tough Claws), **Basculegion M/F** (slot-1 → Water Absorb), **Veluza**
+(slot-0 → Tough Claws), **Hawlucha** (slot-1 → Tough Claws; now No Guard, matching its Mega), **Basculegion M/F** (slot-1 → Water Absorb), **Veluza**
 (empty slot-1 → Water Absorb) and **Ogerpon-Hearthflame** (empty slot-1 → Flash Fire) took fork chosen overrides
 (`src/fork/species_ability_overrides.c`). **Excadrill and Tinkaton are excluded** (all three slots test-pinned —
 Excadrill's Sand Rush + Sand Force + Mold Breaker are each selected in test/, Tinkaton's Mold Breaker + Own Tempo in

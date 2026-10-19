@@ -1949,7 +1949,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0701
         SPECIES_HAWLUCHA, 1,
-        ABILITY_HUSTLE
+        ABILITY_NO_GUARD
     },
     { // 0702
         SPECIES_DEDENNE, 1,
