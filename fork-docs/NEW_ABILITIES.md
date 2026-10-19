@@ -23,7 +23,8 @@ A third, **`Rekindle`** (an innate of Charizard and other Fire lines), is the
 exception to the design rule below: it has no downside and was built to be an
 **innate**. See its [case study](#case-study-rekindle). A fourth, **`Willpower`**
 (Stamina's Sp. Def twin, an innate of Azelf and the Medicham line), was built the same way; see its
-[case study](#case-study-willpower).
+[case study](#case-study-willpower). A fifth, **`Pacify`** (Intimidate's Sp. Atk twin, an innate of
+Sylveon), followed; see its [case study](#case-study-pacify).
 
 ## Design first: is this an ability, or an innate?
 
@@ -383,3 +384,33 @@ randomness and no AI wiring, matching Stamina, which has no AI avoid-read upstre
 
 Covered by `test/fork/willpower.c`. Its carriers are listed in
 [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_willpower).
+
+## Case study: Pacify
+
+**`Pacify`** (`ABILITY_PACIFY`) is the fork's third ability designed to be an **innate**, and
+the Sp. Atk twin of upstream's Intimidate, which has no special counterpart in the main games.
+
+> When the holder enters battle, every opposing battler's **Sp. Atk drops by 1 stage**.
+
+**Flavor.** It calms the foe's will to fight. It was made for **Sylveon**, whose entry says its
+feelers give off "an aura that weakens hostility in its prey".
+
+**Why it can be an innate.** It touches foes only, so the holder's partner in doubles is never
+affected. A foe's Defiant or Competitive can still answer it, which is the same trade the
+innate Intimidate already makes.
+
+**An ordinary stat drop, not an Intimidate.** The `ABILITYEFFECT_ON_SWITCHIN` case in
+`src/battle_util.c` has an `ABILITY_PACIFY` arm beside Halo's that calls `TryActivatePacify()`
+(`src/fork/pacify.c`). It queues Intimidate's loop with Sp. Atk in place of Attack and runs
+upstream's `BattleScript_AbilityStatChange`, the script upstream's own comment recommends for
+Intimidate-like abilities. So Clear Body, Clear Amulet, Mirror Armor, Contrary, Defiant and
+Competitive react to it as to any drop, while the reactions upstream keys on Intimidate by name
+(Rattled, Guard Dog, Adrenaline Orb, and the Gen 8 Inner Focus / Own Tempo / Oblivious / Scrappy
+immunity) do not. As an innate it goes through the switch-in driver
+(`SwitchInInnateAbilityEffect`), exactly like an innate Intimidate.
+
+**No AI wiring yet.** The AI does not simulate the drop when it scores a switch-in, the way it
+does for Intimidate, and does not switch out to re-trigger it. There is no randomness.
+
+Covered by `test/fork/pacify.c`. Its carriers are listed in
+[`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_pacify).

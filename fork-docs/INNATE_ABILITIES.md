@@ -4556,3 +4556,30 @@ resilience:
 Species with no such flavor were left out on purpose, whether special walls (Mantine, Goodra) or
 Sylveon, which it was first proposed for: Sylveon's entry is about lowering the *foe's* guard. No frontier set
 gives any carrier a chosen Willpower, so there is no Step 3.5 work.
+
+### ABILITY_PACIFY
+
+**The fork's own ability, and its third one designed as an innate** (its definition and
+rationale are in [`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-pacify)). Intimidate's Sp. Atk
+twin: each foe loses 1 Sp. Atk stage when the holder enters battle.
+
+**Wiring.** A one-line addition to `SwitchInInnateAbilityEffect` (`src/fork/innate_abilities.c`),
+mapping it to `ABILITYEFFECT_ON_SWITCHIN` like Intimidate. That case's `ABILITY_PACIFY` arm calls
+`TryActivatePacify()` in `src/fork/pacify.c`. The pop-up is overwritten to the innate when the
+chosen ability differs (the Intimidate precedent), and an innate equal to the chosen ability is
+skipped, so it never fires twice.
+
+**No `DETERMINISTIC_*` surface and no AI wiring.** It fires at 100% on entry. Not breakable;
+suppressed by Gastro Acid and Neutralizing Gas through `IsInnateActive()`.
+
+**Species: a "calming" flavor set,** picked by reading every Pokédex entry for wording about
+weakening a foe's hostility or fighting spirit:
+
+- **Sylveon**, which it was made for: an aura "that weakens hostility in its prey".
+- **Chikorita, Bayleef, Meganium** (+ Mega): Chikorita's fragrance "becalms the battlers", and
+  Meganium gives off "its becalming scent to blunt the foe's fighting spirit".
+- **Mega Audino**: "a soothing pulse from its body that reduces hostility in others". Base Audino's
+  entry is about sensing feelings, not calming them, so it is left out.
+
+Entries that soothe *people* or allies rather than foes (Venusaur, Oinkologne, Skeledirge) were
+left out on purpose. No frontier set gives any carrier a chosen Pacify, so there is no Step 3.5 work.

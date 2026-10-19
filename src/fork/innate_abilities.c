@@ -2111,6 +2111,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_PACIFY,
             ABILITY_SWEET_VEIL
         )
     },
@@ -2122,6 +2123,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEAF_GUARD,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_PACIFY,
             ABILITY_SWEET_VEIL
         )
     },
@@ -2134,6 +2136,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_MEGA_SOL,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_PACIFY,
             ABILITY_SWEET_VEIL
         )
     },
@@ -2146,6 +2149,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_MEGA_SOL,
             ABILITY_NATURAL_CURE,
             ABILITY_OVERGROW,
+            ABILITY_PACIFY,
             ABILITY_SWEET_VEIL
         )
     },
@@ -6491,6 +6495,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_FRIEND_GUARD,
             ABILITY_HEALER,
+            ABILITY_PACIFY,
             ABILITY_REGENERATOR
         )
     },
@@ -9032,7 +9037,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ADAPTABILITY,
             ABILITY_ANTICIPATION,
-            ABILITY_CUTE_CHARM
+            ABILITY_CUTE_CHARM,
+            ABILITY_PACIFY
         )
     },
     { // 0701
@@ -13424,6 +13430,7 @@ static enum AbilityEffect SwitchInInnateAbilityEffect(enum Ability ability)
     switch (ability)
     {
     case ABILITY_INTIMIDATE:       // lowers opposing battlers' Attack by 1 stage on switch-in
+    case ABILITY_PACIFY:           // lowers opposing battlers' Sp. Atk by 1 stage on switch-in (the fork's Intimidate twin)
     case ABILITY_ANTICIPATION:     // shows a warning message if a foe knows a super-effective / OHKO move
     case ABILITY_FOREWARN:         // reveals one of a foe's strongest moves
     case ABILITY_FRISK:            // reveals the foes' held items
