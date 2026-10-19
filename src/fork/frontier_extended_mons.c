@@ -180,8 +180,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HEAT_WAVE,
             MOVE_SLUDGE_BOMB,
-            MOVE_ENERGY_BALL,
+            MOVE_LEAF_STORM,
             MOVE_EARTH_POWER
+        },
+        .ability = ABILITY_GRASSY_SURGE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIRE,
+    },
+    {
+        .species = SPECIES_VENUSAUR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAT_ROCK,
+        .moves =
+        {
+            MOVE_SUNNY_DAY,
+            MOVE_GROWTH,
+            MOVE_SOLAR_BEAM,
+            MOVE_WEATHER_BALL
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
