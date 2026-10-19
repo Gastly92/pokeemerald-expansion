@@ -780,7 +780,11 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_NO_GUARD] =
     {
         .name = _("No Guard"),
+    #if BUFF_NO_GUARD // FORK: under the buff, "wild swings" -- see config/buff.h. On conflict keep both branches.
+        .description = COMPOUND_STRING("Inaccurate hits land harder."),
+    #else
         .description = COMPOUND_STRING("Ensures all attacks land."),
+    #endif
         .aiRating = 8,
     },
 

@@ -102,6 +102,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Flat-HP items buff | `BUFF_FLAT_HP_ITEMS` (+ `…_DENOMINATOR`) | ✅ | Oran Berry and Berry Juice heal 1/4 max HP, like Sitrus. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_flat_hp_items.c` |
 | Signature type items | `BUFF_SIGNATURE_TYPE_ITEMS` | ✅ | Plates, Memories and Drives are locked to their own species and boost on the type-item scale, as do the signature orbs. [Reasoning](HELD_ITEMS.md#group-b--dominated-by-our-own-buffs--shipped) · `test/fork/buff_signature_type_items.c` |
 | Confusion self-hit buff | `BUFF_CONFUSION_SELF_DAMAGE` (+ `…_POWER`) | ✅ | The confusion self-hit is 60 BP instead of 40. [Mechanics](DETERMINISM.md#deterministic_status) · `test/fork/buff_confusion.c` |
+| No Guard buff ("wild swings") | `BUFF_NO_GUARD` (+ `…_POWER_BASE`) | ✅ | A move used by or against a No Guard battler turns its lost accuracy into power (80% → 1.2×, 70% → 1.3×); active only with `DETERMINISTIC_ACCURACY_EVASION`, and shown in the damage preview. `test/fork/buff_no_guard.c` |
 
 ## Abilities, types & gimmicks
 
