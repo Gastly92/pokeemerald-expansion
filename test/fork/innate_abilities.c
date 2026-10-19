@@ -978,20 +978,21 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: an innate Prankster status move st
     PARAMETRIZE { ability = ABILITY_INSOMNIA;  enabled = TRUE;  } // innate Prankster: NOT blocked (pure boon)
     GIVEN {
         ASSUME(SpeciesHasInnate(SPECIES_MURKROW, ABILITY_PRANKSTER));
-        ASSUME(GetSpeciesType(SPECIES_UMBREON, 0) == TYPE_DARK);
+        // Not Umbreon: its innate Magic Bounce would reflect the Confuse Ray.
+        ASSUME(GetSpeciesType(SPECIES_POOCHYENA, 0) == TYPE_DARK);
         WITH_CONFIG(B_PRANKSTER_DARK_TYPES, GEN_7);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_UMBREON);
+        PLAYER(SPECIES_POOCHYENA);
         OPPONENT(SPECIES_MURKROW) { Ability(ability); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_CONFUSE_RAY); }
     } SCENE {
         if (ability == ABILITY_PRANKSTER) {
             NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
-            MESSAGE("It doesn't affect Umbreon…");
+            MESSAGE("It doesn't affect Poochyena…");
         } else {
             ANIMATION(ANIM_TYPE_MOVE, MOVE_CONFUSE_RAY, opponent);
-            MESSAGE("Umbreon became confused!");
+            MESSAGE("Poochyena became confused!");
         }
     }
 }
@@ -5474,6 +5475,7 @@ static const enum Ability sImplementedInnates[] =
         ABILITY_DANCER,
         ABILITY_EFFECT_SPORE,
         ABILITY_REKINDLE,
+        ABILITY_WILLPOWER,
         // Reserved as well as innate: only their canon Paradox carriers may declare them (gate (7)).
         ABILITY_PROTOSYNTHESIS, ABILITY_QUARK_DRIVE,
 };
