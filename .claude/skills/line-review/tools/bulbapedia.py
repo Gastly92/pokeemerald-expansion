@@ -1,14 +1,11 @@
-"""Print a species' Biology section from Bulbapedia, and optionally its media sections.
+"""Print a species' Biology, anime and manga sections from Bulbapedia.
 
     python3 -I .claude/skills/line-review/tools/bulbapedia.py NINETALES VENUSAUR_MEGA
-    python3 -I .claude/skills/line-review/tools/bulbapedia.py --media NINETALES
-    python3 -I .claude/skills/line-review/tools/bulbapedia.py --media --full PIKACHU
 
 Names are the bare species constants line.py takes; a form constant resolves to
 its base species' page through the repo's .speciesName, which matches Bulbapedia's
-titles (Mr. Mime, Nidoran♀, Type: Null). Biology includes its Forms subsections.
---media adds "In animation" and "In the manga", capped at 8000 characters each
-unless --full is given. Pages are fetched once as wikitext through the MediaWiki
+titles (Mr. Mime, Nidoran♀, Type: Null). Biology includes its Forms subsections;
+"In animation" and "In the manga" follow in full. Pages are fetched once as wikitext through the MediaWiki
 API and cached in ~/.cache/line-review-bulbapedia (delete that directory to
 refresh).
 
@@ -22,11 +19,10 @@ import glob, html, json, os, re, sys, urllib.parse, urllib.request
 CACHE = os.path.expanduser('~/.cache/line-review-bulbapedia')
 API = ('https://bulbapedia.bulbagarden.net/w/api.php?action=parse&format=json'
        '&redirects=1&prop=wikitext&page=%s')
-MEDIA = ('In animation', 'In the manga')
+SECTIONS = ('Biology', 'In animation', 'In the manga')
 # boilerplate subsections dropped from a section, at whatever depth they sit
 DROP = {'Biology': ('Evolution',), 'In animation': ('Pokédex entries',),
         'In the manga': ('Pokédex entries',)}
-CAP = 8000
 
 names = {}
 for f in glob.glob('src/data/pokemon/species_info/*.h'):
@@ -117,21 +113,16 @@ def clean(w):
     return w.strip()
 
 
-args = sys.argv[1:]
-media = '--media' in args
-full = '--full' in args
-for arg in [a for a in args if not a.startswith('--')]:
+for arg in sys.argv[1:]:
     name = species_name(arg)
     print('== %s (Bulbapedia: %s)' % (arg, name))
     wiki = load(name)
     if not wiki:
         continue
-    for title in ('Biology',) + (MEDIA if media else ()):
+    for title in SECTIONS:
         text = section(wiki, title)
         for sub in DROP.get(title, ()):
             text = drop(text, sub)
         text = clean(text)
-        if not full and len(text) > CAP:
-            text = text[:CAP] + '\n  [... truncated; rerun with --full]'
         print('--- %s' % title)
         print(text or '  (no %s section)' % title)

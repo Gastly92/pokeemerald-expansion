@@ -73,8 +73,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
    root. That directory also holds `lines.py` (the lines a dex range covers),
    `line.py` (a species' rows and sets), `dex.py`, `users.py` (canon ability
    users), `smogon.py` (Smogon's published sets, all gens and formats),
-   `bulbapedia.py` (Bulbapedia's Biology section, plus anime and manga with
-   `--media`), and the
+   `bulbapedia.py` (Bulbapedia's Biology, anime and manga sections), and the
    `inn.py`/`addset.py` editors; each carries its usage in a docstring.
    Rows and sets are routinely keyed on a form constant a bare name aliases to
    (`SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_MINIOR` → `_METEOR_RED` in two hops)
@@ -163,7 +162,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
   often supports nothing, while what a creature is shown *doing* on screen is sharper
   evidence (Ninetales' anime episode is entirely about it sealing a mansion so nobody
   can leave, plus the tail-curse — a far better case for Shadow Tag and Cursed Body
-  than its dex line). **Start from `tools/bulbapedia.py --media <NAME>`** (Biology, plus
+  than its dex line). **Start from `tools/bulbapedia.py <NAME>`** (Biology, plus
   every anime and manga appearance) rather than memory: what it prints is sourced, so
   cite it as Bulbapedia with the episode or chapter, not as recall. Two conditions: **name
   the medium** (Biology prose mixes the games with the anime), **flag as recall anything

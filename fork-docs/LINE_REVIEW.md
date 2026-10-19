@@ -221,7 +221,7 @@ from the repo root; each carries its usage in a docstring.
 | `inn.py SPECIES… ABILITY…` | add innates to existing rows, keeping them alphabetical |
 | `addset.py NAME` | insert a new frontier set after that species' last one |
 | `smogon.py NAME…` | Smogon's published sets for a species and its formes, every generation and format (`python3 -I`; fetched from data.pkmn.cc and cached) |
-| `bulbapedia.py [--media] NAME…` | Bulbapedia's Biology section (forms included); `--media` adds every anime and manga appearance — the Step 1 media pass (`python3 -I`; fetched via the MediaWiki API and cached) |
+| `bulbapedia.py NAME…` | Bulbapedia's Biology section (forms included) and every anime and manga appearance — the Step 1 media pass (`python3 -I`; fetched via the MediaWiki API and cached) |
 
 ### Working the batch
 
@@ -431,7 +431,7 @@ For each species/form in the line:
    tails — which is a far better case for Shadow Tag and Cursed Body than the dex line
    could ever carry alone.
 
-   **Run `tools/bulbapedia.py --media <NAME>` for every species in the line** before
+   **Run `tools/bulbapedia.py <NAME>` for every species in the line** before
    reaching for memory. It prints Bulbapedia's Biology section and the "In animation"
    and "In the manga" sections, so the Ninetales mansion episode above is one command
    away instead of one half-remembered scene. What it prints is a sourced citation,
