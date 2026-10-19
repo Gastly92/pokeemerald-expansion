@@ -5475,7 +5475,6 @@ static const enum Ability sImplementedInnates[] =
         ABILITY_DANCER,
         ABILITY_EFFECT_SPORE,
         ABILITY_REKINDLE,
-        ABILITY_WILLPOWER,
         // Reserved as well as innate: only their canon Paradox carriers may declare them (gate (7)).
         ABILITY_PROTOSYNTHESIS, ABILITY_QUARK_DRIVE,
 };
