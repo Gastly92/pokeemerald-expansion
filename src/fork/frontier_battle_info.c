@@ -2,7 +2,8 @@
 // the (disabled) BAG action. See include/config/frontier.h (B_FRONTIER_BATTLE_INFO)
 // and include/frontier_battle_info.h for the integration notes. This whole file
 // is fork-only, so it never conflicts on an upstream sync; it only *reads* battle
-// state, never mutates it.
+// state, never mutates it (the Speed Tiers page borrows a foe battler for one
+// GetBattlerTotalSpeedStat call and restores it byte-for-byte before returning).
 
 #include "global.h"
 #include "battle.h"
@@ -1654,9 +1655,8 @@ static void DrawBaseStatsPage(u8 windowId, u32 playerCursor, u32 foeIndex)
 // Speed stat spans a known range — the player needn't know the exact EV/IV
 // investment or nature to bound it. Lowest = 0 IVs, 0 EVs, a hindering nature
 // (x0.9); highest = 31 IVs, 252 EVs, a boosting nature (x1.1). The formula
-// mirrors CalculateMonStats() in src/pokemon.c. This is the *raw* stat range:
-// it deliberately ignores in-battle modifiers not derivable from base stats
-// (Choice Scarf, paralysis, Tailwind, stat stages, Speed-changing abilities).
+// mirrors CalculateMonStats() in src/pokemon.c. ApplyKnownSpeedModifiers then
+// scales both ends by every in-battle modifier the player can see.
 // The player's own active mons' actual Speed is shown alongside for comparison.
 static u32 CalcSpeedBound(u32 baseSpeed, u32 level, u32 iv, u32 ev, u32 natureNum)
 {
@@ -1666,15 +1666,140 @@ static u32 CalcSpeedBound(u32 baseSpeed, u32 level, u32 iv, u32 ev, u32 natureNu
     return n * natureNum / 100;
 }
 
+// The on-field battler holding foe party slot `foeIndex`, else MAX_BATTLERS_COUNT.
+static enum BattlerId GetFoeBattlerForSlot(u32 foeIndex)
+{
+    for (enum BattlerId b = 0; b < gBattlersCount; b++)
+    {
+        if (!IsOnPlayerSide(b) && GetBattlerTrainer(b) == B_TRAINER_OPPONENT_A
+            && gBattlerPartyIndexes[b] == foeIndex
+            && !gBattleStruct->battlerState[b].notOnField)
+            return b;
+    }
+    return MAX_BATTLERS_COUNT;
+}
+
+// Scale a foe's raw Speed range by everything the player knows about it, the same way the
+// damage preview treats the foe (fork-docs/DAMAGE_PREVIEW.md, "What it hides"): its stat
+// stages, paralysis, Tailwind, weather and terrain are public; its chosen ability and held
+// item count only once revealed (an Unburden doubling therefore shows from the moment it
+// fires, since CheckSetUnburden records the ability); innates are species data and always
+// count. GetBattlerTotalSpeedStat is the turn-order maths itself, so the foe battler is
+// rewritten into the player's knowledge for the call and restored byte-for-byte.
+// A benched foe is priced as if it switched in now: on a borrowed foe battler, with fresh
+// stat stages and volatiles (Unburden and Slow Start reset on switching) but its own status.
+// Under Illusion the disguise is priced and nothing of the real mon's reveals is used.
+static void ApplyKnownSpeedModifiers(struct Pokemon *foeParty, u32 foeIndex, enum Species displaySpecies, u32 *lo, u32 *hi)
+{
+    enum BattlerId battler = GetFoeBattlerForSlot(foeIndex);
+    bool32 benched = (battler == MAX_BATTLERS_COUNT);
+    bool32 disguised = (GetFoeDisplayMon(foeParty, foeIndex) != &foeParty[foeIndex]);
+    bool32 abilityKnown = !disguised && (gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & (1u << foeIndex));
+    bool32 itemKnown = !disguised && (gBattleStruct->infoItemRevealed[B_SIDE_OPPONENT] & (1u << foeIndex));
+    struct BattlePokemon saved;
+    u8 savedPartyIndex;
+    enum Ability ability;
+    enum HoldEffect holdEffect;
+
+    if (benched)
+    {
+        for (enum BattlerId b = 0; b < gBattlersCount; b++)
+        {
+            if (!IsOnPlayerSide(b) && GetBattlerTrainer(b) == B_TRAINER_OPPONENT_A
+                && !gBattleStruct->battlerState[b].notOnField)
+            {
+                battler = b;
+                break;
+            }
+        }
+        if (battler == MAX_BATTLERS_COUNT)
+            return;
+    }
+
+    saved = gBattleMons[battler];
+    savedPartyIndex = gBattlerPartyIndexes[battler];
+
+    if (benched)
+    {
+        gBattlerPartyIndexes[battler] = foeIndex;
+        memset(&gBattleMons[battler].volatiles, 0, sizeof(gBattleMons[battler].volatiles));
+        // Which stat a Paradox boost picks depends on the hidden spread, so never assume Speed.
+        gBattleMons[battler].volatiles.paradoxBoostedStat = STAT_ATK;
+        for (u32 i = 0; i < NUM_BATTLE_STATS; i++)
+            gBattleMons[battler].statStages[i] = DEFAULT_STAT_STAGE;
+        gBattleMons[battler].status1 = GetMonData(&foeParty[foeIndex], MON_DATA_STATUS, NULL);
+        gBattleMons[battler].ability = abilityKnown ? gBattleStruct->infoRevealedAbility[B_SIDE_OPPONENT][foeIndex] : ABILITY_NONE;
+        gBattleMons[battler].item = itemKnown ? GetMonData(&foeParty[foeIndex], MON_DATA_HELD_ITEM, NULL) : ITEM_NONE;
+    }
+    else
+    {
+        if (!abilityKnown)
+            gBattleMons[battler].ability = ABILITY_NONE;
+        if (!itemKnown)
+            gBattleMons[battler].item = ITEM_NONE;
+    }
+
+    if (!benched && gBattleMons[battler].volatiles.transformed)
+    {
+        // Transform copies the target's Speed stat and species. Copied off one of your mons,
+        // that stat is one you know exactly; off its partner, only the copied species' range.
+        u32 level = GetMonData(&foeParty[foeIndex], MON_DATA_LEVEL, NULL);
+        u32 baseSpeed = GetSpeciesBaseSpeed(gBattleMons[battler].species);
+        struct Pokemon *playerParty = GetTrainerParty(B_TRAINER_PLAYER);
+
+        *lo = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
+        *hi = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
+        for (u32 i = 0; i < PARTY_SIZE; i++)
+        {
+            if (GetMonData(&playerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE
+                && GetMonData(&playerParty[i], MON_DATA_PERSONALITY, NULL) == gBattleMons[battler].volatiles.transformedMonPID)
+            {
+                *lo = *hi = gBattleMons[battler].speed;
+                break;
+            }
+        }
+    }
+    else
+    {
+        // Innates and Quick Powder read the species, so price the mon the player sees.
+        gBattleMons[battler].species = displaySpecies;
+    }
+
+    ability = GetBattlerAbility(battler);
+    holdEffect = GetBattlerHoldEffect(battler);
+    gBattleMons[battler].speed = *lo;
+    *lo = GetBattlerTotalSpeedStat(battler, ability, holdEffect);
+    gBattleMons[battler].speed = *hi;
+    *hi = GetBattlerTotalSpeedStat(battler, ability, holdEffect);
+
+    gBattleMons[battler] = saved;
+    gBattlerPartyIndexes[battler] = savedPartyIndex;
+}
+
+void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi)
+{
+    struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+    // The display mon, so an active Illusion reports the disguise's Speed tier
+    // (what the player believes they face), not the real mon's.
+    struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
+    enum Species displaySpecies = GetMonData(displayMon, MON_DATA_SPECIES, NULL);
+    u32 level = GetMonData(displayMon, MON_DATA_LEVEL, NULL);
+    u32 baseSpeed = GetSpeciesBaseSpeed(displaySpecies);
+
+    *lo = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
+    *hi = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
+    ApplyKnownSpeedModifiers(foeParty, foeIndex, displaySpecies, lo, hi);
+}
+
 // Append a speed-comparison glyph to a foe row. The reference is the
 // player's fastest active mon's *effective* Speed (GetBattlerTotalSpeedStat,
 // which already folds in the player's own Choice Scarf, Tailwind, paralysis and
 // stat stages - all known to the player about their own side). The foe range is
-// the raw base-stat span only; it deliberately ignores the foe's hidden item and
-// ability, so this is purely a number comparison (your known Speed vs the foe's
-// *possible* base Speed), NOT a guarantee of turn order. A down arrow means your
-// Speed already exceeds the foe's best-case base Speed; an up arrow that even the
-// foe's worst-case base Speed exceeds yours; no arrow that it depends on the
+// the base-stat span scaled by what the player knows (ApplyKnownSpeedModifiers);
+// a hidden item or ability is left out, so this is a number comparison (your
+// known Speed vs the foe's *possible* Speed), NOT a guarantee of turn order. A
+// down arrow means your Speed already exceeds the foe's best case; an up arrow
+// that even the foe's worst case exceeds yours; no arrow that it depends on the
 // foe's unseen investment. Colour-free on purpose (the arrows read for everyone).
 static u8 *AppendSpeedGlyph(u8 *p, bool32 haveRef, u32 ref, u32 lo, u32 hi)
 {
@@ -1747,23 +1872,14 @@ static void DrawSpeedPage(u8 windowId)
     for (u32 i = 0; i < PARTY_SIZE; i++)
     {
         enum Species species = GetMonData(&foeParty[i], MON_DATA_SPECIES, NULL);
-        struct Pokemon *displayMon;
-        u32 level, baseSpeed;
 
         if (species == SPECIES_NONE || GetMonData(&foeParty[i], MON_DATA_IS_EGG, NULL))
             continue;
         if (!gBattleStruct->partyState[B_TRAINER_OPPONENT_A][i].sentOut)
             continue;
 
-        // Use the display mon so an active Illusion reports the disguise's Speed
-        // tier (what the player believes they face), not the real mon's.
-        displayMon = GetFoeDisplayMon(foeParty, i);
-        level = GetMonData(displayMon, MON_DATA_LEVEL, NULL);
-        baseSpeed = GetSpeciesBaseSpeed(GetMonData(displayMon, MON_DATA_SPECIES, NULL));
-
         slots[n] = i;
-        los[n] = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
-        his[n] = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
+        GetFoeSpeedRange(i, &los[n], &his[n]);
         n++;
     }
 
@@ -1802,13 +1918,14 @@ static void DrawSpeedPage(u8 windowId)
             p = StringCopy(p, COMPOUND_STRING(": "));
             p = StringCopy(p, GetSpeciesName(GetMonData(displayMon, MON_DATA_SPECIES, NULL)));
             *p++ = CHAR_SPACE;
-            p = ConvertIntToDecimalStringN(p, los[k], STR_CONV_MODE_LEFT_ALIGN, 3);
+            // 4 digits: Tailwind, a Scarf and +6 stack well past 999.
+            p = ConvertIntToDecimalStringN(p, los[k], STR_CONV_MODE_LEFT_ALIGN, 4);
             *p++ = CHAR_HYPHEN;
-            p = ConvertIntToDecimalStringN(p, his[k], STR_CONV_MODE_LEFT_ALIGN, 3);
+            p = ConvertIntToDecimalStringN(p, his[k], STR_CONV_MODE_LEFT_ALIGN, 4);
             AppendSpeedGlyph(p, haveRef, ref, los[k], his[k]);
             PrintLine(windowId, line, 0, y);
-            // Current HP, right-aligned: the row is ~150px at its longest ("Foe 6: " + a
-            // 12-letter name + " 999-999 ^"), so "HP 100%" (~35px) clears it in 224px.
+            // Current HP, right-aligned: the row is ~160px at its longest ("Foe 6: " + a
+            // 12-letter name + " 9999-9999 ^"), so "HP 100%" (~35px) clears it in 224px.
             FormatHpPercent(line, GetFoeHpPercent(slots[k]));
             PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
             y += LINE_H;

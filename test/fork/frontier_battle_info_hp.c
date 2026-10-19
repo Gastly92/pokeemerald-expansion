@@ -71,7 +71,7 @@ TEST("Frontier INFO: the Speed page's HP column clears the widest foe row")
             continue;
         p = StringCopy(row, COMPOUND_STRING("Foe 6: "));
         p = StringCopy(p, GetSpeciesName(species));
-        p = StringCopy(p, COMPOUND_STRING(" 999-999 "));
+        p = StringCopy(p, COMPOUND_STRING(" 9999-9999 "));
         *p++ = CHAR_UP_ARROW;
         *p = EOS;
         w = GetStringWidth(FONT_NARROW, row, 0);

@@ -51,5 +51,10 @@ u32 GetFoeHpPercent(u32 foeIndex);
 // The same rounded-up figure for one of the player's on-field battlers (Speed page "You:" rows):
 // a 1/4-max-HP cost like Substitute is affordable iff it reads 26 or more.
 u32 GetBattlerHpPercent(u32 battler);
+// The Speed Tiers page's range for a seen foe party slot: 0 IV / 0 EV / hindering nature up to
+// 31 / 252 / boosting, then scaled by every modifier the player can see (stat stages, paralysis,
+// Tailwind, weather, revealed item and ability, innates). A benched foe is priced as if it
+// switched in now. Exposed for test/fork/frontier_battle_info_speed.c.
+void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi);
 
 #endif // GUARD_FRONTIER_BATTLE_INFO_H

@@ -40,7 +40,7 @@ path.
 
 | Page | Shows |
 |---|---|
-| **Speed Tiers** | Each revealed foe's *possible* Speed range vs. your effective Speed (see below) |
+| **Speed Tiers** | Each revealed foe's *possible* Speed range, scaled by everything known about it, vs. your effective Speed (see below) |
 | **Field** | Weather, terrain, whole-field effects (Trick Room, Gravity, Magic/Wonder Room, the Sports, Fairy Lock, Ion Deluge) with turns left, plus entry hazards and side screens for both sides |
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides, with turns left where the duration is knowable (see below) |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
@@ -90,12 +90,32 @@ page must not survive the feature being turned off.
 The point of this page is to let the player place a foe on the speed tier **without
 knowing its exact spread**, using only what is derivable from public data.
 
-**Foe rows show a range, `min-max`, computed from base stats alone** at the foe's known
+**Foe rows show a range, `min-max`, starting from base stats** at the foe's known
 level: min = 0 IVs / 0 EVs / hindering nature ×0.9, max = 31 IVs / 252 EVs / boosting
 nature ×1.1. Only *seen* slots are listed — unseen ones are omitted entirely, so
 neither an unrevealed mon **nor the foe's party size** leaks. Rows sort fastest-first
 by the top of their range, so the list reads as a true tier. Each foe row also carries
 its current `HP n%` (or `FNT`) right-aligned, the same rounded-up figure as the Foe page.
+
+**Both ends are then scaled by everything the player knows about that foe**, the same
+knowledge model as the [damage preview](DAMAGE_PREVIEW.md#what-it-hides), run through the real
+turn-order maths (`GetBattlerTotalSpeedStat`):
+
+| Counted | Not counted |
+|---|---|
+| Speed stat stages, paralysis, Tailwind, weather, terrain | an unrevealed held item (a hidden Choice Scarf) |
+| A **revealed** item: Choice Scarf, Iron Ball, Macho Brace / Power items, Quick Powder | an unrevealed chosen ability |
+| A **revealed** ability: Swift Swim & co., Quick Feet, Slow Start, Protosynthesis / Quark Drive, Unburden | the real mon behind an Illusion (the disguise is priced) |
+| Innates — species data, always known | |
+
+Unburden counts from the moment it fires: arming it records the ability
+(`CheckSetUnburden` → `IsAbilityAndRecord`), so the reveal and the doubling land together.
+A **benched** foe is priced as if it switched in now: its own status and revealed item and
+ability under the current field, but fresh stat stages and volatiles (Unburden and Slow Start
+reset on switching), and never a Paradox Speed boost, since which stat that picks depends on the
+hidden spread. A foe that has **Transformed** reads the copied species' range — or, copied off one
+of your mons, that mon's exact Speed, which you know. Numbers print up to 4 digits (Tailwind,
+a Scarf and +6 stack well past 999).
 
 **Your rows use effective Speed instead** — `GetBattlerTotalSpeedStat`, which folds in
 everything you already know about your own side: Choice Scarf, Tailwind, paralysis,
@@ -107,8 +127,8 @@ The fastest of your active mons anchors a per-foe comparison **glyph**:
 
 | Glyph | Meaning |
 |---|---|
-| `▼` (`CHAR_DOWN_ARROW`) | your effective Speed already exceeds that foe's **best-case** base Speed |
-| `▲` (`CHAR_UP_ARROW`) | even the foe's **worst-case** base Speed exceeds yours |
+| `▼` (`CHAR_DOWN_ARROW`) | your effective Speed already exceeds the top of that foe's range |
+| `▲` (`CHAR_UP_ARROW`) | even the bottom of the foe's range exceeds yours |
 | blank | the ranges overlap |
 
 Two deliberate choices here:
@@ -116,9 +136,8 @@ Two deliberate choices here:
 - **A glyph, not a colour** — legible for colour-blind players (cf. the `COLOR_BLIND`
   HP bar flag).
 - **It is a number comparison, not a turn-order guarantee.** Your *known* Speed vs. the
-  foe's *possible base* Speed. The foe's range still deliberately ignores its own
-  hidden Choice Scarf, paralysis or Speed ability, because the player has not seen
-  those.
+  foe's *possible* Speed. The foe's range still ignores a hidden Choice Scarf or Speed
+  ability, because the player has not seen those, and priority is not modelled.
 
 Because it stays a number comparison, **Trick Room inverts what the glyphs imply** -
 the faster mon moves last. Rather than flipping the glyphs (which would make `▼` mean
@@ -127,8 +146,8 @@ right-aligned **`TRICK ROOM`** marker on its title row while the room is up
 (`PrintTrickRoomMarker`). It costs no body line, which matters: with two player rows
 and six revealed foes the page is already full. The Field page carries the turn count.
 
-Code: `DrawSpeedPage` / `CalcSpeedBound` / `AppendSpeedGlyph`, mirroring
-`CalculateMonStats`.
+Code: `DrawSpeedPage` / `GetFoeSpeedRange` / `ApplyKnownSpeedModifiers` / `AppendSpeedGlyph`,
+with `CalcSpeedBound` mirroring `CalculateMonStats`. Tests: `test/fork/frontier_battle_info_speed.c`.
 
 ## Reveal gating — the part that keeps breaking
 
