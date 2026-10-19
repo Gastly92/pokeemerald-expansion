@@ -221,6 +221,7 @@ from the repo root; each carries its usage in a docstring.
 | `inn.py SPECIES… ABILITY…` | add innates to existing rows, keeping them alphabetical |
 | `addset.py NAME` | insert a new frontier set after that species' last one |
 | `smogon.py NAME…` | Smogon's published sets for a species and its formes, every generation and format (`python3 -I`; fetched from data.pkmn.cc and cached) |
+| `bulbapedia.py [--media] NAME…` | Bulbapedia's Biology section (forms included); `--media` adds every anime and manga appearance — the Step 1 media pass (`python3 -I`; fetched via the MediaWiki API and cached) |
 
 ### Working the batch
 
@@ -430,12 +431,22 @@ For each species/form in the line:
    tails — which is a far better case for Shadow Tag and Cursed Body than the dex line
    could ever carry alone.
 
+   **Run `tools/bulbapedia.py --media <NAME>` for every species in the line** before
+   reaching for memory. It prints Bulbapedia's Biology section and the "In animation"
+   and "In the manga" sections, so the Ninetales mansion episode above is one command
+   away instead of one half-remembered scene. What it prints is a sourced citation,
+   not recall: cite it as Bulbapedia with the episode or chapter it names. Biology
+   prose freely mixes the games, the anime and Pokémon Sleep, so attribute an action
+   to the medium the sentence names, and keep the repo `.description` as the dex
+   text a proposal quotes. Recall is still admissible for what the tool does not
+   cover (spin-off games, movies it summarises thinly), and still gets flagged.
+
    **Report the result either way.** *"No usable media evidence for this line"* is a
    normal, expected line in a proposal — stating it is what proves the pass was run.
    Silence is indistinguishable from having skipped it, so silence counts as skipping
    it. Two conditions on using it:
-   - **Name the medium and flag that it is recall.** The repo cannot confirm it, so
-     say so plainly rather than presenting it with the same confidence as a quoted
+   - **Name the medium, and flag recall as recall.** Anything the tool did not show
+     you is something the repo cannot confirm, so say so plainly rather than presenting it with the same confidence as a quoted
      `.description`. Being wrong about an episode is fine; being wrong *silently* is
      what corrupts the evidence base.
    - **Cite a specific action, not a vibe.** "It traps the cast inside a mansion for

@@ -72,7 +72,9 @@ Everything in "Do this" still applies **per line**, at the same depth.
    `python3 .claude/skills/line-review/tools/forms.py <NAME>`, run from the repo
    root. That directory also holds `lines.py` (the lines a dex range covers),
    `line.py` (a species' rows and sets), `dex.py`, `users.py` (canon ability
-   users), `smogon.py` (Smogon's published sets, all gens and formats), and the
+   users), `smogon.py` (Smogon's published sets, all gens and formats),
+   `bulbapedia.py` (Bulbapedia's Biology section, plus anime and manga with
+   `--media`), and the
    `inn.py`/`addset.py` editors; each carries its usage in a docstring.
    Rows and sets are routinely keyed on a form constant a bare name aliases to
    (`SPECIES_AEGISLASH` → `_SHIELD`, `SPECIES_MINIOR` → `_METEOR_RED` in two hops)
@@ -161,8 +163,11 @@ Everything in "Do this" still applies **per line**, at the same depth.
   often supports nothing, while what a creature is shown *doing* on screen is sharper
   evidence (Ninetales' anime episode is entirely about it sealing a mansion so nobody
   can leave, plus the tail-curse — a far better case for Shadow Tag and Cursed Body
-  than its dex line). Two conditions: **name the medium and flag that it is recall**
-  the repo can't confirm, and **cite a specific action, not a vibe**. Flagging recall
+  than its dex line). **Start from `tools/bulbapedia.py --media <NAME>`** (Biology, plus
+  every anime and manga appearance) rather than memory: what it prints is sourced, so
+  cite it as Bulbapedia with the episode or chapter, not as recall. Two conditions: **name
+  the medium** (Biology prose mixes the games with the anime), **flag as recall anything
+  the tool did not show you**, and **cite a specific action, not a vibe**. Flagging recall
   is the price of using media evidence, not a reason to avoid it — citing media only
   to *reject* a candidate is the tell that the honesty requirement has turned into an
   incentive to omit. The canon-user count is still the gate — media evidence picks
