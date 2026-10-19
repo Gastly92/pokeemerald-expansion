@@ -51,5 +51,17 @@ u32 GetFoeHpPercent(u32 foeIndex);
 // The same rounded-up figure for one of the player's on-field battlers (Speed page "You:" rows):
 // a 1/4-max-HP cost like Substitute is affordable iff it reads 26 or more.
 u32 GetBattlerHpPercent(u32 battler);
+// The Speed Tiers page's range for a seen foe party slot: 0 IV / 0 EV / hindering nature up to
+// 31 / 252 / boosting, then scaled by every modifier the player can see (stat stages, paralysis,
+// Tailwind, weather, revealed item and ability, innates). A benched foe is priced as if it
+// switched in now. `tie` is how a Speed tie with your fastest active mon would settle under
+// DETERMINISTIC_MOVE_RESULTS' tie ladder, read from the same view: 1 you win, -1 the foe wins,
+// 0 unsettled (config off, or every rung tied). On the number axis, i.e. not flipped by Trick Room.
+// Exposed for test/fork/frontier_battle_info_speed.c.
+void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi, s32 *tie);
+// The foe row's glyph: CHAR_DOWN_ARROW when your fastest active mon outspeeds the whole range,
+// CHAR_UP_ARROW when the whole range outspeeds you, else 0. A tie at the edge of the range
+// counts the way the tie ladder settles it.
+u32 GetFoeSpeedGlyph(u32 foeIndex);
 
 #endif // GUARD_FRONTIER_BATTLE_INFO_H
