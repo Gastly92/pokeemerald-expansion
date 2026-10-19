@@ -13077,7 +13077,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ROOST,
             MOVE_DEFOG
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -13096,7 +13096,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_BEAM,
             MOVE_GRASS_KNOT
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -13116,7 +13116,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLASH_CANNON,
             MOVE_PROTECT
         },
-        .ability = ABILITY_LIGHTNING_ROD,
+        .ability = ABILITY_STORM_DRAIN,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

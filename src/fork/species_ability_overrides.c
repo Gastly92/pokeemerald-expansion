@@ -1155,7 +1155,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0395
         SPECIES_EMPOLEON, 1,
-        ABILITY_LIGHTNING_ROD
+        ABILITY_STORM_DRAIN
     },
     { // 0398
         SPECIES_STARAPTOR, 1,
