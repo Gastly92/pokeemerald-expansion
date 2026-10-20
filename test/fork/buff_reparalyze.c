@@ -49,6 +49,24 @@ SINGLE_BATTLE_TEST("BUFF_REPARALYZE: the drain never takes a move below 0 PP")
     }
 }
 
+SINGLE_BATTLE_TEST("BUFF_REPARALYZE: Thunder Wave on a paralyzed foe with no PP left fails")
+{
+    GIVEN {
+        WITH_CONFIG(BUFF_REPARALYZE, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+        // Every move at 0 PP. It switches in rather than acting, because a test can't
+        // order a mon with no usable moves to Struggle.
+        OPPONENT(SPECIES_WYNAUT) { Status1(STATUS1_PARALYSIS); MovesWithPP({MOVE_CELEBRATE, 0}, {MOVE_SPLASH, 0}); }
+    } WHEN {
+        TURN { SWITCH(opponent, 1); MOVE(player, MOVE_THUNDER_WAVE); }
+    } SCENE {
+        NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_THUNDER_WAVE, player);
+        MESSAGE("The opposing Wynaut is already paralyzed!");
+        NOT MESSAGE("The opposing Wynaut's moves each lost 1 PP!");
+    }
+}
+
 SINGLE_BATTLE_TEST("BUFF_REPARALYZE off: Thunder Wave on a paralyzed foe fails")
 {
     GIVEN {
