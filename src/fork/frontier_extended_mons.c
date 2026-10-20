@@ -3536,7 +3536,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_GENGAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_KINGS_ROCK,
+        .heldItem = ITEM_RAZOR_FANG,
         .moves =
         {
             MOVE_SHADOW_BALL,
@@ -24038,7 +24038,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_NOIVERN,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_KINGS_ROCK,
+        .heldItem = ITEM_RAZOR_FANG,
         .moves =
         {
             MOVE_BOOMBURST,
@@ -31141,7 +31141,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEOWSCARADA,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_KINGS_ROCK,
+        .heldItem = ITEM_RAZOR_FANG,
         .moves =
         {
             MOVE_FLOWER_TRICK,
