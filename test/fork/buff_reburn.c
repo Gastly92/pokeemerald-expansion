@@ -18,8 +18,10 @@ SINGLE_BATTLE_TEST("BUFF_REBURN: Will-O-Wisp on a burned foe deals an immediate 
     } WHEN {
         TURN { MOVE(player, MOVE_WILL_O_WISP); }
     } SCENE {
-        ANIMATION(ANIM_TYPE_MOVE, MOVE_WILL_O_WISP, player);
+        // Only the burn flares - the Will-O-Wisp move animation is skipped.
+        NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_WILL_O_WISP, player);
         MESSAGE("The opposing Wobbuffet was hurt by its burn!");
+        ANIMATION(ANIM_TYPE_STATUS, B_ANIM_STATUS_BRN, opponent);
         HP_BAR(opponent, damage: 20);
         NOT MESSAGE("The opposing Wobbuffet is already burned!");
         // ...and the normal end-turn burn still ticks.
@@ -51,7 +53,6 @@ SINGLE_BATTLE_TEST("BUFF_REBURN: Heatproof halves the re-burn tick")
     } WHEN {
         TURN { MOVE(player, MOVE_WILL_O_WISP); }
     } SCENE {
-        ANIMATION(ANIM_TYPE_MOVE, MOVE_WILL_O_WISP, player);
         MESSAGE("The opposing Bronzong was hurt by its burn!");
         HP_BAR(opponent, damage: 10);
     }
