@@ -12304,7 +12304,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STEALTH_ROCK,
             MOVE_YAWN,
             MOVE_WATERFALL,
-            MOVE_TOXIC
+            MOVE_HEAD_SMASH
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, SPE_DOWN),
@@ -14037,7 +14037,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUBSTITUTE,
             MOVE_NUZZLE,
             MOVE_SUPER_FANG,
-            MOVE_TOXIC
+            MOVE_U_TURN
         },
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPD_UP, ATK_DOWN),
@@ -20083,7 +20083,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPORE,
             MOVE_GIGA_DRAIN,
             MOVE_CLEAR_SMOG,
-            MOVE_TOXIC
+            MOVE_LEECH_SEED
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
@@ -20105,7 +20105,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CHILLING_WATER,
             MOVE_WILL_O_WISP,
             MOVE_RECOVER,
-            MOVE_TOXIC
+            MOVE_HEX
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
