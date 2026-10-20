@@ -202,8 +202,6 @@ static const u16 sPseudoSpecies[] =
     SPECIES_ARCTOVISH,             // 0883
     SPECIES_URSALUNA,              // 0901
     SPECIES_SNEASLER,              // 0903
-    // The fourteen original Paradox mons. The six 590-BST ones (Walking Wake onward) echo
-    // legendaries and stay TIER_LEGENDARY.
     SPECIES_GREAT_TUSK,            // 0984
     SPECIES_SCREAM_TAIL,           // 0985
     SPECIES_BRUTE_BONNET,          // 0986
