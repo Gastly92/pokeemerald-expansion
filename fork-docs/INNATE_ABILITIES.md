@@ -1624,7 +1624,7 @@ REAL slot where one exists (Dragonite's Multiscale → chosen Inner Focus; Camer
 Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhyperior's Solid Rock → Lightning Rod;
 Araquanid's Water Bubble → Water Absorb); the all-real-abilities-innate / dead-weight-slot cases take a fork-owned
 chosen-ability override (`species_ability_overrides.c`): Lugia → Storm Drain, Carracosta → Water Absorb, Maushold →
-No Guard, Bronzong → Soundproof, Sinistcha → Flash Fire — each a stable `:x:` pick.
+No Guard, Bronzong → Soundproof, Sinistcha → Water Absorb — each a stable `:x:` pick.
 
 ### ABILITY_GUTS / ABILITY_MARVEL_SCALE / ABILITY_QUICK_FEET / ABILITY_TOXIC_BOOST / ABILITY_FLARE_BOOST
 
@@ -2958,7 +2958,7 @@ Tyranitar Megas keep base Unnerve though their Mega ability differs). **Sole-Unn
 redundant** (not a frontier set; its sole chosen ability already grants it — the Mega Lopunny / Scrappy precedent).
 **Hospitality** → the Poltchageist / Sinistcha line (all four forms — Counterfeit / Artisan / Unremarkable /
 Masterpiece — merged onto their existing Heatproof / Levitate rows). **Step 3.5**: Sinistcha's Hospitality frontier
-set is freed to its complementary chosen **Flash Fire** override (the sibling Sinistcha set already runs it — both
+set is freed to its complementary chosen **Water Absorb** override (the sibling Sinistcha set already runs it — both
 its real abilities, Hospitality and Heatproof, are now innate); the ~14 frontier sets that hardcoded chosen Unnerve
 now carry it innately, so they keep their now-redundant chosen Unnerve (still correct: the chosen runs it, the
 innate is redundant-but-skipped) — the complementary-slot freeing **deferred** like the earlier sub-groups.

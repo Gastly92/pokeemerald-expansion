@@ -34334,7 +34334,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_FLASH_FIRE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -34354,7 +34354,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_TRICK_ROOM
         },
-        .ability = ABILITY_FLASH_FIRE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
