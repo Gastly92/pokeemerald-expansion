@@ -190,7 +190,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spa = 252,
             .spe = 252
         ),
-        .teraType = TYPE_FIRE,
+        .teraType = TYPE_GROUND,
     },
     {
         .species = SPECIES_VENUSAUR,
