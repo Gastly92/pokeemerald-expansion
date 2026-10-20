@@ -79,6 +79,7 @@
 #include "follower_npc.h"
 #include "load_save.h"
 #include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
+#include "fork/buff_status_reapply.h" // FORK: BUFF_REBURN
 
 // Helper for accessing command arguments and advancing gBattlescriptCurrInstr.
 //
@@ -5527,6 +5528,11 @@ static void Cmd_trynonvolatilestatus(void)
 {
     CMD_ARGS();
     bool32 canInflictStatus = TRUE;
+
+    // FORK: BUFF_REBURN - a status move re-applying a status the target already has
+    // gets a bonus instead of the "already burned" failure (src/fork/buff_status_reapply.c).
+    if (TryStatusMoveReapply())
+        return;
 
     if (!CanSetNonVolatileStatus(
             gBattlerAttacker,

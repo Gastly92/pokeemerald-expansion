@@ -57,6 +57,23 @@
 // by default - the buff is the stacking + immediate re-drain, not a bigger tick.
 #define BUFF_LEECH_SEED_DENOMINATOR 8
 
+// When TRUE, using a burn-inflicting *status* move (Will-O-Wisp) on a foe that is
+// already burned no longer fails with "is already burned!" - the existing burn
+// flares up for an immediate extra tick of 1/BUFF_REBURN_DENOMINATOR max HP
+// (halved by Heatproof, like the end-turn tick). Every block that would stop a
+// fresh burn still stops the tick: Fire type, Water Veil / Water Bubble / Thermal
+// Exchange, Comatose, Purifying Salt, Leaf Guard, Flower Veil, Misty Terrain,
+// Safeguard, Substitute; Magic Guard takes no tick. Damaging moves with a burn
+// secondary (Scald, Flamethrower...) are unaffected. The toggle is registered in
+// BUFF_CONFIG_DEFINITIONS so battle tests can flip it per-test. See
+// src/fork/buff_status_reapply.c (hooked from Cmd_trynonvolatilestatus).
+#define BUFF_REBURN TRUE
+
+// Divisor for the BUFF_REBURN tick: damage = target's max HP /
+// BUFF_REBURN_DENOMINATOR. 8 -> 1/8, double the Gen 7+ end-turn burn tick, so a
+// re-burn is worth a turn. Must be nonzero. Ignored when BUFF_REBURN is FALSE.
+#define BUFF_REBURN_DENOMINATOR 8
+
 // When TRUE, the two accuracy-boosting hold items get a purpose again under
 // DETERMINISTIC_ACCURACY_EVASION. That flag removes accuracy as a hit/miss axis and
 // replaces it with a PP economy, but it only carried the DEFENDER's half across:

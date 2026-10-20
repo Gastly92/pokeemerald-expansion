@@ -95,6 +95,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 |---|---|---|---|
 | Shell Bell buff | `BUFF_SHELL_BELL` (+ `…_DENOMINATOR`) | ✅ | Heals 1/4 of damage dealt instead of 1/8. `test/fork/buff_shell_bell.c` |
 | Leech Seed buff | `BUFF_LEECH_SEED` (+ `…_DENOMINATOR`) | ✅ | Seeds stack across seeders, and re-seeding drains immediately instead of failing. `test/fork/buff_leech_seed.c` |
+| Re-burn buff | `BUFF_REBURN` (+ `…_DENOMINATOR`) | ✅ | Will-O-Wisp on an already-burned foe deals an immediate 1/8 burn tick instead of failing; every block that stops a fresh burn still applies. `test/fork/buff_reburn.c` |
 | Accuracy items buff | `BUFF_ACCURACY_ITEMS` | ✅ | Wide Lens and Zoom Lens cancel accuracy PP taxes, since `DETERMINISTIC_ACCURACY_EVASION` had left them inert. `test/fork/buff_accuracy_items.c` |
 | Accuracy items: reveal | `BUFF_ACCURACY_ITEMS_REVEAL` | ✅ | Wide Lens reveals every foe's item and Zoom Lens one foe's ability and moveset in the INFO viewer. [Mechanics](BATTLE_INFO.md#held-item-and-depth-reveals-from-a-lens-buff_accuracy_items_reveal) · `test/fork/buff_accuracy_items.c` |
 | Type-boost items buff | `BUFF_TYPE_BOOST_ITEMS` (+ `…_PERCENT`) | ✅ | Type items and Plates boost +40% instead of +20%. `test/fork/buff_type_boost_items.c` |
