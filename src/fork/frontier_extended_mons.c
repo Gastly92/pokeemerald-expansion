@@ -154,26 +154,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_VENUSAUR,
-        .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_TERRAIN_EXTENDER,
-        .moves =
-        {
-            MOVE_SLEEP_POWDER,
-            MOVE_RAGE_POWDER,
-            MOVE_POLLEN_PUFF,
-            MOVE_GIGA_DRAIN
-        },
-        .ability = ABILITY_GRASSY_SURGE,
-        .nature = NATURE(DEF_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .def = 252,
-            .spd = 4
-        ),
-        .teraType = TYPE_WATER,
-    },
-    {
-        .species = SPECIES_VENUSAUR,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
