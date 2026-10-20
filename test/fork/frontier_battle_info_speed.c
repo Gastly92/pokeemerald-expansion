@@ -4,7 +4,7 @@
 #include "fork/innate_abilities.h"
 #include "constants/characters.h"
 
-// B_FRONTIER_BATTLE_INFO. The Speed Tiers page's foe range starts from base Speed alone (0 IV /
+// B_FRONTIER_BATTLE_INFO. The Overview page's foe Speed range starts from base Speed alone (0 IV /
 // 0 EV / hindering nature up to 31 / 252 / boosting) and is then scaled by everything the player
 // can see, and nothing they cannot. A level 100 Wobbuffet (base 33) spans 63-181.
 

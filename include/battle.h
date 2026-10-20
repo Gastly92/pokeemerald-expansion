@@ -786,7 +786,7 @@ struct BattleStruct
     // FORK: the B_FRONTIER_BATTLE_INFO viewer's last page / foe-tab, so re-opening
     // it mid-battle (often once per turn) returns where the player left off. Kept
     // here in gBattleStruct (zero-allocated per battle) rather than in file statics
-    // so the position resets between battles — to INFO_PAGE_SPEED (0) and foe 0 —
+    // so the position resets between battles — to INFO_PAGE_OVERVIEW (0) and foe 0 —
     // and never carries a stale foe index into a fresh battle. Set/read in
     // src/fork/frontier_battle_info.c.
     u8 infoViewerPage;

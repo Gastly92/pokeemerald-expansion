@@ -2,7 +2,7 @@
 // the (disabled) BAG action. See include/config/frontier.h (B_FRONTIER_BATTLE_INFO)
 // and include/frontier_battle_info.h for the integration notes. This whole file
 // is fork-only, so it never conflicts on an upstream sync; it only *reads* battle
-// state, never mutates it (the Speed Tiers page borrows a foe battler for one
+// state, never mutates it (the Overview page borrows a foe battler for one
 // GetBattlerTotalSpeedStat call and restores it byte-for-byte before returning).
 
 #include "global.h"
@@ -13,12 +13,14 @@
 #include "battle_util.h"
 #include "bg.h"
 #include "config_changes.h" // GetConfig(FEATURE_INNATE_ABILITIES)
-#include "fork/deterministic_moves.h" // DeterministicSpeedTieWins for the Speed page's tie glyphs
+#include "decompress.h" // LoadCompressedSpriteSheet for the Overview page's type icons
+#include "fork/deterministic_moves.h" // DeterministicSpeedTieWins for the Overview page's tie glyphs
 #include "fork/free_gimmicks.h" // FindMegaStoneForStats, shared with the live form change
 #include "fork/innate_abilities.h" // FEATURE_INNATE_ABILITIES
 #include "fork/frontier_battle_info.h"
 #include "fork/battle_log.h" // the Battle Log page
 #include "gpu_regs.h"
+#include "graphics.h" // gMoveTypes_Pal
 #include "item.h"
 #include "main.h"
 #include "malloc.h"
@@ -27,6 +29,7 @@
 #include "move.h"
 #include "palette.h"
 #include "pokemon.h"
+#include "pokemon_summary_screen.h" // the summary screen's type icon sprites, reused on the Overview page
 #include "reshow_battle_screen.h"
 #include "scanline_effect.h"
 #include "sound.h"
@@ -83,11 +86,21 @@ static MainCallback sInfoExitCallback = NULL;
 // Heap tilemap buffer for FRAME_BG, allocated on open and freed on close.
 static u16 *sFrameTilemapBuffer = NULL;
 
+// The Overview page's type icons: the summary screen's 32x16 sprites, two per foe row. Created
+// once on open (hidden) and shown per redraw, so every other page simply leaves them hidden.
+// gTypesInfo[].palette names an absolute OBJ slot in the 3-palette block the summary screen
+// loads at 13, so the block has to land at the same place here.
+#define TYPE_ICON_PAL_NUM   13
+#define TYPE_ICON_W         32
+#define TYPE_ICON_COUNT     (PARTY_SIZE * 2)
+static u8 sTypeIconSpriteIds[TYPE_ICON_COUNT];
+
 enum
 {
-    // Speed Tiers leads — it's the page that actually drives a turn
-    // decision, so it's both first in the L/R cycle and the default landing page.
-    INFO_PAGE_SPEED,
+    // Overview leads — every seen mon's speed tier, types and HP on one screen is what
+    // actually drives a turn decision, so it's both first in the L/R cycle and the default
+    // landing page.
+    INFO_PAGE_OVERVIEW,
     INFO_PAGE_FIELD,
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
@@ -134,7 +147,7 @@ static u32 InfoPageCount(void)
 // viewer (often once per turn) returns to where they left off instead of always
 // resetting to the front. It lives in gBattleStruct (infoViewerPage /
 // infoViewerFoeIndex), which is zero-allocated per battle, so the position is kept
-// across open/closes WITHIN a battle but resets to INFO_PAGE_SPEED (0) / foe 0
+// across open/closes WITHIN a battle but resets to INFO_PAGE_OVERVIEW (0) / foe 0
 // BETWEEN battles — a file static would instead carry a stale foe index (possibly
 // past the new foe's revealed slots) into the next battle. The viewer is modal, so
 // saving on close is enough to have the value ready for the next open.
@@ -379,14 +392,14 @@ static void PrintFooter(u8 windowId, const u8 *str)
     PrintLineEx(windowId, str, 0, (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
 }
 
-// right-aligned "TRICK ROOM" marker on the Speed Tiers title row. The speed
+// right-aligned "TRICK ROOM" marker on the Overview title row. The speed
 // glyphs stay a pure number comparison (see AppendSpeedGlyph), so under Trick Room
 // the faster mon is the one that moves LAST - this flags that inversion without
 // costing a body line (the page can already fill its height with 2 player rows and
-// 6 foe rows). The title is 121px wide and the marker 47px in FONT_NARROW, so in a
+// 6 foe rows). The title is 108px wide and the marker 47px in FONT_NARROW, so in a
 // 224px window the two never collide.
 // Right-aligned on the title row, in the title's own colour. Used for a page-level note
-// that must not cost a body row - the Speed page's TRICK ROOM, the Base Stats page's player
+// that must not cost a body row - the Overview page's TRICK ROOM, the Base Stats page's player
 // cursor. Every title is short enough to leave the right edge free.
 static void PrintTitleMarker(u8 windowId, const u8 *str)
 {
@@ -565,6 +578,30 @@ static u8 *AppendTypeNames(u8 *p, enum Species species)
     return p;
 }
 
+// The type icons on a foe's Overview row: what the Foe page's type line says, collapsed to what
+// the mon IS right now. That is the displayed (Illusion-aware) species' types, or the Tera type
+// alone once the mon has Terastallized. Tera Stellar keeps the species' types, as it does
+// defensively.
+u32 GetFoeOverviewTypes(u32 foeIndex, enum Type types[2])
+{
+    struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+    enum Species species = GetMonData(GetFoeDisplayMon(foeParty, foeIndex), MON_DATA_SPECIES, NULL);
+
+    if (gBattleStruct->gimmick.activeGimmick[B_TRAINER_OPPONENT_A][foeIndex] == GIMMICK_TERA)
+    {
+        enum Type tera = GetMonData(&foeParty[foeIndex], MON_DATA_TERA_TYPE, NULL);
+
+        if (tera != TYPE_STELLAR)
+        {
+            types[0] = tera;
+            return 1;
+        }
+    }
+    types[0] = GetSpeciesType(species, 0);
+    types[1] = GetSpeciesType(species, 1);
+    return types[1] == types[0] ? 1 : 2;
+}
+
 // Append the foe mon's gimmick state. activeGimmick persists per party mon for
 // the forms that stay transformed (Mega/Ultra Burst/Dynamax/Tera); a Z-Move reverts
 // and is detected via the per-mon monGimmickUsed record. Nothing is shown until the
@@ -668,7 +705,7 @@ u32 GetFoeHpPercent(u32 foeIndex)
     return HpPercentRoundedUp(hp, maxHP);
 }
 
-// The same figure for one of the player's on-field battlers (Speed page "You:" rows). Rounding
+// The same figure for one of the player's on-field battlers (Overview page "You:" rows). Rounding
 // up makes the Substitute / Belly Drum thresholds exact rather than approximate: a cost of 1/4
 // max HP is affordable iff this reads 26 or more (1/2: 51 or more).
 u32 GetBattlerHpPercent(u32 battler)
@@ -1225,7 +1262,7 @@ static void DrawLogPage(u8 windowId, u32 scroll)
 // surfaces a base spread otherwise - the summary screen shows computed stats, and neither
 // it nor anything else shows what a Mega form would turn them into.
 //
-// The two halves are asymmetric ON PURPOSE, and it is the same asymmetry the Speed Tiers
+// The two halves are asymmetric ON PURPOSE, and it is the same asymmetry the Overview
 // page draws: your side is shown as fact, the foe's as possibility.
 //
 //   - For YOUR mon the engine can say exactly which form it would take, so there is one
@@ -1889,7 +1926,54 @@ static u8 *AppendSpeedGlyph(u8 *p, u32 glyph)
     return p;
 }
 
-static void DrawSpeedPage(u8 windowId)
+// Type icon sprites. The window sits one tile in from the screen edge, and a sprite is
+// positioned by its centre. The icon art is drawn on rows 1-14 of its 16, so lifting the
+// sprite 1px puts the art exactly on a LINE_H text row with nothing spilling into the next.
+static void CreateTypeIcons(void)
+{
+    for (u32 i = 0; i < TYPE_ICON_COUNT; i++)
+    {
+        sTypeIconSpriteIds[i] = CreateSprite(&gSpriteTemplate_MoveTypes, 0, 0, 0);
+        if (sTypeIconSpriteIds[i] != MAX_SPRITES)
+            gSprites[sTypeIconSpriteIds[i]].invisible = TRUE;
+    }
+}
+
+static void HideTypeIcons(void)
+{
+    for (u32 i = 0; i < TYPE_ICON_COUNT; i++)
+    {
+        if (sTypeIconSpriteIds[i] != MAX_SPRITES)
+            gSprites[sTypeIconSpriteIds[i]].invisible = TRUE;
+    }
+}
+
+static void ShowTypeIcon(u32 iconIndex, enum Type type, u32 x, u32 y)
+{
+    struct Sprite *sprite;
+
+    if (sTypeIconSpriteIds[iconIndex] == MAX_SPRITES)
+        return;
+    sprite = &gSprites[sTypeIconSpriteIds[iconIndex]];
+    StartSpriteAnim(sprite, type);
+    sprite->oam.paletteNum = gTypesInfo[type].palette;
+    sprite->x = sInfoWindowTemplate.tilemapLeft * 8 + x + TYPE_ICON_W / 2;
+    sprite->y = sInfoWindowTemplate.tilemapTop * 8 + y - 1 + 8;
+    sprite->invisible = FALSE;
+}
+
+static void DestroyTypeIcons(void)
+{
+    for (u32 i = 0; i < TYPE_ICON_COUNT; i++)
+    {
+        if (sTypeIconSpriteIds[i] != MAX_SPRITES)
+            DestroySprite(&gSprites[sTypeIconSpriteIds[i]]);
+        sTypeIconSpriteIds[i] = MAX_SPRITES;
+    }
+    FreeSpriteTilesByTag(gSpriteSheet_MoveTypes.tag);
+}
+
+static void DrawOverviewPage(u8 windowId)
 {
     u8 line[64];
     u8 *p;
@@ -1900,7 +1984,7 @@ static void DrawSpeedPage(u8 windowId)
     u32 his[PARTY_SIZE];
     u32 n = 0;
 
-    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"));
+    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  OVERVIEW"));
     PrintTrickRoomMarker(windowId);
     y += LINE_H;
 
@@ -1934,7 +2018,9 @@ static void DrawSpeedPage(u8 windowId)
     // reveal gate as the Foe page; unseen slots are omitted entirely, so the
     // report never leaks an unrevealed mon - or even the foe's party size), then
     // sort by the top of each possible Speed range so the list reads as a speed
-    // tier (fastest first). The "Foe N" label keeps the true party slot.
+    // tier (fastest first). Each row leads with the foe's type icons (GetFoeOverviewTypes),
+    // which replace the old "Foe N:" party-slot label: the icons are worth far more at a
+    // glance, and the slot only ever mattered for finding the mon's Foe page tab.
     for (u32 i = 0; i < PARTY_SIZE; i++)
     {
         enum Species species = GetMonData(&foeParty[i], MON_DATA_SPECIES, NULL);
@@ -1979,20 +2065,25 @@ static void DrawSpeedPage(u8 windowId)
         for (u32 k = 0; k < n; k++)
         {
             struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, slots[k]);
+            enum Type types[2];
+            u32 typeCount = GetFoeOverviewTypes(slots[k], types);
 
-            p = StringCopy(line, COMPOUND_STRING("Foe "));
-            p = ConvertIntToDecimalStringN(p, slots[k] + 1, STR_CONV_MODE_LEFT_ALIGN, 1);
-            p = StringCopy(p, COMPOUND_STRING(": "));
-            p = StringCopy(p, GetSpeciesName(GetMonData(displayMon, MON_DATA_SPECIES, NULL)));
+            for (u32 t = 0; t < typeCount; t++)
+                ShowTypeIcon(k * 2 + t, types[t], t * TYPE_ICON_W, y);
+
+            p = StringCopy(line, GetSpeciesName(GetMonData(displayMon, MON_DATA_SPECIES, NULL)));
             *p++ = CHAR_SPACE;
             // 4 digits: Tailwind, a Scarf and +6 stack well past 999.
             p = ConvertIntToDecimalStringN(p, los[k], STR_CONV_MODE_LEFT_ALIGN, 4);
             *p++ = CHAR_HYPHEN;
             p = ConvertIntToDecimalStringN(p, his[k], STR_CONV_MODE_LEFT_ALIGN, 4);
             AppendSpeedGlyph(p, GetFoeSpeedGlyph(slots[k]));
-            PrintLine(windowId, line, 0, y);
-            // Current HP, right-aligned: the row is ~160px at its longest ("Foe 6: " + a
-            // 12-letter name + " 9999-9999 ^"), so "HP 100%" (~35px) clears it in 224px.
+            // The name column starts after two icon slots even for a mono-type, so the
+            // names and ranges line up down the list.
+            PrintLine(windowId, line, 2 * TYPE_ICON_W + 2, y);
+            // Current HP, right-aligned: the row is ~186px at its longest (two icons + the
+            // widest name, "Brambleghast" at 59px + " 9999-9999 ^"), so "HP 100%" (34px)
+            // still clears it in 224px.
             FormatHpPercent(line, GetFoeHpPercent(slots[k]));
             PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
             y += LINE_H;
@@ -2008,6 +2099,8 @@ static void RedrawInfo(u8 taskId)
 
     // Transparent fill so the backdrop colour shows through behind the text.
     FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
+    // Only the Overview page shows type icons; it re-shows the ones it uses.
+    HideTypeIcons();
     switch (gTasks[taskId].tPage)
     {
     case INFO_PAGE_CONDITIONS:
@@ -2016,8 +2109,8 @@ static void RedrawInfo(u8 taskId)
     case INFO_PAGE_STATS:
         DrawStatsPage(windowId);
         break;
-    case INFO_PAGE_SPEED:
-        DrawSpeedPage(windowId);
+    case INFO_PAGE_OVERVIEW:
+        DrawOverviewPage(windowId);
         break;
     case INFO_PAGE_LOG:
         DrawLogPage(windowId, gTasks[taskId].tLogScroll);
@@ -2049,6 +2142,7 @@ static void Task_InfoFadeOut(u8 taskId)
     if (!gPaletteFade.active)
     {
         DestroyTask(taskId);
+        DestroyTypeIcons();
         FreeAllWindowBuffers();
         // FRAME_BG's tilemap buffer is ours (not a window buffer), so free it here.
         TRY_FREE_AND_SET_NULL(sFrameTilemapBuffer);
@@ -2297,19 +2391,21 @@ void CB2_FrontierBattleInfo(void)
         // The player's chosen window frame (from Options), reused as our border.
         LoadBgTiles(FRAME_BG, frame->tiles, 0x120, FRAME_BASE_TILE);
         LoadPalette(frame->pal, BG_PLTT_ID(FRAME_PAL_NUM), PLTT_SIZE_4BPP);
+        LoadCompressedSpriteSheet(&gSpriteSheet_MoveTypes);
+        LoadPalette(gMoveTypes_Pal, OBJ_PLTT_ID(TYPE_ICON_PAL_NUM), 3 * PLTT_SIZE_4BPP);
         gMain.state++;
         break;
     }
     case 4:
         taskId = CreateTask(Task_InfoFadeIn, 0);
         gTasks[taskId].tWindowId = AddWindow(&sInfoWindowTemplate);
-        // Resume on the page/foe last viewed THIS battle (zero-init => Speed Tiers,
+        // Resume on the page/foe last viewed THIS battle (zero-init => Overview,
         // foe 0 — a fresh battle always starts at the front, never a stale foe tab).
         // Clamped because FEATURE_INNATE_ABILITIES is runtime-toggleable: a saved
         // position on the innates page must not survive the feature being turned off.
         gTasks[taskId].tPage = gBattleStruct->infoViewerPage;
         if (gTasks[taskId].tPage >= (s16)InfoPageCount())
-            gTasks[taskId].tPage = INFO_PAGE_SPEED;
+            gTasks[taskId].tPage = INFO_PAGE_OVERVIEW;
         gTasks[taskId].tFoeIndex = gBattleStruct->infoViewerFoeIndex;
         gTasks[taskId].tPlayerIndex = DefaultPlayerCursor();
         PutWindowTilemap(gTasks[taskId].tWindowId);
@@ -2318,6 +2414,7 @@ void CB2_FrontierBattleInfo(void)
         sFrameTilemapBuffer = AllocZeroed(BG_SCREEN_SIZE);
         SetBgTilemapBuffer(FRAME_BG, sFrameTilemapBuffer);
         DrawInfoFrame();
+        CreateTypeIcons();
         RedrawInfo(taskId);
         gMain.state++;
         break;

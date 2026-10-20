@@ -48,10 +48,10 @@ void ApplyAccuracyItemReveals(void);
 // on-field mon is read from its battler (a Dynamaxed foe's bar is its multiplied HP), a benched
 // one from the party. Exposed for test/fork/frontier_battle_info_hp.c.
 u32 GetFoeHpPercent(u32 foeIndex);
-// The same rounded-up figure for one of the player's on-field battlers (Speed page "You:" rows):
+// The same rounded-up figure for one of the player's on-field battlers (Overview page "You:" rows):
 // a 1/4-max-HP cost like Substitute is affordable iff it reads 26 or more.
 u32 GetBattlerHpPercent(u32 battler);
-// The Speed Tiers page's range for a seen foe party slot: 0 IV / 0 EV / hindering nature up to
+// The Overview page's Speed range for a seen foe party slot: 0 IV / 0 EV / hindering nature up to
 // 31 / 252 / boosting, then scaled by every modifier the player can see (stat stages, paralysis,
 // Tailwind, weather, revealed item and ability, innates). A benched foe is priced as if it
 // switched in now. `tie` is how a Speed tie with your fastest active mon would settle under
@@ -63,5 +63,9 @@ void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi, s32 *tie);
 // CHAR_UP_ARROW when the whole range outspeeds you, else 0. A tie at the edge of the range
 // counts the way the tie ladder settles it.
 u32 GetFoeSpeedGlyph(u32 foeIndex);
+// The type icons on a seen foe's Overview row, written to `types`; returns how many (1 or 2).
+// The displayed (Illusion-aware) species' types, or the Tera type alone once the mon has
+// Terastallized (Stellar keeps the species' types). Exposed for test/fork/frontier_battle_info_types.c.
+u32 GetFoeOverviewTypes(u32 foeIndex, enum Type types[2]);
 
 #endif // GUARD_FRONTIER_BATTLE_INFO_H

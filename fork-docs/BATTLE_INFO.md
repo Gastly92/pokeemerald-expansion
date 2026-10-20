@@ -2,7 +2,7 @@
 
 In Frontier facilities the bag is disabled, so its action slot is dead space. This
 fork turns it into **INFO**: a read-only reference screen showing field
-state, both sides' conditions and stat changes, a log of every move used and its damage, a foe speed-tier comparison, and the
+state, both sides' conditions and stat changes, a log of every move used and its damage, an at-a-glance overview of every seen mon (speed tier, types, HP), and the
 foe's revealed party data and innates, and both sides' base stats.
 
 Its whole design problem is **what the player is allowed to know**. The battle engine
@@ -40,7 +40,7 @@ path.
 
 | Page | Shows |
 |---|---|
-| **Speed Tiers** | Each revealed foe's *possible* Speed range, scaled by everything known about it, vs. your effective Speed (see below) |
+| **Overview** | Every revealed foe's type icons, *possible* Speed range (scaled by everything known about it) and HP, sorted into a speed tier against your effective Speed and HP (see below) |
 | **Field** | Weather, terrain, whole-field effects (Trick Room, Gravity, Magic/Wonder Room, the Sports, Fairy Lock, Ion Deluge) with turns left, plus entry hazards and side screens for both sides |
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides, with turns left where the duration is knowable (see below) |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
@@ -70,14 +70,14 @@ turn's fixed damage multiplier, so the player can read the exact roll
 rows and has no room for a tenth - check the arithmetic against `LINE_H` and the
 footer's `y` before adding one.
 
-**Speed Tiers leads the cycle and is the default page on first open**, because it is
+**Overview leads the cycle and is the default page on first open**, because it is
 the page that actually drives a turn decision.
 
 ### Position memory resets between battles — deliberately
 
 The last-viewed page and foe index persist across re-opens **within a battle only**.
 They live in `gBattleStruct->infoViewerPage` / `infoViewerFoeIndex`, which is
-zero-allocated each battle, specifically so the position resets to Speed Tiers / foe 0
+zero-allocated each battle, specifically so the position resets to Overview / foe 0
 rather than carrying a stale foe tab forward. A file static did carry it, and could
 land on a previous battle's foe index — showing an unrevealed slot.
 
@@ -85,10 +85,21 @@ The restored page is clamped against `InfoPageCount()` on open, since
 `FEATURE_INNATE_ABILITIES` is runtime-toggleable and a saved position on the Innates
 page must not survive the feature being turned off.
 
-## The Speed Tiers page
+## The Overview page
 
-The point of this page is to let the player place a foe on the speed tier **without
-knowing its exact spread**, using only what is derivable from public data.
+The page every turn starts from: each seen mon's speed tier, types and HP on one screen. It
+used to be called *Speed Tiers*, and speed is still what orders it. The point of the speed
+half is to let the player place a foe on the speed tier **without knowing its exact spread**,
+using only what is derivable from public data.
+
+**Each foe row leads with the foe's type icons** (the summary screen's 32x16 sprites, two
+slots wide even for a mono-type so the names line up). They show the displayed species'
+types, which is what the Foe page's type line says, so a disguised Zoroark shows its
+disguise. Once the foe has Terastallized they show its Tera type alone; Tera Stellar keeps
+the species' types, as it does defensively. Battle-time type changes (Soak, Roost, Burn Up)
+are not tracked, matching the Foe page. The icons replace the old `Foe N:` party-slot label.
+That label only ever helped find the mon's Foe page tab, and the row could not fit both.
+Your own rows carry no icons, since you know your own types.
 
 **Foe rows show a range, `min-max`, starting from base stats** at the foe's known
 level: min = 0 IVs / 0 EVs / hindering nature ×0.9, max = 31 IVs / 252 EVs / boosting
@@ -156,8 +167,8 @@ right-aligned **`TRICK ROOM`** marker on its title row while the room is up
 (`PrintTrickRoomMarker`). It costs no body line, which matters: with two player rows
 and six revealed foes the page is already full. The Field page carries the turn count.
 
-Code: `DrawSpeedPage` / `GetFoeSpeedRange` / `ApplyKnownSpeedModifiers` / `GetFoeSpeedGlyph`,
-with `CalcSpeedBound` mirroring `CalculateMonStats`. Tests: `test/fork/frontier_battle_info_speed.c`.
+Code: `DrawOverviewPage` / `GetFoeOverviewTypes` / `GetFoeSpeedRange` / `ApplyKnownSpeedModifiers` / `GetFoeSpeedGlyph`,
+with `CalcSpeedBound` mirroring `CalculateMonStats`. Tests: `test/fork/frontier_battle_info_speed.c`, `test/fork/frontier_battle_info_types.c`.
 
 ## Reveal gating — the part that keeps breaking
 
@@ -335,7 +346,7 @@ from the party-menu entry point after your mon has fainted, on your first living
 
 ### Your side is fact, the foe's is possibility
 
-The same split the Speed Tiers page draws.
+The same split the Overview page draws.
 
 - **Your row is a projection — one row for what you *will* become.** For the mon on the
   field it goes through the engine's own eligibility check: `CanMegaEvolve` applies the
@@ -357,7 +368,7 @@ because a benched party mon has no `gBattleMons` entry.
 
 - **Base stats are not reveal-gated**, for the same reason innates aren't (below): they
   are a static property of the *species*, fully determined the moment it is known. The
-  Speed Tiers page already exposes the foe's base Speed this way. The Foe page's gates
+  Overview page already exposes the foe's base Speed this way. The Foe page's gates
   still apply to the foe half — nothing for a slot that has not been sent out, and every
   species read goes through `GetFoeDisplayMon`, so a disguised Zoroark reports the spread
   of the mon the player believes they are facing.
