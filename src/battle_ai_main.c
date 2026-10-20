@@ -3132,6 +3132,8 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     {
     case MOVE_EFFECT_POISON:
     case MOVE_EFFECT_TOXIC:
+        if (AI_CanRepoison(battlerAtk, battlerDef, abilityDef, move)) // FORK: BUFF_REPOISON - an already-poisoned foe takes a tick instead
+            break;
         if (!AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, aiData->partnerMove))
             ADJUST_SCORE(-10);
         if (!ShouldPoison(battlerAtk, battlerDef))
@@ -4551,6 +4553,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
     case MOVE_EFFECT_POISON:
     case MOVE_EFFECT_TOXIC:
         IncreasePoisonScore(battlerAtk, battlerDef, move, &score);
+        IncreaseRepoisonScore(battlerAtk, battlerDef, move, &score); // FORK: BUFF_REPOISON
         break;
     case MOVE_EFFECT_SLEEP:
         IncreaseSleepScore(battlerAtk, battlerDef, move, &score);

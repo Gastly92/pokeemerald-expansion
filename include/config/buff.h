@@ -74,6 +74,22 @@
 // re-burn is worth a turn. Must be nonzero. Ignored when BUFF_REBURN is FALSE.
 #define BUFF_REBURN_DENOMINATOR 8
 
+// When TRUE, a poison *status* move used on a foe that is already poisoned no
+// longer fails - the poison flares for an immediate extra tick:
+//  - Poison Powder / Poison Gas on any poisoned foe: a regular 1/8 max HP tick
+//    (a badly poisoned foe's Toxic counter is left alone).
+//  - Toxic on a badly poisoned foe: the Toxic counter advances and ticks, exactly
+//    like an extra end-turn tick (n/16, n capped at 15).
+//  - Toxic on a regularly poisoned foe: upgrades it to bad poison (through the normal
+//    status path, so Poison Puppeteer etc. still trigger) and ticks as Toxic's first
+//    turn (1/16); the end-turn tick then continues from 2/16.
+// Every block that would stop a fresh poison still stops it (Poison/Steel type
+// unless the user has Corrosion, Immunity, Pastel Veil, Misty Terrain, Safeguard,
+// Substitute...). Magic Guard takes no tick and Poison Heal would heal from it, so
+// both still fail. Damaging moves with a poison secondary are unaffected. See
+// src/fork/buff_status_reapply.c (hooked from Cmd_trynonvolatilestatus).
+#define BUFF_REPOISON TRUE
+
 // When TRUE, the two accuracy-boosting hold items get a purpose again under
 // DETERMINISTIC_ACCURACY_EVASION. That flag removes accuracy as a hit/miss axis and
 // replaces it with a PP economy, but it only carried the DEFENDER's half across:
