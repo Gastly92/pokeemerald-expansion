@@ -217,12 +217,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_CHARIZARD,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_HEAT_ROCK,
+        .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
             MOVE_FIRE_BLAST,
-            MOVE_SOLAR_BEAM,
-            MOVE_HURRICANE,
+            MOVE_AIR_SLASH,
+            MOVE_FOCUS_BLAST,
             MOVE_DRAGON_PULSE
         },
         .ability = ABILITY_SOLAR_POWER,
