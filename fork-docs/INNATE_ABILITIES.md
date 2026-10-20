@@ -979,7 +979,7 @@ weather-team play, and the AI heuristics above exist precisely to reward it.
 
 This is a rule about what the FORK grants, not about vanilla legality, and it was applied in both directions:
 where the fork granted the *setter* (an override row), the row was re-pointed at a non-weather ability
-(Excadrill → Earth Eater, Sandslash → Well-Baked Body, Kingdra → Storm Drain, Bellossom → Solar Power, …);
+(Excadrill → Earth Eater, Sandslash → Earth Eater, Kingdra → Storm Drain, Bellossom → Solar Power, …);
 where the fork granted the *speed-doubler* on a species whose setter is vanilla and un-droppable, the innate
 was removed instead (Kyogre and Kyogre-Primal and Politoed lose Swift Swim, Vanilluxe loses Slush Rush).
 Note the coverage gate forces that split: for a species whose speed-doubler is one of its own vanilla
@@ -1265,7 +1265,7 @@ chosen Sand Veil / Snow Cloak are freed (Step 3.5): Glaceon → Ice Body, Frosla
 Wugtrio → Gooey each take a real complementary slot, while the species whose ALL relevant real
 abilities are now innate take a fork-owned chosen override (`species_ability_overrides.c`) — Donphan →
 Sand Stream and Articuno → Snow Warning, each a stable `:x:` weather-setter that also turns on the mon's
-own evasion innate. Sandslash (→ Well-Baked Body), Sandslash-Alola (→ Screen Cleaner) and Beartic
+own evasion innate. Sandslash (→ Earth Eater), Sandslash-Alola (→ Screen Cleaner) and Beartic
 (→ Sheer Force) were re-pointed off their weather-setters: each also carries a matching weather
 speed-doubler innate, which the self-set weather turned into a free x2 Speed every switch-in. See the
 "no self-enabling weather" rule under the speed-doubler section above.
@@ -1624,7 +1624,7 @@ REAL slot where one exists (Dragonite's Multiscale → chosen Inner Focus; Camer
 Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhyperior's Solid Rock → Lightning Rod;
 Araquanid's Water Bubble → Water Absorb); the all-real-abilities-innate / dead-weight-slot cases take a fork-owned
 chosen-ability override (`species_ability_overrides.c`): Lugia → Storm Drain, Carracosta → Water Absorb, Maushold →
-No Guard, Bronzong → Soundproof, Sinistcha → Flash Fire — each a stable `:x:` pick.
+No Guard, Bronzong → Soundproof, Sinistcha → Water Absorb — each a stable `:x:` pick.
 
 ### ABILITY_GUTS / ABILITY_MARVEL_SCALE / ABILITY_QUICK_FEET / ABILITY_TOXIC_BOOST / ABILITY_FLARE_BOOST
 
@@ -2958,7 +2958,7 @@ Tyranitar Megas keep base Unnerve though their Mega ability differs). **Sole-Unn
 redundant** (not a frontier set; its sole chosen ability already grants it — the Mega Lopunny / Scrappy precedent).
 **Hospitality** → the Poltchageist / Sinistcha line (all four forms — Counterfeit / Artisan / Unremarkable /
 Masterpiece — merged onto their existing Heatproof / Levitate rows). **Step 3.5**: Sinistcha's Hospitality frontier
-set is freed to its complementary chosen **Flash Fire** override (the sibling Sinistcha set already runs it — both
+set is freed to its complementary chosen **Water Absorb** override (the sibling Sinistcha set already runs it — both
 its real abilities, Hospitality and Heatproof, are now innate); the ~14 frontier sets that hardcoded chosen Unnerve
 now carry it innately, so they keep their now-redundant chosen Unnerve (still correct: the chosen runs it, the
 innate is redundant-but-skipped) — the complementary-slot freeing **deferred** like the earlier sub-groups.

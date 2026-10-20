@@ -931,7 +931,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_RAPID_SPIN
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -951,7 +951,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHT_SLASH,
             MOVE_CROSS_POISON
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -971,7 +971,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SWORDS_DANCE,
             MOVE_PROTECT
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_EARTH_EATER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -10474,7 +10474,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_WATER_ABSORB,
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -10494,7 +10494,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDER_WAVE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_WATER_ABSORB,
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -10514,7 +10514,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BATON_PASS,
             MOVE_BUG_BUZZ
         },
-        .ability = ABILITY_WATER_ABSORB,
+        .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -10536,7 +10536,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HELPING_HAND,
             MOVE_BUG_BUZZ
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_LINGERING_AROMA,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
@@ -10556,7 +10556,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MOONBLAST,
             MOVE_BATON_PASS
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_LINGERING_AROMA,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -17872,7 +17872,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_PROTECT
         },
-        .ability = ABILITY_STATIC,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17892,7 +17892,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_RETURN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_STATIC,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -30160,7 +30160,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FLAMETHROWER,
             MOVE_DRACO_METEOR
         },
-        .ability = ABILITY_EARTH_EATER,
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -30180,7 +30180,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TOXIC_SPIKES,
             MOVE_RECOVER
         },
-        .ability = ABILITY_EARTH_EATER,
+        .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -34334,7 +34334,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_STRENGTH_SAP
         },
-        .ability = ABILITY_FLASH_FIRE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -34354,7 +34354,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GIGA_DRAIN,
             MOVE_TRICK_ROOM
         },
-        .ability = ABILITY_FLASH_FIRE,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPA_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
