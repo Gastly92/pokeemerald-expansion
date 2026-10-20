@@ -1644,3 +1644,58 @@ TEST("Frontier extended roster: the draft weighs each dex number equally, not ea
     }
     EXPECT_LT(silvally, 25);
 }
+
+// Booster Energy is what lets a Paradox mon's Protosynthesis / Quark Drive fire outside sun or
+// Electric Terrain, and the random draft rarely hands it either. So every Paradox species in the
+// roster keeps at least one Booster Energy set. "Paradox" here means its vanilla ability data
+// carries Protosynthesis or Quark Drive: upstream's isParadox flag also covers Ogerpon, which has
+// no use for the item.
+static bool32 SpeciesIsBoosterEnergyParadox(u16 species)
+{
+    u32 slot;
+
+    for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+    {
+        enum Ability ability = gSpeciesInfo[species].abilities[slot];
+        if (ability == ABILITY_PROTOSYNTHESIS || ability == ABILITY_QUARK_DRIVE)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+TEST("Frontier extended roster: every Paradox species has at least one Booster Energy set")
+{
+    u32 i, j, paradoxCount = 0, offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        u16 species = gFrontierExtendedMons[i].species;
+        bool32 seenBefore = FALSE, hasBooster = FALSE;
+
+        if (!SpeciesIsBoosterEnergyParadox(species))
+            continue;
+        for (j = 0; j < i; j++)
+        {
+            if (gFrontierExtendedMons[j].species == species)
+                seenBefore = TRUE;
+        }
+        if (seenBefore)
+            continue;
+
+        paradoxCount++;
+        for (j = 0; j < gFrontierExtendedMonsCount; j++)
+        {
+            if (gFrontierExtendedMons[j].species == species && gFrontierExtendedMons[j].heldItem == ITEM_BOOSTER_ENERGY)
+                hasBooster = TRUE;
+        }
+        if (!hasBooster)
+        {
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: no set holds Booster Energy -- give at least one of its sets the item",
+                            i, gSpeciesInfo[species].speciesName);
+        }
+    }
+
+    EXPECT_GT(paradoxCount, 0); // the sweep found the Paradox mons at all
+    EXPECT_EQ(offenders, 0);
+}
