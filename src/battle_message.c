@@ -911,6 +911,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_TYPEAFFINITYAWAKENED]                 = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX}'s affinity awakened its latent {B_BUFF1} type!"), // FORK: Affinity ability family
     [STRINGID_HALOAPPEARED]                         = COMPOUND_STRING("A halo appears above {B_SCR_NAME_WITH_PREFIX}!"), // FORK: Halo ability
     [STRINGID_FLINCHPREVENTED]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents flinching!"), // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
+    [STRINGID_PARALYSISPPDRAIN]                     = COMPOUND_STRING("{B_DEF_NAME_WITH_PREFIX}'s moves each lost {B_BUFF1} PP!"), // FORK: BUFF_REPARALYZE
 };
 
 const u16 gTrainerUsedItemStringIds[] =

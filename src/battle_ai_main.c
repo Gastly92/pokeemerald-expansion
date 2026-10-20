@@ -3146,6 +3146,8 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             ADJUST_SCORE(-20);
         break;
     case MOVE_EFFECT_PARALYSIS:
+        if (AI_CanReparalyze(battlerAtk, battlerDef, aiData->abilities[battlerDef], move)) // FORK: BUFF_REPARALYZE - an already-paralyzed foe loses PP instead
+            break;
         if (!AI_CanParalyze(battlerAtk, battlerDef, aiData->abilities[battlerDef], move, aiData->partnerMove))
             ADJUST_SCORE(-10);
         if (!ShouldParalyze(battlerAtk, battlerDef, aiData->abilities[battlerDef]))
@@ -4560,6 +4562,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
         break;
     case MOVE_EFFECT_PARALYSIS:
         IncreaseParalyzeScore(battlerAtk, battlerDef, move, &score);
+        IncreaseReparalyzeScore(battlerAtk, battlerDef, move, &score); // FORK: BUFF_REPARALYZE
         break;
     case MOVE_EFFECT_BURN:
         IncreaseBurnScore(battlerAtk, battlerDef, move, &score);
