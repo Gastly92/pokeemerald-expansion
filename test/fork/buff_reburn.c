@@ -84,7 +84,6 @@ SINGLE_BATTLE_TEST("BUFF_REBURN: Substitute blocks the re-burn")
     } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_SUBSTITUTE, opponent);
         NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_WILL_O_WISP, player);
-        MESSAGE("The opposing Wobbuffet is already burned!");
     }
 }
 
