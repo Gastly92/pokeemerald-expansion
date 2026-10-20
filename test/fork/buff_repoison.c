@@ -137,6 +137,22 @@ SINGLE_BATTLE_TEST("BUFF_REPOISON: Corrosion re-poisons a poisoned Steel type")
     }
 }
 
+SINGLE_BATTLE_TEST("BUFF_REPOISON: Substitute blocks the re-poison")
+{
+    GIVEN {
+        WITH_CONFIG(BUFF_REPOISON, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(5); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(10); Status1(STATUS1_POISON); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SUBSTITUTE); MOVE(player, MOVE_TOXIC); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_SUBSTITUTE, opponent);
+        NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_TOXIC, player);
+    } THEN {
+        EXPECT(opponent->status1 & STATUS1_POISON); // not upgraded to bad poison
+    }
+}
+
 AI_SINGLE_BATTLE_TEST("BUFF_REPOISON: the AI uses Toxic to upgrade a poisoned foe instead of a status move that fails")
 {
     GIVEN {
