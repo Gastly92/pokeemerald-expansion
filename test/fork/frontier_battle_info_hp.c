@@ -55,13 +55,15 @@ SINGLE_BATTLE_TEST("Frontier INFO: a fainted foe has no HP %")
     }
 }
 
-// The Speed page prints "HP n%" right-aligned on each foe row. Measured, not estimated: the
-// widest species name in the widest row form must still leave room for "HP 100%".
-TEST("Frontier INFO: the Speed page's HP column clears the widest foe row")
+// The Overview page prints "HP n%" right-aligned on each foe row. Measured, not estimated: the
+// widest species name in the widest row form must still leave room for "HP 100%". The row's
+// text starts after two 32px type icons and a 2px gap (DrawOverviewPage).
+TEST("Frontier INFO: the Overview page's HP column clears the widest foe row")
 {
     u8 row[64], hpText[16];
     u8 *p;
     u32 widest = 0;
+    const u32 iconsWidth = 2 * 32 + 2;
 
     for (enum Species species = 1; species < NUM_SPECIES; species++)
     {
@@ -69,8 +71,7 @@ TEST("Frontier INFO: the Speed page's HP column clears the widest foe row")
 
         if (!IsSpeciesEnabled(species))
             continue;
-        p = StringCopy(row, COMPOUND_STRING("Foe 6: "));
-        p = StringCopy(p, GetSpeciesName(species));
+        p = StringCopy(row, GetSpeciesName(species));
         p = StringCopy(p, COMPOUND_STRING(" 9999-9999 "));
         *p++ = CHAR_UP_ARROW;
         *p = EOS;
@@ -80,7 +81,7 @@ TEST("Frontier INFO: the Speed page's HP column clears the widest foe row")
     }
     StringCopy(hpText, COMPOUND_STRING("HP 100%"));
     // 224px window, with a few px of gap between the two.
-    EXPECT_LT(widest + GetStringWidth(FONT_NARROW, hpText, 0) + 4, 28 * 8);
+    EXPECT_LT(iconsWidth + widest + GetStringWidth(FONT_NARROW, hpText, 0) + 4, 28 * 8);
 }
 
 // The case that motivated rounding up: a 46.2% hit on a foe at 46.6%. Rounded the same way both
@@ -99,7 +100,7 @@ SINGLE_BATTLE_TEST("Frontier INFO: the HP % never reads as KO'd by a hit that le
     }
 }
 
-// The Speed page's "You:" rows carry the same rounded-up figure. Rounding up is what makes it
+// The Overview page's "You:" rows carry the same rounded-up figure. Rounding up is what makes it
 // usable for Substitute: the move works iff the row reads 26% or more. These are the HP values
 // of the 26/25/25 cases in the test below; this one checks the move agrees.
 SINGLE_BATTLE_TEST("Frontier INFO: Substitute works exactly when your HP % reads 26 or more")
@@ -151,7 +152,7 @@ SINGLE_BATTLE_TEST("Frontier INFO: your HP % rounds up, and reads 100 only at fu
 }
 
 // "You: " + the widest 12-character nickname + "  Spe 9999" must leave room for "HP 100%".
-TEST("Frontier INFO: the Speed page's HP column clears the widest own row")
+TEST("Frontier INFO: the Overview page's HP column clears the widest own row")
 {
     u8 row[64], hpText[16];
 

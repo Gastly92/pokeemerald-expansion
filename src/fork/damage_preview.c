@@ -31,7 +31,7 @@
 #include "constants/characters.h"
 
 // The two ends of the defender's unknown spread, mirroring CalculateMonStats() (src/pokemon.c).
-// The Speed Tiers page of the INFO viewer bounds Speed the same way.
+// The Overview page of the INFO viewer bounds Speed the same way.
 #define NATURE_HINDERING 90
 #define NATURE_BOOSTING  110
 
