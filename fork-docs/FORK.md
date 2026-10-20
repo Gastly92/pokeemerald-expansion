@@ -103,6 +103,8 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Signature type items | `BUFF_SIGNATURE_TYPE_ITEMS` | ✅ | Plates, Memories and Drives are locked to their own species and boost on the type-item scale, as do the signature orbs. [Reasoning](HELD_ITEMS.md#group-b--dominated-by-our-own-buffs--shipped) · `test/fork/buff_signature_type_items.c` |
 | Confusion self-hit buff | `BUFF_CONFUSION_SELF_DAMAGE` (+ `…_POWER`) | ✅ | The confusion self-hit is 60 BP instead of 40. [Mechanics](DETERMINISM.md#deterministic_status) · `test/fork/buff_confusion.c` |
 | No Guard buff ("wild swings") | `BUFF_NO_GUARD` (+ `…_POWER_BASE`) | ✅ | A move used by or against a No Guard battler turns its lost accuracy into power (80% → 1.2×, 70% → 1.3×); active only with `DETERMINISTIC_ACCURACY_EVASION`, and shown in the damage preview. `test/fork/buff_no_guard.c` |
+| Resist berries buff | `BUFF_RESIST_BERRIES` (+ `…_DIVISOR`) | ✅ | The 18 resist berries cut their hit to 1/3 instead of 1/2 (1/6 instead of 1/4 with Ripen). [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
+| Pinch berries buff | `BUFF_PINCH_BERRIES` (+ `…_STAGES`) | ✅ | Liechi, Ganlon, Salac, Petaya and Apicot raise their stat +2 instead of +1 (+3 with Ripen); Starf keeps its stock +2. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
 
 ## Abilities, types & gimmicks
 

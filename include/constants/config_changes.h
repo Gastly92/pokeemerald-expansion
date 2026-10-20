@@ -311,6 +311,8 @@
     F(BUFF_FLAT_HP_ITEMS, buffFlatHpItems, (u32, TRUE)) \
     F(BUFF_CONFUSION_SELF_DAMAGE, buffConfusionSelfDamage, (u32, TRUE)) \
     F(BUFF_NO_GUARD, buffNoGuard, (u32, TRUE)) \
+    F(BUFF_RESIST_BERRIES, buffResistBerries, (u32, TRUE)) \
+    F(BUFF_PINCH_BERRIES, buffPinchBerries, (u32, TRUE)) \
 
 // FORK: the FEATURE_* flags (config/feature.h) gate standalone gameplay
 // features this fork adds, riding the same runtime config system as the
