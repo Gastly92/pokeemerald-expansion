@@ -4679,10 +4679,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CLEAR_BODY,
             ABILITY_FILTER,
             ABILITY_PRESSURE,
-            ABILITY_REGENERATOR,
             ABILITY_SAND_FORCE,
             ABILITY_STAMINA,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_WILLPOWER
         )
     },
     { // 0378
@@ -4692,10 +4692,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER,
             ABILITY_ICE_BODY,
             ABILITY_PRESSURE,
-            ABILITY_REGENERATOR,
             ABILITY_SNOW_CLOAK,
             ABILITY_STAMINA,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_WILLPOWER
         )
     },
     { // 0379
@@ -4706,9 +4706,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LIGHT_METAL,
             ABILITY_LIMBER,
             ABILITY_PRESSURE,
-            ABILITY_REGENERATOR,
             ABILITY_STAMINA,
-            ABILITY_STURDY
+            ABILITY_STURDY,
+            ABILITY_WILLPOWER
         )
     },
     { // 0380
@@ -5913,7 +5913,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CLEAR_BODY,
             ABILITY_FILTER,
             ABILITY_PRESSURE,
-            ABILITY_STAMINA
+            ABILITY_STAMINA,
+            ABILITY_WILLPOWER
         )
     },
     { // 0487
