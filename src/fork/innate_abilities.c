@@ -113,6 +113,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_CHARMELEON,
         INNATES(
             ABILITY_BLAZE,
+            ABILITY_DEFIANT,
             ABILITY_REKINDLE
         )
     },
