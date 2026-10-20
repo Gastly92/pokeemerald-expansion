@@ -648,6 +648,14 @@ bool32 IsDamageMoveUnusable(struct DamageContext *ctx)
     if (IsMoveDampBanned(ctx->move) && (battlerDefAbility == ABILITY_DAMP || partnerDefAbility == ABILITY_DAMP))
         return TRUE;
 
+    // UPSTREAM: the failure conditions below belong to the chosen move's effect. With a gimmick
+    // active it runs as a Max Move / Z-Move instead (converted before the canceler that would
+    // fail it), so a First Impression past its first turn still hits as Max Flutterby. Reading
+    // the base effect priced it at 0. AI_GetGimmickExecutedMove is the fork's helper for that
+    // conversion. Regression test: test/fork/damage_preview.c ("First Impression").
+    if (AI_GetGimmickExecutedMove(ctx->battlerAtk, ctx->move) != ctx->move)
+        return FALSE;
+
     switch (GetMoveEffect(ctx->move))
     {
     case EFFECT_DREAM_EATER:
