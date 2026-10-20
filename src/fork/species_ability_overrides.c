@@ -176,7 +176,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0028
         SPECIES_SANDSLASH, 1,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_EARTH_EATER
     },
     { // 0028
         SPECIES_SANDSLASH_ALOLA, 1,
@@ -816,11 +816,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0313
         SPECIES_VOLBEAT, 1,
-        ABILITY_WATER_ABSORB
+        ABILITY_SYNCHRONIZE
     },
     { // 0314
         SPECIES_ILLUMISE, 0,
-        ABILITY_STORM_DRAIN
+        ABILITY_LINGERING_AROMA
     },
     { // 0317
         SPECIES_SWALOT, 2,
@@ -1426,7 +1426,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0505
         SPECIES_WATCHOG, 1,
-        ABILITY_STATIC
+        ABILITY_TRACE
     },
     { // 0508
         SPECIES_STOUTLAND, 2,
@@ -2221,7 +2221,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0890
         SPECIES_ETERNATUS, 1,
-        ABILITY_EARTH_EATER
+        ABILITY_TOXIC_DEBRIS
     },
     { // 0892
         SPECIES_URSHIFU, 1,
