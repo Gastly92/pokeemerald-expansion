@@ -349,17 +349,16 @@
 #define BUFF_NO_GUARD_POWER_BASE 200
 
 // When TRUE, the 18 resist Berries (Occa, Yache, Chople, ... and Chilan) cut the hit they fire
-// on to 1/BUFF_RESIST_BERRY_DIVISOR (1/3 by default) instead of the stock 1/2. Ripen -- as the
-// ability or an innate -- still doubles the reduction, so it reads 1/6 instead of 1/4. Nothing
+// on to 1/BUFF_RESIST_BERRY_DIVISOR (1/4 by default) instead of the stock 1/2. Ripen -- as the
+// ability or an innate -- still doubles the reduction, so it reads 1/8 instead of 1/4. Nothing
 // else changes: the Berry still fires once, only on a super-effective hit of its type (any
 // Normal hit for Chilan), and is still blocked by Unnerve.
 //
 // Why: at 0.5x a resist Berry only turns a 4x weakness into 2x or a 2x one into neutral for a
 // single hit, which rarely changes whether the holder survives it -- and the slot it costs is
-// one a Sitrus Berry or a type item would have used every turn. At 1/3 a 2x hit lands below
-// neutral and a 4x hit below 1.5x. Why not 1/4: that is exactly what Ripen gives today, so the
-// Ripen holders (the Grass/Dragon apple line on Yache) would lose the edge their innate buys,
-// and a Shuca Berry would start out-classing an Air Balloon.
+// one a Sitrus Berry or a type item would have used every turn. At 1/4 a 2x hit lands at half
+// damage and a 4x hit at neutral, so the Berry reliably buys the holder a turn. Ripen keeps its
+// edge by still doubling the cut (a 4x hit at half damage).
 //
 // Lives in the shared damage calc, so the AI's damage estimates and the B_MOVE_DAMAGE_PREVIEW
 // readout pick it up for free. The toggle is registered in the runtime config system
@@ -369,20 +368,18 @@
 #define BUFF_RESIST_BERRIES TRUE
 
 // Divisor used when BUFF_RESIST_BERRIES is on: damage = hit / this, or / (2 * this) with Ripen.
-// Stock behavior (flag off) is 2. Higher = stronger Berry; must be nonzero. Ignored when
+// Stock behavior (flag off) is 2. Default 4. Higher = stronger Berry; must be nonzero. Ignored when
 // BUFF_RESIST_BERRIES is FALSE.
-#define BUFF_RESIST_BERRY_DIVISOR 3
+#define BUFF_RESIST_BERRY_DIVISOR 4
 
 // When TRUE, the five single-stat pinch Berries (Liechi, Ganlon, Salac, Petaya, Apicot) raise
-// their stat by BUFF_PINCH_BERRY_STAGES (+2 by default) instead of the stock +1, still at 1/4
-// max HP (1/2 with Gluttony). Ripen adds one more stage (+3) rather than doubling to +4.
-// Starf Berry is untouched: it already raises its stat by +2 in stock (+4 with Ripen).
+// their stat by BUFF_PINCH_BERRY_STAGES (+3 by default) instead of the stock +1, still at 1/4
+// max HP (1/2 with Gluttony). Ripen still doubles it, to +6 (the cap).
+// Starf Berry is untouched: it raises a stat by +2 in stock (+4 with Ripen).
 //
 // Why: a pinch Berry only fires once the holder is down to 1/4 HP, which usually leaves it one
-// action before it faints, and one +1 stage on that action is rarely worth the item slot. +2
-// matches Weakness Policy and Starf, the other one-shot "you got hit hard" boosts. Why Ripen
-// +3 and not +4: Ripen only has to keep its holder ahead of the plain Berry, which +3 does,
-// without a single passive Berry handing out a +4.
+// action before it faints, and one +1 stage on that action is rarely worth the item slot. At +3
+// that one action is a real threat, and a faster foe has to finish the holder before it moves.
 //
 // The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the
 // magnitude lives in the plain constant below. See GetPinchBerryStatStages() in
@@ -390,8 +387,8 @@
 // src/battle_hold_effects.c.
 #define BUFF_PINCH_BERRIES TRUE
 
-// Stat stages raised when BUFF_PINCH_BERRIES is on (Ripen adds one). Stock behavior (flag off)
-// is 1. Ignored when BUFF_PINCH_BERRIES is FALSE.
-#define BUFF_PINCH_BERRY_STAGES 2
+// Stat stages raised when BUFF_PINCH_BERRIES is on (Ripen doubles it; the stat stage cap still
+// applies). Stock behavior (flag off) is 1. Ignored when BUFF_PINCH_BERRIES is FALSE.
+#define BUFF_PINCH_BERRY_STAGES 3
 
 #endif // GUARD_CONFIG_BUFF_H

@@ -16,7 +16,7 @@ ASSUMPTIONS
     ASSUME(GetMoveType(MOVE_AURORA_BEAM) == TYPE_ICE);
 }
 
-SINGLE_BATTLE_TEST("BUFF_RESIST_BERRIES: a resist Berry cuts a super-effective hit to 1/3", s16 damage)
+SINGLE_BATTLE_TEST("BUFF_RESIST_BERRIES: a resist Berry cuts a super-effective hit to 1/4", s16 damage)
 {
     u32 config;
     enum Item item;
@@ -39,12 +39,12 @@ SINGLE_BATTLE_TEST("BUFF_RESIST_BERRIES: a resist Berry cuts a super-effective h
             ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, opponent);
         HP_BAR(opponent, captureDamage: &results[i].damage);
     } FINALLY {
-        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.0 / 3), results[1].damage);
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.25), results[1].damage);
         EXPECT_MUL_EQ(results[2].damage, Q_4_12(0.5), results[3].damage); // stock
     }
 }
 
-SINGLE_BATTLE_TEST("BUFF_RESIST_BERRIES: Ripen still doubles the reduction, to 1/6", s16 damage)
+SINGLE_BATTLE_TEST("BUFF_RESIST_BERRIES: Ripen still doubles the reduction, to 1/8", s16 damage)
 {
     u32 config;
     enum Item item;
@@ -65,12 +65,12 @@ SINGLE_BATTLE_TEST("BUFF_RESIST_BERRIES: Ripen still doubles the reduction, to 1
             ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, opponent);
         HP_BAR(opponent, captureDamage: &results[i].damage);
     } FINALLY {
-        EXPECT_MUL_EQ(results[0].damage, Q_4_12(1.0 / 6), results[1].damage);
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.125), results[1].damage);
         EXPECT_MUL_EQ(results[2].damage, Q_4_12(0.25), results[3].damage); // stock
     }
 }
 
-SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Liechi Berry raises Attack by two stages at 1/4 HP")
+SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Liechi Berry raises Attack by three stages at 1/4 HP")
 {
     GIVEN {
         WITH_CONFIG(BUFF_PINCH_BERRIES, TRUE);
@@ -80,13 +80,13 @@ SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Liechi Berry raises Attack by two stages
         TURN { MOVE(opponent, MOVE_DRAGON_RAGE); }
     } SCENE {
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, player);
-        MESSAGE("The Liechi Berry sharply boosted Wobbuffet's Attack!");
+        MESSAGE("The Liechi Berry drastically boosted Wobbuffet's Attack!");
     } THEN {
-        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 2);
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 3);
     }
 }
 
-SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Ripen adds one more stage, to +3")
+SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Ripen doubles it, to +6")
 {
     GIVEN {
         WITH_CONFIG(BUFF_PINCH_BERRIES, TRUE);
@@ -98,7 +98,7 @@ SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Ripen adds one more stage, to +3")
         ABILITY_POPUP(player, ABILITY_RIPEN);
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, player);
     } THEN {
-        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 3);
+        EXPECT_EQ(player->statStages[STAT_ATK], MAX_STAT_STAGE);
     }
 }
 

@@ -21,12 +21,11 @@ static inline uq4_12_t GetResistBerryModifier(bool32 ripen)
 }
 
 // Stat stages a single-stat pinch Berry (Liechi, Ganlon, Salac, Petaya, Apicot) raises.
-// Stock: +1, Ripen +2. Buffed: +BUFF_PINCH_BERRY_STAGES, and Ripen adds one stage rather
-// than doubling, so a +2 Berry does not jump straight to +4.
+// Stock: +1, Ripen +2. Buffed: +BUFF_PINCH_BERRY_STAGES, and Ripen still doubles it.
 static inline u32 GetPinchBerryStatStages(bool32 ripen)
 {
     if (GetConfig(BUFF_PINCH_BERRIES))
-        return ripen ? BUFF_PINCH_BERRY_STAGES + 1 : BUFF_PINCH_BERRY_STAGES;
+        return ripen ? BUFF_PINCH_BERRY_STAGES * 2 : BUFF_PINCH_BERRY_STAGES;
     return ripen ? 2 : 1;
 }
 
