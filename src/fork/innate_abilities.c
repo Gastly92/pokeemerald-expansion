@@ -114,8 +114,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_BLAZE,
             ABILITY_DEFIANT,
-            ABILITY_REKINDLE,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_REKINDLE
         )
     },
     { // 0006
@@ -124,8 +123,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_COMPETITIVE,
             ABILITY_DEFIANT,
-            ABILITY_REKINDLE,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_REKINDLE
         )
     },
     { // 0006
@@ -144,8 +142,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_COMPETITIVE,
             ABILITY_DEFIANT,
-            ABILITY_REKINDLE,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_REKINDLE
         )
     },
     { // 0006
@@ -154,8 +151,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_BLAZE,
             ABILITY_COMPETITIVE,
             ABILITY_DEFIANT,
-            ABILITY_REKINDLE,
-            ABILITY_TOUGH_CLAWS
+            ABILITY_REKINDLE
         )
     },
     { // 0007
