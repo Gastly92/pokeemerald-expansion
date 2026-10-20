@@ -115,7 +115,7 @@ SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES off: Liechi Berry raises Attack by its st
     }
 }
 
-SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Starf Berry keeps its stock +2")
+SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Starf Berry raises the highest stat by three stages")
 {
     GIVEN {
         WITH_CONFIG(BUFF_PINCH_BERRIES, TRUE);
@@ -126,6 +126,34 @@ SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Starf Berry keeps its stock +2")
         TURN { MOVE(opponent, MOVE_DRAGON_RAGE); }
     } THEN {
         // DETERMINISTIC_HOLD_EFFECTS picks the highest stat, which Attack(300) makes Attack.
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 3);
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES: Starf Berry with Ripen raises the highest stat to +6")
+{
+    GIVEN {
+        WITH_CONFIG(BUFF_PINCH_BERRIES, TRUE);
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_APPLIN) { MaxHP(160); HP(80); Attack(300); Ability(ABILITY_RIPEN); Item(ITEM_STARF_BERRY); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_DRAGON_RAGE); }
+    } THEN {
+        EXPECT_EQ(player->statStages[STAT_ATK], MAX_STAT_STAGE);
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES off: Starf Berry raises the highest stat by its stock two stages")
+{
+    GIVEN {
+        WITH_CONFIG(BUFF_PINCH_BERRIES, FALSE);
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(160); HP(80); Attack(300); Item(ITEM_STARF_BERRY); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_DRAGON_RAGE); }
+    } THEN {
         EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 2);
     }
 }

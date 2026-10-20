@@ -1102,15 +1102,17 @@ static enum ItemEffect RandomStatRaiseBerry(enum BattlerId battler, enum Item it
         gBattlerAttacker = savedAttacker;
 
         // FORK: innate Ripen doubles the Berry's stat raise (FEATURE_INNATE_ABILITIES, Batch T).
+        // FORK: BUFF_PINCH_BERRIES -- the stage counts come from GetStarfBerryStatStages()
+        // (include/fork/buff_berries.h); on conflict keep upstream's scripts and keep the calls.
         if (ability == ABILITY_RIPEN || IsInnateActive(battler, ABILITY_RIPEN))
         {
             BattleScriptCall(BattleScript_ConsumableBerryStatRaiseRipen);
-            SetStatChange(battler, stat, 4);
+            SetStatChange(battler, stat, GetStarfBerryStatStages(TRUE));
         }
         else
         {
             BattleScriptCall(BattleScript_ConsumableBerryStatRaise);
-            SetStatChange(battler, stat, 2);
+            SetStatChange(battler, stat, GetStarfBerryStatStages(FALSE));
         }
         effect = ITEM_STATS_CHANGE;
     }

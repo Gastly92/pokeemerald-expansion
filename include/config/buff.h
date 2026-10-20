@@ -372,10 +372,11 @@
 // BUFF_RESIST_BERRIES is FALSE.
 #define BUFF_RESIST_BERRY_DIVISOR 4
 
-// When TRUE, the five single-stat pinch Berries (Liechi, Ganlon, Salac, Petaya, Apicot) raise
-// their stat by BUFF_PINCH_BERRY_STAGES (+3 by default) instead of the stock +1, still at 1/4
-// max HP (1/2 with Gluttony). Ripen still doubles it, to +6 (the cap).
-// Starf Berry is untouched: it raises a stat by +2 in stock (+4 with Ripen).
+// When TRUE, the stat pinch Berries (Liechi, Ganlon, Salac, Petaya, Apicot and Starf) raise
+// their stat by BUFF_PINCH_BERRY_STAGES (+3 by default) instead of the stock +1 (+2 for Starf),
+// still at 1/4 max HP (1/2 with Gluttony). Ripen still doubles it, to +6 (the cap).
+// Starf keeps raising the holder's highest stat (random without DETERMINISTIC_HOLD_EFFECTS); at
+// equal stages it trades control of the stat for adaptability, rather than losing outright.
 //
 // Why: a pinch Berry only fires once the holder is down to 1/4 HP, which usually leaves it one
 // action before it faints, and one +1 stage on that action is rarely worth the item slot. At +3
@@ -383,8 +384,8 @@
 //
 // The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the
 // magnitude lives in the plain constant below. See GetPinchBerryStatStages() in
-// include/fork/buff_berries.h and its one call site in StatRaiseBerry(),
-// src/battle_hold_effects.c.
+// include/fork/buff_berries.h and its call site in StatRaiseBerry(), plus GetStarfBerryStatStages()
+// in RandomStatRaiseBerry(), src/battle_hold_effects.c.
 #define BUFF_PINCH_BERRIES TRUE
 
 // Stat stages raised when BUFF_PINCH_BERRIES is on (Ripen doubles it; the stat stage cap still

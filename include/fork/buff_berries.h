@@ -6,7 +6,8 @@
 
 // BUFF_RESIST_BERRIES / BUFF_PINCH_BERRIES (config/buff.h). Kept `static inline` here so
 // each call site in the upstream files (GetDefenderItemsModifier() in src/battle_util.c,
-// StatRaiseBerry() in src/battle_hold_effects.c) stays a one-line swap of a constant.
+// StatRaiseBerry() and RandomStatRaiseBerry() in src/battle_hold_effects.c) stays a one-line
+// swap of a constant.
 //
 // Both take whether the holder's Ripen (ability or innate) is active, which the caller
 // already works out, so the Ripen check is not duplicated here.
@@ -27,6 +28,17 @@ static inline u32 GetPinchBerryStatStages(bool32 ripen)
     if (GetConfig(BUFF_PINCH_BERRIES))
         return ripen ? BUFF_PINCH_BERRY_STAGES * 2 : BUFF_PINCH_BERRY_STAGES;
     return ripen ? 2 : 1;
+}
+
+// Stat stages Starf Berry raises. Stock: +2, Ripen +4 (one more than the single-stat Berries,
+// paying for the stat being random -- or, under DETERMINISTIC_HOLD_EFFECTS, the holder's
+// highest rather than chosen). Buffed: the same as the single-stat Berries, so Starf trades
+// control of the stat for adaptability rather than for fewer stages.
+static inline u32 GetStarfBerryStatStages(bool32 ripen)
+{
+    if (GetConfig(BUFF_PINCH_BERRIES))
+        return GetPinchBerryStatStages(ripen);
+    return ripen ? 4 : 2;
 }
 
 #endif // GUARD_FORK_BUFF_BERRIES_H
