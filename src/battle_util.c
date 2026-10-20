@@ -16,6 +16,7 @@
 #include "fork/pacify.h" // FORK: Pacify (Sp. Atk twin of Intimidate)
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "fork/buff_no_guard.h" // FORK: BUFF_NO_GUARD (No Guard "wild swings" power)
+#include "fork/buff_berries.h" // FORK: BUFF_RESIST_BERRIES
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -8700,8 +8701,10 @@ static inline uq4_12_t GetDefenderItemsModifier(struct DamageContext *ctx)
             // FORK: innate Ripen doubles the resist Berry's damage reduction like the real ability
             // (FEATURE_INNATE_ABILITIES, Batch T). This lives in the shared damage calc, so the AI's
             // prediction is innate-aware for free (keyed off the real battler).
-            return (ctx->abilities[ctx->battlerDef] == ABILITY_RIPEN
-                 || (ctx->innatesEnabled && IsInnateActive(ctx->battlerDef, ABILITY_RIPEN))) ? UQ_4_12(0.25) : UQ_4_12(0.5);
+            // FORK: BUFF_RESIST_BERRIES -- the 0.5x / 0.25x pair moved into GetResistBerryModifier()
+            // (include/fork/buff_berries.h); on conflict keep upstream's condition and keep the call.
+            return GetResistBerryModifier(ctx->abilities[ctx->battlerDef] == ABILITY_RIPEN
+                 || (ctx->innatesEnabled && IsInnateActive(ctx->battlerDef, ABILITY_RIPEN)));
         }
         break;
     default:

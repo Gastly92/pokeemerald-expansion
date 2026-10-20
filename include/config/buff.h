@@ -348,4 +348,48 @@
 // lower it toward 100 to shrink the bonus. Ignored when BUFF_NO_GUARD is FALSE.
 #define BUFF_NO_GUARD_POWER_BASE 200
 
+// When TRUE, the 18 resist Berries (Occa, Yache, Chople, ... and Chilan) cut the hit they fire
+// on to 1/BUFF_RESIST_BERRY_DIVISOR (1/4 by default) instead of the stock 1/2. Ripen -- as the
+// ability or an innate -- still doubles the reduction, so it reads 1/8 instead of 1/4. Nothing
+// else changes: the Berry still fires once, only on a super-effective hit of its type (any
+// Normal hit for Chilan), and is still blocked by Unnerve.
+//
+// Why: at 0.5x a resist Berry only turns a 4x weakness into 2x or a 2x one into neutral for a
+// single hit, which rarely changes whether the holder survives it -- and the slot it costs is
+// one a Sitrus Berry or a type item would have used every turn. At 1/4 a 2x hit lands at half
+// damage and a 4x hit at neutral, so the Berry reliably buys the holder a turn. Ripen keeps its
+// edge by still doubling the cut (a 4x hit at half damage).
+//
+// Lives in the shared damage calc, so the AI's damage estimates and the B_MOVE_DAMAGE_PREVIEW
+// readout pick it up for free. The toggle is registered in the runtime config system
+// (BUFF_CONFIG_DEFINITIONS); the magnitude lives in the plain constant below. See
+// GetResistBerryModifier() in include/fork/buff_berries.h and its one call site in
+// GetDefenderItemsModifier(), src/battle_util.c.
+#define BUFF_RESIST_BERRIES TRUE
+
+// Divisor used when BUFF_RESIST_BERRIES is on: damage = hit / this, or / (2 * this) with Ripen.
+// Stock behavior (flag off) is 2. Default 4. Higher = stronger Berry; must be nonzero. Ignored when
+// BUFF_RESIST_BERRIES is FALSE.
+#define BUFF_RESIST_BERRY_DIVISOR 4
+
+// When TRUE, the stat pinch Berries (Liechi, Ganlon, Salac, Petaya, Apicot and Starf) raise
+// their stat by BUFF_PINCH_BERRY_STAGES (+3 by default) instead of the stock +1 (+2 for Starf),
+// still at 1/4 max HP (1/2 with Gluttony). Ripen still doubles it, to +6 (the cap).
+// Starf keeps raising the holder's highest stat (random without DETERMINISTIC_HOLD_EFFECTS); at
+// equal stages it trades control of the stat for adaptability, rather than losing outright.
+//
+// Why: a pinch Berry only fires once the holder is down to 1/4 HP, which usually leaves it one
+// action before it faints, and one +1 stage on that action is rarely worth the item slot. At +3
+// that one action is a real threat, and a faster foe has to finish the holder before it moves.
+//
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the
+// magnitude lives in the plain constant below. See GetPinchBerryStatStages() in
+// include/fork/buff_berries.h and its call site in StatRaiseBerry(), plus GetStarfBerryStatStages()
+// in RandomStatRaiseBerry(), src/battle_hold_effects.c.
+#define BUFF_PINCH_BERRIES TRUE
+
+// Stat stages raised when BUFF_PINCH_BERRIES is on (Ripen doubles it; the stat stage cap still
+// applies). Stock behavior (flag off) is 1. Ignored when BUFF_PINCH_BERRIES is FALSE.
+#define BUFF_PINCH_BERRY_STAGES 3
+
 #endif // GUARD_CONFIG_BUFF_H
