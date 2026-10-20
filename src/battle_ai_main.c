@@ -8,6 +8,7 @@
 #include "battle_ai_switch.h"
 #include "fork/battle_ai_gimmick.h" // FORK: AI picks among its gimmick candidates
 #include "fork/battle_ai_species_overrides.h" // FORK: species-aware AI overrides
+#include "fork/buff_status_reapply.h" // FORK: BUFF_REBURN
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
 #include "fork/frontier_ai.h" // FORK: boss/regular AI tier split for the facilities
 #include "battle_ai_main.h"
@@ -3149,6 +3150,8 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
             ADJUST_SCORE(-5);
         break;
     case MOVE_EFFECT_BURN:
+        if (AI_CanReburn(battlerAtk, battlerDef, aiData->abilities[battlerDef], move)) // FORK: BUFF_REBURN - an already-burned foe takes a tick instead
+            break;
         if (!AI_CanBurn(battlerAtk, battlerDef, aiData->abilities[battlerDef], GetPartnerBattler(battlerAtk), move, aiData->partnerMove))
             ADJUST_SCORE(-10);
         if (!ShouldBurn(battlerAtk, battlerDef, aiData->abilities[battlerDef]))
@@ -4557,6 +4560,7 @@ static s32 AI_CalcMoveEffectScore(enum BattlerId battlerAtk, enum BattlerId batt
         break;
     case MOVE_EFFECT_BURN:
         IncreaseBurnScore(battlerAtk, battlerDef, move, &score);
+        IncreaseReburnScore(battlerAtk, battlerDef, move, &score); // FORK: BUFF_REBURN
         break;
     default:
         break;

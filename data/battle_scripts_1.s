@@ -6596,3 +6596,24 @@ BattleScript_BelchFails::
 	printstring STRINGID_BELCHCANTSELECT
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+
+@ FORK: BUFF_REBURN (src/fork/buff_status_reapply.c) - Will-O-Wisp on a foe that is
+@ already burned flares the burn for an immediate tick instead of failing.
+@ TryStatusMoveReapply stored the damage on the target. Unlike the Leech Seed
+@ re-drain (whose seeding animation would be wrong for an existing seed), the
+@ Will-O-Wisp animation plays: the fire stokes the burn, which then flares with
+@ its own status animation.
+BattleScript_ReburnTick::
+	attackanimation
+	waitanimation
+	saveattacker
+	copybyte gBattlerAttacker, gBattlerTarget   @ "was hurt by its burn" names the victim
+	printstring STRINGID_PKMNHURTBYBURN
+	waitmessage B_WAIT_TIME_LONG
+	restoreattacker
+	statusanimation BS_TARGET
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET, ASSURANCE_DOUBLE
+	tryfaintmon BS_TARGET
+	tryactivateitem BS_TARGET, ACTIVATION_ON_HP_THRESHOLD
+	goto BattleScript_MoveEnd
