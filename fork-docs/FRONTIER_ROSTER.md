@@ -74,6 +74,9 @@ evolutions appear as their own entries, slotted at their base species' National 
 number — alongside Paradox Pokémon (Booster Energy, innate Protosynthesis/Quark Drive),
 Ultra Beasts, and notable formes (Therian, Necrozma, Origin Dialga/Palkia, Urshifu,
 Calyrex riders, Ogerpon masks, Bloodmoon Ursaluna, the appliance Rotoms).
+Every Paradox species keeps at least one Booster Energy set, since the draft rarely gives it
+sun or Electric Terrain. `TEST("Frontier extended roster: every Paradox species has at least one
+Booster Energy set")` enforces this.
 
 **Held items are deliberately varied** — Leftovers, berries, Assault Vest, Rocky Helmet,
 Heavy-Duty Boots, type-boost items and screens/utility items are favored over
