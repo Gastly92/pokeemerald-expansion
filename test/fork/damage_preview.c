@@ -249,6 +249,31 @@ SINGLE_BATTLE_TEST("Damage preview: an armed Dynamax prices G-Max Fireball at it
     }
 }
 
+SINGLE_BATTLE_TEST("Damage preview: an armed Dynamax prices First Impression's Max Flutterby after the first turn")
+{
+    u32 lo = 0, hi = 0;
+
+    // First Impression fails after the user's first turn, but its Max Move does not; the preview
+    // used to read the base move's failure and fall back to the stock "TYPE/" line.
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_FIRST_IMPRESSION) == EFFECT_FIRST_TURN_ONLY);
+        PLAYER(SPECIES_LOKIX) { Moves(MOVE_FIRST_IMPRESSION, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_TYRANITAR) { Ability(ABILITY_UNNERVE); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_FIRST_IMPRESSION, gimmick: GIMMICK_DYNAMAX); }
+    } SCENE {
+        MESSAGE("Lokix used Max Flutterby!");
+        HP_BAR(opponent);
+    } THEN {
+        SetActiveGimmick(B_BATTLER_0, GIMMICK_NONE);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_FIRST_IMPRESSION, GIMMICK_DYNAMAX, &lo, &hi, &sKo));
+        EXPECT_GT(hi, 0);
+        // Undynamaxed it really would fail, which keeps the stock line.
+        EXPECT(!GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_FIRST_IMPRESSION, GIMMICK_NONE, &lo, &hi, &sKo));
+    }
+}
+
 SINGLE_BATTLE_TEST("Damage preview: a move type left latched by an earlier calc does not leak into the range")
 {
     u32 lo = 0, hi = 0, loClean = 0, hiClean = 0;
