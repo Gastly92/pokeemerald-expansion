@@ -19221,7 +19221,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_GROWTH,
+            MOVE_SPIKY_SHIELD,
             MOVE_GIGA_DRAIN,
             MOVE_EARTH_POWER,
             MOVE_LEECH_SEED
@@ -32170,7 +32170,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_GROWTH,
+            MOVE_SUNNY_DAY,
             MOVE_FLAMETHROWER,
             MOVE_GIGA_DRAIN,
             MOVE_EARTH_POWER
