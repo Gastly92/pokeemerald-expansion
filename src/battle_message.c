@@ -910,6 +910,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_HARVESTHPGAIN]                        = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} restored a little HP!"), // FORK: DETERMINISTIC_ABILITIES, Harvest sun heal
     [STRINGID_TYPEAFFINITYAWAKENED]                 = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX}'s affinity awakened its latent {B_BUFF1} type!"), // FORK: Affinity ability family
     [STRINGID_HALOAPPEARED]                         = COMPOUND_STRING("A halo appears above {B_SCR_NAME_WITH_PREFIX}!"), // FORK: Halo ability
+    [STRINGID_FLINCHPREVENTED]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents flinching!"), // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
 };
 
 const u16 gTrainerUsedItemStringIds[] =

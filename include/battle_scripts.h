@@ -265,6 +265,8 @@ extern const u8 BattleScript_BadDreamsActivates[];
 extern const u8 BattleScript_SwitchInAbilityMsg[];
 extern const u8 BattleScript_TypeAffinityActivates[]; // FORK: Affinity ability family
 extern const u8 BattleScript_HaloActivates[]; // FORK: Halo ability
+extern const u8 BattleScript_FlinchPreventedByAbility[]; // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
+extern const u8 BattleScript_FlinchPreventedByItem[]; // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
 extern const u8 BattleScript_ToxicSpikesPoisoned[];
 extern const u8 BattleScript_ToxicSpikesBadlyPoisoned[];
 extern const u8 BattleScript_ToxicSpikesAbsorbed[];
