@@ -5166,6 +5166,14 @@ BattleScript_HaloActivates::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION (src/fork/flinch_prevention.c)
+BattleScript_FlinchPreventedByAbility::
+	call BattleScript_AbilityPopUp
+BattleScript_FlinchPreventedByItem::
+	printstring STRINGID_FLINCHPREVENTED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_ActivateAsOne::
 	call BattleScript_AbilityPopUp
 	printfromtable gSwitchInAbilityStringIds

@@ -21,6 +21,7 @@
 #include "string_util.h"
 #include "config/battle.h"
 #include "fork/innate_abilities.h" // FORK: IsInnateOnSide, innate-aware Liquid Ooze
+#include "fork/flinch_prevention.h" // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
 
 static inline bool32 IgnoreTargetingForMoveEffect(enum MoveEffect moveEffect);
 static bool32 DoesSubstituteBlockMoveEffectOnTarget(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum MoveEffect moveEffect);
@@ -89,6 +90,7 @@ static void HandleSetEffectFlinch(struct BattleCalcValues *cv, struct SetEffect 
         {
             gBattlescriptCurrInstr = se->script;
         }
+        TryAnnounceInnerFocusFlinch(cv, se); // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
     }
     else if (gBattleMons[se->effectBattler].volatiles.flinched)
     {
@@ -1527,6 +1529,9 @@ void SetMoveEffect(struct BattleCalcValues *cv, struct SetEffect *se)
     gBattleScripting.battler = cv->battlerAtk;
     gEffectBattler = se->effectBattler;
 
+    // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION -- must run before the chain below drops a flinch
+    // that Shield Dust / Covert Cloak blocked; it redirects se->script through the message.
+    TryAnnounceBlockedFlinch(cv, se, affectsUser);
     if (!se->primary && !affectsUser && IsMoveEffectBlockedByTarget(cv->abilities[se->effectBattler]))
         se->moveEffect = MOVE_EFFECT_NONE;
     else if (!se->primary

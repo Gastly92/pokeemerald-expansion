@@ -71,4 +71,13 @@
 // fork-docs/FORK.md.
 #define FEATURE_FREE_GIMMICKS TRUE
 
+// When TRUE, a flinch blocked by Shield Dust, Inner Focus (chosen ability or innate) or Covert
+// Cloak is announced: the ability pop-up (abilities only) and "<mon>'s <ability/item> prevents
+// flinching!". Stock play blocks these silently. Only a flinch that would actually have landed
+// is announced (the target hasn't moved yet this turn, isn't Dynamaxed, isn't behind a
+// Substitute), so with DETERMINISTIC_FLINCH the message never fires for a flinch the gate or
+// the anti-lock cap would have skipped anyway. King's Rock / Razor Fang stay silent: they don't
+// even try against a blocker. See src/fork/flinch_prevention.c.
+#define FEATURE_ANNOUNCE_FLINCH_PREVENTION TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
