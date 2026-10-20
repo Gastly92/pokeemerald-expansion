@@ -2409,7 +2409,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 1005
         SPECIES_ROARING_MOON, 1,
-        ABILITY_DARK_AURA
+        ABILITY_HUSTLE
     },
     { // 1006
         SPECIES_IRON_VALIANT, 1,
