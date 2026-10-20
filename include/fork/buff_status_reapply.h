@@ -3,12 +3,13 @@
 
 #include "battle.h"
 
-// BUFF_REBURN / BUFF_REPOISON -- a status move that re-applies a status the target already has
+// BUFF_REBURN / BUFF_REPOISON / BUFF_REPARALYZE -- a status move that re-applies a status the target already has
 // does something instead of failing. Definitions in src/fork/buff_status_reapply.c.
 
 extern const u8 BattleScript_ReburnTick[];
 extern const u8 BattleScript_RepoisonTick[];
 extern const u8 BattleScript_ToxicUpgradeTick[];
+extern const u8 BattleScript_ReparalyzeDrain[];
 
 // Called from Cmd_trynonvolatilestatus before the vanilla checks. When the current
 // move re-applies a status the target already has and the buff for that status can
@@ -27,5 +28,9 @@ s32 GetReburnDamage(enum BattlerId battler);
 bool32 AI_CanRepoison(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability defAbility, enum Move move);
 // AI: adds the score for a re-poison (no-op when the move would not re-poison).
 void IncreaseRepoisonScore(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 *score);
+// AI: TRUE when `move` (Thunder Wave, Stun Spore, Glare) would drain a paralyzed `battlerDef`'s PP.
+bool32 AI_CanReparalyze(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Ability defAbility, enum Move move);
+// AI: adds the score for a paralysis PP drain (no-op when the move would not drain).
+void IncreaseReparalyzeScore(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, s32 *score);
 
 #endif // GUARD_FORK_BUFF_STATUS_REAPPLY_H

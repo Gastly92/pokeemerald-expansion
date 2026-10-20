@@ -90,6 +90,21 @@
 // src/fork/buff_status_reapply.c (hooked from Cmd_trynonvolatilestatus).
 #define BUFF_REPOISON TRUE
 
+// When TRUE, a paralysis *status* move (Thunder Wave, Stun Spore, Glare) used on a
+// foe that is already paralyzed no longer fails - the paralysis flares and every one
+// of the foe's moves loses BUFF_REPARALYZE_PP PP (never below 0). This leans on
+// DETERMINISTIC_PARALYSIS, under which paralysis is already a PP tax. Every block
+// that would stop a fresh paralysis still stops it (Electric type, Ground vs Thunder
+// Wave, Limber, Misty Terrain, Safeguard, Substitute...), and it fails if the foe
+// has no PP left to lose. Magic Guard does not block it (no damage is dealt).
+// Damaging moves with a paralysis secondary are unaffected. See
+// src/fork/buff_status_reapply.c (hooked from Cmd_trynonvolatilestatus).
+#define BUFF_REPARALYZE TRUE
+
+// PP each of the foe's moves loses on a BUFF_REPARALYZE drain. Ignored when
+// BUFF_REPARALYZE is FALSE.
+#define BUFF_REPARALYZE_PP 1
+
 // When TRUE, the two accuracy-boosting hold items get a purpose again under
 // DETERMINISTIC_ACCURACY_EVASION. That flag removes accuracy as a hit/miss axis and
 // replaces it with a PP economy, but it only carried the DEFENDER's half across:

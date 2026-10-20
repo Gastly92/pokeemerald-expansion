@@ -6651,3 +6651,14 @@ BattleScript_ToxicUpgradeTick::
 	waitmessage B_WAIT_TIME_LONG
 	restoreattacker
 	goto BattleScript_RepoisonTickHp
+
+@ FORK: BUFF_REPARALYZE (src/fork/buff_status_reapply.c) - a paralysis status move on
+@ a foe that is already paralyzed flares the paralysis and drains PP from every move
+@ instead of failing. TryStatusMoveReapply already drained the PP and buffered the amount.
+BattleScript_ReparalyzeDrain::
+	attackanimation
+	waitanimation
+	statusanimation BS_TARGET
+	printstring STRINGID_PARALYSISPPDRAIN
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
