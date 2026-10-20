@@ -1825,6 +1825,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0053
     {
+        .species = SPECIES_PERSIAN_ALOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_KNOCK_OFF,
+            MOVE_SUCKER_PUNCH,
+            MOVE_PARTING_SHOT
+        },
+        .ability = ABILITY_RIVALRY,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
+
+    // 0053
+    {
         .species = SPECIES_PERSIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_SILK_SCARF,
@@ -1863,6 +1885,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
+    },
+
+    // 0053
+    {
+        .species = SPECIES_PERSIAN,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_FAKE_OUT,
+            MOVE_BODY_SLAM,
+            MOVE_KNOCK_OFF,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_TRACE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
     },
 
     // 0055
@@ -3468,6 +3512,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GHOST,
     },
 
+    // 0094
+    {
+        .species = SPECIES_GENGAR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_SHADOW_BALL,
+            MOVE_SLUDGE_BOMB,
+            MOVE_THUNDERBOLT,
+            MOVE_TAUNT
+        },
+        .ability = ABILITY_PERISH_BODY,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
+
     // 0097
     {
         .species = SPECIES_HYPNO,
@@ -4451,6 +4517,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GROUND,
+    },
+
+    // 0128
+    {
+        .species = SPECIES_TAUROS,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_DOUBLE_EDGE,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_CLOSE_COMBAT,
+            MOVE_ROCK_SLIDE
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
     },
 
     // 0128
@@ -9627,6 +9715,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_STEEL,
+    },
+
+    // 0291
+    {
+        .species = SPECIES_NINJASK,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_LEECH_LIFE,
+            MOVE_DUAL_WINGBEAT,
+            MOVE_SHADOW_CLAW,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
     },
 
     // 0292
@@ -17339,6 +17449,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GRASS,
     },
 
+    // 0497
+    {
+        .species = SPECIES_SERPERIOR,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_LEAF_STORM,
+            MOVE_DRAGON_PULSE,
+            MOVE_EARTH_POWER,
+            MOVE_GLARE
+        },
+        .ability = ABILITY_CONTRARY,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GROUND,
+    },
+
     // 0500
     {
         .species = SPECIES_EMBOAR,
@@ -20291,6 +20423,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ball = BALL_NET,
     },
 
+    // 0617
+    {
+        .species = SPECIES_ACCELGOR,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_BUG_BUZZ,
+            MOVE_SLUDGE_BOMB,
+            MOVE_FOCUS_BLAST,
+            MOVE_ENERGY_BALL
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_BUG,
+    },
+
     // 0618
     {
         .species = SPECIES_STUNFISK_GALAR,
@@ -21880,6 +22034,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_WATER,
     },
+
+    // 0658
+    {
+        .species = SPECIES_GRENINJA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_WATER_SHURIKEN,
+            MOVE_DARK_PULSE,
+            MOVE_ICE_BEAM,
+            MOVE_GRASS_KNOT
+        },
+        .ability = ABILITY_PROTEAN,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_DARK,
+    },
     {
         .species = SPECIES_GRENINJA_BATTLE_BOND,
         .tags = FORMAT_BOTH,
@@ -22034,6 +22210,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BRAVE_BIRD,
             MOVE_FLARE_BLITZ,
             MOVE_WILL_O_WISP
+        },
+        .ability = ABILITY_FLAME_BODY,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+
+    // 0663
+    {
+        .species = SPECIES_TALONFLAME,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_ACROBATICS,
+            MOVE_FLARE_BLITZ,
+            MOVE_U_TURN,
+            MOVE_ROOST
         },
         .ability = ABILITY_FLAME_BODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -23047,6 +23245,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FIGHTING,
     },
 
+    // 0701
+    {
+        .species = SPECIES_HAWLUCHA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_ACROBATICS,
+            MOVE_HIGH_JUMP_KICK,
+            MOVE_KNOCK_OFF,
+            MOVE_ROOST
+        },
+        .ability = ABILITY_NO_GUARD,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIGHTING,
+    },
+
     // 0702
     {
         .species = SPECIES_DEDENNE,
@@ -23549,6 +23769,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FLYING,
+    },
+
+    // 0715
+    {
+        .species = SPECIES_NOIVERN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_BOOMBURST,
+            MOVE_DRAGON_PULSE,
+            MOVE_FLAMETHROWER,
+            MOVE_AIR_SLASH
+        },
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
     },
 
     // 0716
@@ -27060,6 +27302,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_FIGHTING,
     },
 
+    // 0802
+    {
+        .species = SPECIES_MARSHADOW,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_SPECTRAL_THIEF,
+            MOVE_CLOSE_COMBAT,
+            MOVE_SHADOW_SNEAK,
+            MOVE_ICE_PUNCH
+        },
+        .ability = ABILITY_TRACE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIGHTING,
+    },
+
     // 0804
     {
         .species = SPECIES_NAGANADEL,
@@ -27417,6 +27681,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_FIRE,
+    },
+
+    // 0815
+    {
+        .species = SPECIES_CINDERACE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_PYRO_BALL,
+            MOVE_HIGH_JUMP_KICK,
+            MOVE_SUCKER_PUNCH,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_LIBERO,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FIGHTING,
     },
 
     // 0818
@@ -30022,6 +30308,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0898
     {
+        .species = SPECIES_CALYREX_SHADOW,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_ASTRAL_BARRAGE,
+            MOVE_PSYSHOCK,
+            MOVE_GIGA_DRAIN,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_AS_ONE_SHADOW_RIDER,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+
+    // 0898
+    {
         .species = SPECIES_CALYREX,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS,
@@ -30544,6 +30852,28 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_GHOST,
+    },
+
+    // 0908
+    {
+        .species = SPECIES_MEOWSCARADA,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_KINGS_ROCK,
+        .moves =
+        {
+            MOVE_FLOWER_TRICK,
+            MOVE_KNOCK_OFF,
+            MOVE_SUCKER_PUNCH,
+            MOVE_LOW_KICK
+        },
+        .ability = ABILITY_PROTEAN,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GRASS,
     },
 
     // 0911
