@@ -1027,8 +1027,9 @@ innate Pressure is exactly as (in)visible to the AI as a real one.
 Who carries it: every species whose ability data carries Pressure in any slot (so the signature
 survives whichever slot a build picks), **plus every species in the `TIER_LEGENDARY` and
 `TIER_MYTHICAL` lists of `src/fork/species_tiers.c`** — a blanket buff for the legend-grade tiers,
-which also covers the non-legends those tiers deliberately include (Ultra Beasts, Paradox Pokémon,
-Dragapult, Baxcalibur, Bloodmoon Ursaluna). `test/fork/innate_abilities.c` checks that every tiered
+which also covers the non-legends those tiers deliberately include (Ultra Beasts, the six 590-BST
+Paradox Pokémon, Dragapult, Baxcalibur, Bloodmoon Ursaluna). The other fourteen Paradox mons are
+`TIER_PSEUDO` and do not carry it. `test/fork/innate_abilities.c` checks that every tiered
 species carries it, so a species added to either tier list must get Pressure in its `INNATES(...)` row.
 
 ### ABILITY_STENCH
@@ -4462,7 +4463,7 @@ never-an-innate override in slot 1 that all of its frontier sets name:
 | Flutter Mane | Perish Body | Iron Jugulis | Sheer Force |
 | Slither Wing | Flame Body | Iron Moth | Toxic Debris |
 | Sandy Shocks | Static | Iron Thorns | Sand Stream |
-| Roaring Moon | Dark Aura | Iron Valiant | Trace |
+| Roaring Moon | Hustle | Iron Valiant | Trace |
 | Walking Wake | Water Absorb | Iron Leaves | Sap Sipper |
 | Gouging Fire | Flash Fire | Iron Boulder | Sand Spit |
 | Raging Bolt | Volt Absorb | Iron Crown | Bulletproof |

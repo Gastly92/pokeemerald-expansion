@@ -12533,7 +12533,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0984
         SPECIES_GREAT_TUSK,
         INNATES(
-            ABILITY_PRESSURE,
             ABILITY_PROTOSYNTHESIS,
             ABILITY_SAND_FORCE,
             ABILITY_SOLID_ROCK,
@@ -12545,7 +12544,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPETITIVE,
             ABILITY_FRIEND_GUARD,
-            ABILITY_PRESSURE,
             ABILITY_PROTOSYNTHESIS,
             ABILITY_THICK_FAT
         )
@@ -12555,7 +12553,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_EFFECT_SPORE,
             ABILITY_OVERCOAT,
-            ABILITY_PRESSURE,
             ABILITY_PROTOSYNTHESIS,
             ABILITY_REGENERATOR
         )
@@ -12566,7 +12563,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE,
             ABILITY_PROTOSYNTHESIS
         )
     },
@@ -12575,7 +12571,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPOUND_EYES,
             ABILITY_GUTS,
-            ABILITY_PRESSURE,
             ABILITY_PROTOSYNTHESIS,
             ABILITY_SWARM
         )
@@ -12585,7 +12580,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANALYTIC,
             ABILITY_MAGNET_PULL,
-            ABILITY_PRESSURE,
             ABILITY_PROTOSYNTHESIS,
             ABILITY_STURDY
         )
@@ -12593,7 +12587,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0990
         SPECIES_IRON_TREADS,
         INNATES(
-            ABILITY_PRESSURE,
             ABILITY_QUARK_DRIVE,
             ABILITY_SAND_FORCE,
             ABILITY_SOLID_ROCK,
@@ -12605,7 +12598,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ICE_BODY,
             ABILITY_INSOMNIA,
-            ABILITY_PRESSURE,
             ABILITY_QUARK_DRIVE
         )
     },
@@ -12614,7 +12606,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_GUTS,
             ABILITY_IRON_FIST,
-            ABILITY_PRESSURE,
             ABILITY_QUARK_DRIVE,
             ABILITY_THICK_FAT
         )
@@ -12624,7 +12615,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_KEEN_EYE,
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE,
             ABILITY_QUARK_DRIVE,
             ABILITY_UNNERVE
         )
@@ -12634,7 +12624,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPOUND_EYES,
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE,
             ABILITY_QUARK_DRIVE,
             ABILITY_SWARM
         )
@@ -12643,7 +12632,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_IRON_THORNS,
         INNATES(
             ABILITY_IRON_BARBS,
-            ABILITY_PRESSURE,
             ABILITY_QUARK_DRIVE,
             ABILITY_SAND_VEIL,
             ABILITY_UNNERVE
@@ -12748,7 +12736,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_MOXIE,
-            ABILITY_PRESSURE,
             ABILITY_PROTOSYNTHESIS
         )
     },
@@ -12756,7 +12743,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_IRON_VALIANT,
         INNATES(
             ABILITY_JUSTIFIED,
-            ABILITY_PRESSURE,
             ABILITY_QUARK_DRIVE,
             ABILITY_SHARPNESS,
             ABILITY_STEADFAST,

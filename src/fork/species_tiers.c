@@ -157,25 +157,11 @@ static const u16 sLegendarySpecies[] =
     SPECIES_URSALUNA_BLOODMOON,    // 0901
     SPECIES_ENAMORUS,              // 0905
     SPECIES_ENAMORUS_THERIAN,      // 0905
-    SPECIES_GREAT_TUSK,            // 0984
-    SPECIES_SCREAM_TAIL,           // 0985
-    SPECIES_BRUTE_BONNET,          // 0986
-    SPECIES_FLUTTER_MANE,          // 0987
-    SPECIES_SLITHER_WING,          // 0988
-    SPECIES_SANDY_SHOCKS,          // 0989
-    SPECIES_IRON_TREADS,           // 0990
-    SPECIES_IRON_BUNDLE,           // 0991
-    SPECIES_IRON_HANDS,            // 0992
-    SPECIES_IRON_JUGULIS,          // 0993
-    SPECIES_IRON_MOTH,             // 0994
-    SPECIES_IRON_THORNS,           // 0995
     SPECIES_BAXCALIBUR,            // 0998
     SPECIES_WO_CHIEN,              // 1001
     SPECIES_CHIEN_PAO,             // 1002
     SPECIES_TING_LU,               // 1003
     SPECIES_CHI_YU,                // 1004
-    SPECIES_ROARING_MOON,          // 1005
-    SPECIES_IRON_VALIANT,          // 1006
     SPECIES_WALKING_WAKE,          // 1009
     SPECIES_IRON_LEAVES,           // 1010
     SPECIES_OKIDOGI,               // 1014
@@ -216,7 +202,21 @@ static const u16 sPseudoSpecies[] =
     SPECIES_ARCTOVISH,             // 0883
     SPECIES_URSALUNA,              // 0901
     SPECIES_SNEASLER,              // 0903
+    SPECIES_GREAT_TUSK,            // 0984
+    SPECIES_SCREAM_TAIL,           // 0985
+    SPECIES_BRUTE_BONNET,          // 0986
+    SPECIES_FLUTTER_MANE,          // 0987
+    SPECIES_SLITHER_WING,          // 0988
+    SPECIES_SANDY_SHOCKS,          // 0989
+    SPECIES_IRON_TREADS,           // 0990
+    SPECIES_IRON_BUNDLE,           // 0991
+    SPECIES_IRON_HANDS,            // 0992
+    SPECIES_IRON_JUGULIS,          // 0993
+    SPECIES_IRON_MOTH,             // 0994
+    SPECIES_IRON_THORNS,           // 0995
     SPECIES_GHOLDENGO,             // 1000
+    SPECIES_ROARING_MOON,          // 1005
+    SPECIES_IRON_VALIANT,          // 1006
     SPECIES_ARCHALUDON,            // 1018
 };
 

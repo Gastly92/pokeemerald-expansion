@@ -21,13 +21,15 @@
 //                      beasts, lake trio, Regis, genies, musketeers, Tapus,
 //                      Treasures of Ruin, Loyal Three, Ogerpon, ...), the other
 //                      Mythicals (Mew, Celebi, Jirachi, Diancie, Magearna,
-//                      Pecharunt, ...), the Ultra Beasts, the Paradox Pokemon, and
-//                      a few non-legends strong enough to share the quota
-//                      (Dragapult, Baxcalibur, Bloodmoon Ursaluna).
+//                      Pecharunt, ...), the Ultra Beasts, the six 590-BST Paradox
+//                      Pokemon (Walking Wake onward), and a few non-legends
+//                      strong enough to share the quota (Dragapult,
+//                      Baxcalibur, Bloodmoon Ursaluna).
 //   - TIER_PSEUDO    : non-legendary standouts capped at one per team — some
 //                      600-BST pseudo-legendaries (Dragonite, Garchomp, Metagross,
 //                      ...) alongside other top picks (Gengar, Lucario, the fossil
-//                      quartet, Gholdengo, Archaludon, ...).
+//                      quartet, the fourteen original Paradox Pokemon, Gholdengo,
+//                      Archaludon, ...).
 //   - TIER_NORMAL    : everything else (the default; not stored in the table).
 //
 // The table is keyed by EXACT species id, so each forme is classified on its own
