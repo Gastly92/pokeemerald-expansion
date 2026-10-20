@@ -314,6 +314,7 @@
     F(BUFF_RESIST_BERRIES, buffResistBerries, (u32, TRUE)) \
     F(BUFF_PINCH_BERRIES, buffPinchBerries, (u32, TRUE)) \
     F(BUFF_REBURN, buffReburn, (u32, TRUE)) \
+    F(BUFF_REPOISON, buffRepoison, (u32, TRUE)) \
 
 // FORK: the FEATURE_* flags (config/feature.h) gate standalone gameplay
 // features this fork adds, riding the same runtime config system as the

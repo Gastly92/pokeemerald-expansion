@@ -6617,3 +6617,37 @@ BattleScript_ReburnTick::
 	tryfaintmon BS_TARGET
 	tryactivateitem BS_TARGET, ACTIVATION_ON_HP_THRESHOLD
 	goto BattleScript_MoveEnd
+
+@ FORK: BUFF_REPOISON (src/fork/buff_status_reapply.c) - a poison status move on a
+@ foe that is already poisoned makes the poison flare for an immediate tick instead
+@ of failing. As with the re-burn, the move animation plays first. TryStatusMoveReapply
+@ stored the damage (and advanced the Toxic counter) on the target.
+BattleScript_RepoisonTick::
+	attackanimation
+	waitanimation
+	saveattacker
+	copybyte gBattlerAttacker, gBattlerTarget   @ "was hurt by its poisoning" names the victim
+	printstring STRINGID_PKMNHURTBYPOISON
+	waitmessage B_WAIT_TIME_LONG
+	restoreattacker
+	statusanimation BS_TARGET
+BattleScript_RepoisonTickHp:
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET, ASSURANCE_DOUBLE
+	tryfaintmon BS_TARGET
+	tryactivateitem BS_TARGET, ACTIVATION_ON_HP_THRESHOLD
+	goto BattleScript_MoveEnd
+
+@ Toxic on a regularly poisoned foe: upgrade to bad poison through the normal status
+@ path ("was badly poisoned!", status icon), then tick. setnonvolatilestatus already
+@ plays the status animation, so the tick skips its own.
+BattleScript_ToxicUpgradeTick::
+	attackanimation
+	waitanimation
+	setnonvolatilestatus TRIGGER_ON_MOVE
+	saveattacker
+	copybyte gBattlerAttacker, gBattlerTarget
+	printstring STRINGID_PKMNHURTBYPOISON
+	waitmessage B_WAIT_TIME_LONG
+	restoreattacker
+	goto BattleScript_RepoisonTickHp
