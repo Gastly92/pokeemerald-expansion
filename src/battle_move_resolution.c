@@ -5528,6 +5528,11 @@ static enum MoveEndResult MoveEndClearBits(struct BattleCalcValues *cv)
     // go to next Bouncer or original attacker if possible
     if (gBattleStruct->bouncedMoveIsUsed)
     {
+        // UPSTREAM: this early return skips the targetsDone reset below, so the bouncer kept
+        // targetsDone[original attacker] and its own move later this turn skipped that target
+        // (dealt no damage). Clear it for the bouncer here. Test: test/fork/magic_bounce_followup.c
+        for (enum BattlerId battler = B_BATTLER_0; battler < gBattlersCount; battler++)
+            gBattleStruct->battlerState[gBattlerAttacker].targetsDone[battler] = FALSE;
         RestoreAttacker();
         RestoreTarget();
         gBattleStruct->bouncedMoveIsUsed = FALSE;
