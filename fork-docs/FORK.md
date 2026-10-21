@@ -19,6 +19,7 @@ doc below. A row records only what neither of those can — status, and the poin
 |---|---|
 | [`DETERMINISM.md`](DETERMINISM.md) | The `DETERMINISTIC_*` project — rationale + per-flag mechanics |
 | [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) | Innate abilities, the species ability-override table, per-ability wiring, how to add one |
+| [`INNATE_LIST.md`](INNATE_LIST.md) | Quick reference: every innate-capable ability with a one-line effect |
 | [`NEW_ABILITIES.md`](NEW_ABILITIES.md) | Custom abilities (Affinity, Halo, Rekindle, Willpower, Pacify) and how to add one |
 | [`NEW_TYPES.md`](NEW_TYPES.md) | Re-typing a species |
 | [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md) | Converting a facility to 6v6 + endless, per-facility status, the Factory and Tower as worked examples |
