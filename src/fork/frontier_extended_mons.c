@@ -8084,13 +8084,13 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SMEARGLE,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FOCUS_BAND,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_SPORE,
-            MOVE_STEALTH_ROCK,
-            MOVE_SPIKES,
-            MOVE_WHIRLWIND
+            MOVE_SUBSTITUTE,
+            MOVE_STONE_AXE,
+            MOVE_CEASELESS_EDGE
         },
         .ability = ABILITY_MOODY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -30486,7 +30486,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SPECTRIER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -30501,7 +30501,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GHOST,
+        .teraType = TYPE_FAIRY,
     },
 
     // 0898
