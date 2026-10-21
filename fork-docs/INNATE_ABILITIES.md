@@ -8,7 +8,8 @@ source of truth for the exact per-ability semantics — see the
 end. The compact allowlist in `src/fork/innate_abilities.c` and the SCOPE list
 in `include/fork/innate_abilities.h` carry only the ability *names* and a
 one-line gloss; the full record (sites, divergences, AI, species rationale)
-lives here.
+lives here. For a one-line-per-ability lookup table, see
+[`INNATE_LIST.md`](INNATE_LIST.md).
 
 ## The one rule: it's an allowlist, grown one ability at a time
 
@@ -595,6 +596,8 @@ Two human-facing records, both fork-owned:
 - **`FORK.md`** — edit the **Innate abilities** row: add the ability to the
   supported-set parenthetical in the *status* column, to the "Today the allowlist
   is …" sentence, and to the "Known limitations" list; note any new wiring.
+- **`INNATE_LIST.md`** — add the ability's row (one-line effect, ◆ if it is a
+  pure-boon divergence, and the → link to its `###` block here).
 (The old `INNATE_ABILITIES_PROGRESS.md` tracker has been retired and deleted;
 adding `ABILITY_X` to `sImplementedInnates[]` in Step 2 is now the only place an
 ability's implemented/never status is recorded.)
