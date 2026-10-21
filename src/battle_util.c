@@ -10939,6 +10939,7 @@ u32 GetWeather(void)
     return gBattleWeather;
 }
 
+// FORK: leading `battler` parameter is ours; see the note on the declaration in battle_util.h.
 u32 GetAttackerWeather(enum BattlerId battler, enum HoldEffect holdEffect, enum Ability ability, u32 weather)
 {
     // FORK: an innate Mega Sol (FEATURE_INNATE_ABILITIES) makes the holder's moves treat the

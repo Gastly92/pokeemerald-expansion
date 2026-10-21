@@ -201,6 +201,9 @@ bool32 BlocksPrankster(enum Move move, enum BattlerId battlerPrankster, enum Bat
 bool32 PickupHasValidTarget(enum BattlerId battler);
 bool32 CantPickupItem(u32 battler);
 u32 GetWeather(void);
+// FORK: leading `battler` parameter added so an innate Mega Sol can be checked (IsInnateActive).
+// Every caller passes the attacker. On conflict, take upstream's line and re-add the battler as the
+// first argument; a new upstream caller fails to build until it does the same.
 u32 GetAttackerWeather(enum BattlerId battler, enum HoldEffect holdEffect, enum Ability ability, u32 weather);
 bool32 IsBattlerWeatherAffected(enum HoldEffect holdEffect, u32 weather, u32 weatherFlags);
 enum MoveTarget GetBattlerMoveSelectionTargetType(enum BattlerId battler, enum Move move);
