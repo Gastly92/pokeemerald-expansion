@@ -21904,7 +21904,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0647
     {
-        .species = SPECIES_KELDEO,
+        .species = SPECIES_KELDEO_RESOLUTE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
@@ -21914,7 +21914,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VACUUM_WAVE,
             MOVE_ICY_WIND
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21924,17 +21924,38 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_WATER,
     },
     {
-        .species = SPECIES_KELDEO,
+        .species = SPECIES_KELDEO_RESOLUTE,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
             MOVE_CALM_MIND,
-            MOVE_HYDRO_PUMP,
+            MOVE_SURF,
             MOVE_SECRET_SWORD,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+
+    {
+        .species = SPECIES_KELDEO_RESOLUTE,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_LIFE_ORB,
+        .moves =
+        {
+            MOVE_HYDRO_PUMP,
+            MOVE_SECRET_SWORD,
+            MOVE_QUICK_GUARD,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,

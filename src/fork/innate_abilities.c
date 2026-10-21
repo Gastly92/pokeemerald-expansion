@@ -7742,14 +7742,18 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INNER_FOCUS,
             ABILITY_JUSTIFIED,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0647
         SPECIES_KELDEO_RESOLUTE,
         INNATES(
             ABILITY_INNER_FOCUS,
-            ABILITY_JUSTIFIED
+            ABILITY_JUSTIFIED,
+            ABILITY_PRESSURE,
+            ABILITY_SHARPNESS,
+            ABILITY_SWIFT_SWIM
         )
     },
     { // 0648
