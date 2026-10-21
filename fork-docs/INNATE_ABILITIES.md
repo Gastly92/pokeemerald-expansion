@@ -593,9 +593,9 @@ the innate's. Build the ROM with CI's flags too (`UNUSED_ERROR=1 DEPRECATED_ERRO
 
 Two human-facing records, both fork-owned:
 
-- **`FORK.md`** — edit the **Innate abilities** row: add the ability to the
-  supported-set parenthetical in the *status* column, to the "Today the allowlist
-  is …" sentence, and to the "Known limitations" list; note any new wiring.
+- **`FORK.md`** — the **Innate abilities** row is a one-line summary and does not
+  list abilities; edit it only if the new wiring changes that summary or adds a
+  known limitation.
 - **`INNATE_LIST.md`** — add the ability's row (one-line effect, ◆ if it is a
   pure-boon divergence, and the → link to its `###` block here).
 (The old `INNATE_ABILITIES_PROGRESS.md` tracker has been retired and deleted;
@@ -3730,12 +3730,12 @@ deferral needed, since each species' now-innate Turboblaze/Teravolt was its only
 
 ### ABILITY_MEGA_SOL
 
-**Tier 5.1** — the first of the Tier-5 one-offs, and the smallest: a **self-contained weather-view clause** for a
-**fork-custom ability**. The holder's *own* moves treat the battle weather as **harsh sun**, regardless of the actual
+**Tier 5.1** — the first of the Tier-5 one-offs, and the smallest: a **self-contained weather-view clause** for
+**upstream's Mega Meganium ability** (`ABILITY_MEGA_SOL`). The holder's *own* moves treat the battle weather as **harsh sun**, regardless of the actual
 weather. A **1:1 clean-upside copy** (no downside to drop).
 
-**One chokepoint, one clause.** Every "what weather does the attacker see?" read in the engine funnels through the
-fork helper **`GetAttackerWeather(...)`** (`src/battle_util.c`), which already had the chosen-ability check
+**One chokepoint, one clause.** Every "what weather does the attacker see?" read in the engine funnels through
+upstream's helper **`GetAttackerWeather(...)`** (`src/battle_util.c`), which already had the chosen-ability check
 `if (ability == ABILITY_MEGA_SOL) return B_WEATHER_SUN;`. Making it innate-aware is a single added disjunct —
 `|| IsInnateActive(battler, ABILITY_MEGA_SOL)` — so **all** downstream effects are covered at once with no per-site
 work: Weather Ball becomes Fire (`GetMoveType`, `src/battle_main.c`), Fire moves get the sun 1.5× and Water moves the
@@ -3747,8 +3747,10 @@ drop to 50% accuracy (`GetTotalAccuracy`), and the AI's shared move/damage calc 
 **The one structural edit: `GetAttackerWeather` gained a leading `enum BattlerId battler` parameter.** The function
 took `(holdEffect, ability, weather)` and so had no way to consult the innate; the battler is threaded in from all
 ~15 callers (each already had the attacker's battler in hand — `ctx->battlerAtk`, `gBattlerAttacker`,
-`gBattleAnimAttacker`, etc.). This is a fork-authored helper (added in fork PR #269, and it references the fork
-ability `ABILITY_MEGA_SOL`), so the signature change and its call sites are all on fork-owned lines — low sync risk.
+`gBattleAnimAttacker`, etc.). `GetAttackerWeather` and its callers are **upstream's**, so this signature change
+touches upstream-owned lines across ~15 call sites: any upstream edit to one of those calls conflicts. Resolve by
+taking upstream's line and re-adding the leading battler argument; a new upstream caller fails to build until it
+passes the battler too.
 The **one genuinely off-field caller** — the party-menu Weather Ball type prediction's `else` branch in
 `src/battle_main.c` (no live battler) — keeps its own `== ABILITY_MEGA_SOL` check and gains a `SpeciesHasInnate`
 disjunct beside it.
@@ -3770,7 +3772,7 @@ testable). No wider flavor set.
 
 **Step 3.5**: no-op — no frontier set hardcoded `ABILITY_MEGA_SOL` (the base-Meganium sets already run a Grassy
 Surge chosen override for the now-innate Leaf Guard, and simply gain innate Mega Sol on top). **Not** in the
-progress-doc 133 count (Mega Sol is a fork-custom ability, never a canon row). This is **Tier 5.1**; Tier 5.2
+progress-doc 133 count. This is **Tier 5.1**; Tier 5.2
 (Quick Draw) is done — see the next block.
 
 ### ABILITY_QUICK_DRAW
