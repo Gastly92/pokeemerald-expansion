@@ -19,6 +19,7 @@
 #include "battle_main.h"
 #include "battle_message.h"
 #include "battle_util.h"
+#include "battle_z_move.h"
 #include "event_data.h"
 #include "pokemon.h"
 #include "string_util.h"
@@ -292,6 +293,23 @@ enum Type GetDamagePreviewMoveType(enum BattlerId battler, enum Move move, enum 
     if (armedForm)
         EndArmedFormPreview(battler);
     return type;
+}
+
+enum Move GetDamagePreviewExecutedMove(enum BattlerId battler, enum Move move)
+{
+    enum Gimmick gimmick = GetActiveGimmick(battler);
+    enum Move executed = MOVE_NONE;
+
+    // Status moves are not converted by a Z-Move, and have no icon to show.
+    if (IsBattleMoveStatus(move))
+        return move;
+    if (gimmick == GIMMICK_NONE)
+        gimmick = GetArmedGimmick(battler);
+    if (gimmick == GIMMICK_Z_MOVE)
+        executed = GetUsableZMove(battler, move);
+    else if (gimmick == GIMMICK_DYNAMAX)
+        executed = GetMaxMove(battler, move);
+    return (executed == MOVE_NONE || executed == MOVE_Z_STATUS) ? move : executed;
 }
 
 bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct, enum DamagePreviewKO *ko)

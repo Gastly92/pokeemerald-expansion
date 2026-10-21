@@ -2502,20 +2502,19 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
     ctx.weather = GetWeather();
     ctx.terrain = gFieldTimers.terrain;
 
-    // FORK: with the Z trigger armed the move that actually fires is the Z-Move, and a
-    // Z-Move takes the base move's *unconverted* type - Z-Moves ignore -ate abilities and
-    // Normalize (test/battle/gimmick/zmove.c). The gimmick isn't active yet while the menu
-    // is open, so CheckDynamicMoveType above still applied -ate and judged Pixilate
-    // Sylveon's Hyper Voice as Fairy, while the Breakneck Blitz it fires is Normal.
-    // ctx.move stays the base move so move-specific overrides (Freeze-Dry, Flying Press)
-    // still apply. Damaging moves only - a status move keeps its own type.
-    if ((GetActiveGimmick(battlerAtk) == GIMMICK_Z_MOVE || IsGimmickSelected(battlerAtk, GIMMICK_Z_MOVE))
-     && !IsBattleMoveStatus(ctx.move))
+    // FORK: with a Z-Move or Dynamax armed, the move that actually fires is the Z-Move / Max
+    // Move, so the matchup is judged on it (GetDamagePreviewExecutedMove, src/fork/damage_preview.c).
+    // A converted move keeps none of the base move's matchup quirks: Freeze-Dry's Subzero
+    // Slammer / Max Hailstorm is a plain Ice move that Water resists. A Z-Move also takes the
+    // base move's *unconverted* type - Z-Moves ignore -ate abilities and Normalize
+    // (test/battle/gimmick/zmove.c) - while a Max Move keeps the -ate type CheckDynamicMoveType
+    // gave above. Damaging moves only - a status move keeps its own move and type.
+    enum Move executedMove = GetDamagePreviewExecutedMove(battlerAtk, ctx.move);
+    if (executedMove != ctx.move)
     {
-        enum Move zMove = GetUsableZMove(battlerAtk, ctx.move);
-
-        if (zMove != MOVE_NONE && zMove != MOVE_Z_STATUS)
-            ctx.moveType = GetMoveType(zMove);
+        if (IsZMove(executedMove))
+            ctx.moveType = GetMoveType(executedMove);
+        ctx.move = executedMove;
     }
     ctx.abilities[ctx.battlerAtk] = GetBattlerAbility(battlerAtk);
     ctx.abilities[ctx.battlerDef] = GetBattlerAbility(battlerDef);
