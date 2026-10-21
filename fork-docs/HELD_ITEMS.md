@@ -550,8 +550,12 @@ final 78), and the last of those is exactly the batch carrying the
   healing and status berries. A niche berry found on any other holder is a re-item candidate,
   **except where a move is built around eating the berry**, which keeps it whatever the holder:
   **Endure** drops the holder to 1 HP so the pinch berry fires on cue (Sawk's Salac), **Belly
-  Drum** halves HP and the berry pays it back (Snorlax and Male Oinkologne's Figy), and
-  **Recycle** exists to eat it again (Alolan Muk's Figy).
+  Drum** halves HP and the berry pays it back (Snorlax and Male Oinkologne's Figy),
+  **Recycle** exists to eat it again (Alolan Muk's Figy), and **Rest** is woken by a Chesto
+  (Poliwrath, Regice, Furfrou and Goodra). **Payapa** is the one berry with no legal home:
+  no Harvest, Ripen or Cheek Pouch species is weak to Psychic, so it stays where it was.
+  A resist berry still has to fire — the roster test rejects one on a holder that is not
+  weak to its type, which is why Babiri (Steel) sits on three Shuckle sets and nothing else.
   This placement is a convention, not a CI gate — no test checks berry holders.
   The move is running in batches: **batch 1** re-homed Jaboca (Wobbuffet, Trevenant), Rowap
   (Shuckle, Exeggutor), Kee (Torterra, Greedent — whose Stuff Cheeks eats it for +2 Def on top
@@ -570,6 +574,14 @@ final 78), and the last of those is exactly the batch carrying the
   The flavour berries were matched against each holder's nature — a nature that lowers the
   stat a flavour tracks dislikes it and confuses the holder. Raichu's Water Gem and Diggersby's
   Blunder Policy each sit on one of only two sets, so neither was taken.
+  **Batch 4** finished the move with **40 new sets**, because no eligible existing set was
+  left: the resist berries (each on a holder genuinely weak to its type, screened for innate
+  immunities — Alolan Raichu's Levitate rules out Shuca, Appletun's Well-Baked Body rules out
+  Occa) plus Aguav, Oran, Leppa, Enigma, Persim, Cheri and the second Pecha. Cherrim and
+  Morpeko took four re-items; they had been missed earlier because their roster entries use
+  the alias species names. These are mid-list insertions, so this one batch invalidates an
+  in-progress rented team in an existing save (see
+  [`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md), "Save compatibility").
 - **Prefer re-iteming an existing set to appending a new one.** Saved rentals key on array
   index and the roster is kept in dex order, so a new set is a mid-list insertion that
   invalidates an in-progress rented team ([`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md),
