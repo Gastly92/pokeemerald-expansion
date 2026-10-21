@@ -1,10 +1,12 @@
 #include "global.h"
 #include "test/battle.h"
 
-// Coverage for the BUFF_RESIST_BERRIES and BUFF_PINCH_BERRIES flags (config/buff.h). BUFF_*
+// Coverage for the BUFF_RESIST_BERRIES, BUFF_PINCH_BERRIES and BUFF_RETALIATION_BERRIES flags
+// (config/buff.h). BUFF_*
 // flags default off in the test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG and the stock behavior is pinned with the flag explicitly off. The stock numbers
-// are also covered at length by test/battle/hold_effect/resist_berry.c and attack_up.c.
+// are also covered at length by test/battle/hold_effect/resist_berry.c, attack_up.c,
+// jaboca_berry.c and rowap_berry.c.
 
 ASSUMPTIONS
 {
@@ -12,6 +14,10 @@ ASSUMPTIONS
     ASSUME(GetItemHoldEffect(ITEM_YACHE_BERRY) == HOLD_EFFECT_RESIST_BERRY);
     ASSUME(GetItemHoldEffect(ITEM_LIECHI_BERRY) == HOLD_EFFECT_ATTACK_UP);
     ASSUME(GetItemHoldEffect(ITEM_STARF_BERRY) == HOLD_EFFECT_RANDOM_STAT_UP);
+    ASSUME(GetItemHoldEffect(ITEM_JABOCA_BERRY) == HOLD_EFFECT_JABOCA_BERRY);
+    ASSUME(GetItemHoldEffect(ITEM_ROWAP_BERRY) == HOLD_EFFECT_ROWAP_BERRY);
+    ASSUME(GetMoveCategory(MOVE_SCRATCH) == DAMAGE_CATEGORY_PHYSICAL);
+    ASSUME(GetMoveCategory(MOVE_SWIFT) == DAMAGE_CATEGORY_SPECIAL);
     ASSUME(GetMoveType(MOVE_EMBER) == TYPE_FIRE);
     ASSUME(GetMoveType(MOVE_AURORA_BEAM) == TYPE_ICE);
 }
@@ -155,5 +161,71 @@ SINGLE_BATTLE_TEST("BUFF_PINCH_BERRIES off: Starf Berry raises the highest stat 
         TURN { MOVE(opponent, MOVE_DRAGON_RAGE); }
     } THEN {
         EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 2);
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_RETALIATION_BERRIES: Jaboca and Rowap Berry cost the attacker 1/4 of its max HP")
+{
+    s16 damage;
+    u32 config;
+    enum Item item;
+    enum Move move;
+
+    PARAMETRIZE { config = TRUE;  item = ITEM_JABOCA_BERRY; move = MOVE_SCRATCH; }
+    PARAMETRIZE { config = TRUE;  item = ITEM_ROWAP_BERRY;  move = MOVE_SWIFT; }
+    PARAMETRIZE { config = FALSE; item = ITEM_JABOCA_BERRY; move = MOVE_SCRATCH; }
+    PARAMETRIZE { config = FALSE; item = ITEM_ROWAP_BERRY;  move = MOVE_SWIFT; }
+
+    GIVEN {
+        WITH_CONFIG(BUFF_RETALIATION_BERRIES, config);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Item(item); }
+    } WHEN {
+        TURN { MOVE(player, move); }
+    } SCENE {
+        HP_BAR(opponent);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, opponent);
+        HP_BAR(player, captureDamage: &damage);
+    } THEN {
+        EXPECT_EQ(damage, player->maxHP / (config ? 4 : 8));
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_RETALIATION_BERRIES: Ripen still doubles Jaboca Berry, to 1/2")
+{
+    s16 damage;
+    u32 config;
+
+    PARAMETRIZE { config = TRUE; }
+    PARAMETRIZE { config = FALSE; }
+
+    GIVEN {
+        WITH_CONFIG(BUFF_RETALIATION_BERRIES, config);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_APPLIN) { Ability(ABILITY_RIPEN); Item(ITEM_JABOCA_BERRY); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        HP_BAR(opponent);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, opponent);
+        HP_BAR(player, captureDamage: &damage);
+    } THEN {
+        EXPECT_EQ(damage, (player->maxHP / (config ? 4 : 8)) * 2);
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_RETALIATION_BERRIES: Magic Guard still blocks the recoil")
+{
+    GIVEN {
+        WITH_CONFIG(BUFF_RETALIATION_BERRIES, TRUE);
+        PLAYER(SPECIES_CLEFABLE) { Ability(ABILITY_MAGIC_GUARD); }
+        OPPONENT(SPECIES_WOBBUFFET) { Item(ITEM_JABOCA_BERRY); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        HP_BAR(opponent);
+        NOT HP_BAR(player);
+    } THEN {
+        EXPECT_EQ(player->hp, player->maxHP);
     }
 }

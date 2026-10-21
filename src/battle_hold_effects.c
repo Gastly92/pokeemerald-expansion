@@ -14,7 +14,7 @@
 #include "data/hold_effects.h"
 #include "constants/berry.h"
 #include "fork/innate_abilities.h" // FORK: innate ability predicates
-#include "fork/buff_berries.h" // FORK: BUFF_PINCH_BERRIES
+#include "fork/buff_berries.h" // FORK: BUFF_PINCH_BERRIES, BUFF_RETALIATION_BERRIES
 
 bool32 IsOnSwitchInActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].onSwitchIn; }
 bool32 IsMirrorHerbActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].mirrorHerb; }
@@ -376,10 +376,11 @@ static enum ItemEffect TryJabocaBerry(enum BattlerId battlerDef, enum BattlerId 
      && IsBattleMovePhysical(gCurrentMove)
      && !IsAbilityOrInnateAndRecord(battlerAtk, GetBattlerAbility(battlerAtk), ABILITY_MAGIC_GUARD))
     {
-        s32 jabocaDamage = GetNonDynamaxMaxHP(battlerAtk) / 8;
         // FORK: innate Ripen doubles the Berry's effect like the real ability (FEATURE_INNATE_ABILITIES, Batch T).
-        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN))
-            jabocaDamage *= 2;
+        // FORK: BUFF_RETALIATION_BERRIES -- the divisor and the Ripen doubling live in
+        // GetRetaliationBerryDamage() (include/fork/buff_berries.h); on conflict keep the call.
+        s32 jabocaDamage = GetRetaliationBerryDamage(GetNonDynamaxMaxHP(battlerAtk),
+            GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN));
         SetPassiveDamageAmount(battlerAtk, jabocaDamage);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_HURT_BY_ITEM;
         BattleScriptCall(BattleScript_JabocaRowapBerryActivates);
@@ -400,10 +401,11 @@ static enum ItemEffect TryRowapBerry(enum BattlerId battlerDef, enum BattlerId b
      && IsBattleMoveSpecial(gCurrentMove)
      && !IsAbilityOrInnateAndRecord(battlerAtk, GetBattlerAbility(battlerAtk), ABILITY_MAGIC_GUARD))
     {
-        s32 rowapDamage = GetNonDynamaxMaxHP(battlerAtk) / 8;
         // FORK: innate Ripen doubles the Berry's effect (FEATURE_INNATE_ABILITIES, Batch T).
-        if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN))
-            rowapDamage *= 2;
+        // FORK: BUFF_RETALIATION_BERRIES -- the divisor and the Ripen doubling live in
+        // GetRetaliationBerryDamage() (include/fork/buff_berries.h); on conflict keep the call.
+        s32 rowapDamage = GetRetaliationBerryDamage(GetNonDynamaxMaxHP(battlerAtk),
+            GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN));
         SetPassiveDamageAmount(battlerAtk, rowapDamage);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_HURT_BY_ITEM;
         BattleScriptCall(BattleScript_JabocaRowapBerryActivates);

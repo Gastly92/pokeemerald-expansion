@@ -109,6 +109,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | No Guard buff ("wild swings") | `BUFF_NO_GUARD` (+ `…_POWER_BASE`) | ✅ | A move used by or against a No Guard battler turns its lost accuracy into power (80% → 1.2×, 70% → 1.3×); active only with `DETERMINISTIC_ACCURACY_EVASION`, and shown in the damage preview. `test/fork/buff_no_guard.c` |
 | Resist berries buff | `BUFF_RESIST_BERRIES` (+ `…_DIVISOR`) | ✅ | The 18 resist berries cut their hit to 1/4 instead of 1/2 (1/8 instead of 1/4 with Ripen). [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
 | Pinch berries buff | `BUFF_PINCH_BERRIES` (+ `…_STAGES`) | ✅ | Liechi, Ganlon, Salac, Petaya, Apicot and Starf raise their stat +3 instead of +1 (+2 for Starf), and +6 with Ripen. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
+| Retaliation berries buff | `BUFF_RETALIATION_BERRIES` (+ `…_DENOMINATOR`) | ✅ | Jaboca and Rowap Berry cost the attacker 1/4 of its max HP instead of 1/8 (1/2 instead of 1/4 with Ripen). [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
 
 ## Abilities, types & gimmicks
 

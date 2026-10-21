@@ -4,9 +4,10 @@
 #include "config_changes.h"
 #include "fpmath.h"
 
-// BUFF_RESIST_BERRIES / BUFF_PINCH_BERRIES (config/buff.h). Kept `static inline` here so
+// BUFF_RESIST_BERRIES / BUFF_PINCH_BERRIES / BUFF_RETALIATION_BERRIES (config/buff.h). Kept `static inline` here so
 // each call site in the upstream files (GetDefenderItemsModifier() in src/battle_util.c,
-// StatRaiseBerry() and RandomStatRaiseBerry() in src/battle_hold_effects.c) stays a one-line
+// StatRaiseBerry(), RandomStatRaiseBerry(), TryJabocaBerry() and TryRowapBerry() in
+// src/battle_hold_effects.c) stays a one-line
 // swap of a constant.
 //
 // Both take whether the holder's Ripen (ability or innate) is active, which the caller
@@ -39,6 +40,14 @@ static inline u32 GetStarfBerryStatStages(bool32 ripen)
     if (GetConfig(BUFF_PINCH_BERRIES))
         return GetPinchBerryStatStages(ripen);
     return ripen ? 4 : 2;
+}
+
+// Recoil Jaboca / Rowap Berry deal to the attacker, from its non-Dynamax max HP. Stock: 1/8,
+// Ripen 1/4. Buffed: 1/BUFF_RETALIATION_BERRY_DENOMINATOR, and Ripen still doubles it.
+static inline s32 GetRetaliationBerryDamage(s32 maxHP, bool32 ripen)
+{
+    s32 damage = maxHP / (GetConfig(BUFF_RETALIATION_BERRIES) ? BUFF_RETALIATION_BERRY_DENOMINATOR : 8);
+    return ripen ? damage * 2 : damage;
 }
 
 #endif // GUARD_FORK_BUFF_BERRIES_H
