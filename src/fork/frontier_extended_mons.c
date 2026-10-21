@@ -21914,7 +21914,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_VACUUM_WAVE,
             MOVE_ICY_WIND
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -21934,7 +21934,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SECRET_SWORD,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -21955,7 +21955,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_QUICK_GUARD,
             MOVE_PROTECT
         },
-        .ability = ABILITY_STORM_DRAIN,
+        .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 4,
