@@ -1,12 +1,12 @@
 #include "global.h"
 #include "test/battle.h"
 
-// Coverage for the BUFF_RESIST_BERRIES, BUFF_PINCH_BERRIES and BUFF_RETALIATION_BERRIES flags
-// (config/buff.h). BUFF_*
+// Coverage for the BUFF_RESIST_BERRIES, BUFF_PINCH_BERRIES, BUFF_RETALIATION_BERRIES and
+// BUFF_DAMAGED_STAT_BERRIES flags (config/buff.h). BUFF_*
 // flags default off in the test baseline (see TestInitConfigData), so each test opts in with
 // WITH_CONFIG and the stock behavior is pinned with the flag explicitly off. The stock numbers
 // are also covered at length by test/battle/hold_effect/resist_berry.c, attack_up.c,
-// jaboca_berry.c and rowap_berry.c.
+// jaboca_berry.c, rowap_berry.c, kee_berry.c and maranga_berry.c.
 
 ASSUMPTIONS
 {
@@ -16,6 +16,8 @@ ASSUMPTIONS
     ASSUME(GetItemHoldEffect(ITEM_STARF_BERRY) == HOLD_EFFECT_RANDOM_STAT_UP);
     ASSUME(GetItemHoldEffect(ITEM_JABOCA_BERRY) == HOLD_EFFECT_JABOCA_BERRY);
     ASSUME(GetItemHoldEffect(ITEM_ROWAP_BERRY) == HOLD_EFFECT_ROWAP_BERRY);
+    ASSUME(GetItemHoldEffect(ITEM_KEE_BERRY) == HOLD_EFFECT_KEE_BERRY);
+    ASSUME(GetItemHoldEffect(ITEM_MARANGA_BERRY) == HOLD_EFFECT_MARANGA_BERRY);
     ASSUME(GetMoveCategory(MOVE_SCRATCH) == DAMAGE_CATEGORY_PHYSICAL);
     ASSUME(GetMoveCategory(MOVE_SWIFT) == DAMAGE_CATEGORY_SPECIAL);
     ASSUME(GetMoveType(MOVE_EMBER) == TYPE_FIRE);
@@ -227,5 +229,53 @@ SINGLE_BATTLE_TEST("BUFF_RETALIATION_BERRIES: Magic Guard still blocks the recoi
         NOT HP_BAR(player);
     } THEN {
         EXPECT_EQ(player->hp, player->maxHP);
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_DAMAGED_STAT_BERRIES: Kee and Maranga Berry raise their stat by 2")
+{
+    u32 config;
+    enum Item item;
+    enum Move move;
+    enum Stat stat;
+
+    PARAMETRIZE { config = TRUE;  item = ITEM_KEE_BERRY;     move = MOVE_SCRATCH; stat = STAT_DEF; }
+    PARAMETRIZE { config = TRUE;  item = ITEM_MARANGA_BERRY; move = MOVE_SWIFT;   stat = STAT_SPDEF; }
+    PARAMETRIZE { config = FALSE; item = ITEM_KEE_BERRY;     move = MOVE_SCRATCH; stat = STAT_DEF; }
+    PARAMETRIZE { config = FALSE; item = ITEM_MARANGA_BERRY; move = MOVE_SWIFT;   stat = STAT_SPDEF; }
+
+    GIVEN {
+        WITH_CONFIG(BUFF_DAMAGED_STAT_BERRIES, config);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET) { Item(item); }
+    } WHEN {
+        TURN { MOVE(player, move); }
+    } SCENE {
+        HP_BAR(opponent);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, opponent);
+    } THEN {
+        EXPECT_EQ(opponent->item, ITEM_NONE);
+        EXPECT_EQ(opponent->statStages[stat], DEFAULT_STAT_STAGE + (config ? 2 : 1));
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_DAMAGED_STAT_BERRIES: Ripen still doubles Kee Berry, to +4")
+{
+    u32 config;
+
+    PARAMETRIZE { config = TRUE; }
+    PARAMETRIZE { config = FALSE; }
+
+    GIVEN {
+        WITH_CONFIG(BUFF_DAMAGED_STAT_BERRIES, config);
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_APPLIN) { Ability(ABILITY_RIPEN); Item(ITEM_KEE_BERRY); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        HP_BAR(opponent);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_BERRY, opponent);
+    } THEN {
+        EXPECT_EQ(opponent->statStages[STAT_DEF], DEFAULT_STAT_STAGE + (config ? 4 : 2));
     }
 }
