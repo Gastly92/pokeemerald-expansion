@@ -541,6 +541,16 @@ final 78), and the last of those is exactly the batch carrying the
   into total evasion immunity. The check also cuts the other way and is worth exploiting:
   Emboar's innate Gluttony moves a Lansat Berry's trigger from 1/4 to 1/2 max HP, which is
   why Emboar got one.
+- **A niche berry goes on a Harvest, Ripen or Cheek Pouch holder** (chosen ability or innate).
+  Every berry except **Sitrus and Lum** is placed this way; those two are staples that pay off
+  on any holder and stay unrestricted. Under `DETERMINISTIC_ABILITIES` **Harvest regrows the
+  berry every turn**, so a one-shot berry becomes a recurring one, and **Ripen** doubles it —
+  these two are the premium homes and take the strong berries (resist, pinch, Jaboca/Rowap,
+  Kee/Maranga) first. **Cheek Pouch** only adds a 1/3 heal on eating, so its holders take the
+  healing and status berries. A niche berry found on any other holder is a re-item candidate.
+  The move is running in batches: **batch 1** re-homed Jaboca (Wobbuffet, Trevenant), Rowap
+  (Shuckle, Exeggutor), Kee (Torterra, Greedent — whose Stuff Cheeks eats it for +2 Def on top
+  of the berry's own) and Maranga (Arboliva, Hydrapple).
 - **Prefer re-iteming an existing set to appending a new one.** Saved rentals key on array
   index and the roster is kept in dex order, so a new set is a mid-list insertion that
   invalidates an in-progress rented team ([`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md),
