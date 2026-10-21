@@ -748,7 +748,7 @@ Upstream's `MOVEEND_SHEER_FORCE` handles a Sheer-Force-boosted move by jumping s
 to `MOVEEND_ITEMS_EFFECTS_ALL`, skipping every step in between — Life Orb, Shell Bell,
 Red Card, Color Change, Berserk, and also the Moxie step. Upstream never has to tell
 those apart, because no species carries Sheer Force and a Moxie-type ability at once.
-With innates, Spectrier (chosen Sheer Force, innate Grim Neigh) and others do, and
+With innates a species can (e.g. Spectrier given Sheer Force, with its innate Grim Neigh), and
 Moxie / Chilling Neigh / Grim Neigh / Beast Boost are KO triggers Sheer Force does not
 suppress. `RedirectSheerForceSkipToInnates()` detours the skip through the
 attacker-side innate step (`MOVEEND_ABILITY_EFFECT_FOES_FAINTED_INNATE`), which then
