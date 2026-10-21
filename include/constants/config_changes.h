@@ -313,6 +313,7 @@
     F(BUFF_NO_GUARD, buffNoGuard, (u32, TRUE)) \
     F(BUFF_RESIST_BERRIES, buffResistBerries, (u32, TRUE)) \
     F(BUFF_PINCH_BERRIES, buffPinchBerries, (u32, TRUE)) \
+    F(BUFF_RETALIATION_BERRIES, buffRetaliationBerries, (u32, TRUE)) \
     F(BUFF_REBURN, buffReburn, (u32, TRUE)) \
     F(BUFF_REPOISON, buffRepoison, (u32, TRUE)) \
     F(BUFF_REPARALYZE, buffReparalyze, (u32, TRUE)) \
