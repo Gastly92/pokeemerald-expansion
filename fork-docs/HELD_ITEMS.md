@@ -547,10 +547,21 @@ final 78), and the last of those is exactly the batch carrying the
   berry every turn**, so a one-shot berry becomes a recurring one, and **Ripen** doubles it —
   these two are the premium homes and take the strong berries (resist, pinch, Jaboca/Rowap,
   Kee/Maranga) first. **Cheek Pouch** only adds a 1/3 heal on eating, so its holders take the
-  healing and status berries. A niche berry found on any other holder is a re-item candidate.
+  healing and status berries. A niche berry found on any other holder is a re-item candidate,
+  **except on an `MOVE_ENDURE` set**: Endure drops the holder to 1 HP on purpose, so the pinch
+  berry fires on cue and is the set's engine (Sawk's Endure / Reversal Salac keeps its berry).
+  This placement is a convention, not a CI gate — no test checks berry holders.
   The move is running in batches: **batch 1** re-homed Jaboca (Wobbuffet, Trevenant), Rowap
   (Shuckle, Exeggutor), Kee (Torterra, Greedent — whose Stuff Cheeks eats it for +2 Def on top
-  of the berry's own) and Maranga (Arboliva, Hydrapple).
+  of the berry's own) and Maranga (Arboliva, Hydrapple). **Batch 2** re-homed the nine pinch
+  berries — Liechi, Ganlon, Salac, Petaya, Apicot, Starf, Lansat, Micle, Custap — onto Slaking,
+  Torterra, Scovillain, Simisage, Hisuian Electrode, Alolan Exeggutor, Hydrapple, Greedent,
+  Trevenant and Tropius (Harvest/Ripen), then Diggersby, Pachirisu, Watchog and Alolan Raichu
+  (Cheek Pouch) for the ones short on Harvest homes. Two placements were steered by the
+  share floor rather than fit: Flapple's Eject Pack and Arboliva's Ground Gem are each one of
+  only two sets, so neither could give its item up. Sawk's Endure / Reversal set kept its
+  Salac Berry under the Endure exception above, so Salac sits on three sets. **Shuckle is no pinch-berry home**: its
+  Contrary turns every stat-raising berry into a drop.
 - **Prefer re-iteming an existing set to appending a new one.** Saved rentals key on array
   index and the roster is kept in dex order, so a new set is a mid-list insertion that
   invalidates an in-progress rented team ([`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md),
