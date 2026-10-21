@@ -31152,10 +31152,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SHADOW_BALL,
             MOVE_DARK_PULSE,
-            MOVE_MYSTICAL_FIRE,
-            MOVE_DRAINING_KISS
+            MOVE_PSYSHOCK,
+            MOVE_MYSTICAL_FIRE
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -31175,7 +31175,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_MYSTICAL_FIRE,
             MOVE_SUBSTITUTE
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,

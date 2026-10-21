@@ -2249,7 +2249,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0897
         SPECIES_SPECTRIER, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_PSYCHIC_SURGE
     },
     { // 0898
         SPECIES_CALYREX, 1,
