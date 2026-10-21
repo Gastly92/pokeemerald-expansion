@@ -115,6 +115,7 @@ static const u16 sLegendarySpecies[] =
     SPECIES_LANDORUS_THERIAN,      // 0645
     SPECIES_KYUREM,                // 0646
     SPECIES_KELDEO,                // 0647
+    SPECIES_KELDEO_RESOLUTE,       // 0647
     SPECIES_MELOETTA,              // 0648
     SPECIES_GENESECT,              // 0649
     SPECIES_GENESECT_DOUSE,        // 0649
