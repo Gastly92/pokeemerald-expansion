@@ -969,6 +969,13 @@ than one whose existing set is about to be rewritten.
       moves and ability, and against the fork's changes (`BUFF_*`,
       `DETERMINISTIC_HOLD_EFFECTS` — several items behave differently here than
       stock knowledge expects).
+      **Berries follow a placement convention, not a gate:** every berry except
+      Sitrus and Lum goes on a holder with **Harvest, Ripen or Cheek Pouch** (chosen
+      ability or innate), apart from a set built around eating it (Endure, Belly Drum,
+      Recycle, Rest + Chesto). No test checks this, so the review is the check — don't
+      put a niche berry on an ineligible species, and don't take one off an eligible
+      one without a reason. Rules and exceptions: `HELD_ITEMS.md`, "Decisions already
+      settled".
    d. **Nature, EVs, IVs — does the spread match what the set actually does?**
       A nature dropping a stat the set uses, EVs invested in an unused attacking
       stat, or a Speed investment that reaches no relevant benchmark.
