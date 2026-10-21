@@ -18678,7 +18678,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SAWK,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_BLACK_BELT,
+        .heldItem = ITEM_SALAC_BERRY,
         .moves =
         {
             MOVE_ENDURE,
