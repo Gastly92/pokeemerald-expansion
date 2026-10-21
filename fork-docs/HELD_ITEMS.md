@@ -548,8 +548,10 @@ final 78), and the last of those is exactly the batch carrying the
   these two are the premium homes and take the strong berries (resist, pinch, Jaboca/Rowap,
   Kee/Maranga) first. **Cheek Pouch** only adds a 1/3 heal on eating, so its holders take the
   healing and status berries. A niche berry found on any other holder is a re-item candidate,
-  **except on an `MOVE_ENDURE` set**: Endure drops the holder to 1 HP on purpose, so the pinch
-  berry fires on cue and is the set's engine (Sawk's Endure / Reversal Salac keeps its berry).
+  **except where a move is built around eating the berry**, which keeps it whatever the holder:
+  **Endure** drops the holder to 1 HP so the pinch berry fires on cue (Sawk's Salac), **Belly
+  Drum** halves HP and the berry pays it back (Snorlax and Male Oinkologne's Figy), and
+  **Recycle** exists to eat it again (Alolan Muk's Figy).
   This placement is a convention, not a CI gate — no test checks berry holders.
   The move is running in batches: **batch 1** re-homed Jaboca (Wobbuffet, Trevenant), Rowap
   (Shuckle, Exeggutor), Kee (Torterra, Greedent — whose Stuff Cheeks eats it for +2 Def on top
@@ -562,6 +564,12 @@ final 78), and the last of those is exactly the batch carrying the
   only two sets, so neither could give its item up. Sawk's Endure / Reversal set kept its
   Salac Berry under the Endure exception above, so Salac sits on three sets. **Shuckle is no pinch-berry home**: its
   Contrary turns every stat-raising berry into a drop.
+  **Batch 3** moved six healing and status berries onto existing Cheek Pouch and Harvest sets:
+  Wiki (Hisuian Electrode, Wobbuffet), Iapapa (Shuckle, Maushold), Figy (both Toucannon sets),
+  Mago (Alolan Raichu, Emolga), Aspear (Alolan Raichu, Emolga) and Rawst (Raichu, Maushold).
+  The flavour berries were matched against each holder's nature — a nature that lowers the
+  stat a flavour tracks dislikes it and confuses the holder. Raichu's Water Gem and Diggersby's
+  Blunder Policy each sit on one of only two sets, so neither was taken.
 - **Prefer re-iteming an existing set to appending a new one.** Saved rentals key on array
   index and the roster is kept in dex order, so a new set is a mid-list insertion that
   invalidates an in-progress rented team ([`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md),
