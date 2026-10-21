@@ -31152,7 +31152,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SHADOW_BALL,
             MOVE_DARK_PULSE,
-            MOVE_PSYCHIC,
+            MOVE_PSYSHOCK,
             MOVE_MYSTICAL_FIRE
         },
         .ability = ABILITY_PSYCHIC_SURGE,
