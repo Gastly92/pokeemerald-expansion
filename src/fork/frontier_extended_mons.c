@@ -30486,7 +30486,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_SPECTRIER,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_NASTY_PLOT,
@@ -30501,7 +30501,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_GHOST,
+        .teraType = TYPE_FAIRY,
     },
 
     // 0898
