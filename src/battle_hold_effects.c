@@ -14,7 +14,7 @@
 #include "data/hold_effects.h"
 #include "constants/berry.h"
 #include "fork/innate_abilities.h" // FORK: innate ability predicates
-#include "fork/buff_berries.h" // FORK: BUFF_PINCH_BERRIES, BUFF_RETALIATION_BERRIES
+#include "fork/buff_berries.h" // FORK: BUFF_PINCH_BERRIES, BUFF_RETALIATION_BERRIES, BUFF_DAMAGED_STAT_BERRIES
 
 bool32 IsOnSwitchInActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].onSwitchIn; }
 bool32 IsMirrorHerbActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].mirrorHerb; }
@@ -545,14 +545,16 @@ static enum ItemEffect DamagedStatBoostBerryEffect(enum BattlerId battlerDef, en
      || (GetBattleMoveCategory(gCurrentMove) == category && IsBattlerTurnDamaged(battlerDef, EXCLUDING_SUBSTITUTES)))
     {
         // FORK: innate Ripen doubles the Berry's stat raise (FEATURE_INNATE_ABILITIES, Batch T).
+        // FORK: BUFF_DAMAGED_STAT_BERRIES -- the stage counts come from GetDamagedStatBerryStages()
+        // (include/fork/buff_berries.h); on conflict keep upstream's scripts and keep the calls.
         if (GetBattlerAbility(battlerDef) == ABILITY_RIPEN || IsInnateActive(battlerDef, ABILITY_RIPEN))
         {
-            SetStatChange(battlerDef, statId, 2);
+            SetStatChange(battlerDef, statId, GetDamagedStatBerryStages(TRUE));
             BattleScriptCall(BattleScript_ConsumableBerryStatRaiseRipen);
         }
         else
         {
-            SetStatChange(battlerDef, statId, 1);
+            SetStatChange(battlerDef, statId, GetDamagedStatBerryStages(FALSE));
             BattleScriptCall(BattleScript_ConsumableBerryStatRaise);
         }
 

@@ -463,4 +463,24 @@
 // Ignored when BUFF_RETALIATION_BERRIES is FALSE.
 #define BUFF_RETALIATION_BERRY_DENOMINATOR 4
 
+// When TRUE, Kee Berry (hit by a physical move: +Def) and Maranga Berry (hit by a special move:
+// +Sp. Def) raise their stat by BUFF_DAMAGED_STAT_BERRY_STAGES (+2 by default) instead of the
+// stock +1. Ripen -- as the ability or an innate -- still doubles it, to +4. Nothing else
+// changes: the Berry still fires once, on the first damaging hit of its category.
+//
+// Why: +1 once, after the hit has already landed, rarely changes the next exchange -- the same
+// complaint BUFF_PINCH_BERRIES answered for the pinch Berries. These get a smaller number than
+// the pinch Berries' +3 because they fire at any HP, not only at 1/4, so the holder usually has
+// several turns left to use the boost.
+//
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the
+// magnitude lives in the plain constant below. See GetDamagedStatBerryStages() in
+// include/fork/buff_berries.h and its call site in DamagedStatBoostBerryEffect(),
+// src/battle_hold_effects.c.
+#define BUFF_DAMAGED_STAT_BERRIES TRUE
+
+// Stat stages raised when BUFF_DAMAGED_STAT_BERRIES is on (Ripen doubles it; the stat stage cap
+// still applies). Stock behavior (flag off) is 1. Ignored when BUFF_DAMAGED_STAT_BERRIES is FALSE.
+#define BUFF_DAMAGED_STAT_BERRY_STAGES 2
+
 #endif // GUARD_CONFIG_BUFF_H

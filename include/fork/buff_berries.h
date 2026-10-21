@@ -4,10 +4,11 @@
 #include "config_changes.h"
 #include "fpmath.h"
 
-// BUFF_RESIST_BERRIES / BUFF_PINCH_BERRIES / BUFF_RETALIATION_BERRIES (config/buff.h). Kept `static inline` here so
+// BUFF_RESIST_BERRIES / BUFF_PINCH_BERRIES / BUFF_RETALIATION_BERRIES /
+// BUFF_DAMAGED_STAT_BERRIES (config/buff.h). Kept `static inline` here so
 // each call site in the upstream files (GetDefenderItemsModifier() in src/battle_util.c,
-// StatRaiseBerry(), RandomStatRaiseBerry(), TryJabocaBerry() and TryRowapBerry() in
-// src/battle_hold_effects.c) stays a one-line
+// StatRaiseBerry(), RandomStatRaiseBerry(), TryJabocaBerry(), TryRowapBerry() and
+// DamagedStatBoostBerryEffect() in src/battle_hold_effects.c) stays a one-line
 // swap of a constant.
 //
 // Both take whether the holder's Ripen (ability or innate) is active, which the caller
@@ -48,6 +49,15 @@ static inline s32 GetRetaliationBerryDamage(s32 maxHP, bool32 ripen)
 {
     s32 damage = maxHP / (GetConfig(BUFF_RETALIATION_BERRIES) ? BUFF_RETALIATION_BERRY_DENOMINATOR : 8);
     return ripen ? damage * 2 : damage;
+}
+
+// Stat stages Kee / Maranga Berry raise. Stock: +1, Ripen +2. Buffed:
+// +BUFF_DAMAGED_STAT_BERRY_STAGES, and Ripen still doubles it.
+static inline u32 GetDamagedStatBerryStages(bool32 ripen)
+{
+    if (GetConfig(BUFF_DAMAGED_STAT_BERRIES))
+        return ripen ? BUFF_DAMAGED_STAT_BERRY_STAGES * 2 : BUFF_DAMAGED_STAT_BERRY_STAGES;
+    return ripen ? 2 : 1;
 }
 
 #endif // GUARD_FORK_BUFF_BERRIES_H
