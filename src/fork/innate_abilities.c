@@ -2577,8 +2577,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_CUTE_CHARM,
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGIC_BOUNCE,
-            ABILITY_MAGIC_GUARD
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0197
@@ -2588,8 +2587,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_CUTE_CHARM,
             ABILITY_INNER_FOCUS,
-            ABILITY_MAGIC_BOUNCE,
-            ABILITY_MAGIC_GUARD
+            ABILITY_MAGIC_BOUNCE
         )
     },
     { // 0198
