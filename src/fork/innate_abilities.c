@@ -5883,6 +5883,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PALKIA,
         INNATES(
             ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
         )
@@ -5891,6 +5892,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PALKIA_ORIGIN,
         INNATES(
             ABILITY_INFILTRATOR,
+            ABILITY_LEVITATE,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
         )
