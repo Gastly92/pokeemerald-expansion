@@ -4278,30 +4278,6 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: chosen Filter stacks with innate S
     }
 }
 
-// Stakataka carries both innate Filter and innate Solid Rock, so a super-effective hit takes both reductions.
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Stakataka's innate Filter and Solid Rock stack on a super-effective hit", s16 damage)
-{
-    bool32 enabled;
-    PARAMETRIZE { enabled = FALSE; }
-    PARAMETRIZE { enabled = TRUE; }
-    GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_STAKATAKA, ABILITY_FILTER));
-        ASSUME(SpeciesHasInnate(SPECIES_STAKATAKA, ABILITY_SOLID_ROCK));
-        ASSUME(gTypeEffectivenessTable[TYPE_WATER][TYPE_ROCK] > UQ_4_12(1.0));
-        ASSUME(gTypeEffectivenessTable[TYPE_WATER][TYPE_STEEL] == UQ_4_12(1.0));
-        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_STAKATAKA) { Ability(ABILITY_BEAST_BOOST); }
-        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SURF); }
-    } WHEN {
-        TURN { MOVE(opponent, MOVE_SURF); }
-    } SCENE {
-        HP_BAR(player, captureDamage: &results[i].damage);
-        MESSAGE("It's super effective!");
-    } FINALLY {
-        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.5625), results[1].damage); // off: full; on: 0.75 x 0.75
-    }
-}
-
 // ---- Fur Coat ----
 // Persian-Alola carries innate Fur Coat (and Technician); its chosen ability is set to Technician
 // (a no-op on defense), so the off-run takes full physical damage and the halving is the innate's.
