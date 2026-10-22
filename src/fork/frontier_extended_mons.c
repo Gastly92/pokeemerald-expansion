@@ -27560,17 +27560,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
-    {
-        .species = SPECIES_TAPU_FINI,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
-        .moves =
-        {
-            MOVE_PERISH_SONG,
-            MOVE_PROTECT,
-            MOVE_MOONBLAST,
-            MOVE_SURF
-        },
         .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
