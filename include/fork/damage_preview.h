@@ -55,4 +55,18 @@ void EndArmedFormPreview(enum BattlerId battler);
 // Exposed for test/fork/damage_preview.c.
 enum Type GetDamagePreviewMoveType(enum BattlerId battler, enum Move move, enum Gimmick gimmick);
 
+// The move that really runs when `battler` picks `move` with its Z-Move or Dynamax armed (or
+// already active): the Z-Move or Max Move it turns into, else `move` itself. The effectiveness
+// icon judges this move, since a converted move keeps the base move's type but none of its
+// matchup quirks -- Freeze-Dry's Subzero Slammer / Max Hailstorm is resisted by Water.
+enum Move GetDamagePreviewExecutedMove(enum BattlerId battler, enum Move move);
+
+struct DamageContext;
+
+// CalcTypeEffectivenessMultiplier against the disguise a defender under Illusion shows: its
+// typing and species, with the real mon's ability and item left out. Move-specific matchups
+// (Freeze-Dry, Flying Press, Thousand Arrows) still apply; the real typing never leaks.
+// Leaves the defender and `ctx` as it found them. Used by the effectiveness icon.
+uq4_12_t CalcDisguisedTypeEffectiveness(struct DamageContext *ctx, enum Species illusionSpecies);
+
 #endif // GUARD_FORK_DAMAGE_PREVIEW_H

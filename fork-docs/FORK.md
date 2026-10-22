@@ -146,7 +146,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 |---|---|---|---|---|
 | Color-blind HP bar | `COLOR_BLIND` | `config/accessibility.h` | ✅ | The battle HP bar's healthy band is blue instead of green. Party/summary bars unchanged. |
 | Clean battle healthboxes | `B_CLEAN_HEALTHBOX` | `config/fork.h`, `src/battle_interface.c` | ✅ | Removes the healthbox corner tail and the singles player EXP bar. |
-| Illusion-safe effectiveness readout | `B_SHOW_EFFECTIVENESS` (fix; no new flag) | `src/battle_controller_player.c` | ✅ | The effectiveness icon reads a disguised foe's apparent typing, so it can't leak an Illusion. Type chart only while disguised. |
+| Illusion-safe effectiveness readout | `B_SHOW_EFFECTIVENESS` (fix; no new flag) | `src/battle_controller_player.c`, `src/fork/damage_preview.c` | ✅ | The effectiveness icon reads a disguised foe as its disguise (typing and species, move quirks like Freeze-Dry included), so it can't leak an Illusion. |
 
 ## The fork-flag test harness
 

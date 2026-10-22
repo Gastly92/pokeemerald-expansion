@@ -654,3 +654,114 @@ SINGLE_BATTLE_TEST("Damage preview: Bolt Beak does not read the foe's true Speed
         EXPECT_EQ(gAiLogicData->speedStats[B_BATTLER_1], 999);
     }
 }
+
+// Vaporeon at Lv100 (base HP 130 / Def 60) at the two corners of its legal spread.
+#define VAPOREON_FRAIL_HP   370
+#define VAPOREON_FRAIL_DEF  112
+#define VAPOREON_BULKY_HP   464
+#define VAPOREON_BULKY_DEF  240
+
+SINGLE_BATTLE_TEST("Damage preview: Freeze-Dry turned into a Z-Move or Max Move is priced as resisted by Water")
+{
+    u32 maxHP, defense;
+    enum Gimmick gimmick;
+    enum Item item;
+    s16 damage;
+    u32 lo = 0, hi = 0;
+
+    // Subzero Slammer and Max Hailstorm are plain Ice moves: Freeze-Dry's bonus against Water
+    // does not carry over, so the hit is 0.5x, not 2x.
+    PARAMETRIZE { gimmick = GIMMICK_Z_MOVE;  item = ITEM_ICIUM_Z; maxHP = VAPOREON_FRAIL_HP; defense = VAPOREON_FRAIL_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_Z_MOVE;  item = ITEM_ICIUM_Z; maxHP = VAPOREON_BULKY_HP; defense = VAPOREON_BULKY_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_DYNAMAX; item = ITEM_NONE;    maxHP = VAPOREON_FRAIL_HP; defense = VAPOREON_FRAIL_DEF; }
+    PARAMETRIZE { gimmick = GIMMICK_DYNAMAX; item = ITEM_NONE;    maxHP = VAPOREON_BULKY_HP; defense = VAPOREON_BULKY_DEF; }
+
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_FREEZE_DRY) == EFFECT_SUPER_EFFECTIVE_ON_ARG);
+        PLAYER(SPECIES_WEAVILE) { Item(item); Moves(MOVE_FREEZE_DRY); }
+        OPPONENT(SPECIES_VAPOREON) { Ability(ABILITY_WATER_ABSORB); MaxHP(maxHP); HP(maxHP); Defense(defense); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_FREEZE_DRY, gimmick: gimmick); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+        MESSAGE("It's not very effective…");
+    } THEN {
+        // Read with the gimmick armed, the way the menu asks before it is used, and against
+        // the full bar the hit was dealt to.
+        SetActiveGimmick(B_BATTLER_0, GIMMICK_NONE);
+        gBattleMons[B_BATTLER_1].hp = gBattleMons[B_BATTLER_1].maxHP;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_FREEZE_DRY, gimmick, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, maxHP, lo, hi));
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: the effectiveness icon judges the Z-Move or Max Move an armed gimmick fires")
+{
+    enum Gimmick gimmick;
+    enum Item item;
+    enum Move expected;
+    struct DamageContext ctx = {0};
+
+    // The icon's matchup is CalcTypeEffectivenessMultiplier on GetDamagePreviewExecutedMove;
+    // judging the base Freeze-Dry showed the super-effective icon for a resisted hit.
+    PARAMETRIZE { gimmick = GIMMICK_NONE;    item = ITEM_NONE;    expected = MOVE_FREEZE_DRY; }
+    PARAMETRIZE { gimmick = GIMMICK_Z_MOVE;  item = ITEM_ICIUM_Z; expected = MOVE_SUBZERO_SLAMMER; }
+    PARAMETRIZE { gimmick = GIMMICK_DYNAMAX; item = ITEM_NONE;    expected = MOVE_MAX_HAILSTORM; }
+
+    GIVEN {
+        PLAYER(SPECIES_WEAVILE) { Item(item); Moves(MOVE_FREEZE_DRY); }
+        OPPONENT(SPECIES_VAPOREON) { Ability(ABILITY_WATER_ABSORB); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { }
+    } THEN {
+        // Armed, as the move menu sees it: usable and selected, not yet active.
+        gBattleStruct->gimmick.usableGimmick[B_BATTLER_0] = gimmick;
+        gBattleStruct->gimmick.toActivate |= 1u << B_BATTLER_0;
+        ctx.battlerAtk = B_BATTLER_0;
+        ctx.battlerDef = B_BATTLER_1;
+        ctx.move = GetDamagePreviewExecutedMove(B_BATTLER_0, MOVE_FREEZE_DRY);
+        ctx.moveType = TYPE_ICE;
+        ctx.abilities[B_BATTLER_0] = GetBattlerAbility(B_BATTLER_0);
+        ctx.abilities[B_BATTLER_1] = GetBattlerAbility(B_BATTLER_1);
+        EXPECT_EQ(ctx.move, expected);
+        if (gimmick == GIMMICK_NONE)
+            EXPECT_EQ(CalcTypeEffectivenessMultiplier(&ctx), UQ_4_12(2.0));
+        else
+            EXPECT_EQ(CalcTypeEffectivenessMultiplier(&ctx), UQ_4_12(0.5));
+        gBattleStruct->gimmick.toActivate &= ~(1u << B_BATTLER_0);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: the effectiveness icon reads a foe under Illusion as its disguise, move quirks included")
+{
+    enum Move move;
+    uq4_12_t expected;
+    struct DamageContext ctx = {0};
+
+    // The real Zoroark is Dark. Against the Vaporeon it shows, Freeze-Dry is 2x (its Water bonus),
+    // where the old pure type-chart read gave plain Ice's 0.5x; Psychic is 1x, not the Dark immunity.
+    PARAMETRIZE { move = MOVE_FREEZE_DRY; expected = UQ_4_12(2.0); }
+    PARAMETRIZE { move = MOVE_PSYCHIC;    expected = UQ_4_12(1.0); }
+
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_FREEZE_DRY) == EFFECT_SUPER_EFFECTIVE_ON_ARG);
+        PLAYER(SPECIES_WEAVILE) { Moves(MOVE_FREEZE_DRY, MOVE_PSYCHIC); }
+        OPPONENT(SPECIES_ZOROARK) { Ability(ABILITY_ILLUSION); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_VAPOREON) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { }
+    } THEN {
+        EXPECT_EQ(GetIllusionMonSpecies(B_BATTLER_1), SPECIES_VAPOREON);
+        ctx.battlerAtk = B_BATTLER_0;
+        ctx.battlerDef = B_BATTLER_1;
+        ctx.move = move;
+        ctx.moveType = GetMoveType(move);
+        ctx.abilities[B_BATTLER_0] = GetBattlerAbility(B_BATTLER_0);
+        ctx.abilities[B_BATTLER_1] = GetBattlerAbility(B_BATTLER_1);
+        EXPECT_EQ(CalcDisguisedTypeEffectiveness(&ctx, SPECIES_VAPOREON), expected);
+        // ...and the real mon is put back.
+        EXPECT_EQ(gBattleMons[B_BATTLER_1].species, SPECIES_ZOROARK);
+        EXPECT_EQ(gBattleMons[B_BATTLER_1].types[0], TYPE_DARK);
+        EXPECT_EQ(ctx.abilities[B_BATTLER_1], ABILITY_ILLUSION);
+    }
+}
