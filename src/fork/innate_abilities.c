@@ -12844,7 +12844,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_GUARD_DOG,
             ABILITY_INTIMIDATE,
             ABILITY_PRESSURE,
-            ABILITY_STRONG_JAW
+            ABILITY_STRONG_JAW,
+            ABILITY_TOXIC_CHAIN
         )
     },
     { // 1015
@@ -12853,7 +12854,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ANTICIPATION,
             ABILITY_FRISK,
             ABILITY_PRESSURE,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_TOXIC_CHAIN
         )
     },
     { // 1016
@@ -12861,7 +12863,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_KEEN_EYE,
             ABILITY_PRESSURE,
-            ABILITY_TECHNICIAN
+            ABILITY_TECHNICIAN,
+            ABILITY_TOXIC_CHAIN
         )
     },
     { // 1017
@@ -13348,6 +13351,33 @@ bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index,
     }
 
     return FALSE;
+}
+
+// Innate Toxic Chain's badly-poison, called from the ABILITYEFFECT_MOVE_END_ATTACKER case in
+// src/battle_util.c when the attacker's chosen ability is not Toxic Chain. The trigger roll is upstream's
+// SetToxicChainPriority (innate-aware), which sets gBattleStruct->toxicChainPriority when the hit can
+// poison; this mirrors the chosen ABILITY_TOXIC_CHAIN case that consumes it, with the pop-up and record
+// overwritten to the innate. A 1:1 copy of the real ability, NOT a pure boon: under DETERMINISTIC_ABILITIES
+// it badly poisons on every damaging hit, which can feed a foe's Guts / Poison Heal or take the status slot
+// the holder's own status move wanted. Wired as-is by maintainer decision for its canon carriers only (see
+// fork-docs/INNATE_ABILITIES.md, ABILITY_TOXIC_CHAIN).
+bool32 TryInnateToxicChain(enum BattlerId battler)
+{
+    if (!gBattleStruct->toxicChainPriority || !IsInnateActive(battler, ABILITY_TOXIC_CHAIN))
+        return FALSE;
+
+    gBattleStruct->toxicChainPriority = FALSE;
+    if (IsMoveEffectBlockedByTarget(GetBattlerAbility(gBattlerTarget)))
+        return FALSE;
+
+    gLastUsedAbility = ABILITY_TOXIC_CHAIN;
+    gBattleScripting.abilityPopupOverwrite = ABILITY_TOXIC_CHAIN; // CreateAbilityPopUp reads the chosen slot
+    gEffectBattler = gBattlerTarget;
+    gBattleScripting.battler = battler;
+    gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
+    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+    BattleScriptCall(BattleScript_AbilityStatusEffect);
+    return TRUE;
 }
 
 // Active, scripted innate abilities that react when the HOLDER takes damage from a move — the

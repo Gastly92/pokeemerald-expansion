@@ -1278,7 +1278,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0472
         SPECIES_GLISCOR, 2,
-        ABILITY_TOXIC_CHAIN
+        ABILITY_SAND_STREAM
     },
     { // 0473
         SPECIES_MAMOSWINE, 2,
@@ -2430,6 +2430,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 1013
         SPECIES_SINISTCHA, 2,
         ABILITY_WATER_ABSORB
+    },
+    { // 1014
+        SPECIES_OKIDOGI, 0,
+        ABILITY_SHEER_FORCE
+    },
+    { // 1015
+        SPECIES_MUNKIDORI, 0,
+        ABILITY_PSYCHIC_SURGE
+    },
+    { // 1016
+        SPECIES_FEZANDIPITI, 0,
+        ABILITY_LINGERING_AROMA
     },
     { // 1017
         SPECIES_OGERPON_HEARTHFLAME, 1,

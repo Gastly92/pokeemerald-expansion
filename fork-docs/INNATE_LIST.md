@@ -6,7 +6,7 @@ follow the **→** link for the exact semantics, wiring and species picks in
 [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#per-ability-wiring-reference).
 
 - **Source of truth:** `sImplementedInnates[]` in `test/fork/innate_abilities.c`. CI
-  fails any species row that names an ability not on it. This page lists 192.
+  fails any species row that names an ability not on it. This page lists 193.
 - **Most innates are a 1:1 copy** of the real ability. **◆** marks a *pure-boon
   divergence*: the innate keeps the upside and drops a cost the real ability has
   (see [the design principle](INNATE_ABILITIES.md#the-design-principle-an-innate-is-a-pure-boon)).
@@ -235,6 +235,7 @@ When you wire a new innate, add its row here in the same PR (Step 5 of
 | Steam Engine | +6 Speed when hit by a Fire or Water move. | [→](INNATE_ABILITIES.md#ability_steam_engine--ability_thermal_exchange--ability_wind_power) |
 | Stench | 10% flinch chance on its hits (with deterministic abilities, a guaranteed flinch on its first turn out). | [→](INNATE_ABILITIES.md#ability_stench) |
 | Tangling Hair | Lowers a contact attacker's Speed by 1. | [→](INNATE_ABILITIES.md#ability_rough_skin--ability_iron_barbs--ability_gooey--ability_tangling_hair) |
+| Toxic Chain | Badly poisons the target of any damaging hit (30%, always with deterministic abilities). Not a pure boon. | [→](INNATE_ABILITIES.md#ability_toxic_chain) |
 | Thermal Exchange | +1 Attack when hit by a Fire move; can't be burned. | [→](INNATE_ABILITIES.md#ability_steam_engine--ability_thermal_exchange--ability_wind_power) |
 | Water Compaction | +2 Defense when hit by a Water move. | [→](INNATE_ABILITIES.md#ability_justified--ability_stamina--ability_water_compaction--ability_anger_point) |
 | Willpower | Fork ability: +1 Sp. Def when hit by any move. | [→](INNATE_ABILITIES.md#ability_willpower) |

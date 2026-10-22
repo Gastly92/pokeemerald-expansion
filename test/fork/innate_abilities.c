@@ -5587,6 +5587,7 @@ static const enum Ability sImplementedInnates[] =
         ABILITY_OPPORTUNIST,
         ABILITY_MIRROR_ARMOR,
         ABILITY_MAGIC_BOUNCE,
+        ABILITY_TOXIC_CHAIN,
         ABILITY_DANCER,
         ABILITY_EFFECT_SPORE,
         ABILITY_REKINDLE,
@@ -6415,6 +6416,95 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Guard Dog boosts Attack ins
             EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1); // immune to the drop, boosted instead
         else
             EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1); // no innate -> Intimidate drops Attack
+    }
+}
+
+// ================================ Toxic Chain ================================
+// The Loyal Three's own ability, wired as-is (NOT a pure boon) for its canon carriers only, so each
+// one's observable slot can carry something else. Under DETERMINISTIC_ABILITIES it badly poisons on
+// every damaging hit, contact or not. Each test gives the holder a chosen ability that is not Toxic
+// Chain, so the effect is attributable solely to the innate.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Toxic Chain badly poisons on a damaging hit")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_OKIDOGI, ABILITY_TOXIC_CHAIN));
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_OKIDOGI) { Ability(ABILITY_SHEER_FORCE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_TOXIC_CHAIN);
+            MESSAGE("The opposing Wobbuffet was badly poisoned!");
+        } else {
+            NONE_OF { ABILITY_POPUP(player, ABILITY_TOXIC_CHAIN); }
+        }
+    } THEN {
+        if (enabled)
+            EXPECT(opponent->status1 & STATUS1_TOXIC_POISON);
+        else
+            EXPECT_EQ(opponent->status1, 0);
+    }
+}
+
+// Not contact-gated (that is Poison Touch): a special move from Munkidori triggers it too.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Toxic Chain triggers on a non-contact special move")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_MUNKIDORI, ABILITY_TOXIC_CHAIN));
+        ASSUME(!MoveMakesContact(MOVE_PSYSHOCK));
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_MUNKIDORI) { Ability(ABILITY_PSYCHIC_SURGE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_PSYSHOCK); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_TOXIC_CHAIN);
+    } THEN {
+        EXPECT(opponent->status1 & STATUS1_TOXIC_POISON);
+    }
+}
+
+// Okidogi's chosen ability is Sheer Force, which skips a move's after-hit effects. Toxic Chain is an
+// ability, not a move secondary, and its step runs before the Sheer Force skip, so it still fires on
+// a move whose own secondary Sheer Force removed (Poison Jab's 30% poison).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Sheer Force does not suppress an innate Toxic Chain")
+{
+    GIVEN {
+        ASSUME(MoveHasAdditionalEffect(MOVE_POISON_JAB, MOVE_EFFECT_POISON));
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_OKIDOGI) { Ability(ABILITY_SHEER_FORCE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_POISON_JAB); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_TOXIC_CHAIN);
+    } THEN {
+        EXPECT(opponent->status1 & STATUS1_TOXIC_POISON); // bad poison from the ability, not Poison Jab's plain poison
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate Toxic Chain")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_OKIDOGI) { Ability(ABILITY_SHEER_FORCE); Speed(20); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_GASTRO_ACID); MOVE(player, MOVE_SCRATCH); }
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_TOXIC_CHAIN); }
+    } THEN {
+        EXPECT_EQ(opponent->status1, 0);
     }
 }
 

@@ -4830,6 +4830,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
          && IsInnateActive(gBattlerAttacker, ABILITY_STENCH)
          && TryStenchFlinch())
             effect++;
+        // FORK: innate Toxic Chain (FEATURE_INNATE_ABILITIES). Its trigger roll is SetToxicChainPriority
+        // (src/battle_script_commands.c), which is innate-aware; the badly-poison itself is applied here,
+        // since the switch below only reaches it for a chosen Toxic Chain. See TryInnateToxicChain.
+        else if (gLastUsedAbility != ABILITY_TOXIC_CHAIN && TryInnateToxicChain(gBattlerAttacker))
+            effect++;
         switch (gLastUsedAbility)
         {
         case ABILITY_POISON_TOUCH:
