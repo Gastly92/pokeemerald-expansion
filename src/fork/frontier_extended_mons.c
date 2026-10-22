@@ -34318,7 +34318,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_HYDRO_PUMP,
             MOVE_FREEZE_DRY,
-            MOVE_FLIP_TURN,
+            MOVE_ENCORE,
             MOVE_ICE_BEAM
         },
         .ability = ABILITY_SNOW_WARNING,
@@ -34329,6 +34329,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_IRON_BUNDLE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SPECS,
+        .moves =
+        {
+            MOVE_HYDRO_PUMP,
+            MOVE_FREEZE_DRY,
+            MOVE_FLIP_TURN,
+            MOVE_BLIZZARD
+        },
+        .ability = ABILITY_SNOW_WARNING,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .spa = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_ICE,
     },
     {
         .species = SPECIES_IRON_BUNDLE,
