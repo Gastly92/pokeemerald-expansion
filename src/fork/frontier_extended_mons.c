@@ -7203,7 +7203,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WOBBUFFET,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FULL_INCENSE,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_COUNTER,
@@ -10456,7 +10456,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AGGRON,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_FULL_INCENSE,
+        .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
             MOVE_HEAD_SMASH,
@@ -14118,7 +14118,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_BASTIODON,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_ROCKY_HELMET,
+        .heldItem = ITEM_FULL_INCENSE,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -15603,7 +15603,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MAGNEZONE,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_ASSAULT_VEST,
+        .heldItem = ITEM_FULL_INCENSE,
         .moves =
         {
             MOVE_THUNDERBOLT,
