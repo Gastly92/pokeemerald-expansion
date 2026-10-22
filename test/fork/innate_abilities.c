@@ -2271,6 +2271,31 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Teravolt and Turboblaze ann
     }
 }
 
+// Innate Comatose announces itself on entry like the real ability. Komala's chosen ability is overridden
+// to Hustle, so without this the innate's "is drowsing!" message never showed.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose announces itself on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_KOMALA, ABILITY_COMATOSE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_KOMALA) { Ability(ABILITY_HUSTLE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_COMATOSE);
+            MESSAGE("Komala is drowsing!");
+        } else {
+            NONE_OF { MESSAGE("Komala is drowsing!"); }
+        }
+    }
+}
+
 // Blanket buff: every species in the TIER_LEGENDARY / TIER_MYTHICAL lists (src/fork/species_tiers.c)
 // carries Pressure innately. A species added to either tier list must get it in its INNATES(...) row.
 TEST("Innate abilities: every legendary- and mythical-tier species carries innate Pressure")

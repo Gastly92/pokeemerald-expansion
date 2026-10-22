@@ -3515,6 +3515,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         case ABILITY_COMATOSE:
             if (shouldAbilityTrigger)
             {
+                // FORK: innate Comatose announces too; show the innate in the pop-up only when the
+                // chosen ability differs (Pressure precedent). Keep on conflict.
+                if (GetBattlerAbility(battler) != gLastUsedAbility)
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
                 BattleScriptCall(BattleScript_SwitchInAbilityMsg);
                 effect++;

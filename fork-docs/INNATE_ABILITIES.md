@@ -3887,10 +3887,10 @@ damage for an innate Comatose switch-in candidate. (Upstream's `IsSwitchinTSpike
 Comatose even for the chosen ability, so the innate is left unhandled there too — matching the chosen ability at
 each site.)
 
-**Dropped display half.** The real Comatose's switch-in **"… is drowsing!"** message (the `ABILITY_COMATOSE` case
-of `ABILITYEFFECT_ON_SWITCHIN`) is deliberately **not** wired for the innate — it's pure display flavor and would
-need a switch-in driver; the "drop the form/display half" design note. So an innate Comatose is silent on
-switch-in. The overworld Dream-Ball catch modifier (`src/battle_script_commands.c`) and Battle Pike sleep room
+**Entry announcement.** Comatose is listed in `SwitchInInnateAbilityEffect()`, so the switch-in driver fires the
+upstream `ABILITYEFFECT_ON_SWITCHIN` case ("<mon> is drowsing!") with the pop-up overwritten to Comatose when the
+chosen ability differs (the Pressure precedent), which is always the case for Komala (chosen slot overridden to
+Hustle). The overworld Dream-Ball catch modifier (`src/battle_script_commands.c`) and Battle Pike sleep room
 (`src/battle_pike.c`) are likewise left chosen-only (innates are battle-only / never touch economy or the
 overworld).
 
