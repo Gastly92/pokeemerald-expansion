@@ -292,6 +292,10 @@
 //   (src/battle_util.c), and the repurposed evasion-ignore for both in GetAccEvasionStageDelta
 //   (src/fork/deterministic_moves.c). A 1:1 copy, guarded against a chosen Victory Star so it never
 //   applies twice. No AI wiring needed. Carrier: Victini only (its sole canon user).
+//   TOXIC_CHAIN: NOT a pure boon, wired as-is for its canon carriers (the Loyal Three) by maintainer
+//   decision. SetToxicChainPriority (src/battle_script_commands.c) is innate-aware; the bad poison is
+//   applied by TryInnateToxicChain from the ABILITYEFFECT_MOVE_END_ATTACKER case in src/battle_util.c.
+//   AI credits it in AI_DeterministicAbilityGuaranteesStatus.
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /
@@ -364,6 +368,7 @@ bool32 TryActivateInnateOnHitEffects(enum BattlerId battler, u32 *index, enum Mo
 // call and returning TRUE, or FALSE once the list is exhausted. Delegates to the upstream
 // ABILITYEFFECT_MOVE_END_FOES_FAINTED case so the steal / script / pop-up match the real ability.
 bool32 TryActivateInnateOnHitAttackerEffects(enum BattlerId battler, u32 *index, enum Move move);
+bool32 TryInnateToxicChain(enum BattlerId battler);
 
 // on-damage innate driver. Fires `battler`'s active, scripted on-damage innates — today only
 // Berserk (raises Sp. Atk +1 when an attack drops the holder's HP to 1/2 or less). Hooked from

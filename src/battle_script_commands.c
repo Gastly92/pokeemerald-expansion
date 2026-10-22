@@ -1792,7 +1792,8 @@ static void SetToxicChainPriority(void)
         return;
 
     enum Ability abilityAtk = GetBattlerAbility(gBattlerAttacker);
-    if (abilityAtk == ABILITY_TOXIC_CHAIN
+    if ((abilityAtk == ABILITY_TOXIC_CHAIN
+      || IsInnateActive(gBattlerAttacker, ABILITY_TOXIC_CHAIN)) // FORK: innate Toxic Chain, applied by TryInnateToxicChain
      && IsBattlerAlive(gBattlerTarget)
      && CanBePoisoned(gBattlerAttacker, gBattlerTarget, abilityAtk, GetBattlerAbility(gBattlerTarget))
      && IsBattlerTurnDamaged(gBattlerTarget, EXCLUDING_SUBSTITUTES)

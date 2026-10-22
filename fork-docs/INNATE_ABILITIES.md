@@ -147,7 +147,9 @@ ability sits in exactly one):
   mutually exclusive, so it can *block the holder's own* status move (an innate
   Static paralyses a target you wanted to Toxic). Not a pure boon — unlike the
   *volatile* Cute Charm (infatuation), which **is** wired. Static, Flame Body, Poison
-  Point, Poison Touch, Toxic Chain, Poison Puppeteer, Spicy Spray.
+  Point, Poison Touch, Poison Puppeteer, Spicy Spray. **Toxic Chain** is the one
+  exception wired as-is, by maintainer decision, for its canon carriers only. See
+  [`### ABILITY_TOXIC_CHAIN`](#ability_toxic_chain) for why that is not a precedent.
   **Effect Spore was promoted out of this bucket** — the fork re-specced it to lower the
   contact attacker's accuracy instead of applying a status, which removes the
   mutual-exclusion objection entirely. See [`### ABILITY_EFFECT_SPORE`](#ability_effect_spore).
@@ -1491,7 +1493,7 @@ Swarm, Kricketune's Swarm, Roserade's Natural Cure, Ambipom's Prankster, the Min
 Charm, the Clobbopus/Grapploct line's Limber), so they take a combined `INNATES(...)` list with Technician
 added. Frontier roster sets that hardcoded Technician are freed (Step 3.5): Persian-Alola → Fur Coat, Kanto
 Persian → Unnerve, Mr. Mime → Soundproof, Scizor → Light Metal, Hitmontop → Intimidate, Breloom → Effect Spore,
-Roserade → Poison Point, Ambipom → Skill Link, Maushold → Friend Guard, Fezandipiti → Toxic Chain; and the
+Roserade → Poison Point, Ambipom → Skill Link, Maushold → Friend Guard, Fezandipiti → Lingering Aroma; and the
 three species whose every real ability is now innate take a fork-owned chosen-ability override
 (`species_ability_overrides.c`): Marshadow (sole Technician) → Trace, Kricketune (Swarm + Technician) →
 Sheer Force, Grapploct (Limber + Technician) → Water Absorb.
@@ -2363,7 +2365,7 @@ keyed to the chosen slot, consistent with how the Intimidate driver left its sof
 Roar-scoring reads in `src/battle_ai_main.c` (`EFFECT_ROAR` + Suction Cups, both the score-penalty and
 the doubles no-op) credit an innate Suction Cups. Canon only so far (no flavor picks yet). Guard Dog's canon users
 (Mabosstiff, Okidogi) are frontier sets whose slot is freed via a fork-owned override (Strong Jaw /
-Toxic Chain).
+Sheer Force).
 
 ### ABILITY_ROCK_HEAD
 
@@ -4621,3 +4623,39 @@ frontier sets run it.
 
 **Step 3.5.** Ledian used to carry a chosen Victory Star through an override. Wiring the innate made
 that pick illegal, so Ledian's override and both of its sets moved to **Soundproof**.
+
+### ABILITY_TOXIC_CHAIN
+
+Badly poisons the target of any damaging hit, contact or not. Normally 30%; under
+`DETERMINISTIC_ABILITIES`, every hit. Wired as an innate for the Loyal Three (Okidogi, Munkidori,
+Fezandipiti) so each keeps its signature chain and still runs a second trait in its observable slot.
+
+**Not a pure boon, and wired anyway.** It belongs in the "non-volatile status on hit" bucket: an
+always-on bad poison can feed a foe's Guts / Poison Heal / Toxic Boost / Marvel Scale / Quick Feet,
+bounce back off Synchronize, and fill the status slot the holder's own status move wanted. The
+maintainer chose to wire it as-is (Oct 2026) because every frontier set for all three carriers
+already ran it as the chosen ability, so the cost was already being paid. **That reasoning only
+covers canon carriers whose sets already chose it.** Do not cite it to wire Static, Poison Point or
+the rest of the bucket as-is, and give Toxic Chain no flavor picks.
+
+**Wiring.** Two halves, matching upstream's split:
+
+- The trigger roll, `SetToxicChainPriority` (`src/battle_script_commands.c`), is innate-aware. It sets
+  `toxicChainPriority`, which also blocks the move's own non-volatile secondary, exactly like the real
+  ability.
+- The bad poison is applied by `TryInnateToxicChain` (`src/fork/innate_abilities.c`), called from the
+  `ABILITYEFFECT_MOVE_END_ATTACKER` case in `src/battle_util.c` beside the innate Stench clause,
+  guarded so a chosen Toxic Chain never fires twice. The pop-up is overwritten to the innate.
+
+That step runs before the Sheer Force skip, so Okidogi's chosen Sheer Force does not suppress it.
+Suppressed by Gastro Acid and Neutralizing Gas through `IsInnateActive()`; blocked by Shield Dust and
+Covert Cloak like the real ability. AI: `AI_DeterministicAbilityGuaranteesStatus`
+(`src/fork/deterministic_moves.c`) credits the innate, so the AI knows its hits guarantee bad poison.
+
+**Species: the Loyal Three only.** Their slot 0 is overridden: Okidogi → **Sheer Force**,
+Munkidori → **Psychic Surge**, Fezandipiti → **Lingering Aroma** (its lore pheromones that captivate
+whoever touches it). All six of their frontier sets run the new pick.
+
+**Step 3.5.** Gliscor's override was a borrowed Toxic Chain. Wiring the innate made that illegal, so
+the override and both Gliscor sets moved to **Sand Stream**, which sets up the sand its innate Sand
+Veil exploits.

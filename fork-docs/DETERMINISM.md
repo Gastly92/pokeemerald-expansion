@@ -326,7 +326,7 @@ equal-damage moves it prefers a non-contact one (via
 handling). `AI_WhoStrikesFirst` (`src/battle_ai_util.c`) also models Quick Draw's
 guaranteed entry-turn first-strike, so the AI's turn-order prediction matches the
 engine. And `AI_DeterministicAbilityGuaranteesStatus` teaches the AI that its
-*own* Poison Touch (on a contact hit) / Toxic Chain (on any damaging hit) now
+*own* Poison Touch (on a contact hit) / Toxic Chain (on any damaging hit, chosen or innate) now
 guarantees poison, scored as a plus via `AI_IsMoveEffectInPlus` (reusing
 `AI_CanPoison`), so e.g. a Poison Touch user prefers an equal-damage contact move.
 And `StatusWillBeCuredDeterministically` (`src/battle_ai_util.c`) teaches the AI

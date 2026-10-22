@@ -548,7 +548,7 @@ bool32 AI_DeterministicAbilityGuaranteesStatus(enum BattlerId battlerAtk, enum B
      && AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, gAiLogicData->partnerMove))
         return TRUE;
 
-    if (abilityAtk == ABILITY_TOXIC_CHAIN
+    if ((abilityAtk == ABILITY_TOXIC_CHAIN || IsInnateActive(battlerAtk, ABILITY_TOXIC_CHAIN))
      && AI_CanPoison(battlerAtk, battlerDef, abilityDef, move, gAiLogicData->partnerMove))
         return TRUE;
 
