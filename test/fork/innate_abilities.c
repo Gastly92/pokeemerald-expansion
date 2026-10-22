@@ -3180,6 +3180,96 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate C
     }
 }
 
+// Victory Star: Victini's own ability, wired as an innate so its one observable slot can carry something
+// else (Flash Fire, via species_ability_overrides.c). A 1:1 copy at both accuracy sites: in the hit calc it
+// is the real x1.1 for the holder and a living partner; in the deterministic PP economy it ignores the
+// target's evasion for both, exactly like the chosen ability. Victini's chosen ability is Flash Fire in
+// every test below, so the effect is attributable solely to the innate.
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Victory Star ignores the target's evasion (no PP tax)")
+{
+    u32 enabled, expectedPP;
+    PARAMETRIZE { enabled = TRUE;  expectedPP = 34; } // innate Victory Star -> evasion ignored -> only the base 1 PP
+    PARAMETRIZE { enabled = FALSE; expectedPP = 33; } // no innate -> the foe's +1 evasion taxes an extra 1 PP
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VICTINI, ABILITY_VICTORY_STAR));
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_VICTINI) { Ability(ABILITY_FLASH_FIRE); Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_DOUBLE_TEAM); } // opponent +1 evasion
+        TURN { MOVE(player, MOVE_POUND); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(player->pp[0], expectedPP);
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a partner's innate Victory Star ignores the evasion PP tax")
+{
+    u32 enabled, expectedPP;
+    PARAMETRIZE { enabled = TRUE;  expectedPP = 34; } // the partner's innate ignores the foe's evasion
+    PARAMETRIZE { enabled = FALSE; expectedPP = 33; } // 35 - 1 (base) - 1 (foe +1 evasion)
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_VICTINI, ABILITY_VICTORY_STAR));
+        WITH_CONFIG(DETERMINISTIC_ACCURACY_EVASION, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_POUND, MOVE_CELEBRATE); }
+        PLAYER(SPECIES_VICTINI) { Ability(ABILITY_FLASH_FIRE); Speed(50); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_DOUBLE_TEAM, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_CELEBRATE);
+               MOVE(opponentLeft, MOVE_DOUBLE_TEAM); MOVE(opponentRight, MOVE_CELEBRATE); }
+        TURN { MOVE(playerLeft, MOVE_POUND, target: opponentLeft); MOVE(playerRight, MOVE_CELEBRATE);
+               MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(opponentRight, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(playerLeft->pp[0], expectedPP);
+    }
+}
+
+// The hit calc: Zen Headbutt's 90 accuracy x1.1 = 99, which upstream's own Victory Star test treats as a
+// sure hit (test/battle/ability/victory_star.c). The feature-off leg proves the boost came from the innate.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Victory Star raises the holder's accuracy")
+{
+    u32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    PASSES_RANDOMLY(enabled ? 100 : 90, 100, RNG_ACCURACY);
+    GIVEN {
+        ASSUME(GetMoveAccuracy(MOVE_ZEN_HEADBUTT) == 90);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_VICTINI) { Ability(ABILITY_FLASH_FIRE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_ZEN_HEADBUTT); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_ZEN_HEADBUTT, player);
+        HP_BAR(opponent);
+    }
+}
+
+DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: a partner's innate Victory Star raises the ally's accuracy")
+{
+    u32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    PASSES_RANDOMLY(enabled ? 100 : 90, 100, RNG_ACCURACY);
+    GIVEN {
+        ASSUME(GetMoveAccuracy(MOVE_ZEN_HEADBUTT) == 90);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_VICTINI) { Ability(ABILITY_FLASH_FIRE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_ZEN_HEADBUTT, target: opponentLeft); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_ZEN_HEADBUTT, playerLeft);
+        HP_BAR(opponentLeft);
+    }
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Keen Eye ignores the target's evasion (no PP tax)")
 {
     u32 enabled, expectedPP;
@@ -5502,6 +5592,7 @@ static const enum Ability sImplementedInnates[] =
         ABILITY_REKINDLE,
         ABILITY_WILLPOWER,
         ABILITY_PACIFY,
+        ABILITY_VICTORY_STAR,
         // Reserved as well as innate: only their canon Paradox carriers may declare them (gate (7)).
         ABILITY_PROTOSYNTHESIS, ABILITY_QUARK_DRIVE,
 };

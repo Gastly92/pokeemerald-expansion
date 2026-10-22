@@ -508,7 +508,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0166
         SPECIES_LEDIAN, 0,
-        ABILITY_VICTORY_STAR
+        ABILITY_SOUNDPROOF
     },
     { // 0168
         SPECIES_ARIADOS, 1,
@@ -1399,6 +1399,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0492
         SPECIES_SHAYMIN_SKY, 1,
         ABILITY_WIND_RIDER
+    },
+    { // 0494
+        SPECIES_VICTINI, 0,
+        ABILITY_FLASH_FIRE
     },
     { // 0500
         SPECIES_EMBOAR, 1,

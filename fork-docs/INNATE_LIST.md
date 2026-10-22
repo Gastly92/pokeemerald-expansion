@@ -6,7 +6,7 @@ follow the **→** link for the exact semantics, wiring and species picks in
 [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#per-ability-wiring-reference).
 
 - **Source of truth:** `sImplementedInnates[]` in `test/fork/innate_abilities.c`. CI
-  fails any species row that names an ability not on it. This page lists 191.
+  fails any species row that names an ability not on it. This page lists 192.
 - **Most innates are a 1:1 copy** of the real ability. **◆** marks a *pure-boon
   divergence*: the innate keeps the upside and drops a cost the real ability has
   (see [the design principle](INNATE_ABILITIES.md#the-design-principle-an-innate-is-a-pure-boon)).
@@ -148,6 +148,7 @@ When you wire a new innate, add its row here in the same PR (Step 5 of
 | Turboblaze | Its moves ignore the target's breakable ability. | [→](INNATE_ABILITIES.md#ability_teravolt--ability_turboblaze) |
 | Unaware ◆ | Ignores the foe's stat boosts, but still benefits from the foe's stat drops. | [→](INNATE_ABILITIES.md#ability_unaware) |
 | Unseen Fist | Contact moves hit through Protect. | [→](INNATE_ABILITIES.md#ability_unseen_fist--ability_piercing_drill) |
+| Victory Star | Boosts its own and its partner's accuracy x1.1; both ignore evasion boosts in the PP economy. | [→](INNATE_ABILITIES.md#ability_victory_star) |
 
 ## Speed and priority
 

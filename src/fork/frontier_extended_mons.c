@@ -6173,7 +6173,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_AURA_SPHERE,
             MOVE_ROOST
         },
-        .ability = ABILITY_VICTORY_STAR,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .def = 4,
@@ -6193,7 +6193,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAILWIND,
             MOVE_BUG_BUZZ
         },
-        .ability = ABILITY_VICTORY_STAR,
+        .ability = ABILITY_SOUNDPROOF,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -17920,7 +17920,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ZEN_HEADBUTT,
             MOVE_U_TURN
         },
-        .ability = ABILITY_VICTORY_STAR,
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -17940,7 +17940,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FOCUS_BLAST,
             MOVE_THUNDERBOLT
         },
-        .ability = ABILITY_VICTORY_STAR,
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
             .spa = 252,
@@ -17960,7 +17960,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FAKE_OUT,
             MOVE_PROTECT
         },
-        .ability = ABILITY_VICTORY_STAR,
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -17980,7 +17980,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_TRICK
         },
-        .ability = ABILITY_VICTORY_STAR,
+        .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

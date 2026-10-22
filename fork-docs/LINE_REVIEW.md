@@ -686,7 +686,8 @@ line:
    target's evasion stages, which is why `sEvasionStageIgnorers` in
    `test/fork/frontier_extended_roster.c` lists it beside Compound Eyes and Keen
    Eye, and why `DETERMINISM.md` describes it as "the repurposed Compound
-   Eyes/Victory Star". Ledian's Victory Star override is live and stands. This is
+   Eyes/Victory Star". (Victory Star has since been wired as an innate for Victini,
+   which made it an illegal override; Ledian's row moved to Soundproof.) This is
    the "these flags CONVERT; they rarely delete" rule from the regime section,
    failing in the one direction that is expensive: it retires a legal pick and
    sends a review hunting for a worse one.
