@@ -13440,8 +13440,9 @@ bool32 TryActivateInnateOnDamageEffects(enum BattlerId battler, u32 *index)
 // super-effective or OHKO move), Download (raises the holder's Attack or Sp. Atk toward the foe's weaker
 // defense), Supersweet Syrup (lowers every opposing battler's evasiveness by 1 stage, once per battle),
 // Unnerve (denies opposing battlers their Berries), Hospitality (heals the ally 1/4 max HP in doubles)
-// Pastel Veil (cures the holder's and its ally's pre-existing poison on switch-in) and Pressure (its
-// "is exerting its pressure!" entry announcement — the PP tax itself is a passive check elsewhere).
+// Pastel Veil (cures the holder's and its ally's pre-existing poison on switch-in), and Pressure, Mold
+// Breaker, Teravolt, Turboblaze and Comatose (their entry announcements only — the effects themselves are
+// passive checks elsewhere).
 // The driver (TryActivateInnateSwitchInEffects) is re-entrant, so a battler may carry more than one and
 // each fires in turn. Each delegates to the existing upstream switch-in case that runs the real ability,
 // so the stat change / message / heal / script / pop-up matches the real ability for free (the effect site
@@ -13470,6 +13471,10 @@ static enum AbilityEffect SwitchInInnateAbilityEffect(enum Ability ability)
     case ABILITY_INTREPID_SWORD:   // raises the holder's Attack by 1 stage the first time it enters battle
     case ABILITY_DAUNTLESS_SHIELD: // raises the holder's Defense by 1 stage the first time it enters battle
     case ABILITY_PRESSURE:         // announces "<mon> is exerting its pressure!" (the PP tax itself is passive)
+    case ABILITY_MOLD_BREAKER:     // announces "<mon> breaks the mold!" (the ability-ignoring itself is passive)
+    case ABILITY_TERAVOLT:         // announces "<mon> is radiating a bursting aura!"
+    case ABILITY_TURBOBLAZE:       // announces "<mon> is radiating a blazing aura!"
+    case ABILITY_COMATOSE:         // announces "<mon> is drowsing!" (the status immunity itself is passive)
         return ABILITYEFFECT_ON_SWITCHIN;
     case ABILITY_UNNERVE:          // denies opposing battlers their Berries
         return ABILITYEFFECT_UNNERVE;
