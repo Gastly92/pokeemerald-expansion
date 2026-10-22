@@ -4253,6 +4253,31 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Sol
     }
 }
 
+// Filter and Solid Rock are distinct abilities, so a chosen Filter stacks on top of the innate Solid Rock
+// (0.75 x 0.75); a chosen Solid Rock is the same ability as the innate and does not double-apply.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: chosen Filter stacks with innate Solid Rock, chosen Solid Rock does not", s16 damage)
+{
+    enum Ability ability;
+    PARAMETRIZE { ability = ABILITY_LIGHTNING_ROD; } // innate Solid Rock only
+    PARAMETRIZE { ability = ABILITY_FILTER; }        // + Filter -> another 0.75x
+    PARAMETRIZE { ability = ABILITY_SOLID_ROCK; }    // same ability twice -> no extra reduction
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_RHYPERIOR, ABILITY_SOLID_ROCK));
+        ASSUME(gTypeEffectivenessTable[TYPE_WATER][TYPE_GROUND] > UQ_4_12(1.0));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_RHYPERIOR) { Ability(ability); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SURF); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SURF); }
+    } SCENE {
+        HP_BAR(player, captureDamage: &results[i].damage);
+        MESSAGE("It's extremely effective!");
+    } FINALLY {
+        EXPECT_MUL_EQ(results[0].damage, Q_4_12(0.75), results[1].damage);
+        EXPECT_EQ(results[0].damage, results[2].damage);
+    }
+}
+
 // ---- Fur Coat ----
 // Persian-Alola carries innate Fur Coat (and Technician); its chosen ability is set to Technician
 // (a no-op on defense), so the off-run takes full physical damage and the halving is the innate's.

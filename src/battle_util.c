@@ -8592,7 +8592,8 @@ static inline uq4_12_t GetDefenderAbilitiesModifier(struct DamageContext *ctx)
         RecordAbilityBattle(ctx->battlerDef, ctx->abilities[ctx->battlerDef]);
 
     // FORK: innate defensive damage reducers (FEATURE_INNATE_ABILITIES) — Filter / Solid Rock / Prism Armor
-    // (-25% vs a supereffective hit, sharing one 1:1 clause — Prism Armor added in Batch Y3), Multiscale /
+    // (-25% vs a supereffective hit, one clause EACH so distinct copies stack: chosen Filter + innate Solid
+    // Rock, or two of them as innates, take 0.75 x 0.75), Multiscale /
     // Shadow Shield (halve at full HP — Shadow Shield added in Batch Y3) and Ice Scales (halve special
     // damage), each a 1:1 clean-upside copy applied beside (not inside) the chosen-ability switch
     // with a `chosen != ABILITY_X` guard so the real ability never double-applies; the multiplies stack
@@ -8604,13 +8605,15 @@ static inline uq4_12_t GetDefenderAbilitiesModifier(struct DamageContext *ctx)
     // branch instead of several IsInnateActive / GetConfig calls.
     if (ctx->innatesEnabled)
     {
-        if (ctx->typeEffectivenessModifier >= UQ_4_12(2.0)
-         && ctx->abilities[ctx->battlerDef] != ABILITY_FILTER
-         && ctx->abilities[ctx->battlerDef] != ABILITY_SOLID_ROCK
-         && ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR
-         && (IsInnateActive(ctx->battlerDef, ABILITY_FILTER) || IsInnateActive(ctx->battlerDef, ABILITY_SOLID_ROCK)
-          || IsInnateActive(ctx->battlerDef, ABILITY_PRISM_ARMOR))) // FORK: innate Prism Armor rides Filter's SE-reduction (Batch Y3)
-            modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+        if (ctx->typeEffectivenessModifier >= UQ_4_12(2.0))
+        {
+            if (ctx->abilities[ctx->battlerDef] != ABILITY_FILTER && IsInnateActive(ctx->battlerDef, ABILITY_FILTER))
+                modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+            if (ctx->abilities[ctx->battlerDef] != ABILITY_SOLID_ROCK && IsInnateActive(ctx->battlerDef, ABILITY_SOLID_ROCK))
+                modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+            if (ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR && IsInnateActive(ctx->battlerDef, ABILITY_PRISM_ARMOR))
+                modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+        }
 
         if (IsBattlerAtMaxHp(ctx->battlerDef)
          && ctx->abilities[ctx->battlerDef] != ABILITY_MULTISCALE
