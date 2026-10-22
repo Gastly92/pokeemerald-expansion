@@ -10319,6 +10319,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0785
         SPECIES_TAPU_KOKO,
         INNATES(
+            ABILITY_DEFIANT,
+            ABILITY_GALE_WINGS,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
@@ -10331,6 +10333,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_HEALER,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
+            ABILITY_SHIELD_DUST,
             ABILITY_TELEPATHY
         )
     },
@@ -10338,6 +10341,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_TAPU_BULU,
         INNATES(
             ABILITY_GRASS_PELT,
+            ABILITY_INTIMIDATE,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
@@ -10349,6 +10353,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE,
             ABILITY_PRESSURE,
+            ABILITY_SHADOW_TAG,
             ABILITY_TELEPATHY
         )
     },

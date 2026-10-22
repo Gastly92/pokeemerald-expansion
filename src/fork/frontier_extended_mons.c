@@ -27342,7 +27342,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_THUNDERBOLT,
             MOVE_DAZZLING_GLEAM,
-            MOVE_U_TURN,
+            MOVE_ROOST,
             MOVE_CALM_MIND
         },
         .ability = ABILITY_ELECTRIC_SURGE,
@@ -27415,6 +27415,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_TAPU_LELE,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_SHELL_BELL,
+        .moves =
+        {
+            MOVE_PSYCHIC,
+            MOVE_MOONBLAST,
+            MOVE_POLLEN_PUFF,
+            MOVE_LIFE_DEW
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_BUG,
     },
 
     // 0787
@@ -27539,6 +27559,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_TAPU_FINI,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves =
+        {
+            MOVE_PERISH_SONG,
+            MOVE_PROTECT,
+            MOVE_MOONBLAST,
+            MOVE_SURF
+        },
+        .ability = ABILITY_MISTY_SURGE,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0791
