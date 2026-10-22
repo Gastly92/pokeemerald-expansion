@@ -10,6 +10,7 @@
 #include "fork/innate_abilities.h" // FORK: IsInnateOnSide
 #include "fork/battle_ai_gimmick.h" // FORK: AI_GetGimmickExecutedMove
 #include "fork/battle_ai_zmove.h" // FORK: AI_FLAG_SMART_Z_MOVE
+#include "fork/damage_preview.h" // FORK: IsDamagePreviewCrit
 #include "battle_stat_change.h"
 #include "battle_controllers.h"
 #include "battle_factory.h"
@@ -887,7 +888,7 @@ static inline bool32 ShouldCalcCritDamage(struct DamageContext *ctx)
         return TRUE;
     // FORK: DETERMINISTIC_HOLD_EFFECTS -- a held crit item guarantees the crit, exactly as in
     // IsCriticalHit, so the AI and the move menu's damage preview must price it in.
-    // Regression test: test/fork/damage_preview.c ("Scope Lens").
+    // Regression test: test/fork/damage_preview.c ("a held crit item").
     if (critChanceIndex != CRITICAL_HIT_BLOCKED && IsDeterministicCritItemActive(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]))
         return TRUE;
 
@@ -1046,6 +1047,13 @@ struct SimulatedDamage AI_CalcDamage(struct AiCalcValues *aiCalc, enum BattlerId
         ctx.move = AI_GetGimmickExecutedMove(battlerAtk, move);
     bool32 convertedByGimmick = (ctx.move != move);
     ctx.typeEffectivenessModifier = aiCalc->typeEffectiveness = CalcTypeEffectivenessMultiplier(&ctx);
+    // FORK: B_MOVE_DAMAGE_PREVIEW answers the crit question again, the way the real hit does,
+    // with what ShouldCalcCritDamage above leaves out per AI eval: innates, and the
+    // DETERMINISTIC_CRITICAL_HITS high-crit-ratio gate that reads the effectiveness just set.
+    // Asked before ctx.move goes back, since the real hit's crit reads the converted move.
+    // Regression tests: test/fork/damage_preview.c ("crit").
+    if (aiCalc->isDamagePreview)
+        ctx.isCrit = IsDamagePreviewCrit(&ctx);
     ctx.move = move;
 
     u32 movePower = GetMovePower(move);

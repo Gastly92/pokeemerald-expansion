@@ -87,6 +87,7 @@ struct AiCalcValues
     enum BattleTerrain terrain:8;
     enum Gimmick gimmickAtk:8;
     enum Gimmick gimmickDef:8;
+    u32 isDamagePreview:1; // FORK: B_MOVE_DAMAGE_PREVIEW; AI_CalcDamage asks IsDamagePreviewCrit
 };
 
 static inline bool32 IsMoveUnusable(u32 moveIndex, enum Move move, u32 moveLimitations)

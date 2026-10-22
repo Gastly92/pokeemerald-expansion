@@ -554,15 +554,25 @@ SINGLE_BATTLE_TEST("Damage preview: a Quick Claw past its entry turn is still he
     }
 }
 
-SINGLE_BATTLE_TEST("Damage preview: a held Scope Lens prices in its guaranteed crit")
+// Each crit test checks the range against the real crit, then turns the crit's source off and
+// checks the range drops, so a preview that ignored the crit could not pass on the spread alone.
+SINGLE_BATTLE_TEST("Damage preview: a held crit item prices in its guaranteed crit")
 {
+    enum Species species;
+    enum Item item;
     s16 damage;
-    u32 lo = 0, hi = 0, maxHP = 404;
+    u32 crit[2], plain[2], maxHP = 404;
+
+    PARAMETRIZE { species = SPECIES_WOBBUFFET; item = ITEM_SCOPE_LENS; }
+    PARAMETRIZE { species = SPECIES_WOBBUFFET; item = ITEM_RAZOR_CLAW; }
+    PARAMETRIZE { species = SPECIES_FARFETCHD; item = ITEM_LEEK; }
+    PARAMETRIZE { species = SPECIES_SIRFETCHD; item = ITEM_LEEK; }
+    PARAMETRIZE { species = SPECIES_CHANSEY; item = ITEM_LUCKY_PUNCH; }
 
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
         WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
-        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_SCOPE_LENS); Moves(MOVE_TACKLE); }
+        PLAYER(species) { Item(item); Moves(MOVE_TACKLE); }
         OPPONENT(SPECIES_WOBBUFFET) { MaxHP(maxHP); HP(maxHP); Moves(MOVE_CELEBRATE); }
     } WHEN {
         TURN { MOVE(player, MOVE_TACKLE); }
@@ -570,9 +580,102 @@ SINGLE_BATTLE_TEST("Damage preview: a held Scope Lens prices in its guaranteed c
         HP_BAR(opponent, captureDamage: &damage);
         MESSAGE("A critical hit!");
     } THEN {
+        gBattleMons[B_BATTLER_0].item = item;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &crit[0], &crit[1], &sKo));
+        EXPECT(PercentWithin(damage, maxHP, crit[0], crit[1]));
+        SetConfig(CONFIG_DETERMINISTIC_HOLD_EFFECTS, FALSE);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &plain[0], &plain[1], &sKo));
+        EXPECT_LT(plain[1], crit[1]);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: Super Luck's first-turn crit is priced in, chosen or innate")
+{
+    enum Species species;
+    enum Ability ability;
+    bool32 innates;
+    s16 damage;
+    u32 crit[2], plain[2], maxHP = 404;
+
+    PARAMETRIZE { species = SPECIES_ABSOL;    ability = ABILITY_SUPER_LUCK;    innates = FALSE; }
+    // Togekiss's chosen ability is Serene Grace; its Super Luck is the innate.
+    PARAMETRIZE { species = SPECIES_TOGEKISS; ability = ABILITY_SERENE_GRACE;  innates = TRUE; }
+
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, innates);
+        PLAYER(species) { Ability(ability); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(maxHP); HP(maxHP); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+        MESSAGE("A critical hit!");
+    } THEN {
+        gBattleStruct->battlerState[B_BATTLER_0].isFirstTurn = 1;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &crit[0], &crit[1], &sKo));
+        EXPECT(PercentWithin(damage, maxHP, crit[0], crit[1]));
+        gBattleStruct->battlerState[B_BATTLER_0].isFirstTurn = 0;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &plain[0], &plain[1], &sKo));
+        EXPECT_LT(plain[1], crit[1]);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a high-crit-ratio move's strong-hit crit is priced in")
+{
+    enum Species species;
+    enum Move move;
+    s16 damage;
+    u32 crit[2], plain[2], maxHP = 404;
+
+    // Super effective: Night Slash into a Psychic type. Normal is never super effective, so
+    // Slash crits from a Normal-type user instead.
+    PARAMETRIZE { species = SPECIES_WOBBUFFET; move = MOVE_NIGHT_SLASH; }
+    PARAMETRIZE { species = SPECIES_ZIGZAGOON; move = MOVE_SLASH; }
+
+    GIVEN {
+        ASSUME(GetMoveCriticalHitStage(move) > 0);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        PLAYER(species) { Moves(move); }
+        OPPONENT(SPECIES_WOBBUFFET) { MaxHP(maxHP); HP(maxHP); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, move); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+        MESSAGE("A critical hit!");
+    } THEN {
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, GIMMICK_NONE, &crit[0], &crit[1], &sKo));
+        EXPECT(PercentWithin(damage, maxHP, crit[0], crit[1]));
+        SetConfig(CONFIG_DETERMINISTIC_CRITICAL_HITS, FALSE);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, move, GIMMICK_NONE, &plain[0], &plain[1], &sKo));
+        EXPECT_LT(plain[1], crit[1]);
+    }
+}
+
+SINGLE_BATTLE_TEST("Damage preview: a foe's innate Shell Armor blocks a crit the preview would price in")
+{
+    s16 damage;
+    u32 blocked[2], plain[2], maxHP = 404;
+
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_SCOPE_LENS); Moves(MOVE_TACKLE); }
+        // Torrent is the chosen ability, so the block comes from the innate alone.
+        OPPONENT(SPECIES_BLASTOISE) { Ability(ABILITY_TORRENT); MaxHP(maxHP); HP(maxHP); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+        NONE_OF { MESSAGE("A critical hit!"); }
+    } THEN {
         gBattleMons[B_BATTLER_0].item = ITEM_SCOPE_LENS;
-        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &lo, &hi, &sKo));
-        EXPECT(PercentWithin(damage, maxHP, lo, hi));
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &blocked[0], &blocked[1], &sKo));
+        EXPECT(PercentWithin(damage, maxHP, blocked[0], blocked[1]));
+        SetConfig(CONFIG_DETERMINISTIC_HOLD_EFFECTS, FALSE);
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_TACKLE, GIMMICK_NONE, &plain[0], &plain[1], &sKo));
+        EXPECT_EQ(plain[1], blocked[1]);
     }
 }
 

@@ -69,4 +69,11 @@ struct DamageContext;
 // Leaves the defender and `ctx` as it found them. Used by the effectiveness icon.
 uq4_12_t CalcDisguisedTypeEffectiveness(struct DamageContext *ctx, enum Species illusionSpecies);
 
+// Whether the hit the preview prices is a crit, asked by AI_CalcDamage once `ctx` holds the type
+// effectiveness of the move that really runs. A crit counts only when it is certain, as the real
+// hit's IsCriticalHit decides it: innates included (an innate Super Luck's first-turn crit, an
+// innate Battle Armor's block) and the DETERMINISTIC_CRITICAL_HITS high-crit-ratio gate, which
+// the AI's own per-eval crit guess leaves out to stay inside its thinking-time budget.
+bool32 IsDamagePreviewCrit(struct DamageContext *ctx);
+
 #endif // GUARD_FORK_DAMAGE_PREVIEW_H
