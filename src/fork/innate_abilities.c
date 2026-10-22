@@ -10545,6 +10545,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_STAKATAKA,
         INNATES(
             ABILITY_BEAST_BOOST,
+            ABILITY_FILTER,
             ABILITY_PRESSURE,
             ABILITY_SOLID_ROCK,
             ABILITY_STURDY
