@@ -1009,7 +1009,8 @@ to attribute beyond its real users): every species whose ability data carries Fi
 (Mr. Mime and Mime Jr.'s slot-1 Filter, Revavroom's HA, Mega Aggron whose Mega ability data is
 Filter), so the signature survives whichever slot a build picks. Mega Aggron already carries innate
 Sturdy (persisting from base Aggron), so it takes the combined `INNATES(STURDY, FILTER)` list. One flavor pick as a legendary buff: **Cresselia**, whose wings shed shining particles "like a veil"; it
-stacks with her innate Multiscale on a super-effective first hit.
+stacks with her innate Multiscale on a super-effective first hit. A second flavor pick: **Stakataka**, a wall
+of stacked stones, carries Filter beside its innate Solid Rock, so a super-effective hit takes 0.75 x 0.75.
 
 ### ABILITY_PRESSURE
 

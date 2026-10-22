@@ -65,7 +65,7 @@ When you wire a new innate, add its row here in the same PR (Step 5 of
 
 | Ability | As an innate | |
 | --- | --- | --- |
-| Filter | Takes 25% less damage from super-effective moves. | [→](INNATE_ABILITIES.md#ability_filter) |
+| Filter | Takes 25% less damage from super-effective moves; stacks with Solid Rock / Prism Armor. | [→](INNATE_ABILITIES.md#ability_filter) |
 | Friend Guard | Its allies take 25% less damage. | [→](INNATE_ABILITIES.md#ability_multiscale--ability_solid_rock--ability_fur_coat--ability_ice_scales--ability_heatproof--ability_friend_guard--ability_water_bubble) |
 | Fur Coat | Doubled Defense against physical moves. | [→](INNATE_ABILITIES.md#ability_multiscale--ability_solid_rock--ability_fur_coat--ability_ice_scales--ability_heatproof--ability_friend_guard--ability_water_bubble) |
 | Grass Pelt | Defense x1.5 on Grassy Terrain. | [→](INNATE_ABILITIES.md#ability_surge_surfer--ability_grass_pelt) |
@@ -75,11 +75,11 @@ When you wire a new innate, add its row here in the same PR (Step 5 of
 | Light Metal | Halves its weight. | [→](INNATE_ABILITIES.md#ability_heavy_metal--ability_light_metal) |
 | Marvel Scale | Defense x1.5 while statused. | [→](INNATE_ABILITIES.md#ability_guts--ability_marvel_scale--ability_quick_feet--ability_toxic_boost--ability_flare_boost) |
 | Multiscale | Takes half damage at full HP. | [→](INNATE_ABILITIES.md#ability_multiscale--ability_solid_rock--ability_fur_coat--ability_ice_scales--ability_heatproof--ability_friend_guard--ability_water_bubble) |
-| Prism Armor | Takes 25% less damage from super-effective moves (unbreakable). | [→](INNATE_ABILITIES.md#ability_prism_armor--ability_shadow_shield--ability_neuroforce--ability_supreme_overlord) |
+| Prism Armor | Takes 25% less damage from super-effective moves (unbreakable); stacks with Filter / Solid Rock. | [→](INNATE_ABILITIES.md#ability_prism_armor--ability_shadow_shield--ability_neuroforce--ability_supreme_overlord) |
 | Sand Veil | +25% evasion in sandstorm; immune to sandstorm damage. | [→](INNATE_ABILITIES.md#ability_sand_veil--ability_snow_cloak) |
 | Shadow Shield | Takes half damage at full HP (unbreakable). | [→](INNATE_ABILITIES.md#ability_prism_armor--ability_shadow_shield--ability_neuroforce--ability_supreme_overlord) |
 | Snow Cloak | +25% evasion in hail/snow; immune to hail damage. | [→](INNATE_ABILITIES.md#ability_sand_veil--ability_snow_cloak) |
-| Solid Rock | Takes 25% less damage from super-effective moves. | [→](INNATE_ABILITIES.md#ability_multiscale--ability_solid_rock--ability_fur_coat--ability_ice_scales--ability_heatproof--ability_friend_guard--ability_water_bubble) |
+| Solid Rock | Takes 25% less damage from super-effective moves; stacks with Filter / Prism Armor. | [→](INNATE_ABILITIES.md#ability_multiscale--ability_solid_rock--ability_fur_coat--ability_ice_scales--ability_heatproof--ability_friend_guard--ability_water_bubble) |
 | Tangled Feet | Doubled evasion while confused. | [→](INNATE_ABILITIES.md#ability_shield_dust--ability_tinted_lens--ability_scrappy--ability_wonder_skin--ability_tangled_feet) |
 | Thick Fat | Takes half damage from Fire and Ice moves. | [→](INNATE_ABILITIES.md#ability_thick_fat) |
 | Water Bubble | Takes half damage from Fire moves, can't be burned, and its Water moves are doubled. | [→](INNATE_ABILITIES.md#ability_multiscale--ability_solid_rock--ability_fur_coat--ability_ice_scales--ability_heatproof--ability_friend_guard--ability_water_bubble) |
