@@ -27560,15 +27560,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
     },
-        .ability = ABILITY_MISTY_SURGE,
-        .nature = NATURE(SPD_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .def = 4,
-            .spd = 252
-        ),
-        .teraType = TYPE_STEEL,
-    },
 
     // 0791
     {
