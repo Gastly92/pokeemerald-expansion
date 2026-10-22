@@ -2206,6 +2206,71 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: chosen + innate Pressure announces
     }
 }
 
+// Innate Mold Breaker / Teravolt / Turboblaze announce themselves on entry like the real abilities, through
+// the same switch-in driver as Pressure, with the pop-up overwritten to the innate (chosen ability is Damp).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mold Breaker announces itself on switch-in")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PINSIR, ABILITY_MOLD_BREAKER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_PINSIR) { Ability(ABILITY_DAMP); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        if (enabled) {
+            ABILITY_POPUP(player, ABILITY_MOLD_BREAKER);
+            MESSAGE("Pinsir breaks the mold!");
+        } else {
+            NONE_OF { MESSAGE("Pinsir breaks the mold!"); }
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: chosen + innate Mold Breaker announces only once")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_PINSIR, ABILITY_MOLD_BREAKER));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(SPECIES_PINSIR) { Ability(ABILITY_MOLD_BREAKER); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_MOLD_BREAKER);
+        MESSAGE("Pinsir breaks the mold!");
+        NONE_OF { MESSAGE("Pinsir breaks the mold!"); }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Teravolt and Turboblaze announce themselves on switch-in")
+{
+    u32 species;
+    enum Ability innate;
+    PARAMETRIZE { species = SPECIES_ZEKROM;   innate = ABILITY_TERAVOLT; }
+    PARAMETRIZE { species = SPECIES_RESHIRAM; innate = ABILITY_TURBOBLAZE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(species, innate));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET);
+        PLAYER(species) { Ability(ABILITY_DAMP); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        ABILITY_POPUP(player, innate);
+        if (innate == ABILITY_TERAVOLT)
+            MESSAGE("Zekrom is radiating a bursting aura!");
+        else
+            MESSAGE("Reshiram is radiating a blazing aura!");
+    }
+}
+
 // Blanket buff: every species in the TIER_LEGENDARY / TIER_MYTHICAL lists (src/fork/species_tiers.c)
 // carries Pressure innately. A species added to either tier list must get it in its INNATES(...) row.
 TEST("Innate abilities: every legendary- and mythical-tier species carries innate Pressure")

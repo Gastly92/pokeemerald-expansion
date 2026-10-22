@@ -3708,8 +3708,8 @@ if (IsInnateActive(battler, ABILITY_MOLD_BREAKER)
 Because the whole effect flows through that one flag, every effect site (the `CanBreakThroughAbility` gate in
 `GetBattlerAbility`) **and** every AI read that routes through `IsMoldBreakerTypeAbility` (the ~12 call sites across
 `battle_ai_util.c` / `battle_ai_main.c` / `battle_ai_switch.c`) is innate-aware for free — no per-site edits, no
-dedicated AI work. Same as Mold Breaker: **no `RecordAbilityBattle`** for the innate (never identity), and **no**
-switch-in pop-up (that lives on the chosen-slot switch-in path an innate never triggers).
+dedicated AI work. Same as Mold Breaker: **no `RecordAbilityBattle`** for the innate (never identity), and the
+innate announces itself on entry ("<mon> is radiating a bursting / blazing aura!") through the switch-in driver.
 
 **Suppression parity, 1:1.** Neither ability is `.breakable`, and `CanBreakThroughInnate` exempts the attacker's own
 ability, so an innate Teravolt / Turboblaze is never self-broken — but it *is* suppressed by Gastro Acid /
@@ -4021,10 +4021,11 @@ Because **every** effect site (the `CanBreakThroughAbility` gate inside `GetBatt
 innate here covers the whole ability with no per-site edits. The clone abilities Teravolt / Turboblaze share this
 exact path — Teravolt / Turboblaze just add their species data + two more `IsInnateActive` lines beside this one.
 
-- **No identity leak / no pop-up.** The innate path deliberately does **not** call `RecordAbilityBattle` (innates
-  are never identity) and there is **no** switch-in "breaks the mold" message — that flavor lives on the
-  chosen-slot switch-in path (`src/battle_util.c` ~L3202), which an innate never triggers. Mold Breaker's real
-  effect has no per-move pop-up, so nothing else is needed.
+- **No identity leak; announces on entry.** The innate path deliberately does **not** call `RecordAbilityBattle`
+  (innates are never identity). It does announce itself like the real ability: Mold Breaker is listed in
+  `SwitchInInnateAbilityEffect()`, so the switch-in driver fires the upstream `ABILITYEFFECT_ON_SWITCHIN` case
+  ("<mon> breaks the mold!"), with the pop-up overwritten to Mold Breaker when the chosen ability differs (the
+  Pressure precedent). A holder whose chosen ability is Mold Breaker announces once, through the chosen path.
 - **Suppression parity, 1:1.** Mold Breaker is `.breakable = FALSE` and `CanBreakThroughInnate` exempts the
   attacker's own ability, so an innate Mold Breaker is never self-broken — but it *is* suppressed by Gastro Acid /
   Neutralizing Gas exactly like the real ability (both the top-of-function `gastroAcid` guard and `IsInnateActive`
