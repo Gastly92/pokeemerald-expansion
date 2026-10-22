@@ -994,8 +994,9 @@ the override is the only lever.
 Reduces the damage the holder takes from supereffective moves by 25%, handled
 at the single defensive calc site `GetDefenderAbilitiesModifier` (`src/battle_util.c`): an
 `IsInnateActive()` clause beside the chosen-ability Filter / Solid Rock / Prism Armor switch case
-applies the 0.75 modifier (guarded against those three so it never double-applies, and stacking
-correctly with any other defender-ability modifier). A pure calc-modifier passive like Unaware:
+applies the 0.75 modifier. Each of the three has its own clause guarded only against itself, so the
+same ability never double-applies but distinct ones stack (chosen Filter + innate Solid Rock takes
+0.75 x 0.75), as does any other defender-ability modifier. A pure calc-modifier passive like Unaware:
 no script / pop-up / driver, and the innate is NOT recorded as identity. NO pure-boon divergence:
 Filter is a clean upside that never hurts its holder, so the innate is a 1:1 copy of the real
 ability. Suppression parity holds via `IsInnateActive()`: Filter is breakable, so an attacker's Mold
@@ -1591,8 +1592,8 @@ keyed off the real battler, so it both threatens and respects them. Per-ability 
   Multiscale / Shadow Shield case). The one DEDICATED AI read — `BattlerHasMaxHPProtection` (`src/battle_ai_util.c`,
   which tells the AI a battler survives at full HP, the same helper Sturdy was wired into) — is made innate-aware
   with `BattlerHasAbility(battler, ABILITY_MULTISCALE)`.
-- **Solid Rock** (−25% from supereffective hits): shares Filter's effect 1:1, so it just rides the existing
-  innate-Filter clause in `GetDefenderAbilitiesModifier` (now `IsInnateActive(FILTER) || IsInnateActive(SOLID_ROCK)`).
+- **Solid Rock** (−25% from supereffective hits): its own clause beside innate Filter's in
+  `GetDefenderAbilitiesModifier`, so Filter and Solid Rock on one mon stack (0.75 x 0.75).
 - **Fur Coat** (double Defense vs physical): the defense-stat modifier clause (beside the chosen Fur Coat case),
   gated on `usesDefStat`.
 - **Ice Scales** (halve special damage): the `GetDefenderAbilitiesModifier` clause, gated on a special move.
@@ -3417,18 +3418,17 @@ Three are the "unbreakable" cousins of already-wired defenders and attackers; th
 party-faint-gated power boost that reuses the switch-in driver to latch its counter.
 
 **Prism Armor / Shadow Shield ride the existing damage-reducer innate clauses** in `GetDefenderAbilitiesModifier`
-(`src/battle_util.c`) — no new clause, just an added `IsInnateActive(...)` disjunct beside the ones already
-there:
+(`src/battle_util.c`) — Prism Armor gets its own clause beside Filter / Solid Rock's, Shadow Shield an added
+`IsInnateActive(...)` disjunct on Multiscale's:
 
 ```c
-// -25% vs a supereffective hit (shares Filter / Solid Rock's clause)
-if (ctx->typeEffectivenessModifier >= UQ_4_12(2.0)
- && ctx->abilities[ctx->battlerDef] != ABILITY_FILTER
- && ctx->abilities[ctx->battlerDef] != ABILITY_SOLID_ROCK
- && ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR
- && (IsInnateActive(ctx->battlerDef, ABILITY_FILTER) || IsInnateActive(ctx->battlerDef, ABILITY_SOLID_ROCK)
-  || IsInnateActive(ctx->battlerDef, ABILITY_PRISM_ARMOR)))
-    modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+// -25% vs a supereffective hit: one clause per ability (Filter / Solid Rock alongside), so distinct ones stack
+if (ctx->typeEffectivenessModifier >= UQ_4_12(2.0))
+{
+    ...
+    if (ctx->abilities[ctx->battlerDef] != ABILITY_PRISM_ARMOR && IsInnateActive(ctx->battlerDef, ABILITY_PRISM_ARMOR))
+        modifier = uq4_12_multiply(modifier, UQ_4_12(0.75));
+}
 // halve at full HP (shares Multiscale's clause)
 if (IsBattlerAtMaxHp(ctx->battlerDef)
  && ctx->abilities[ctx->battlerDef] != ABILITY_MULTISCALE
