@@ -10546,6 +10546,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER,
             ABILITY_PRESSURE,
             ABILITY_SOLID_ROCK,
+            ABILITY_STAMINA,
             ABILITY_STURDY
         )
     },
