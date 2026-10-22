@@ -53,6 +53,14 @@ end (crit / flinch items, King's Rock) are still held for the hit. A held crit i
 crit under `DETERMINISTIC_HOLD_EFFECTS` is priced in, as is a Gem's boost. What a faster foe does
 to your item first (Knock Off, Thief, Trick) cannot be known and is not predicted.
 
+A critical hit is priced in only when it is certain, decided the way the real hit decides it:
+the crit items above, Super Luck's first-turn crit (chosen or innate), a high-crit-ratio move's
+strong-hit crit under `DETERMINISTIC_CRITICAL_HITS` (Night Slash into a Psychic type, Slash from a
+Normal type), always-crit moves, Laser Focus, and Merciless against a poisoned foe. A foe's
+Battle Armor or Shell Armor, innate included, blocks it. The AI's own damage guess skips innates
+and the high-crit-ratio gate to stay inside its thinking-time budget; the preview does not
+(`IsDamagePreviewCrit`).
+
 ## What it hides
 
 Built on the AI's damage simulation (`AI_CalcDamage`), with the foe rewritten into what the

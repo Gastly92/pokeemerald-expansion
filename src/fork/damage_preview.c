@@ -26,6 +26,7 @@
 #include "text.h"
 #include "window.h"
 #include "fork/damage_preview.h"
+#include "fork/deterministic_moves.h"
 #include "fork/innate_abilities.h"
 #include "constants/battle.h"
 #include "constants/battle_frontier.h"
@@ -312,6 +313,28 @@ enum Move GetDamagePreviewExecutedMove(enum BattlerId battler, enum Move move)
     return (executed == MOVE_NONE || executed == MOVE_Z_STATUS) ? move : executed;
 }
 
+bool32 IsDamagePreviewCrit(struct DamageContext *ctx)
+{
+    s32 critChance;
+
+    // DoMoveDamageCalcVars sets innatesEnabled for the damage passes anyway; the AI's crit guess
+    // runs before it, with the flag still clear. aiCalc is what keeps CalcCritChanceStage off the
+    // high-crit-ratio gate, since the AI asks before it has the effectiveness the gate reads.
+    ctx->innatesEnabled = GetConfig(FEATURE_INNATE_ABILITIES);
+    ctx->aiCalc = FALSE;
+    if (GetConfig(B_CRIT_CHANCE) == GEN_1)
+        critChance = CalcCritChanceStageGen1(ctx);
+    else
+        critChance = CalcCritChanceStage(ctx);
+    ctx->aiCalc = TRUE;
+
+    if (critChance == CRITICAL_HIT_BLOCKED)
+        return FALSE;
+    if (IsDeterministicCritItemActive(ctx->battlerAtk, ctx->holdEffects[ctx->battlerAtk]))
+        return TRUE;
+    return IsGuaranteedCriticalHit(critChance);
+}
+
 uq4_12_t CalcDisguisedTypeEffectiveness(struct DamageContext *ctx, enum Species illusionSpecies)
 {
     struct BattlePokemon *def = &gBattleMons[ctx->battlerDef];
@@ -451,6 +474,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     {
         struct AiCalcValues aiCalc = {
             .move = move,
+            .isDamagePreview = TRUE,
             .gimmickAtk = gimmick,
             .gimmickDef = GIMMICK_NONE,
             // A projected form's Drought / Sand Stream / Snow Warning sets its weather on the
