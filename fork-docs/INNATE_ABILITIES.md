@@ -114,7 +114,7 @@ ability sits in exactly one):
   not a personal boon (big AI + power swing). Drizzle, Sand Stream, Drought, Snow
   Warning, Electric/Psychic/Misty/Grassy Surge, Primordial Sea, Desolate Land, Delta
   Stream, Orichalcum Pulse, Hadron Engine, Cloud Nine, Air Lock, Dark Aura, Fairy
-  Aura, Vessel/Sword/Tablets/Beads of Ruin, Victory Star. **Aura Break** sits here
+  Aura, Vessel/Sword/Tablets/Beads of Ruin. **Aura Break** sits here
   too, but for a downstream reason: it only *reverses* Dark Aura / Fairy Aura, and
   both of those are themselves `:x:` (never wired as innates), so an innate Aura
   Break clause would be **dead code** — there is nothing on the innate side to
@@ -1326,7 +1326,7 @@ Sand Rush), so they take a combined `INNATES(...)` list with the accuracy abilit
 sets that hardcoded one of these are freed (Step 3.5): Butterfree → Tinted Lens, Galvantula → Unnerve,
 Pidgeot → Big Pecks, Fearow → Sniper, Furret → Frisk, Lycanroc → Steadfast (each a real complementary
 slot), while the species whose ALL relevant real abilities are now innate take a fork-owned chosen
-override (`species_ability_overrides.c`) — Skarmory → Bulletproof and Volbeat → Victory Star, each a
+override (`species_ability_overrides.c`) — Skarmory → Bulletproof and Volbeat → Synchronize, each a
 stable `:x:` pick. (Sableye is the exception: its only free real slot is Stall, a drawback that the
 vanilla Stall tests rely on, so it can't be overridden — its roster sets keep a redundant-but-harmless
 chosen Keen Eye instead.)
@@ -1577,7 +1577,7 @@ Pokémon"), the serene beauty Milotic, and the lunar-blessing Cresselia. Several
 innates, so they take a combined `INNATES(...)` list. Frontier roster sets that hardcoded Serene Grace are freed
 (Step 3.5) to a complementary REAL slot where one exists (Chansey/Blissey → Healer, Togekiss → Super Luck, Dudunsparce →
 Rattled); the three sole-real-ability species take a fork-owned chosen-ability override (`species_ability_overrides.c`):
-Jirachi → Victory Star, Shaymin-Sky → Effect Spore, Meloetta → Punk Rock.
+Jirachi → Bulletproof, Shaymin-Sky → Effect Spore, Meloetta → Punk Rock.
 
 ### ABILITY_MULTISCALE / ABILITY_SOLID_ROCK / ABILITY_FUR_COAT / ABILITY_ICE_SCALES / ABILITY_HEATPROOF / ABILITY_FRIEND_GUARD / ABILITY_WATER_BUBBLE
 
@@ -4590,3 +4590,34 @@ weakening a foe's hostility or fighting spirit:
 
 Entries that soothe *people* or allies rather than foes (Venusaur, Oinkologne, Skeledirge) were
 left out on purpose. No frontier set gives any carrier a chosen Pacify, so there is no Step 3.5 work.
+
+### ABILITY_VICTORY_STAR
+
+Boosts the accuracy of the holder and its partner by 10%. Wired as an innate so Victini, whose
+only real ability it is, can keep it and still run a second trait in its one observable slot.
+
+**Why it is not with the auras.** It used to be listed beside Dark Aura and the Ruin abilities as a
+"global field" effect. It isn't one: it reaches only the holder's own partner, never a foe, which
+is the same reach as Friend Guard and Power Spot, both already innates. It is also a clean upside
+with no cost to strip.
+
+**Wiring.** A 1:1 copy at both accuracy sites, each an additive `IsInnateActive()` clause beside the
+chosen-ability read and guarded so a holder whose chosen ability is also Victory Star never applies
+it twice:
+
+- `GetTotalAccuracy` (`src/battle_util.c`): ×1.1 for the holder, and ×1.1 for a living partner.
+- `GetAccEvasionStageDelta` (`src/fork/deterministic_moves.c`): the deterministic PP economy, where
+  Victory Star is repurposed as "ignore the target's evasion" for the holder and a living partner,
+  exactly like the chosen ability. Pure boon, boost-only, like the innate Compound Eyes.
+
+Not breakable (its holder is the attacker or the attacker's partner); suppressed by Gastro Acid and
+Neutralizing Gas through `IsInnateActive()`. The AI needs no extra wiring: the PP delta is shared
+with the AI's PP mirror, and the one AI case (`BattlerBenefitsFromAbilityScore`) is ability-transfer
+scoring, which innates never take part in.
+
+**Species: Victini only.** It is the sole canon carrier, and the ability reads as Victini's signature,
+so it gets no flavor picks. Victini's slot 0 is overridden to **Flash Fire**, and all four of its
+frontier sets run it.
+
+**Step 3.5.** Ledian used to carry a chosen Victory Star through an override. Wiring the innate made
+that pick illegal, so Ledian's override and both of its sets moved to **Soundproof**.

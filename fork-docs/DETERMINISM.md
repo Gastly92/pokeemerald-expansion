@@ -242,7 +242,7 @@ scaling (10 → 9 PP). A **per-use PP economy**
 opponents, derived from the same net accuracy/evasion stage as the old hit calc
 (`GetAccEvasionStageDelta`, `src/battle_util.c` — so Keen Eye/Unaware/Foresight/Minds
 Eye, the repurposed Compound Eyes/Victory Star, and a living **partner's** Victory
-Star all carry over): +acc/−evasion
+Star, chosen or innate, all carry over): +acc/−evasion
 recover 1 PP per net stage, −acc/+evasion cost 1, accuracy and evasion cancel,
 doubles sums both foes. Always spends ≥1 PP (last PP spent if it can't pay in
 full), recovery clamped to max PP. Flat additive uncapped taxes

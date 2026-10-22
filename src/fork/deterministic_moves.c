@@ -228,6 +228,7 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
             && (IsInnateActive(battlerAtk, ABILITY_COMPOUND_EYES)
              || IsInnateActive(battlerAtk, ABILITY_KEEN_EYE)
              || IsInnateActive(battlerAtk, ABILITY_MINDS_EYE) // Mind's Eye ignores the target's evasion (Keen Eye clone, Batch Y4)
+             || IsInnateActive(battlerAtk, ABILITY_VICTORY_STAR) // repurposed as evasion-ignore, like the chosen ability above
              || (GetConfig(B_ILLUMINATE_EFFECT) >= GEN_9 && IsInnateActive(battlerAtk, ABILITY_ILLUMINATE))))
         evasionStage = DEFAULT_STAT_STAGE;
     else // An innate Unaware ignores the target's evasion boosts but keeps its drops (pure boon)
@@ -236,12 +237,12 @@ s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef
     // battler's accuracy, so (repurposed as evasion-ignore, exactly like the user's OWN Victory Star
     // above) it makes the user ignore the target's evasion in the PP economy too. PURE BOON: the
     // boost guard keeps a foe's evasion DROP recovering PP, and keeps the partner lookup off the
-    // common no-boost path. No IsInnateActive(): Victory Star is never an innate (:x: in
-    // absent from sImplementedInnates[] in test/fork/innate_abilities.c).
+    // common no-boost path. A partner's innate Victory Star counts the same as a chosen one.
     if (evasionStage > DEFAULT_STAT_STAGE)
     {
         enum BattlerId atkAlly = GetPartnerBattler(battlerAtk);
-        if (IsBattlerAlive(atkAlly) && GetBattlerAbility(atkAlly) == ABILITY_VICTORY_STAR)
+        if (IsBattlerAlive(atkAlly)
+         && (GetBattlerAbility(atkAlly) == ABILITY_VICTORY_STAR || IsInnateActive(atkAlly, ABILITY_VICTORY_STAR)))
             evasionStage = DEFAULT_STAT_STAGE;
     }
     if (MoveIgnoresDefenseEvasionStages(move))

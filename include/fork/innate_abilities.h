@@ -288,6 +288,10 @@
 //   SwitchInInnateAbilityEffect mapping it to the ABILITYEFFECT_ON_SWITCHIN case, whose logic lives in
 //   src/fork/pacify.c. An ordinary stat drop, so the reactions keyed on Intimidate by name skip it. No AI
 //   wiring. Carriers: a "calming" flavor set (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
+//   VICTORY_STAR: x1.1 accuracy for the holder and a living partner in GetTotalAccuracy
+//   (src/battle_util.c), and the repurposed evasion-ignore for both in GetAccEvasionStageDelta
+//   (src/fork/deterministic_moves.c). A 1:1 copy, guarded against a chosen Victory Star so it never
+//   applies twice. No AI wiring needed. Carrier: Victini only (its sole canon user).
 //
 // NOTE: innates are intentionally a *pure boon* — never a 1:1 copy of the real
 // ability when the real one carries a downside. E.g. an innate Levitate grants Ground /

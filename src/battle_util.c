@@ -12020,6 +12020,10 @@ u32 GetTotalAccuracy(struct BattleCalcValues *cv, u32 weather)
     default:
         break;
     }
+    // FORK: an innate Victory Star boosts the holder's accuracy exactly like the real ability (1:1 clean
+    // upside). Guarded against the chosen-ability case above so a real holder never gets the boost twice.
+    if (cv->abilities[battlerAtk] != ABILITY_VICTORY_STAR && IsInnateActive(battlerAtk, ABILITY_VICTORY_STAR))
+        calc = (calc * 110) / 100;
 
     // Target's ability
     switch (cv->abilities[battlerDef])
@@ -12069,6 +12073,10 @@ u32 GetTotalAccuracy(struct BattleCalcValues *cv, u32 weather)
     default:
         break;
     }
+    // FORK: a living partner's innate Victory Star boosts this battler's accuracy too, same guard as above.
+    if (cv->abilities[atkAlly] != ABILITY_VICTORY_STAR && IsBattlerAlive(atkAlly)
+     && IsInnateActive(atkAlly, ABILITY_VICTORY_STAR))
+        calc = (calc * 110) / 100;
 
     if (MoveDecreasesAccIfUserNotSameType(cv->move) && !IS_BATTLER_OF_TYPE(battlerAtk, GetBattleMoveType(cv->move)))
         calc = (calc * 90) / 100;
