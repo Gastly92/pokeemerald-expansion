@@ -731,3 +731,37 @@ SINGLE_BATTLE_TEST("Damage preview: the effectiveness icon judges the Z-Move or 
         gBattleStruct->gimmick.toActivate &= ~(1u << B_BATTLER_0);
     }
 }
+
+SINGLE_BATTLE_TEST("Damage preview: the effectiveness icon reads a foe under Illusion as its disguise, move quirks included")
+{
+    enum Move move;
+    uq4_12_t expected;
+    struct DamageContext ctx = {0};
+
+    // The real Zoroark is Dark. Against the Vaporeon it shows, Freeze-Dry is 2x (its Water bonus),
+    // where the old pure type-chart read gave plain Ice's 0.5x; Psychic is 1x, not the Dark immunity.
+    PARAMETRIZE { move = MOVE_FREEZE_DRY; expected = UQ_4_12(2.0); }
+    PARAMETRIZE { move = MOVE_PSYCHIC;    expected = UQ_4_12(1.0); }
+
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_FREEZE_DRY) == EFFECT_SUPER_EFFECTIVE_ON_ARG);
+        PLAYER(SPECIES_WEAVILE) { Moves(MOVE_FREEZE_DRY, MOVE_PSYCHIC); }
+        OPPONENT(SPECIES_ZOROARK) { Ability(ABILITY_ILLUSION); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_VAPOREON) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { }
+    } THEN {
+        EXPECT_EQ(GetIllusionMonSpecies(B_BATTLER_1), SPECIES_VAPOREON);
+        ctx.battlerAtk = B_BATTLER_0;
+        ctx.battlerDef = B_BATTLER_1;
+        ctx.move = move;
+        ctx.moveType = GetMoveType(move);
+        ctx.abilities[B_BATTLER_0] = GetBattlerAbility(B_BATTLER_0);
+        ctx.abilities[B_BATTLER_1] = GetBattlerAbility(B_BATTLER_1);
+        EXPECT_EQ(CalcDisguisedTypeEffectiveness(&ctx, SPECIES_VAPOREON), expected);
+        // ...and the real mon is put back.
+        EXPECT_EQ(gBattleMons[B_BATTLER_1].species, SPECIES_ZOROARK);
+        EXPECT_EQ(gBattleMons[B_BATTLER_1].types[0], TYPE_DARK);
+        EXPECT_EQ(ctx.abilities[B_BATTLER_1], ABILITY_ILLUSION);
+    }
+}

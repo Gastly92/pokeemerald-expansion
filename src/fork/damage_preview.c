@@ -312,6 +312,34 @@ enum Move GetDamagePreviewExecutedMove(enum BattlerId battler, enum Move move)
     return (executed == MOVE_NONE || executed == MOVE_Z_STATUS) ? move : executed;
 }
 
+uq4_12_t CalcDisguisedTypeEffectiveness(struct DamageContext *ctx, enum Species illusionSpecies)
+{
+    struct BattlePokemon *def = &gBattleMons[ctx->battlerDef];
+    enum Species realSpecies = def->species;
+    enum Type realTypes[3] = {def->types[0], def->types[1], def->types[2]};
+    enum Ability realAbility = ctx->abilities[ctx->battlerDef];
+    enum HoldEffect realHoldEffect = ctx->holdEffects[ctx->battlerDef];
+    uq4_12_t modifier;
+
+    // The disguise's typing and species (which FEATURE_INNATE_ABILITIES reads innates from), as
+    // GetDamagePreviewRange reads it; the real mon's ability and item are hidden behind it. A
+    // Terastallized mon's type is its Tera type either way, which GetBattlerType resolves first.
+    def->species = illusionSpecies;
+    def->types[0] = GetSpeciesType(illusionSpecies, 0);
+    def->types[1] = GetSpeciesType(illusionSpecies, 1);
+    def->types[2] = TYPE_MYSTERY;
+    ctx->abilities[ctx->battlerDef] = ABILITY_NONE;
+    ctx->holdEffects[ctx->battlerDef] = HOLD_EFFECT_NONE;
+    modifier = CalcTypeEffectivenessMultiplier(ctx);
+    def->species = realSpecies;
+    def->types[0] = realTypes[0];
+    def->types[1] = realTypes[1];
+    def->types[2] = realTypes[2];
+    ctx->abilities[ctx->battlerDef] = realAbility;
+    ctx->holdEffects[ctx->battlerDef] = realHoldEffect;
+    return modifier;
+}
+
 bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Gimmick gimmick, u32 *loPct, u32 *hiPct, enum DamagePreviewKO *ko)
 {
     struct BattlePokemon realDef;

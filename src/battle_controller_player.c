@@ -2467,25 +2467,6 @@ static bool32 ShouldShowTypeEffectiveness(u32 targetId)
     return TRUE;
 }
 
-// FORK: type effectiveness as it would read against the disguise a Pokémon shows
-// under Illusion, i.e. the type-chart matchup of moveType against the *illusion
-// species'* base types. Mirrors the "presumed" calc in
-// TryNoticeIllusionInTypeEffectiveness (battle_util.c) but uses the public
-// GetTypeModifier so it can live in the controller. Pure type chart only: it
-// deliberately ignores the real mon's ability/held item/etc. (those are hidden
-// behind the disguise) and move-specific overrides like Freeze-Dry / Flying
-// Press, which is an acceptable trade for never leaking the real typing.
-static uq4_12_t CalcIllusionTypeEffectiveness(enum Type moveType, enum Species illusionSpecies)
-{
-    enum Type type0 = GetSpeciesType(illusionSpecies, 0);
-    enum Type type1 = GetSpeciesType(illusionSpecies, 1);
-    uq4_12_t modifier = GetTypeModifier(moveType, type0);
-
-    if (type1 != type0)
-        modifier = uq4_12_multiply(modifier, GetTypeModifier(moveType, type1));
-    return modifier;
-}
-
 static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId battlerDef)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battlerAtk][4]);
@@ -2524,13 +2505,15 @@ static u32 CheckTypeEffectiveness(enum BattlerId battlerAtk, enum BattlerId batt
     // FORK: when the target is under an active Illusion, the readout must reflect
     // the disguise's typing, not the real mon's — otherwise a damaging move's
     // effectiveness leaks e.g. Zoroark's Dark weaknesses through the disguise.
+    // CalcDisguisedTypeEffectiveness (src/fork/damage_preview.c) runs the real calc
+    // against the disguise, so Freeze-Dry / Flying Press still read right.
     // GetIllusionMonSpecies returns SPECIES_NONE once the Illusion is broken (or
     // absent), falling back to the true calc. Status moves read NORMAL either way,
     // so they're left on the standard path and can't reveal anything.
     enum Species illusionSpecies = GetIllusionMonSpecies(battlerDef);
     uq4_12_t modifier;
     if (illusionSpecies != SPECIES_NONE && GetMoveCategory(ctx.move) != DAMAGE_CATEGORY_STATUS)
-        modifier = CalcIllusionTypeEffectiveness(ctx.moveType, illusionSpecies);
+        modifier = CalcDisguisedTypeEffectiveness(&ctx, illusionSpecies);
     else
         modifier = CalcTypeEffectivenessMultiplier(&ctx);
     // FORK: the end of the armed-form projection begun above.
