@@ -17018,6 +17018,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_DRAGON,
     },
+    {
+        .species = SPECIES_PALKIA,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_ROOM_SERVICE,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_SPACIAL_REND,
+            MOVE_MUDDY_WATER,
+            MOVE_HYPERSPACE_HOLE
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPA_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
+        .iv = IVS(ATK, 0, SPE, 0),
+        .teraType = TYPE_STEEL,
+    },
 
     // 0484
     {
@@ -17032,18 +17053,18 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THUNDERBOLT
         },
         .ability = ABILITY_WATER_ABSORB,
-        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
+            .hp = 4,
             .spa = 252,
-            .spe = 4
+            .spe = 252
         ),
         .teraType = TYPE_WATER,
     },
     {
         .species = SPECIES_PALKIA_ORIGIN,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_MYSTIC_WATER,
+        .heldItem = ITEM_LUSTROUS_GLOBE,
         .moves =
         {
             MOVE_SPACIAL_REND,
