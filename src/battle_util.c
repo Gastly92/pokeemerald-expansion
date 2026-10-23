@@ -4329,6 +4329,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
              && !IsInnateOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL) // FORK: innate Aroma Veil on the attacker's side also blocks Cursed Body disable (Batch U)
              && gChosenMove != MOVE_STRUGGLE
              && GetActiveGimmick(gBattlerAttacker) != GIMMICK_DYNAMAX
+             && !(GetConfig(FEATURE_CURSED_BODY_IGNORES_Z_MOVES) && IsZMove(gChosenMove)) // FORK: skip the no-op disable of a damaging Z-Move (a status Z-Move's gChosenMove is its base move, so it still triggers)
              && (GetConfig(DETERMINISTIC_ABILITIES) || RandomPercentage(RNG_CURSED_BODY, 30))) // FORK: Cursed Body always disables
             {
                 gBattleMons[gBattlerAttacker].volatiles.disabledMove = gChosenMove;

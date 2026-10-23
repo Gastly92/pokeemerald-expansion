@@ -80,4 +80,11 @@
 // even try against a blocker. See src/fork/flinch_prevention.c.
 #define FEATURE_ANNOUNCE_FLINCH_PREVENTION TRUE
 
+// When TRUE, Cursed Body does not activate on a damaging Z-Move. Stock play "disables" the
+// Z-Move itself, which shows the pop-up and "<mon>'s <Z-Move> was disabled!" but does nothing:
+// the Z-Move is in no move slot, so the disable is cleared at end of turn. A status Z-Move
+// still triggers it as usual, because there the disabled move is the base move. The hook is
+// one condition in the ABILITY_CURSED_BODY case of src/battle_util.c.
+#define FEATURE_CURSED_BODY_IGNORES_Z_MOVES TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
