@@ -2634,4 +2634,19 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Lowers foes' Sp. Atk on entry."),
         .aiRating = 7,
     },
+
+    // FORK: given as an innate to every TIER_MYTHICAL species. Doubles the holder's max HP while it is
+    // on the field, the way Dynamax does, and stacks with Dynamax. Neither Gastro Acid, Neutralizing Gas
+    // nor Mold Breaker can touch it. See src/fork/mythical.c and fork-docs/NEW_ABILITIES.md.
+    [ABILITY_MYTHICAL] =
+    {
+        .name = _("Mythical"),
+        .description = COMPOUND_STRING("Doubles max HP in battle."),
+        .aiRating = 10,
+        .cantBeCopied = TRUE,
+        .cantBeSwapped = TRUE,
+        .cantBeTraced = TRUE,
+        .cantBeSuppressed = TRUE,
+        .cantBeOverwritten = TRUE,
+    },
 };

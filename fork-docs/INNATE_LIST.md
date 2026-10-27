@@ -12,7 +12,7 @@ follow the **→** link for the exact semantics, wiring and species picks in
   (see [the design principle](INNATE_ABILITIES.md#the-design-principle-an-innate-is-a-pure-boon)).
 - **Reserved** abilities may only be declared by their canon carriers
   ([details](INNATE_ABILITIES.md#reserved-abilities-welded-to-one-line-banned-everywhere-else)).
-- **Fork abilities** (Rekindle, Willpower, Pacify) are defined in
+- **Fork abilities** (Rekindle, Willpower, Pacify, Mythical) are defined in
   [`NEW_ABILITIES.md`](NEW_ABILITIES.md).
 - The fork ships with `DETERMINISTIC_ABILITIES` on, so chance-based effects below
   note their deterministic behaviour where it differs.
@@ -179,6 +179,7 @@ When you wire a new innate, add its row here in the same PR (Step 5 of
 | Hospitality | Heals an ally 1/4 max HP on entry. | [→](INNATE_ABILITIES.md#ability_unnerve--ability_hospitality) |
 | Intimidate | Lowers every foe's Attack by 1 on entry. | [→](INNATE_ABILITIES.md#ability_intimidate) |
 | Intrepid Sword | +1 Attack the first time it enters battle. | [→](INNATE_ABILITIES.md#ability_intrepid_sword--ability_dauntless_shield) |
+| Mythical | Fork ability: doubles max HP while on the field, stacking with Dynamax. Can't be suppressed. | [→](INNATE_ABILITIES.md#ability_mythical) |
 | Pacify | Fork ability: lowers every foe's Sp. Atk by 1 on entry. | [→](INNATE_ABILITIES.md#ability_pacify) |
 | Pressure | Foes use 1 extra PP on moves aimed at it. | [→](INNATE_ABILITIES.md#ability_pressure) |
 | Protosynthesis | Reserved. Boosts its highest stat in sun or with Booster Energy. | [→](INNATE_ABILITIES.md#ability_protosynthesis--ability_quark_drive) |

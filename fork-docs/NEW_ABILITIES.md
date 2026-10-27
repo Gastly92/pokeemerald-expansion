@@ -414,3 +414,47 @@ does for Intimidate, and does not switch out to re-trigger it. There is no rando
 
 Covered by `test/fork/pacify.c`. Its carriers are listed in
 [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_pacify).
+
+## Case study: Mythical
+
+**`Mythical`** (`ABILITY_MYTHICAL`) is an **innate-only** ability carried by every species in the
+fork's `TIER_MYTHICAL` band (`src/fork/species_tiers.c`): the restricted box legends and the strongest
+Mythicals, which the Factory only ever fields as the Frontier Brain's one guaranteed mythical.
+
+> When the holder enters battle its presence is announced ("{mon}'s mythical presence fills the
+> battlefield!") and its **max HP doubles** while it stays on the field.
+
+**It behaves like Dynamax's HP boost:**
+
+- The HP fraction is kept: a mon entering at 60% stays at 60% of the doubled max.
+- The boost is undone whenever the holder leaves the field (switch, U-turn, Baton Pass, Roar,
+  Red Card, Eject items, faint) and at the end of battle, keeping the fraction and rounding up so a
+  living mon never drops to 0. It is re-applied on every entry.
+- It **stacks with Dynamax** multiplicatively, and survives Dynamax ending.
+- Effects upstream scales off `GetNonDynamaxHP` / `GetNonDynamaxMaxHP` divide the boost back out,
+  exactly as they do Dynamax's: residual damage and healing (Leftovers, hazards, weather, status),
+  Super Fang, Endeavor. Move-based healing and Substitute work off the boosted max, as for any mon.
+- Unlike Dynamax it gives no immunity to OHKO moves, weight-based moves or forced switching.
+
+**Nothing can switch it off.** It is `cantBeSuppressed` and not `breakable`, so Gastro Acid,
+Neutralizing Gas and Mold Breaker never reach it, and innates are never copied or swapped, so
+Skill Swap, Role Play and Entrainment don't either. A transformed battler (Ditto, Imposter) never
+gets the boost: the presence belongs to the species itself.
+
+**Wiring.** `TryActivateMythical()` (`src/fork/mythical.c`) runs from the `ABILITYEFFECT_ON_SWITCHIN`
+case. The boost is tracked per party slot in `gBattleStruct->mythicalHPBoosted`, so Ally Switch
+can't misplace it. Undo happens in `Cmd_getswitchedmondata`, which every switch goes through while
+the battler's party index still names the outgoing mon, plus `FaintClearSetData` and the end-of-battle
+stat recalculation. `RecalcBattlerStats` (form changes, Mega Evolution, Primal Reversion) and
+`UndoDynamax` re-double the max HP after `CalculateMonStats` rebuilds it.
+
+**Carriers.** Every `TIER_MYTHICAL` species, enforced by `TEST("Mythical: every TIER_MYTHICAL
+species carries the Mythical innate")`, plus the forms they take in battle (Mega Mewtwo X/Y, Mega
+Rayquaza, Mega Darkrai, Mega Zygarde, Primal Kyogre/Groudon, Complete Zygarde, Ultra Necrozma, Active
+Xerneas). A species that changes form on entry needs the innate on that form, or the switch-in check
+never sees it.
+
+**Known limit.** A level-up in the middle of battle rebuilds the max HP without the boost. The
+Frontier has no Exp., so this is not wired.
+
+Covered by `test/fork/mythical.c`.

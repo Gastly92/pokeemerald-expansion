@@ -5166,6 +5166,13 @@ BattleScript_HaloActivates::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: Mythical ability (src/fork/mythical.c). The HP is doubled in C before this runs.
+BattleScript_MythicalActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_MYTHICALPRESENCE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 @ FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION (src/fork/flinch_prevention.c)
 BattleScript_FlinchPreventedByAbility::
 	call BattleScript_AbilityPopUp

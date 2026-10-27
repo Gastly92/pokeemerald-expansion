@@ -793,6 +793,9 @@ struct BattleStruct
     u8 infoViewerFoeIndex;
     // FORK: the B_FRONTIER_BATTLE_INFO viewer's Battle Log page (include/fork/battle_log.h).
     struct BattleLog battleLog;
+    // FORK: per-trainer bitmask of the party slots whose HP the Mythical ability has doubled
+    // (src/fork/mythical.c). Keyed by party slot, not battler, so Ally Switch can't misplace it.
+    u8 mythicalHPBoosted[MAX_BATTLE_TRAINERS];
 };
 
 struct AiBattleData
