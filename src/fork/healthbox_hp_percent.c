@@ -70,16 +70,19 @@ static u32 GetSlotRight(enum BattlerId battler)
 #define INDICATOR_WIDTH 8
 #define INDICATOR_GAP   2
 
+// The % prints 1px below where UpdateLvlInHealthbox printed the level (y 3); see PrintHealthboxHpPercent.
+#define TEXT_Y 4
+
 void ApplyHealthboxIndicatorPosition(struct Sprite *sprite, enum BattlerId battler)
 {
     s32 left = gSprites[gHealthboxSpriteIds[battler]].x + SECOND_SPRITE_LEFT + GetSlotRight(battler) - INDICATOR_WIDTH;
 
     // Flush with the slot's right edge.
     sprite->x = left - sprite->centerToCornerVecX;
-    // The Dynamax icon's artwork starts a row lower than Mega's and Tera's, so it hung a pixel
-    // below the text line.
+    // The Dynamax icon sits 1px lower than upstream places it, which reads better beside the
+    // (also lowered) HP %. Tuned by eye in play.
     if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX)
-        sprite->y2 -= 1;
+        sprite->y2 += 1;
 }
 
 void PrintHealthboxHpPercent(u32 healthboxSpriteId, enum BattlerId battler, s32 currHp, s32 maxHp, const union TextColor textColor, u32 bgColor)
@@ -102,9 +105,11 @@ void PrintHealthboxHpPercent(u32 healthboxSpriteId, enum BattlerId battler, s32 
     if (text[0] == EOS)
         return;
 
+    // TEXT_Y is 1px below the level's y (3): the % reads better a pixel low against the name and
+    // the icon, though its digits then sit a row under the name's. Tuned by eye in play.
     percent = SplitPercentText(digits, text);
     x = right - GetHealthboxHpPercentTextWidth(text);
-    AddSpriteTextPrinterParameterized6(spriteId, DIGIT_FONT, x, 3, 0, 0, textColor, 0, digits);
+    AddSpriteTextPrinterParameterized6(spriteId, DIGIT_FONT, x, TEXT_Y, 0, 0, textColor, 0, digits);
     x += GetStringWidth(DIGIT_FONT, digits, 0);
-    AddSpriteTextPrinterParameterized6(spriteId, PERCENT_FONT, x, 3, 0, 0, textColor, 0, percent);
+    AddSpriteTextPrinterParameterized6(spriteId, PERCENT_FONT, x, TEXT_Y, 0, 0, textColor, 0, percent);
 }
