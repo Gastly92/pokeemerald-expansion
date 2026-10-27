@@ -1814,6 +1814,11 @@ void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
     if (GetBattlerSide(gSprites[healthboxSpriteId].hMain_Battler) == B_SIDE_OPPONENT && IsGhostBattleWithoutScope())
         gender = 100;
 
+    // FORK: B_HEALTHBOX_HIDE_GENDER drops the gender symbol (gender has no effect in this fork's
+    // battles), so a long name gets 5px more before it is squeezed into a narrower font.
+    if (B_HEALTHBOX_HIDE_GENDER)
+        gender = 100;
+
     switch (gender)
     {
     default:
