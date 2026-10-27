@@ -880,11 +880,11 @@ static void UpdateLvlInHealthbox(u8 healthboxSpriteId, u8 lvl)
 
     // FORK: B_HEALTHBOX_HP_PERCENT shows the HP % in this slot instead of the level. The %
     // itself is drawn by UpdateHpTextInHealthbox, which HEALTHBOX_ALL always runs right after
-    // this; here only the gimmick icon is placed, at its level-100 spot (the % is never wider
-    // than "100"). See src/fork/healthbox_hp_percent.c.
+    // this; here only the gimmick icon is shown or hidden. Its position no longer depends on the
+    // level: SpriteCb_GimmickIndicator pins it to the box's right edge. See
+    // src/fork/healthbox_hp_percent.c.
     if (B_HEALTHBOX_HP_PERCENT)
     {
-        UpdateIndicatorLevelData(healthboxSpriteId, MAX_LEVEL);
         UpdateIndicatorVisibilityAndType(healthboxSpriteId, GetIndicatorPalTag(battler) == TAG_NONE);
         return;
     }

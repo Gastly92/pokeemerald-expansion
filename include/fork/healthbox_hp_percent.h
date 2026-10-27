@@ -4,6 +4,8 @@
 #include "text.h"
 #include "constants/battle.h"
 
+struct Sprite;
+
 // B_HEALTHBOX_HP_PERCENT (config/fork.h): every battle healthbox shows its mon's HP as a % in
 // the slot that used to hold "Lv100". See fork-docs/HEALTHBOX_HP_PERCENT.md.
 
@@ -20,5 +22,9 @@ u32 GetHealthboxHpPercentTextWidth(const u8 *text);
 // Redraws the slot on one healthbox. textColor and bgColor are the box's own (battle_interface.c's
 // sHealthBoxTextColor / HEALTHBOX_BG_INDEX), passed in so they stay defined in one place.
 void PrintHealthboxHpPercent(u32 healthboxSpriteId, enum BattlerId battler, s32 currHp, s32 maxHp, const union TextColor textColor, u32 bgColor);
+
+// Called from SpriteCb_GimmickIndicator every frame: pins the gimmick icon to the healthbox's
+// right edge (the HP % sits between it and the name) and nudges the Dynamax icon up 1px.
+void ApplyHealthboxIndicatorPosition(struct Sprite *sprite, enum BattlerId battler);
 
 #endif // GUARD_HEALTHBOX_HP_PERCENT_H

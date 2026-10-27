@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle.h"
+#include "battle_gimmick.h"
 #include "sprite.h"
 #include "string_util.h"
 #include "text.h"
@@ -54,16 +55,47 @@ u32 GetHealthboxHpPercentTextWidth(const u8 *text)
     return GetStringWidth(DIGIT_FONT, digits, 0) + GetStringWidth(PERCENT_FONT, percent, 0);
 }
 
+// The level slot's right edge, in the healthbox's second sprite (UpdateLvlInHealthbox's numbers).
+static u32 GetSlotRight(enum BattlerId battler)
+{
+    return IsOnPlayerSide(battler) ? 32 : 24;
+}
+
+// SpriteCB_HealthBoxOther keeps the second sprite 64px right of the main one, and both are 64px
+// wide and positioned by their centre, so the second sprite's left edge is 32px right of the
+// main sprite's x.
+#define SECOND_SPRITE_LEFT 32
+
+// The gimmick icon is 8px wide; the HP % keeps 2px clear of it.
+#define INDICATOR_WIDTH 8
+#define INDICATOR_GAP   2
+
+void ApplyHealthboxIndicatorPosition(struct Sprite *sprite, enum BattlerId battler)
+{
+    s32 left = gSprites[gHealthboxSpriteIds[battler]].x + SECOND_SPRITE_LEFT + GetSlotRight(battler) - INDICATOR_WIDTH;
+
+    // Flush with the slot's right edge.
+    sprite->x = left - sprite->centerToCornerVecX;
+    // The Dynamax icon's artwork starts a row lower than Mega's and Tera's, so it hung a pixel
+    // below the text line.
+    if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX)
+        sprite->y2 -= 1;
+}
+
 void PrintHealthboxHpPercent(u32 healthboxSpriteId, enum BattlerId battler, s32 currHp, s32 maxHp, const union TextColor textColor, u32 bgColor)
 {
     u8 text[4], digits[4];
     const u8 *percent;
     // The healthbox's second sprite holds the level slot, as in UpdateLvlInHealthbox.
     u32 spriteId = gSprites[healthboxSpriteId].oam.affineParam;
-    // Same rectangle and right edge as UpdateLvlInHealthbox, so the % replaces the level exactly.
+    // Same rectangle as UpdateLvlInHealthbox, so the % replaces the level exactly. It is
+    // right-aligned to the slot's edge, or just left of the gimmick icon when one is showing.
     u32 left = IsOnPlayerSide(battler) ? 8 : 0;
-    u32 right = left + 24;
+    u32 right = GetSlotRight(battler);
     u32 x;
+
+    if (GetIndicatorPalTag(battler) != TAG_NONE)
+        right -= INDICATOR_WIDTH + INDICATOR_GAP;
 
     BuildHealthboxHpPercentText(text, currHp, maxHp);
     FillSpriteRectColor(spriteId, left, 5, 24, 11, bgColor);
