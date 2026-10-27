@@ -151,6 +151,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Color-blind HP bar | `COLOR_BLIND` | `config/accessibility.h` | ✅ | The battle HP bar's healthy band is blue instead of green. Party/summary bars unchanged. |
 | Clean battle healthboxes | `B_CLEAN_HEALTHBOX` | `config/fork.h`, `src/battle_interface.c` | ✅ | Removes the healthbox corner tail and the singles player EXP bar. |
 | Healthbox HP % | `B_HEALTHBOX_HP_PERCENT` | `config/fork.h`, `src/fork/healthbox_hp_percent.c` | ✅ | Every healthbox shows its mon's HP % (rounded up, empty at full HP) where `Lv100` was, without moving the gimmick icons. [Details](HEALTHBOX_HP_PERCENT.md) · `test/fork/healthbox_hp_percent.c` |
+| Healthbox without gender | `B_HEALTHBOX_HIDE_GENDER` | `config/fork.h`, `src/battle_interface.c` | ✅ | Healthboxes drop the ♂/♀ after the name (gender has no effect in this fork's battles), so fewer long names are squeezed into a narrower font; the INFO viewer, party menu and summary still show it. `test/fork/healthbox_hide_gender.c` |
 | Illusion-safe effectiveness readout | `B_SHOW_EFFECTIVENESS` (fix; no new flag) | `src/battle_controller_player.c`, `src/fork/damage_preview.c` | ✅ | The effectiveness icon reads a disguised foe as its disguise (typing and species, move quirks like Freeze-Dry included), so it can't leak an Illusion. |
 
 ## The fork-flag test harness
