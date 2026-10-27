@@ -333,6 +333,7 @@
     F(FEATURE_FREE_GIMMICKS,    featureFreeGimmicks,    (u32, TRUE)) \
     F(FEATURE_ANNOUNCE_FLINCH_PREVENTION, featureAnnounceFlinchPrevention, (u32, TRUE)) \
     F(FEATURE_CURSED_BODY_IGNORES_Z_MOVES, featureCursedBodyIgnoresZMoves, (u32, TRUE)) \
+    F(FEATURE_ANNOUNCE_SILENT_ABILITIES, featureAnnounceSilentAbilities, (u32, TRUE)) \
 
 #define GET_CONFIG_MAXIMUM(_typeMaxValue, ...) INVOKE_WITH_B(GET_CONFIG_MAXIMUM_, _typeMaxValue)
 #define GET_CONFIG_MAXIMUM_(_type, ...) FIRST(__VA_OPT__(FIRST(__VA_ARGS__),) MAX_BITS((sizeof(_type) * 8)))
