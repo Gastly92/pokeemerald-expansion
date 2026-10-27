@@ -44,7 +44,8 @@ the move becomes, G-Max moves included (G-Max Fireball is 160, not Max Flare's t
 Choice Band / Specs as the real Dynamax does. A Z-Move or Max Move off a multi-strike move
 (Triple Axel, Double Kick) is priced as the single hit it is. The range and the effectiveness icon
 both judge the matchup of the Z-Move / Max Move itself, which keeps none of the base move's quirks:
-Freeze-Dry's Subzero Slammer / Max Hailstorm is resisted by Water.
+Freeze-Dry's Subzero Slammer / Max Hailstorm is resisted by Water. Nor does it keep the base move's
+flags, so a Close Combat All-Out Pummeling makes no contact and gets no Tough Claws.
 
 Your item is read as it will be **when the move runs**. An item used up while turn order is
 settled — Quick Claw on its entry turn under `DETERMINISTIC_HOLD_EFFECTS`, a Custap Berry in its

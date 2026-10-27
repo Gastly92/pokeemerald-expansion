@@ -1034,9 +1034,9 @@ struct SimulatedDamage AI_CalcDamage(struct AiCalcValues *aiCalc, enum BattlerId
     // same-type-only rule. Reading the base move's matchup here made the AI both
     // over-predict its damage (2x where the real hit is 0.5x) and hand every downstream
     // score check - including "don't Z into a resist" - the wrong effectiveness.
-    // Only ctx.move is swapped, and only across this one call: base power still derives
-    // from ctx.baseMove (see CalcMoveBasePower's gimmick branches), and every other
-    // consumer of ctx.move below keeps reading the chosen move.
+    // Only ctx.move is swapped: base power still derives from ctx.baseMove (see
+    // CalcMoveBasePower's gimmick branches). The swap is kept for the damage pass below
+    // too, see the FORK note after the crit check.
     // On conflict: port upstream's change onto the CalcTypeEffectivenessMultiplier call
     // rather than dropping the swap.
     // The guard keeps the overwhelmingly common no-gimmick calc at one extra read: AI
@@ -1054,7 +1054,21 @@ struct SimulatedDamage AI_CalcDamage(struct AiCalcValues *aiCalc, enum BattlerId
     // Regression tests: test/fork/damage_preview.c ("crit").
     if (aiCalc->isDamagePreview)
         ctx.isCrit = IsDamagePreviewCrit(&ctx);
-    ctx.move = move;
+    // FORK: the damage pass prices the converted move too, as the real hit does. Every
+    // modifier keyed off the move's own flags or effect reads ctx.move, and a Z-Move or Max
+    // Move keeps none of the base move's: All-Out Pummeling off Close Combat makes no contact,
+    // so it gets no Tough Claws (chosen or innate) and Fluffy does not halve it. Reading the
+    // base move priced a Tough Claws Sneasler's Z-Close Combat at 1.3x its real damage, and
+    // the damage preview promised a KO that did not happen. The category still comes from the
+    // base move, as SetDynamicMoveCategory gives it the real hit: every Z-Move entry carries a
+    // placeholder PHYSICAL. A *status* conversion (Extreme Evoboost off Last Resort) keeps the
+    // base move, which is what the AI asks about there (see CalcMoveBasePower's Z branch).
+    // Regression test: test/fork/damage_preview.c ("Tough Claws").
+    // On conflict: keep the converted move in ctx.move through the damage calc.
+    if (!convertedByGimmick || IsBattleMoveStatus(ctx.move))
+        ctx.move = move;
+    else
+        gBattleStruct->dynamicMoveCategory = GetMoveCategory(move);
 
     u32 movePower = GetMovePower(move);
 
