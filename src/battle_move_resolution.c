@@ -22,6 +22,7 @@
 #include "constants/songs.h"
 #include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
 #include "fork/buff_confusion.h" // FORK: BUFF_CONFUSION_SELF_DAMAGE
+#include "fork/silent_ability_popup.h" // FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES
 
 static void ValidateBattlers(void);
 static enum Move GetOriginallyUsedMove(enum Move chosenMove);
@@ -60,6 +61,7 @@ static enum CancelerResult CancelerClearFlags(struct BattleCalcValues *cv)
     gBattleMons[cv->battlerAtk].volatiles.glaiveRush = FALSE;
     gBattleStruct->eventState.atkCancelerBattler = 0;
     gBattleStruct->eventState.moveEndBlock = 0;
+    SnapshotAbilityRevealsBeforeMove(); // FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES -- before this move's type matchup and damage calc record anything
     return CANCELER_RESULT_SUCCESS;
 }
 
@@ -3038,6 +3040,10 @@ static enum CancelerResult CancelerPreAnimActivations(struct BattleCalcValues *c
             BattleScriptCall(BattleScript_BerryReduceAnimation);
             return CANCELER_RESULT_RUN_SCRIPT;
         }
+        gBattleStruct->eventState.moveEndBlock++;
+    case PRE_ANIM_SILENT_ABILITY: // FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES (src/fork/silent_ability_popup.c)
+        if (TryShowSilentAbilityPopUp())
+            return CANCELER_RESULT_RUN_SCRIPT;
         gBattleStruct->eventState.moveEndBlock++;
     default:
         break;

@@ -87,4 +87,12 @@
 // one condition in the ABILITY_CURSED_BODY case of src/battle_util.c.
 #define FEATURE_CURSED_BODY_IGNORES_Z_MOVES TRUE
 
+// When TRUE, the first time an ability that only changes a hit's damage takes effect (Fluffy,
+// Multiscale, Fur Coat, Thick Fat, Filter, Heatproof, Infiltrator through screens, Scrappy into a
+// Ghost type, ...), its pop-up shows before the hit animation. Stock play applies these with no
+// pop-up, though the damage calc still marks them revealed for the INFO viewer and the damage
+// preview. Once per mon per battle, since the reveal is what it announces. Innates never show,
+// as they are always known. See src/fork/silent_ability_popup.c for the full list.
+#define FEATURE_ANNOUNCE_SILENT_ABILITIES TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
