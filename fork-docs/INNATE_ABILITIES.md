@@ -4597,6 +4597,20 @@ weakening a foe's hostility or fighting spirit:
 Entries that soothe *people* or allies rather than foes (Venusaur, Oinkologne, Skeledirge) were
 left out on purpose. No frontier set gives any carrier a chosen Pacify, so there is no Step 3.5 work.
 
+### ABILITY_MYTHICAL
+
+**The fork's own ability, innate-only** (its definition and rationale are in
+[`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-mythical)). Doubles the holder's max HP while it is on
+the field, like Dynamax, and stacks with it.
+
+**Wiring.** A one-line addition to `SwitchInInnateAbilityEffect`, mapping it to
+`ABILITYEFFECT_ON_SWITCHIN`, whose `ABILITY_MYTHICAL` arm calls `TryActivateMythical()` in
+`src/fork/mythical.c`. `cantBeSuppressed` and not breakable, so `IsInnateActive()` lets it through
+Gastro Acid, Neutralizing Gas and Mold Breaker.
+
+**Species: every `TIER_MYTHICAL` species** (gated by `test/fork/mythical.c`), plus the Mega, Primal,
+Complete, Ultra and Active forms they take in battle.
+
 ### ABILITY_VICTORY_STAR
 
 Boosts the accuracy of the holder and its partner by 10%. Wired as an innate so Victini, whose

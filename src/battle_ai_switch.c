@@ -7,6 +7,7 @@
 #include "fork/battle_ai_species_overrides.h" // FORK: species-aware AI overrides
 #include "battle_util.h"
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — innate-aware switch evaluation
+#include "fork/mythical.h" // FORK: a benched Mythical enters with doubled HP
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_main.h"
@@ -79,6 +80,7 @@ static void InitializeSwitchinCandidate(enum BattlerId switchinBattler, u32 monI
     PokemonToBattleMon(mon, &gBattleMons[switchinBattler]);
     gBattlerPartyIndexes[switchinBattler] = monIndex;
     CopyMonAbilityAndTypesToBattleMon(switchinBattler, mon);
+    SimulateMythicalSwitchIn(switchinBattler); // FORK: a benched Mythical would enter with doubled HP (src/fork/mythical.c)
     // Setup switchin battler data
     gAiThinkingStruct->saved[switchinBattler].saved = TRUE;
     SetBattlerAiData(switchinBattler, gAiLogicData);
@@ -1809,7 +1811,7 @@ static u32 GetSwitchinHazardsDamage(enum BattlerId battler)
 // Gets damage / healing from weather
 static s32 GetSwitchinWeatherImpact(enum BattlerId battler)
 {
-    s32 weatherImpact = 0, maxHP = gBattleMons[battler].maxHP;
+    s32 weatherImpact = 0, maxHP = GetNonDynamaxMaxHP(battler); // FORK: residuals scale off the regular max HP, not Mythical's doubled one
     enum Ability ability = gAiLogicData->abilities[battler];
     enum HoldEffect holdEffect = gAiLogicData->holdEffects[battler];
     u32 weather = AI_GetSwitchinWeather(battler);
@@ -1878,7 +1880,7 @@ static s32 GetSwitchinWeatherImpact(enum BattlerId battler)
 // Gets one turn of recurring healing
 static u32 GetSwitchinRecurringHealing(enum BattlerId battler)
 {
-    u32 recurringHealing = 0, maxHP = gBattleMons[battler].maxHP;
+    u32 recurringHealing = 0, maxHP = GetNonDynamaxMaxHP(battler); // FORK: residuals scale off the regular max HP, not Mythical's doubled one
     enum Ability ability = gAiLogicData->abilities[battler];
     enum HoldEffect holdEffect = gAiLogicData->holdEffects[battler];
 
@@ -1915,7 +1917,7 @@ static u32 GetSwitchinRecurringHealing(enum BattlerId battler)
 // Gets one turn of recurring damage
 static u32 GetSwitchinRecurringDamage(enum BattlerId battler)
 {
-    u32 passiveDamage = 0, maxHP = gBattleMons[battler].maxHP;
+    u32 passiveDamage = 0, maxHP = GetNonDynamaxMaxHP(battler); // FORK: residuals scale off the regular max HP, not Mythical's doubled one
     enum Ability ability = gAiLogicData->abilities[battler];
     enum HoldEffect holdEffect = gAiLogicData->holdEffects[battler];
 
@@ -1950,7 +1952,7 @@ static u32 GetSwitchinStatusDamage(enum BattlerId battler)
     u8 tSpikesLayers = gSideTimers[GetBattlerSide(battler)].toxicSpikesAmount;
     u32 status = gBattleMons[battler].status1;
     enum Ability ability = gAiLogicData->abilities[battler];
-    u32 maxHP = gBattleMons[battler].maxHP;
+    u32 maxHP = GetNonDynamaxMaxHP(battler); // FORK: residuals scale off the regular max HP, not Mythical's doubled one
     u32 statusDamage = 0;
     bool32 poisonHeal = ability == ABILITY_POISON_HEAL
                      || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_POISON_HEAL)); // FORK: innate-aware

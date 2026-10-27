@@ -36,6 +36,7 @@
 #include "constants/items.h"
 #include "constants/trainers.h"
 #include "fork/innate_abilities.h" // FORK: innate ability predicates
+#include "fork/mythical.h" // FORK: a predicted Mythical switch-in enters with doubled HP
 
 #if TESTING
 #include "test/battle.h"
@@ -1230,6 +1231,7 @@ void BattleAI_DoAIProcessing_PredictedSwitchin(struct AiThinkingStruct *aiThink,
     // Get battler and move data for predicted switchin
     PokemonToBattleMon(&party[aiData->mostSuitableMonId[battlerDef]], &switchinCandidate);
     gBattleMons[battlerDef] = switchinCandidate;
+    SimulateMythicalSwitchIn(battlerDef); // FORK: a benched Mythical would enter with doubled HP (src/fork/mythical.c)
     gAiThinkingStruct->saved[battlerDef].saved = TRUE;
     SetBattlerAiData(battlerDef, aiData);
     CalcBattlerAiMovesData(aiData, battlerAtk, battlerDef, AI_GetWeather(), gFieldTimers.terrain);

@@ -80,6 +80,7 @@
 #include "load_save.h"
 #include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
 #include "fork/buff_status_reapply.h" // FORK: BUFF_REBURN
+#include "fork/mythical.h" // FORK: Mythical HP boost undone on switch-out
 
 // Helper for accessing command arguments and advancing gBattlescriptCurrInstr.
 //
@@ -3253,6 +3254,7 @@ static void Cmd_getswitchedmondata(void)
         gBattleStruct->monToSwitchIntoId[battler] = GetArbitraryValidSwitchIn(trainer);
     }
 
+    UndoMythicalHPBoost(battler); // FORK: every switch funnels through here, while the index still names the outgoing mon (src/fork/mythical.c)
     gBattlerPartyIndexes[battler] = gBattleStruct->monToSwitchIntoId[battler];
 
     BtlController_EmitGetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_ALL_BATTLE, 1u << gBattlerPartyIndexes[battler]);
@@ -7646,6 +7648,7 @@ static void Cmd_switchoutabilities(void)
         }
     }
 
+    UndoMythicalHPBoost(battler); // FORK: revert before Regenerator heals, so it heals 1/3 of the regular max (src/fork/mythical.c)
     switch (GetBattlerAbility(battler))
     {
     case ABILITY_NATURAL_CURE:

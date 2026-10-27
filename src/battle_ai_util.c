@@ -8,6 +8,7 @@
 #include "battle_ai_main.h"
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
 #include "fork/innate_abilities.h" // FORK: IsInnateOnSide
+#include "fork/mythical.h" // FORK: ClearSimulatedMythicalSwitchIns
 #include "fork/battle_ai_gimmick.h" // FORK: AI_GetGimmickExecutedMove
 #include "fork/battle_ai_zmove.h" // FORK: AI_FLAG_SMART_Z_MOVE
 #include "fork/damage_preview.h" // FORK: IsDamagePreviewCrit
@@ -4843,6 +4844,7 @@ struct BattlePokemon *AllocSaveBattleMons(void)
 void FreeRestoreBattleMons(struct BattlePokemon *savedBattleMons)
 {
     memcpy(gBattleMons, savedBattleMons, SIZE_G_BATTLE_MONS);
+    ClearSimulatedMythicalSwitchIns(); // FORK: every AI switch-in simulation ends here (src/fork/mythical.c)
     Free(savedBattleMons);
 }
 

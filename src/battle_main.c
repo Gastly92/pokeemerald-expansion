@@ -81,6 +81,7 @@
 #include "cable_club.h"
 #include "fork/deterministic_moves.h" // FORK: DETERMINISTIC_MOVE_RESULTS speed ties
 #include "fork/free_gimmick_struggle.h" // FORK: ShouldOpenMoveMenuForGimmick, ShouldStruggleFromGimmickMoveMenu
+#include "fork/mythical.h" // FORK: Mythical HP boost undone on faint / at battle end
 
 extern const struct BgTemplate gBattleBgTemplates[];
 extern const struct WindowTemplate *const gBattleWindowTemplates[];
@@ -3054,6 +3055,7 @@ void FaintClearSetData(enum BattlerId battler)
 {
     // Data cleared both on switch and faint
     ClearSetDataOnLeave(battler);
+    UndoMythicalHPBoost(battler); // FORK: a fainted Mythical returns to its real max HP (src/fork/mythical.c)
 
     for (enum Stat i = 0; i < NUM_BATTLE_STATS; i++)
         gBattleMons[battler].statStages[i] = DEFAULT_STAT_STAGE;
@@ -5401,6 +5403,7 @@ static void HandleEndTurn_FinishBattle(void)
         BeginFastPaletteFade(3);
         FadeOutMapMusic(5);
         TryRestoreHeldItems();
+        UndoAllMythicalHPBoosts(); // FORK: before the recalculation below, which would clamp a boosted HP (src/fork/mythical.c)
 
         for (u32 i = 0; i < PARTY_SIZE; i++)
         {

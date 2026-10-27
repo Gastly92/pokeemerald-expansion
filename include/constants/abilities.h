@@ -369,6 +369,7 @@ enum __attribute__((packed)) Ability
     ABILITY_REKINDLE,                 // FORK: heals 1/4 max HP per battler the holder knocks out; designed as an innate. See src/fork/rekindle.c + fork-docs/NEW_ABILITIES.md.
     ABILITY_WILLPOWER,                // FORK: Stamina's Sp. Def twin (+1 Sp. Def when hit); designed as an innate. See src/fork/willpower.c + fork-docs/NEW_ABILITIES.md.
     ABILITY_PACIFY,                   // FORK: Intimidate's Sp. Atk twin (-1 foes' Sp. Atk on entry); designed as an innate. See src/fork/pacify.c + fork-docs/NEW_ABILITIES.md.
+    ABILITY_MYTHICAL,                 // FORK: doubles max HP while on the field; innate-only, unsuppressable. See src/fork/mythical.c + fork-docs/NEW_ABILITIES.md.
 
     // FORK: was `= ABILITIES_COUNT_GEN9`; it now has to span the fork block above.
     // On conflict, keep this definition and re-apply upstream's change to

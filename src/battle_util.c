@@ -14,6 +14,7 @@
 #include "fork/rekindle.h" // FORK: Rekindle (heal on KO)
 #include "fork/willpower.h" // FORK: Willpower (Sp. Def twin of Stamina)
 #include "fork/pacify.h" // FORK: Pacify (Sp. Atk twin of Intimidate)
+#include "fork/mythical.h" // FORK: Mythical (doubled max HP while on the field)
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "fork/buff_no_guard.h" // FORK: BUFF_NO_GUARD (No Guard "wild swings" power)
 #include "fork/buff_berries.h" // FORK: BUFF_RESIST_BERRIES
@@ -3553,6 +3554,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         case ABILITY_PACIFY: // FORK: Intimidate's Sp. Atk twin, chosen or innate. Logic in src/fork/pacify.c; keep this case on conflict.
             if (shouldAbilityTrigger)
                 effect = TryActivatePacify(battler, gLastUsedAbility);
+            break;
+        case ABILITY_MYTHICAL: // FORK: doubles max HP on entry, chosen or innate. Logic in src/fork/mythical.c; keep this case on conflict.
+            if (shouldAbilityTrigger)
+                effect = TryActivateMythical(battler, gLastUsedAbility);
             break;
         case ABILITY_DRIZZLE:
             if (shouldAbilityTrigger && TryChangeWeatherWithAbility(battler, BATTLE_WEATHER_RAIN, gLastUsedAbility))
@@ -11088,6 +11093,7 @@ void RecalcBattlerStats(enum BattlerId battler, struct Pokemon *mon, bool32 isDy
         CalculateMonStatsCont(mon, FALSE);
     else
         CalculateMonStats(mon);
+    ReapplyMythicalHPBoost(battler, mon, hp, oldMaxHp); // FORK: CalculateMonStats drops the Mythical boost; re-apply it before Dynamax's own (see src/fork/mythical.c)
 
     if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX && gChosenActionByBattler[battler] != B_ACTION_SWITCH)
     {

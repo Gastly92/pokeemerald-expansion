@@ -288,6 +288,11 @@
 //   SwitchInInnateAbilityEffect mapping it to the ABILITYEFFECT_ON_SWITCHIN case, whose logic lives in
 //   src/fork/pacify.c. An ordinary stat drop, so the reactions keyed on Intimidate by name skip it. No AI
 //   wiring. Carriers: a "calming" flavor set (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
+//   MYTHICAL (the fork's own ability, innate-only): doubles the holder's max HP while it is on the field, like
+//   Dynamax, and stacks with it. Rides the switch-in driver — a one-line addition to SwitchInInnateAbilityEffect
+//   mapping it to the ABILITYEFFECT_ON_SWITCHIN case, whose logic lives in src/fork/mythical.c. cantBeSuppressed
+//   and not breakable, so Gastro Acid, Neutralizing Gas and Mold Breaker never reach it. Carriers: every
+//   TIER_MYTHICAL species plus the forms they take in battle, gated by test/fork/mythical.c.
 //   VICTORY_STAR: x1.1 accuracy for the holder and a living partner in GetTotalAccuracy
 //   (src/battle_util.c), and the repurposed evasion-ignore for both in GetAccEvasionStageDelta
 //   (src/fork/deterministic_moves.c). A 1:1 copy, guarded against a chosen Victory Star so it never

@@ -20,7 +20,7 @@ doc below. A row records only what neither of those can — status, and the poin
 | [`DETERMINISM.md`](DETERMINISM.md) | The `DETERMINISTIC_*` project — rationale + per-flag mechanics |
 | [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) | Innate abilities, the species ability-override table, per-ability wiring, how to add one |
 | [`INNATE_LIST.md`](INNATE_LIST.md) | Quick reference: every innate-capable ability with a one-line effect |
-| [`NEW_ABILITIES.md`](NEW_ABILITIES.md) | Custom abilities (Affinity, Halo, Rekindle, Willpower, Pacify) and how to add one |
+| [`NEW_ABILITIES.md`](NEW_ABILITIES.md) | Custom abilities (Affinity, Halo, Rekindle, Willpower, Pacify, Mythical) and how to add one |
 | [`NEW_TYPES.md`](NEW_TYPES.md) | Re-typing a species |
 | [`FRONTIER_ENDLESS.md`](FRONTIER_ENDLESS.md) | Converting a facility to 6v6 + endless, per-facility status, the Factory and Tower as worked examples |
 | [`FRONTIER_ROSTER.md`](FRONTIER_ROSTER.md) | The extended roster, the species tier map, and the draft rules |
@@ -125,6 +125,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Custom abilities (Rekindle) | _(data; no flag)_ | `src/fork/rekindle.c` | ✅ | Heals 1/4 max HP for each battler its holder knocks out; built as an innate, on Fire lines whose flame burns with their fighting spirit. [Details](NEW_ABILITIES.md#case-study-rekindle) · `test/fork/rekindle.c` |
 | Custom abilities (Willpower) | _(data; no flag)_ | `src/fork/willpower.c` | ✅ | Stamina's Sp. Def twin: +1 Sp. Def each time its holder is hit by a move; built as an innate, on a few strong-willed species. [Details](NEW_ABILITIES.md#case-study-willpower) · `test/fork/willpower.c` |
 | Custom abilities (Pacify) | _(data; no flag)_ | `src/fork/pacify.c` | ✅ | Intimidate's Sp. Atk twin: each foe loses 1 Sp. Atk stage when its holder enters battle; built as an innate, on Sylveon and other calming species. [Details](NEW_ABILITIES.md#case-study-pacify) · `test/fork/pacify.c` |
+| Custom abilities (Mythical) | _(data; no flag)_ | `src/fork/mythical.c` | ✅ | Innate on every `TIER_MYTHICAL` species: announces itself on entry and doubles max HP while on the field, like Dynamax and stacking with it; nothing can suppress it. [Details](NEW_ABILITIES.md#case-study-mythical) · `test/fork/mythical.c` |
 | Item-free battle gimmicks | `FEATURE_FREE_GIMMICKS` | `config/feature.h`, `src/battle_gimmick.c` | ✅ | Mega, Z-Moves, Ultra Burst, Tera and Dynamax need no items, with a per-mon picker among them. [Details](FREE_GIMMICKS.md) · `test/fork/free_gimmicks.c` |
 | Announce blocked flinches | `FEATURE_ANNOUNCE_FLINCH_PREVENTION` | `config/feature.h`, `src/fork/flinch_prevention.c` | ✅ | A flinch that Shield Dust, Inner Focus or Covert Cloak blocked shows "<mon>'s <ability/item> prevents flinching!" (plus the pop-up for abilities), but only when the flinch would actually have landed. `test/fork/flinch_prevention.c` |
 | Announce silent damage abilities | `FEATURE_ANNOUNCE_SILENT_ABILITIES` | `config/feature.h`, `src/fork/silent_ability_popup.c` | ✅ | The first time an ability that only changes a hit's damage takes effect (Fluffy, Multiscale, Fur Coat, Thick Fat, Filter, Infiltrator, Scrappy...), its pop-up shows before the hit, once per mon per battle; innates never pop up. `test/fork/silent_ability_popup.c` |

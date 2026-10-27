@@ -10,6 +10,7 @@
 #include "event_data.h"
 #include "graphics.h"
 #include "item.h"
+#include "fork/mythical.h" // FORK: Mythical stacks with Dynamax
 #include "pokemon.h"
 #include "random.h"
 #include "sprite.h"
@@ -146,24 +147,24 @@ void ApplyDynamaxHPMultiplier(struct Pokemon* mon)
 u32 GetNonDynamaxHP(enum BattlerId battler)
 {
     if (GetActiveGimmick(battler) != GIMMICK_DYNAMAX || HasShedinjaHPHandling(gBattleMons[battler].species))
-        return gBattleMons[battler].hp;
+        return RemoveMythicalHPBoost(battler, gBattleMons[battler].hp); // FORK: Mythical's boost is divided out like Dynamax's (src/fork/mythical.c)
 
     struct Pokemon *mon = GetBattlerMon(battler);
     uq4_12_t mult = GetDynamaxLevelHPMultiplier(GetMonData(mon, MON_DATA_DYNAMAX_LEVEL), TRUE);
     u32 hp = UQ_4_12_TO_INT((gBattleMons[battler].hp * mult) + UQ_4_12_ROUND);
-    return hp;
+    return RemoveMythicalHPBoost(battler, hp); // FORK: Mythical stacks with Dynamax
 }
 
 // Returns the non-Dynamax Max HP of a Pokemon.
 u32 GetNonDynamaxMaxHP(enum BattlerId battler)
 {
     if (GetActiveGimmick(battler) != GIMMICK_DYNAMAX || HasShedinjaHPHandling(gBattleMons[battler].species))
-        return gBattleMons[battler].maxHP;
+        return RemoveMythicalHPBoost(battler, gBattleMons[battler].maxHP); // FORK: Mythical's boost is divided out like Dynamax's (src/fork/mythical.c)
 
     struct Pokemon *mon = GetBattlerMon(battler);
     uq4_12_t mult = GetDynamaxLevelHPMultiplier(GetMonData(mon, MON_DATA_DYNAMAX_LEVEL), TRUE);
     u32 maxHP = UQ_4_12_TO_INT((gBattleMons[battler].maxHP * mult) + UQ_4_12_ROUND);
-    return maxHP;
+    return RemoveMythicalHPBoost(battler, maxHP); // FORK: Mythical stacks with Dynamax
 }
 
 // Sets flags used for Dynamaxing and checks Gigantamax forms.
@@ -198,7 +199,9 @@ void UndoDynamax(enum BattlerId battler)
         uq4_12_t mult = GetDynamaxLevelHPMultiplier(GetMonData(mon, MON_DATA_DYNAMAX_LEVEL), TRUE);
         gBattleMons[battler].hp = UQ_4_12_TO_INT((GetMonData(mon, MON_DATA_HP) * mult + 1) + UQ_4_12_ROUND); // round up
         SetMonData(mon, MON_DATA_HP, &gBattleMons[battler].hp);
+        u32 maxHPBefore = GetMonData(mon, MON_DATA_MAX_HP); // FORK: Mythical stacks with Dynamax (src/fork/mythical.c)
         CalculateMonStats(mon);
+        ReapplyMythicalHPBoost(battler, mon, gBattleMons[battler].hp, maxHPBefore); // FORK: keep the Mythical boost through Dynamax ending
     }
 
     // Makes sure there are no Dynamax flags set, including on switch / faint.
