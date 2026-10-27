@@ -14,6 +14,7 @@
 #include "util.h"
 #include "test_runner.h"
 #include "fork/frontier_ai.h" // FORK: IsGimmickWithheldFromFrontierOpponent
+#include "fork/healthbox_hp_percent.h" // FORK: ApplyHealthboxIndicatorPosition
 
 #include "data/gimmicks.h"
 
@@ -483,6 +484,11 @@ static void SpriteCb_GimmickIndicator(struct Sprite *sprite)
     sprite->x = gSprites[gHealthboxSpriteIds[battler]].x + sprite->tPosX + sprite->tLevelXDelta;
     sprite->x2 = gSprites[gHealthboxSpriteIds[battler]].x2;
     sprite->y2 = gSprites[gHealthboxSpriteIds[battler]].y2;
+    // FORK: B_HEALTHBOX_HP_PERCENT moves the icon to the healthbox's right edge (the HP % sits
+    // between it and the name) and nudges the Dynamax icon up 1px. It overrides the x and adjusts
+    // the y2 set just above, so on conflict keep this after upstream's position lines.
+    if (B_HEALTHBOX_HP_PERCENT)
+        ApplyHealthboxIndicatorPosition(sprite, battler);
 }
 
 static inline u32 GetIndicatorSpriteId(u32 healthboxId)

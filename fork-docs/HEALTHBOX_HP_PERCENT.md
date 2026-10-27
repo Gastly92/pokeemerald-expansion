@@ -32,19 +32,27 @@ so it ticks down with the bar rather than jumping when the bar stops.
 
 ## Fitting beside a gimmick icon
 
-The Mega, Primal, Tera and Dynamax icons share the level slot: the icon takes the place of the
-"Lv" glyph and the level prints next to it as `100`, 15px wide, starting right where the icon
-ends. The icon is pinned at that level-100 position and never moves.
+The Mega, Primal, Tera and Dynamax icons share the slot. With this flag the icon sits at the
+slot's **right edge**, and the HP % sits between it and the name, 2px clear of the icon. Without an
+icon the % is right-aligned to the edge, so it shifts left once when a mon Mega Evolves,
+Terastallizes or Dynamaxes (each of those redraws the whole healthbox, which reprints the %).
+Next to the name, the % shares the text's line and shadow, so it reads as level with it; beside
+the icon it looked a pixel high, because the icon hangs a row lower than the text.
 
-A reading that fills those 15px touches the icon whenever its first digit's left column is filled
-(a `9` does; the `1` of `100` happens not to). So the digits print in `FONT_SMALL_NARROWER` (4px
-each instead of 5; same height and baseline) and the `%` in `FONT_SMALL_NARROW` (5px instead of
-7). The widest reading, `99%`, is then 13px, leaving a 2px gap. The `%` glyph itself is the same
-in every small font. A taller custom `%` was tried and rejected: at 4px wide it reads as a `Z` and
-crowds the digits.
+The icon's position is set every frame in upstream's `SpriteCb_GimmickIndicator`
+(`src/battle_gimmick.c`), through a `FORK:` hook calling `ApplyHealthboxIndicatorPosition`. That
+also lifts the **Dynamax** icon 1px: its artwork starts a row lower than Mega's and Tera's, so it
+hung below the text line.
 
-`100%` would not fit at all, which is one more reason full HP shows nothing. The width test in
-`test/fork/healthbox_hp_percent.c` fails if a font change ever closes the gap.
+The digits print in `FONT_SMALL_NARROWER` (4px each instead of 5; same height and baseline) and
+the `%` in `FONT_SMALL_NARROW` (5px instead of 7), so the widest reading, `99%`, is 13px. That
+fits between the longest name field and the icon with 2px to spare on each side. The `%` glyph
+itself is the same in every small font. A taller custom `%` was tried and rejected: at 4px wide it
+reads as a `Z` and crowds the digits.
+
+`100%` would not fit, which is one more reason full HP shows nothing. Tests in
+`test/fork/healthbox_hp_percent.c` fail if a font change closes the gaps or if upstream moves the
+icon's positioning out from under the hook.
 
 ## Upstream's `B_HP_PERCENTAGE_DISPLAY`
 
