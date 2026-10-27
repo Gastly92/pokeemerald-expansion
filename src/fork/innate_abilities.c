@@ -7678,7 +7678,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INNER_FOCUS,
             ABILITY_JUSTIFIED,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0639
@@ -7686,7 +7687,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
-            ABILITY_SAND_FORCE
+            ABILITY_SAND_FORCE,
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0640
@@ -7694,7 +7696,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_JUSTIFIED,
             ABILITY_PRESSURE,
-            ABILITY_SHARPNESS
+            ABILITY_SHARPNESS,
+            ABILITY_SPEED_BOOST
         )
     },
     { // 0641
