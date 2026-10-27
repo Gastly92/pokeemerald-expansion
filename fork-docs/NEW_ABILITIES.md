@@ -433,7 +433,9 @@ Mythicals, which the Factory only ever fields as the Frontier Brain's one guaran
 - It **stacks with Dynamax** multiplicatively, and survives Dynamax ending.
 - Effects upstream scales off `GetNonDynamaxHP` / `GetNonDynamaxMaxHP` divide the boost back out,
   exactly as they do Dynamax's: residual damage and healing (Leftovers, hazards, weather, status),
-  Super Fang, Endeavor. Move-based healing and Substitute work off the boosted max, as for any mon.
+  Super Fang, Endeavor, and the HP-fraction moves: Recover, Roost, Synthesis and the like heal half
+  the *regular* max HP, and Substitute, Shed Tail and Belly Drum cost a fraction of it. Rest still
+  heals to the full doubled max.
 - Unlike Dynamax it gives no immunity to OHKO moves, weight-based moves or forced switching.
 
 **Nothing can switch it off.** It is `cantBeSuppressed` and not `breakable`, so Gastro Acid,
