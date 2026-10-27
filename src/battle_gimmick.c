@@ -485,7 +485,7 @@ static void SpriteCb_GimmickIndicator(struct Sprite *sprite)
     sprite->x2 = gSprites[gHealthboxSpriteIds[battler]].x2;
     sprite->y2 = gSprites[gHealthboxSpriteIds[battler]].y2;
     // FORK: B_HEALTHBOX_HP_PERCENT moves the icon to the healthbox's right edge (the HP % sits
-    // between it and the name) and nudges the Dynamax icon up 1px. It overrides the x and adjusts
+    // between it and the name) and nudges the Dynamax icon down 1px. It overrides the x and adjusts
     // the y2 set just above, so on conflict keep this after upstream's position lines.
     if (B_HEALTHBOX_HP_PERCENT)
         ApplyHealthboxIndicatorPosition(sprite, battler);

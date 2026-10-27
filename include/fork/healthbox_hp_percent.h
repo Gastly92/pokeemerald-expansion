@@ -24,7 +24,7 @@ u32 GetHealthboxHpPercentTextWidth(const u8 *text);
 void PrintHealthboxHpPercent(u32 healthboxSpriteId, enum BattlerId battler, s32 currHp, s32 maxHp, const union TextColor textColor, u32 bgColor);
 
 // Called from SpriteCb_GimmickIndicator every frame: pins the gimmick icon to the healthbox's
-// right edge (the HP % sits between it and the name) and nudges the Dynamax icon up 1px.
+// right edge (the HP % sits between it and the name) and nudges the Dynamax icon down 1px.
 void ApplyHealthboxIndicatorPosition(struct Sprite *sprite, enum BattlerId battler);
 
 #endif // GUARD_HEALTHBOX_HP_PERCENT_H
