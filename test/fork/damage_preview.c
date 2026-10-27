@@ -336,6 +336,43 @@ SINGLE_BATTLE_TEST("Damage preview: a gimmick off a multi-strike move is priced 
     }
 }
 
+// Solrock at Lv100, bulkiest corner of its spread (base HP 90 / Def 85): 31 IV / 252 EV / +Def.
+#define SOLROCK_BULKY_HP   384
+#define SOLROCK_BULKY_DEF  295
+
+SINGLE_BATTLE_TEST("Damage preview: a gimmick off a contact move gets no Tough Claws, since the Z-Move or Max Move makes no contact")
+{
+    enum Gimmick gimmick;
+    enum Item item;
+    s16 damage;
+    u32 lo = 0, hi = 0;
+
+    // Sneasler's innate Tough Claws boosts Close Combat, but not the All-Out Pummeling or Max
+    // Knuckle it becomes. The simulation read the base move's contact flag and priced the hit
+    // at 1.3x, so the preview promised a KO on a bulky Solrock that survived.
+    PARAMETRIZE { gimmick = GIMMICK_Z_MOVE;  item = ITEM_FIGHTINIUM_Z; }
+    PARAMETRIZE { gimmick = GIMMICK_DYNAMAX; item = ITEM_NONE; }
+
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        ASSUME(MoveMakesContact(MOVE_CLOSE_COMBAT));
+        ASSUME(!MoveMakesContact(MOVE_ALL_OUT_PUMMELING));
+        ASSUME(!MoveMakesContact(MOVE_MAX_KNUCKLE));
+        PLAYER(SPECIES_SNEASLER) { Ability(ABILITY_POISON_TOUCH); Item(item); Moves(MOVE_CLOSE_COMBAT); }
+        OPPONENT(SPECIES_SOLROCK) { Ability(ABILITY_DROUGHT); MaxHP(SOLROCK_BULKY_HP); HP(SOLROCK_BULKY_HP - 1); Defense(SOLROCK_BULKY_DEF); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CLOSE_COMBAT, gimmick: gimmick); }
+    } SCENE {
+        HP_BAR(opponent, captureDamage: &damage);
+    } THEN {
+        // Read with the gimmick armed, at the Attack the hit was dealt at (Max Knuckle raised it).
+        SetActiveGimmick(B_BATTLER_0, GIMMICK_NONE);
+        gBattleMons[B_BATTLER_0].statStages[STAT_ATK] = DEFAULT_STAT_STAGE;
+        EXPECT(GetDamagePreviewRange(B_BATTLER_0, B_BATTLER_1, MOVE_CLOSE_COMBAT, gimmick, &lo, &hi, &sKo));
+        EXPECT(PercentWithin(damage, SOLROCK_BULKY_HP, lo, hi));
+    }
+}
+
 SINGLE_BATTLE_TEST("Damage preview: the KO verdict is read against the foe's current HP")
 {
     u32 hp, lo, hi;
