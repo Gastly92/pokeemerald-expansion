@@ -55,6 +55,18 @@ static bool32 BattleInfoCanRevealNow(void)
 
 void RecordAbilityBattle(enum BattlerId battlerId, enum Ability abilityId)
 {
+    // FORK: FEATURE_INNATE_ABILITIES — an innate is a static species property (the AI reads it via
+    // IsInnateActive), never the mon's chosen ability. Innate handlers (e.g. an innate Clear Body
+    // blocking a stat drop in battle_stat_change.c) record the innate they fired, which used to
+    // overwrite a revealed chosen ability here: Carbink's Bulletproof was forgotten after every
+    // silently blocked Moonblast drop, so the AI kept going back to Focus Blast. Drop such records.
+    // The Battle Info reveal below never revealed an innate either, so it loses nothing.
+    // Regression test: test/fork/ai_innate_ability_knowledge.c.
+    if (GetConfig(FEATURE_INNATE_ABILITIES)
+     && abilityId != gBattleMons[battlerId].ability
+     && SpeciesHasInnate(gBattleMons[battlerId].species, abilityId))
+        return;
+
     gBattleHistory->abilities[battlerId] = abilityId;
     gAiPartyData->mons[GetBattlerSide(battlerId)][gBattlerPartyIndexes[battlerId]].ability = abilityId;
     if (BattleInfoCanRevealNow())
