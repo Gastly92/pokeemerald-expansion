@@ -2680,6 +2680,12 @@ static enum CancelerResult CancelerSubstitute(struct BattleCalcValues *cv)
     if (moveTarget == TARGET_FIELD || moveTarget == TARGET_OPPONENTS_FIELD)
         return CANCELER_RESULT_SUCCESS;
 
+    // UPSTREAM: every target was already blocked by CancelerTargetFailure (powder immunity, Volt
+    // Absorb, a type immunity), which printed its own message; without this the !IsAnyTargetAffected
+    // check below added a second "But it failed!". Regression test: test/fork/status_move_blocked_message.c.
+    if (!IsAnyTargetAffected())
+        return CANCELER_RESULT_SUCCESS;
+
     for (enum BattlerId battler = 0; battler < gBattlersCount; battler++)
     {
         if (ShouldSkipFailureCheckOnBattler(cv->battlerAtk, cv->battlerDef))
