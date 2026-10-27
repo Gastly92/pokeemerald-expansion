@@ -36,8 +36,9 @@ The Mega, Primal, Tera and Dynamax icons share the slot. With this flag the icon
 slot's **right edge**, and the HP % sits between it and the name, 2px clear of the icon. Without an
 icon the % is right-aligned to the edge, so it shifts left once when a mon Mega Evolves,
 Terastallizes or Dynamaxes (each of those redraws the whole healthbox, which reprints the %).
-The % prints 1px below where the level did, so it sits a row under the name's baseline. That is
-deliberate: against the name and the icon it reads better a pixel low (tuned by eye in play).
+The % prints at the level's height, so its digits share the name's baseline. A reading with a `3`
+can still look a pixel high at a glance, because the `3`'s bottom row has no dark pixels; printing
+the % 1px lower was tried and looked worse overall.
 
 The icon's position is set every frame in upstream's `SpriteCb_GimmickIndicator`
 (`src/battle_gimmick.c`), through a `FORK:` hook calling `ApplyHealthboxIndicatorPosition`. That

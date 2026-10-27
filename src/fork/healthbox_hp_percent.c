@@ -70,8 +70,8 @@ static u32 GetSlotRight(enum BattlerId battler)
 #define INDICATOR_WIDTH 8
 #define INDICATOR_GAP   2
 
-// The % prints 1px below where UpdateLvlInHealthbox printed the level (y 3); see PrintHealthboxHpPercent.
-#define TEXT_Y 4
+// The % prints at the level's y in UpdateLvlInHealthbox, so its digits share the name's baseline.
+#define TEXT_Y 3
 
 void ApplyHealthboxIndicatorPosition(struct Sprite *sprite, enum BattlerId battler)
 {
@@ -105,8 +105,6 @@ void PrintHealthboxHpPercent(u32 healthboxSpriteId, enum BattlerId battler, s32 
     if (text[0] == EOS)
         return;
 
-    // TEXT_Y is 1px below the level's y (3): the % reads better a pixel low against the name and
-    // the icon, though its digits then sit a row under the name's. Tuned by eye in play.
     percent = SplitPercentText(digits, text);
     x = right - GetHealthboxHpPercentTextWidth(text);
     AddSpriteTextPrinterParameterized6(spriteId, DIGIT_FONT, x, TEXT_Y, 0, 0, textColor, 0, digits);
