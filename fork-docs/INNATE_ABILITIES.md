@@ -195,7 +195,10 @@ out.
 - **Identity stays deterministic**: innates are *never* copied/swapped/displayed
   as identity. Trace, Skill Swap, Role Play, the ability pop-up, and
   `RecordAbilityBattle` all keep reading only the primary slot
-  (`GetBattlerAbility`). Do **not** change that.
+  (`GetBattlerAbility`). Do **not** change that. `RecordAbilityBattle` also enforces it:
+  a call naming one of the species' innates (rather than its chosen ability) is dropped, so
+  an innate block can never overwrite what the AI has learned about the chosen ability
+  (`test/fork/ai_innate_ability_knowledge.c`).
 - **Message text names the innate, not the chosen ability**
   (`ApplyInnateMessageAbilities()`, `src/fork/innate_abilities.c`). The
   `{B_ATK_ABILITY}` / `{B_DEF_ABILITY}` / `{B_SCR_ACTIVE_ABILITY}` / `{B_EFF_ABILITY}`
