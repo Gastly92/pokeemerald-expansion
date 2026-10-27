@@ -24,29 +24,55 @@ void BuildHealthboxHpPercentText(u8 *dst, s32 currHp, s32 maxHp)
     *dst = EOS;
 }
 
+// The digits print in FONT_SMALL_NARROWER (4px each against FONT_SMALL's 5, same height and
+// baseline) and the '%' in FONT_SMALL_NARROW (5px against 7), so "99%" is 13px: 2px narrower than
+// the "100" a gimmick icon sits beside, which leaves a visible gap to the icon. With the digits at
+// full width, a digit whose left column is filled (a 9, say) touched it.
+#define DIGIT_FONT   FONT_SMALL_NARROWER
+#define PERCENT_FONT FONT_SMALL_NARROW
+
+// Splits "91%" into its digits and its '%' (the last character). An empty text has neither.
+static const u8 *SplitPercentText(u8 *digits, const u8 *text)
+{
+    u32 len = StringLength(text);
+
+    if (len == 0)
+    {
+        *digits = EOS;
+        return text;
+    }
+    StringCopyN(digits, text, len - 1);
+    digits[len - 1] = EOS;
+    return &text[len - 1];
+}
+
+u32 GetHealthboxHpPercentTextWidth(const u8 *text)
+{
+    u8 digits[4];
+    const u8 *percent = SplitPercentText(digits, text);
+
+    return GetStringWidth(DIGIT_FONT, digits, 0) + GetStringWidth(PERCENT_FONT, percent, 0);
+}
+
 void PrintHealthboxHpPercent(u32 healthboxSpriteId, enum BattlerId battler, s32 currHp, s32 maxHp, const union TextColor textColor, u32 bgColor)
 {
-    u8 text[4];
+    u8 text[4], digits[4];
+    const u8 *percent;
     // The healthbox's second sprite holds the level slot, as in UpdateLvlInHealthbox.
     u32 spriteId = gSprites[healthboxSpriteId].oam.affineParam;
-    u32 width;
+    // Same rectangle and right edge as UpdateLvlInHealthbox, so the % replaces the level exactly.
+    u32 left = IsOnPlayerSide(battler) ? 8 : 0;
+    u32 right = left + 24;
+    u32 x;
 
     BuildHealthboxHpPercentText(text, currHp, maxHp);
-    // FONT_SMALL_NARROW's '%' is 2px narrower than FONT_SMALL's, which makes "99%" exactly as
-    // wide as "100" (15px): the Mega/Tera/Dynamax icon sits where it does for a level-100 mon.
-    width = GetStringWidth(FONT_SMALL_NARROW, text, 0);
+    FillSpriteRectColor(spriteId, left, 5, 24, 11, bgColor);
+    if (text[0] == EOS)
+        return;
 
-    // Same rectangle and right edge as UpdateLvlInHealthbox, so the % replaces the level exactly.
-    if (IsOnPlayerSide(battler))
-    {
-        FillSpriteRectColor(spriteId, 8, 5, 24, 11, bgColor);
-        if (width != 0)
-            AddSpriteTextPrinterParameterized6(spriteId, FONT_SMALL_NARROW, 32 - width, 3, 0, 0, textColor, 0, text);
-    }
-    else
-    {
-        FillSpriteRectColor(spriteId, 0, 5, 24, 11, bgColor);
-        if (width != 0)
-            AddSpriteTextPrinterParameterized6(spriteId, FONT_SMALL_NARROW, 24 - width, 3, 0, 0, textColor, 0, text);
-    }
+    percent = SplitPercentText(digits, text);
+    x = right - GetHealthboxHpPercentTextWidth(text);
+    AddSpriteTextPrinterParameterized6(spriteId, DIGIT_FONT, x, 3, 0, 0, textColor, 0, digits);
+    x += GetStringWidth(DIGIT_FONT, digits, 0);
+    AddSpriteTextPrinterParameterized6(spriteId, PERCENT_FONT, x, 3, 0, 0, textColor, 0, percent);
 }
