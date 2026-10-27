@@ -18,6 +18,8 @@
 //   - FaintClearSetData / the end-of-battle stat recalculation    -> UndoMythicalHPBoost / UndoAllMythicalHPBoosts
 //   - RecalcBattlerStats and UndoDynamax, after CalculateMonStats -> ReapplyMythicalHPBoost
 //   - GetNonDynamaxHP / GetNonDynamaxMaxHP                        -> RemoveMythicalHPBoost
+//   - Cmd_switchoutabilities, before Regenerator heals              -> UndoMythicalHPBoost
+//   - the AI's switch-in simulations / FreeRestoreBattleMons        -> SimulateMythicalSwitchIn / ClearSimulatedMythicalSwitchIns
 
 // TRUE if `battler`'s mon currently has its HP doubled by Mythical.
 bool32 IsMythicalHPBoosted(enum BattlerId battler);
@@ -35,10 +37,19 @@ void UndoAllMythicalHPBoosts(void);
 
 // Call right after CalculateMonStats has rebuilt a boosted mon's max HP from scratch (form change, Dynamax
 // ending). `hpBefore` / `maxHPBefore` are the mon's HP and max HP before that call. Re-doubles the max HP
-// and restores the HP the way CalculateMonStats would have, then syncs gBattleMons.
+// and restores the HP the way CalculateMonStats would have. Touches the party data only; both callers copy it
+// into gBattleMons afterwards.
 void ReapplyMythicalHPBoost(enum BattlerId battler, struct Pokemon *mon, u32 hpBefore, u32 maxHPBefore);
 
 // Divides the boost back out of an HP value, for GetNonDynamaxHP / GetNonDynamaxMaxHP.
 u32 RemoveMythicalHPBoost(enum BattlerId battler, u32 hp);
+
+// AI switch-in simulations (InitializeSwitchinCandidate, the predicted player switch-in) copy a benched mon into
+// gBattleMons at its party HP, which is never boosted. Call right after that copy, once the candidate's ability is
+// set: if the candidate would gain Mythical on entry, its simulated HP and max HP are doubled, and until
+// ClearSimulatedMythicalSwitchIns (called from FreeRestoreBattleMons) RemoveMythicalHPBoost answers for the
+// candidate rather than for the mon really on the field.
+void SimulateMythicalSwitchIn(enum BattlerId battler);
+void ClearSimulatedMythicalSwitchIns(void);
 
 #endif // GUARD_FORK_MYTHICAL_H

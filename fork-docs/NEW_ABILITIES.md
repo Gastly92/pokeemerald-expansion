@@ -456,6 +456,17 @@ Rayquaza, Mega Darkrai, Mega Zygarde, Primal Kyogre/Groudon, Complete Zygarde, U
 Xerneas). A species that changes form on entry needs the innate on that form, or the switch-in check
 never sees it.
 
+**Regenerator.** The boost comes off at the start of `Cmd_switchoutabilities`, before Regenerator
+heals, so a Mythical with Regenerator (Ho-Oh, Shaymin-Sky, Xerneas, Zygarde) still recovers a full
+third of its regular max HP.
+
+**AI.** The AI's switch-in simulations (`InitializeSwitchinCandidate`, and the predicted player
+switch-in in `battle_ai_main.c`) copy a benched mon in at its party HP, which is never boosted.
+`SimulateMythicalSwitchIn` doubles a would-be Mythical's simulated HP there, so "survives the hit" and
+"hits to KO" see the real numbers, and `FreeRestoreBattleMons` clears it. The switch-in estimates for
+weather, recurring healing and damage, and status damage now scale off `GetNonDynamaxMaxHP`, matching
+what the battle really does.
+
 **Known limit.** A level-up in the middle of battle rebuilds the max HP without the boost. The
 Frontier has no Exp., so this is not wired.
 

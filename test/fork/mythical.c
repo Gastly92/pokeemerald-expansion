@@ -299,3 +299,44 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Mythical keeps its boost th
         EXPECT_EQ(results[1].maxHP, results[0].maxHP * 2);
     }
 }
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Regenerator heals a Mythical 1/3 of its regular max HP")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_HO_OH, ABILITY_MYTHICAL));
+        ASSUME(SpeciesHasInnate(SPECIES_HO_OH, ABILITY_REGENERATOR));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_HO_OH) { Ability(ABILITY_PRESSURE); MaxHP(300); HP(150); }
+        PLAYER(SPECIES_WYNAUT);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { SWITCH(player, 1); }
+    } THEN {
+        // Doubled to 300/600 on entry, back to 150/300 on the way out, then +100 from Regenerator.
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_MAX_HP), 300);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), 250);
+    }
+}
+
+AI_SINGLE_BATTLE_TEST("Mythical: the AI counts a benched Mythical's doubled HP when choosing a switch-in")
+{
+    enum Ability ability;
+    u32 expectedSendOut;
+
+    PARAMETRIZE { ability = ABILITY_SYNCHRONIZE; expectedSendOut = 2; } // Thief OHKOs Alakazam before Focus Blast lands
+    PARAMETRIZE { ability = ABILITY_MYTHICAL; expectedSendOut = 1; }    // doubled HP survives Thief, so Alakazam gets the KO
+
+    GIVEN {
+        ASSUME(GetMoveCategory(MOVE_THIEF) == DAMAGE_CATEGORY_PHYSICAL);
+        ASSUME(GetMoveCategory(MOVE_FOCUS_BLAST) == DAMAGE_CATEGORY_SPECIAL);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES);
+        PLAYER(SPECIES_WEAVILE) { Speed(300); Ability(ABILITY_SHADOW_TAG); Moves(MOVE_THIEF); }
+        OPPONENT(SPECIES_KADABRA) { Speed(200); Moves(MOVE_PSYCHIC, MOVE_DISABLE, MOVE_TAUNT, MOVE_CALM_MIND); }
+        OPPONENT(SPECIES_ALAKAZAM) { Speed(200); Ability(ability); Moves(MOVE_FOCUS_BLAST, MOVE_PSYCHIC); }
+        OPPONENT(SPECIES_BLASTOISE) { Speed(200); Moves(MOVE_BUBBLE_BEAM, MOVE_WATER_GUN, MOVE_LEER, MOVE_STRENGTH); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_THIEF); EXPECT_SEND_OUT(opponent, expectedSendOut); }
+    } SCENE {
+        MESSAGE("The opposing Kadabra fainted!");
+    }
+}

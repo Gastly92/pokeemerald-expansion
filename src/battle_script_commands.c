@@ -7648,6 +7648,7 @@ static void Cmd_switchoutabilities(void)
         }
     }
 
+    UndoMythicalHPBoost(battler); // FORK: revert before Regenerator heals, so it heals 1/3 of the regular max (src/fork/mythical.c)
     switch (GetBattlerAbility(battler))
     {
     case ABILITY_NATURAL_CURE:

@@ -5,11 +5,18 @@
 #include "battle_interface.h"
 #include "battle_scripts.h"
 #include "battle_util.h"
+#include "config/feature.h"
+#include "fork/innate_abilities.h"
 #include "pokemon.h"
 
 // The Mythical ability -- see include/fork/mythical.h and fork-docs/NEW_ABILITIES.md.
 
 #define MYTHICAL_HP_MULTIPLIER 2
+
+// Battler bitmasks for the AI's switch-in simulations: which battlers currently hold a simulated candidate, and
+// which of those candidates would be boosted.
+static EWRAM_DATA u8 sSimulatedBattlers = 0;
+static EWRAM_DATA u8 sSimulatedBoosted = 0;
 
 static bool32 IsPartySlotBoosted(enum BattleTrainer trainer, u32 partyIndex)
 {
@@ -113,7 +120,36 @@ void ReapplyMythicalHPBoost(enum BattlerId battler, struct Pokemon *mon, u32 hpB
 
 u32 RemoveMythicalHPBoost(enum BattlerId battler, u32 hp)
 {
-    if (!IsMythicalHPBoosted(battler))
+    bool32 boosted;
+
+    if ((sSimulatedBattlers >> battler) & 1)
+        boosted = (sSimulatedBoosted >> battler) & 1;
+    else
+        boosted = IsMythicalHPBoosted(battler);
+    if (!boosted)
         return hp;
     return (hp + MYTHICAL_HP_MULTIPLIER - 1) / MYTHICAL_HP_MULTIPLIER;
+}
+
+void SimulateMythicalSwitchIn(enum BattlerId battler)
+{
+    struct BattlePokemon *battleMon = &gBattleMons[battler];
+    bool32 boosts = battleMon->hp != 0
+                 && (battleMon->ability == ABILITY_MYTHICAL
+                  || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(battleMon->species, ABILITY_MYTHICAL)));
+
+    sSimulatedBattlers |= 1u << battler;
+    sSimulatedBoosted &= ~(1u << battler);
+    if (!boosts)
+        return;
+
+    battleMon->hp *= MYTHICAL_HP_MULTIPLIER;
+    battleMon->maxHP *= MYTHICAL_HP_MULTIPLIER;
+    sSimulatedBoosted |= 1u << battler;
+}
+
+void ClearSimulatedMythicalSwitchIns(void)
+{
+    sSimulatedBattlers = 0;
+    sSimulatedBoosted = 0;
 }
