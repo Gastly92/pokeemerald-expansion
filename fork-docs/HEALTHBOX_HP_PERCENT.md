@@ -33,11 +33,18 @@ so it ticks down with the bar rather than jumping when the bar stops.
 ## Fitting beside a gimmick icon
 
 The Mega, Primal, Tera and Dynamax icons share the level slot: the icon takes the place of the
-"Lv" glyph and the level prints next to it as `100`, 15px wide. The % is printed in
-`FONT_SMALL_NARROW`, whose `%` is 5px instead of 7px, so the widest reading, `99%`, is exactly
-15px too. The icon is pinned at its level-100 position and never moves. `100%` would not fit
-(20px), which is one more reason full HP shows nothing. The second test in the test file fails
-if a font change ever makes a reading wider than `100`.
+"Lv" glyph and the level prints next to it as `100`, 15px wide, starting right where the icon
+ends. The icon is pinned at that level-100 position and never moves.
+
+A reading that fills those 15px touches the icon whenever its first digit's left column is filled
+(a `9` does; the `1` of `100` happens not to). So the digits print in `FONT_SMALL_NARROWER` (4px
+each instead of 5; same height and baseline) and the `%` in `FONT_SMALL_NARROW` (5px instead of
+7). The widest reading, `99%`, is then 13px, leaving a 2px gap. The `%` glyph itself is the same
+in every small font. A taller custom `%` was tried and rejected: at 4px wide it reads as a `Z` and
+crowds the digits.
+
+`100%` would not fit at all, which is one more reason full HP shows nothing. The width test in
+`test/fork/healthbox_hp_percent.c` fails if a font change ever closes the gap.
 
 ## Upstream's `B_HP_PERCENTAGE_DISPLAY`
 

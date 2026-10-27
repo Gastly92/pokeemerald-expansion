@@ -28,17 +28,19 @@ TEST("Healthbox HP %: empty at full HP, rounded up below it, 0% when fainted")
     EXPECT_EQ(StringCompare(buf, COMPOUND_STRING("")), 0);
 }
 
-TEST("Healthbox HP %: no reading is wider than the level-100 text the gimmick icon sits beside")
+TEST("Healthbox HP %: every reading leaves a gap before the gimmick icon")
 {
     u8 buf[8];
-    u32 limit = GetStringWidth(FONT_SMALL, COMPOUND_STRING("100"), 0);
+    // The icon sits right where "100" starts (it replaces the "Lv" glyph), so a reading as wide
+    // as "100" touches it whenever its first digit's left column is filled. Require 2px of room.
+    u32 limit = GetStringWidth(FONT_SMALL, COMPOUND_STRING("100"), 0) - 2;
     u32 widest = 0;
 
     for (s32 hp = 0; hp <= 300; hp++)
     {
         u32 width;
         BuildHealthboxHpPercentText(buf, hp, 300);
-        width = GetStringWidth(FONT_SMALL_NARROW, buf, 0);
+        width = GetHealthboxHpPercentTextWidth(buf);
         if (width > widest)
             widest = width;
     }
