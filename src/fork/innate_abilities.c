@@ -5900,6 +5900,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_MOLD_BREAKER,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
@@ -5910,6 +5911,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_MOLD_BREAKER,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
             ABILITY_TELEPATHY
@@ -5940,6 +5942,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
+            ABILITY_SHADOW_TAG,
             ABILITY_TELEPATHY
         )
     },
@@ -5949,6 +5952,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
+            ABILITY_SHADOW_TAG,
             ABILITY_TELEPATHY
         )
     },

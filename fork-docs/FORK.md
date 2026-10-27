@@ -28,6 +28,7 @@ doc below. A row records only what neither of those can — status, and the poin
 | [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md) | Item-free Mega/Z/Tera/Dynamax and the gimmick picker |
 | [`BATTLE_INFO.md`](BATTLE_INFO.md) | The in-battle INFO viewer and its reveal-gating rules |
 | [`DAMAGE_PREVIEW.md`](DAMAGE_PREVIEW.md) | The move menu's damage-range readout: what the range spans and what it hides |
+| [`HEALTHBOX_HP_PERCENT.md`](HEALTHBOX_HP_PERCENT.md) | The healthbox HP % that replaces the level: rounding, the empty full-HP slot, fitting beside gimmick icons |
 | [`LINE_REVIEW.md`](LINE_REVIEW.md) | The per-species-line review playbook (innates, overrides, Factory sets) |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
@@ -127,6 +128,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Custom abilities (Mythical) | _(data; no flag)_ | `src/fork/mythical.c` | ✅ | Innate on every `TIER_MYTHICAL` species: announces itself on entry and doubles max HP while on the field, like Dynamax and stacking with it; nothing can suppress it. [Details](NEW_ABILITIES.md#case-study-mythical) · `test/fork/mythical.c` |
 | Item-free battle gimmicks | `FEATURE_FREE_GIMMICKS` | `config/feature.h`, `src/battle_gimmick.c` | ✅ | Mega, Z-Moves, Ultra Burst, Tera and Dynamax need no items, with a per-mon picker among them. [Details](FREE_GIMMICKS.md) · `test/fork/free_gimmicks.c` |
 | Announce blocked flinches | `FEATURE_ANNOUNCE_FLINCH_PREVENTION` | `config/feature.h`, `src/fork/flinch_prevention.c` | ✅ | A flinch that Shield Dust, Inner Focus or Covert Cloak blocked shows "<mon>'s <ability/item> prevents flinching!" (plus the pop-up for abilities), but only when the flinch would actually have landed. `test/fork/flinch_prevention.c` |
+| Announce silent damage abilities | `FEATURE_ANNOUNCE_SILENT_ABILITIES` | `config/feature.h`, `src/fork/silent_ability_popup.c` | ✅ | The first time an ability that only changes a hit's damage takes effect (Fluffy, Multiscale, Fur Coat, Thick Fat, Filter, Infiltrator, Scrappy...), its pop-up shows before the hit, once per mon per battle; innates never pop up. `test/fork/silent_ability_popup.c` |
 | Cursed Body ignores Z-Moves | `FEATURE_CURSED_BODY_IGNORES_Z_MOVES` | `config/feature.h`, `src/battle_util.c` | ✅ | Cursed Body no longer shows a pop-up and a "was disabled!" message for a damaging Z-Move, a disable that did nothing anyway. A status Z-Move's base move is still disabled. `test/fork/cursed_body_z_moves.c` |
 | Sand Spit weather animation fix | _(fix; no new flag)_ | `src/battle_util.c`, `src/battle_script_commands.c` | ✅ | Sand Spit no longer plays a garbage animation that could hang the battle. `test/fork/weather_ability_animation.c` |
 | Illusion survives a form-change gfx reload | _(fix; no new flag)_ | `src/battle_gfx_sfx_util.c` | ✅ | A disguised battler's sprite is no longer repainted as its true species when Dynamax ends. `test/fork/illusion_dynamax.c` |
@@ -148,6 +150,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 |---|---|---|---|---|
 | Color-blind HP bar | `COLOR_BLIND` | `config/accessibility.h` | ✅ | The battle HP bar's healthy band is blue instead of green. Party/summary bars unchanged. |
 | Clean battle healthboxes | `B_CLEAN_HEALTHBOX` | `config/fork.h`, `src/battle_interface.c` | ✅ | Removes the healthbox corner tail and the singles player EXP bar. |
+| Healthbox HP % | `B_HEALTHBOX_HP_PERCENT` | `config/fork.h`, `src/fork/healthbox_hp_percent.c` | ✅ | Every healthbox shows its mon's HP % (rounded up, empty at full HP) where `Lv100` was, without moving the gimmick icons. [Details](HEALTHBOX_HP_PERCENT.md) · `test/fork/healthbox_hp_percent.c` |
 | Illusion-safe effectiveness readout | `B_SHOW_EFFECTIVENESS` (fix; no new flag) | `src/battle_controller_player.c`, `src/fork/damage_preview.c` | ✅ | The effectiveness icon reads a disguised foe as its disguise (typing and species, move quirks like Freeze-Dry included), so it can't leak an Illusion. |
 
 ## The fork-flag test harness

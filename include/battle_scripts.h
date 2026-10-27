@@ -268,6 +268,7 @@ extern const u8 BattleScript_HaloActivates[]; // FORK: Halo ability
 extern const u8 BattleScript_MythicalActivates[]; // FORK: Mythical ability
 extern const u8 BattleScript_FlinchPreventedByAbility[]; // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
 extern const u8 BattleScript_FlinchPreventedByItem[]; // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
+extern const u8 BattleScript_SilentAbilityRevealed[]; // FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES
 extern const u8 BattleScript_ToxicSpikesPoisoned[];
 extern const u8 BattleScript_ToxicSpikesBadlyPoisoned[];
 extern const u8 BattleScript_ToxicSpikesAbsorbed[];

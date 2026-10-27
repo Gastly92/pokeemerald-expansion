@@ -670,7 +670,7 @@ static u32 CountDisplayedInnates(enum Species displaySpecies, bool32 abilitySeen
     return CollectDisplayedInnates(displaySpecies, abilitySeen, seenAbility, innates);
 }
 
-static u32 HpPercentRoundedUp(u32 hp, u32 maxHP)
+u32 HpPercentRoundedUp(u32 hp, u32 maxHP)
 {
     u32 pct;
 

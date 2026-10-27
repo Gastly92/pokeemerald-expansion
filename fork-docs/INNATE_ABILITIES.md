@@ -2247,9 +2247,10 @@ identity bookkeeping about the mon's *displayed* ability, not an effect read (in
 identity). The overworld wild-encounter lures (Magnet Pull / Arena Trap in `src/wild_encounter.c`) likewise
 stay keyed to the lead's chosen ability — innates are a battle-only feature.
 
-**Species (canon only so far, no flavor picks yet — preventing the foe from switching is a potent utility effect, so the
-set stays the canon carriers).** **Shadow Tag:** Wobbuffet, Wynaut, the Gothita line, and the Litwick line
-(merged into its existing Levitate rows). Mega Gengar is *omitted* as redundant (its only ability IS Shadow
+**Species (canon carriers plus one flavor pick — preventing the foe from switching is a potent utility effect, so
+non-canon carriers need a strong case).** **Shadow Tag:** Wobbuffet, Wynaut, the Gothita line, and the Litwick line
+(merged into its existing Levitate rows), plus **Giratina** (Altered + Origin) as a flavor pick: it rules the
+Distortion World and, in Pokémon Adventures, imprisons Dialga and Palkia there. Mega Gengar is *omitted* as redundant (its only ability IS Shadow
 Tag, so an innate could never be observed). **Arena Trap:** Diglett / Dugtrio (Kantonian only — the Alolan
 forms lack it) and Trapinch (merged into its Hyper Cutter row). **Magnet Pull:** Magnemite / Magneton /
 Magnezone, the Alolan Geodude line, and Nosepass / Probopass (all merged into existing rows). Meltan is
@@ -4037,12 +4038,14 @@ exact path — Teravolt / Turboblaze just add their species data + two more `IsI
 heuristics), each passing a matching `(battler, aiData->abilities[battler])` pair — so the one clause makes them
 all innate-aware for free, keyed off the real battler. No dedicated AI edits.
 
-**Species (Step 1) — canon only so far** (ability-ignoring is a strong offensive utility, kept tight, matching the Purifying Salt /
+**Species (Step 1) — canon plus one flavor pick** (ability-ignoring is a strong offensive utility, kept tight, matching the Purifying Salt /
 Comatose / Magic Guard canon only so far decisions). Every canon Mold Breaker user in **any** slot, merged into existing
 innate rows where present: **Pinsir** (+ Mega, pure-boon), the **Cranidos / Rampardos** line (new rows), the
 **Drilbur / Excadrill** (+ Mega) line, **Throh**, **Sawk**, the **Basculin** (all three stripes) / **Basculegion**
 (M/F) line, the **Axew / Fraxure / Haxorus** line, **Druddigon**, the **Pancham / Pangoro** line, **Hawlucha**
-(+ Mega), the **Tinkatink / Tinkatuff / Tinkaton** line, **Veluza**, and **Ogerpon-Hearthflame** (new row). The
+(+ Mega), the **Tinkatink / Tinkatuff / Tinkaton** line, **Veluza**, and **Ogerpon-Hearthflame** (new row). One
+flavor pick: **Palkia** (+ Origin), which rends "its targets along with the space around it", so the target's ability
+offers no protection. The
 **all-Mold-Breaker Mega forms** (Emboar / Gyarados / Ampharos Mega, whose own ability data is Mold Breaker in
 every slot) are **omitted as redundant** — their chosen ability is always Mold Breaker, so an innate could never
 be observed (the Calyrex / Mega Lopunny omission precedent).

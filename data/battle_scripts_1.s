@@ -5181,6 +5181,14 @@ BattleScript_FlinchPreventedByItem::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES (src/fork/silent_ability_popup.c)
+BattleScript_SilentAbilityRevealed::
+	copybyte gBattlerAbility, sBATTLER
+	showabilitypopup
+	pause B_WAIT_TIME_MED
+	sethword sABILITY_OVERWRITE, 0
+	return
+
 BattleScript_ActivateAsOne::
 	call BattleScript_AbilityPopUp
 	printfromtable gSwitchInAbilityStringIds

@@ -258,12 +258,17 @@ enum Move GetMaxMove(enum BattlerId battler, enum Move baseMove)
     // one it computed. On conflict: keep the save/clear/restore around whatever upstream's
     // type resolution has become. If upstream ever has SetTypeBeforeUsingMove clear the
     // latch itself, this becomes redundant and should go.
+    // SetTypeBeforeUsingMove also clears the category latch, which the AI's damage simulation
+    // has set for the Max Move it is pricing by the time it asks this (test/fork/damage_preview.c,
+    // "Tough Claws"), so that is put back too.
     enum Type savedDynamicMoveType = gBattleStruct->dynamicMoveType;
+    enum DamageCategory savedDynamicMoveCategory = gBattleStruct->dynamicMoveCategory;
 
     gBattleStruct->dynamicMoveType = TYPE_NONE;
     SetTypeBeforeUsingMove(baseMove, battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
     moveType = GetBattleMoveType(baseMove);
     gBattleStruct->dynamicMoveType = savedDynamicMoveType;
+    gBattleStruct->dynamicMoveCategory = savedDynamicMoveCategory;
 
     if (baseMove == MOVE_NONE) // for move display
         return MOVE_NONE;
