@@ -51,6 +51,10 @@ u32 GetFoeHpPercent(u32 foeIndex);
 // The same rounded-up figure for one of the player's on-field battlers (Overview page "You:" rows):
 // a 1/4-max-HP cost like Substitute is affordable iff it reads 26 or more.
 u32 GetBattlerHpPercent(u32 battler);
+// The rounding rule behind both readouts above, on raw HP: rounded up, 99 at most below full,
+// 100 only at full. The healthbox HP % (B_HEALTHBOX_HP_PERCENT) uses it too, so the box and
+// the INFO pages can never disagree.
+u32 HpPercentRoundedUp(u32 hp, u32 maxHP);
 // The Overview page's Speed range for a seen foe party slot: 0 IV / 0 EV / hindering nature up to
 // 31 / 252 / boosting, then scaled by every modifier the player can see (stat stages, paralysis,
 // Tailwind, weather, revealed item and ability, innates). A benched foe is priced as if it

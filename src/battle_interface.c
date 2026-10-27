@@ -28,6 +28,7 @@
 #include "item.h"
 #include "item_icon.h"
 #include "item_use.h"
+#include "fork/healthbox_hp_percent.h"
 #include "test_runner.h"
 #include "constants/battle_anim.h"
 #include "constants/rgb.h"
@@ -877,6 +878,17 @@ static void UpdateLvlInHealthbox(u8 healthboxSpriteId, u8 lvl)
     enum BattlerId battler = gSprites[healthboxSpriteId].hMain_Battler;
     u32 spriteId = gSprites[healthboxSpriteId].oam.affineParam;
 
+    // FORK: B_HEALTHBOX_HP_PERCENT shows the HP % in this slot instead of the level. The %
+    // itself is drawn by UpdateHpTextInHealthbox, which HEALTHBOX_ALL always runs right after
+    // this; here only the gimmick icon is placed, at its level-100 spot (the % is never wider
+    // than "100"). See src/fork/healthbox_hp_percent.c.
+    if (B_HEALTHBOX_HP_PERCENT)
+    {
+        UpdateIndicatorLevelData(healthboxSpriteId, MAX_LEVEL);
+        UpdateIndicatorVisibilityAndType(healthboxSpriteId, GetIndicatorPalTag(battler) == TAG_NONE);
+        return;
+    }
+
     // Don't print Lv char if mon has a gimmick with an indicator active.
     if (GetIndicatorPalTag(battler) != TAG_NONE)
     {
@@ -1078,6 +1090,10 @@ void UpdateHpTextInHealthbox(u32 healthboxSpriteId, u32 maxOrCurrent, s16 currHp
 {
     enum BattlerId battler = gSprites[healthboxSpriteId].hMain_Battler;
     u32 barSpriteId = gSprites[healthboxSpriteId].data[5];
+    // FORK: B_HEALTHBOX_HP_PERCENT -- every HP redraw (each frame of the bar draining, and
+    // HEALTHBOX_ALL) also redraws the HP % in the level slot, so it counts with the bar.
+    if (B_HEALTHBOX_HP_PERCENT)
+        PrintHealthboxHpPercent(healthboxSpriteId, battler, currHp, maxHp, sHealthBoxTextColor, HEALTHBOX_BG_INDEX);
     switch (GetBattlerCoordsIndex(battler))
     {
     default:
