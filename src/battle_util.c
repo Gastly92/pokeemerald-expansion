@@ -19,6 +19,7 @@
 #include "fork/buff_no_guard.h" // FORK: BUFF_NO_GUARD (No Guard "wild swings" power)
 #include "fork/buff_berries.h" // FORK: BUFF_RESIST_BERRIES
 #include "fork/dynamax_sleep.h" // FORK: DETERMINISTIC_STATUS Dynamax resists sleep
+#include "fork/buff_gimmick_moves.h" // FORK: BUFF_GIMMICK_MOVES_IGNORE_DEF_BOOSTS
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -8164,6 +8165,9 @@ static inline u32 CalcDefenseStat(struct DamageContext *ctx)
 
     // critical hits ignore positive stat changes
     if (ctx->isCrit && defStage > DEFAULT_STAT_STAGE)
+        defStage = DEFAULT_STAT_STAGE;
+    // FORK: BUFF_GIMMICK_MOVES_IGNORE_DEF_BOOSTS - Z-Moves and Max Moves ignore positive Def/Sp. Def stages like a crit
+    if (defStage > DEFAULT_STAT_STAGE && GimmickMoveIgnoresDefenseBoosts(ctx->battlerAtk))
         defStage = DEFAULT_STAT_STAGE;
     // Pokémon with unaware ignore defense stat changes while dealing damage
     if (ctx->abilities[ctx->battlerAtk] == ABILITY_UNAWARE)

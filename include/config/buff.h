@@ -483,4 +483,17 @@
 // still applies). Stock behavior (flag off) is 1. Ignored when BUFF_DAMAGED_STAT_BERRIES is FALSE.
 #define BUFF_DAMAGED_STAT_BERRY_STAGES 2
 
+// When TRUE, Z-Moves and Max Moves ignore the target's positive Defense / Sp. Def stat stages
+// when dealing damage, exactly as a critical hit does. Drops still count, and nothing else about
+// a crit carries over (no 1.5x, screens still apply, the attacker's own stages are untouched).
+//
+// Why: a gimmick move is a once-per-battle (or three-turn) investment, and a single Iron Defense
+// or Calm Mind could halve it. Ignoring boosts makes the gimmick a reliable answer to a set-up
+// wall, which is the job it should be best at.
+//
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS). See
+// GimmickMoveIgnoresDefenseBoosts() in include/fork/buff_gimmick_moves.h and its call site in
+// CalcDefenseStat(), src/battle_util.c.
+#define BUFF_GIMMICK_MOVES_IGNORE_DEF_BOOSTS TRUE
+
 #endif // GUARD_CONFIG_BUFF_H
