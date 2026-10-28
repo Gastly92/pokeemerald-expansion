@@ -33,6 +33,8 @@
 // persists (e.g. Mega Venusaur keeps Overgrow / Chlorophyll though its real ability is Thick Fat).
 // Exceptions: grounded Megas must not float — Mega Gengar mirrors the base row minus Levitate, and
 // Mega Mewtwo X keeps only Pressure (dropping base Mewtwo's Levitate).
+// Levitate goes only to designs that hover or fly; grounded species (and Flying-types whose design
+// doesn't call for it) are listed in fork-docs/INNATE_ABILITIES.md#ability_levitate.
 
 struct SpeciesInnates
 {
@@ -569,7 +571,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CUTE_CHARM,
             ABILITY_DANCER,
             ABILITY_FRIEND_GUARD,
-            ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
             ABILITY_SERENE_GRACE,
             ABILITY_UNAWARE
@@ -965,7 +966,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FOREWARN,
             ABILITY_INNER_FOCUS,
-            ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
             ABILITY_TELEPATHY
         )
@@ -3674,7 +3674,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GARDEVOIR,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_LEVITATE,
             ABILITY_SERENE_GRACE,
             ABILITY_TELEPATHY
         )
@@ -3683,7 +3682,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GARDEVOIR_MEGA,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_LEVITATE,
             ABILITY_SERENE_GRACE,
             ABILITY_TELEPATHY
         )
@@ -4802,7 +4800,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RAYQUAZA,
         INNATES(
             ABILITY_INSOMNIA,
-            ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE
         )
@@ -4811,7 +4808,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RAYQUAZA_MEGA,
         INNATES(
             ABILITY_INSOMNIA,
-            ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE
         )
@@ -5903,7 +5899,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PALKIA,
         INNATES(
             ABILITY_INFILTRATOR,
-            ABILITY_LEVITATE,
             ABILITY_MOLD_BREAKER,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
@@ -5914,7 +5909,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_PALKIA_ORIGIN,
         INNATES(
             ABILITY_INFILTRATOR,
-            ABILITY_LEVITATE,
             ABILITY_MOLD_BREAKER,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
@@ -5943,7 +5937,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0487
         SPECIES_GIRATINA_ALTERED,
         INNATES(
-            ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
             ABILITY_SHADOW_TAG,
@@ -6914,7 +6907,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_COFAGRIGUS,
         INNATES(
             ABILITY_CURSED_BODY,
-            ABILITY_LEVITATE,
             ABILITY_SHADOW_TAG
         )
     },
@@ -7363,7 +7355,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANALYTIC,
             ABILITY_FRISK,
-            ABILITY_LEVITATE,
             ABILITY_TELEPATHY
         )
     },
@@ -7372,7 +7363,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANALYTIC,
             ABILITY_FRISK,
-            ABILITY_LEVITATE,
             ABILITY_TELEPATHY
         )
     },
@@ -9264,7 +9254,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRISK,
             ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
-            ABILITY_LEVITATE,
             ABILITY_PICKUP
         )
     },
@@ -9274,7 +9263,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRISK,
             ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
-            ABILITY_LEVITATE,
             ABILITY_PICKUP
         )
     },
@@ -9284,7 +9272,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRISK,
             ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
-            ABILITY_LEVITATE,
             ABILITY_PICKUP
         )
     },
@@ -9294,7 +9281,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FRISK,
             ABILITY_ILLUMINATE,
             ABILITY_INSOMNIA,
-            ABILITY_LEVITATE,
             ABILITY_PICKUP
         )
     },
@@ -10356,7 +10342,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0781
         SPECIES_DHELMISE,
         INNATES(
-            ABILITY_LEVITATE,
             ABILITY_REGENERATOR,
             ABILITY_STEELWORKER
         )
@@ -10456,7 +10441,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_FULL_METAL_BODY,
             ABILITY_ILLUMINATE,
-            ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
             ABILITY_STURDY,
@@ -10504,7 +10488,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_XURKITREE,
         INNATES(
             ABILITY_BEAST_BOOST,
-            ABILITY_LEVITATE,
             ABILITY_PRESSURE
         )
     },
@@ -10545,7 +10528,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_NECROZMA_DUSK_MANE,
         INNATES(
             ABILITY_FULL_METAL_BODY,
-            ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
             ABILITY_PRISM_ARMOR
@@ -10645,7 +10627,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_AFTERMATH,
             ABILITY_BEAST_BOOST,
-            ABILITY_LEVITATE,
             ABILITY_PRESSURE
         )
     },
@@ -11686,7 +11667,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_REGIELEKI,
         INNATES(
             ABILITY_CLEAR_BODY,
-            ABILITY_LEVITATE,
             ABILITY_PRESSURE,
             ABILITY_TRANSISTOR
         )
@@ -12718,7 +12698,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_IRON_JUGULIS,
         INNATES(
             ABILITY_KEEN_EYE,
-            ABILITY_LEVITATE,
             ABILITY_QUARK_DRIVE,
             ABILITY_UNNERVE
         )

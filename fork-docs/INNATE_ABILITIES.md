@@ -808,6 +808,16 @@ interactions — field terrain and Toxic Spikes absorption (via `IsBattlerGround
 Poison-type still clears Toxic Spikes — things a real Levitate forgoes. This is why
 terrain summoners (the Tapus, Miraidon) and Poison floaters happily carry the innate.
 
+**Who carries it:** only species that hover or fly *by design*. Grounded, legged designs don't,
+even when Psychic- or Ghost-flavored: base Clefable, Alakazam, Gardevoir (and its Mega), Elgyem,
+Beheeyem, Cofagrigus, Gourgeist, Palkia (both formes), Giratina Altered (Origin floats), Solgaleo,
+Necrozma Dusk Mane, Dhelmise, Xurkitree, Blacephalon and Regieleki. Where a Mega's design floats
+and the base doesn't, the Mega alone keeps it (Mega Clefable's wings, Mega Alakazam). On a
+Flying-type it is not redundant: it keeps the Ground immunity through Roost and Tera, *and* the
+pure-boon grounding above hands it terrain benefits a plain Flying-type never gets, so it is
+withheld from flyers whose design doesn't call for it (Rayquaza and its Mega, Iron Jugulis). Altaria
+keeps it because Mega Altaria drops the Flying type.
+
 ### ABILITY_REGENERATOR
 
 Heals 1/3 max HP on switch-out, handled at the single switch-out
