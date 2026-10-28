@@ -2109,7 +2109,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_WILLPOWER
         )
     },
     { // 0152
@@ -3363,11 +3364,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0251
         SPECIES_CELEBI,
         INNATES(
+            ABILITY_FILTER,
             ABILITY_FOREWARN,
             ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE,
             ABILITY_PRESSURE,
-            ABILITY_REGENERATOR
+            ABILITY_REGENERATOR,
+            ABILITY_TRIAGE,
+            ABILITY_WILLPOWER
         )
     },
     { // 0252
