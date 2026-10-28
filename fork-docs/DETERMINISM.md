@@ -373,6 +373,11 @@ which subtracts 2 per attempt, therefore no longer sheds a sleep move outright
 Because the counter only moves on the *sleeper's* action, a faster attacker still
 sees a sleeping target on the wake turn, so sleep-gated moves (Dream Eater,
 Nightmare) get two windows per application rather than one.
+**Dynamax resists sleep** (`src/fork/dynamax_sleep.c`): a fixed sleep costs two of a
+Dynamax's three turns, so a Dynamaxed battler is immune to sleep ("It doesn't affect…"
+on sleep moves, Yawn, Effect Spore and sleep secondaries, and the AI knows it), and
+Dynamaxing wakes a sleeping battler ("X woke up!" before the Dynamax animation, after
+which it acts normally) and clears any pending Yawn drowsiness.
 **Confusion** stops being a 2-5 turn chain of self-hit rolls (`CancelerConfused`):
 on its first confused action the battler takes **one** guaranteed typeless
 self-hit (40 BP, or 60 under `BUFF_CONFUSION_SELF_DAMAGE`, `config/buff.h`) but

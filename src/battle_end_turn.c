@@ -15,6 +15,7 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
+#include "fork/dynamax_sleep.h" // FORK: DETERMINISTIC_STATUS Dynamax resists sleep
 
 static enum BattlerId GetBattlerSideForMessage(enum BattleSide side)
 {
@@ -1010,6 +1011,7 @@ static bool32 HandleEndTurnYawn(enum BattlerId battler)
          && !BattlerHasAbility(battler, ABILITY_VITAL_SPIRIT) // FORK: innate-aware (FEATURE_INNATE_ABILITIES)
          && !BattlerHasAbility(battler, ABILITY_INSOMNIA)     // FORK: innate-aware
          && !UproarWakeUpCheck(battler)
+         && !IsDynamaxSleepImmune(battler) // FORK: DETERMINISTIC_STATUS (src/fork/dynamax_sleep.c)
          && !IsLeafGuardProtected(battler, ability))
         {
             gEffectBattler = gBattlerTarget = battler;
