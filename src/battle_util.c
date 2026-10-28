@@ -18,6 +18,7 @@
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "fork/buff_no_guard.h" // FORK: BUFF_NO_GUARD (No Guard "wild swings" power)
 #include "fork/buff_berries.h" // FORK: BUFF_RESIST_BERRIES
+#include "fork/dynamax_sleep.h" // FORK: DETERMINISTIC_STATUS Dynamax resists sleep
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -5973,6 +5974,12 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         else if (IsElectricTerrainAffected(battlerDef, abilityDef, GetBattlerHoldEffect(battlerDef), gFieldTimers.terrain))
         {
             battleScript = BattleScript_ElectricTerrainPrevents;
+        }
+        // FORK: DETERMINISTIC_STATUS makes a Dynamaxed battler immune to sleep (src/fork/dynamax_sleep.c).
+        // Every sleep source and the AI's CanBeSlept route through here.
+        else if (IsDynamaxSleepImmune(battlerDef))
+        {
+            battleScript = BattleScript_NotAffected;
         }
         // FORK: credit an innate Sweet Veil on the side too (FEATURE_INNATE_ABILITIES). The real
         // ability is checked first; only if neither side member chose it do we look for an innate.

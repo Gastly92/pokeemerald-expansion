@@ -11,6 +11,7 @@
 #include "graphics.h"
 #include "item.h"
 #include "fork/mythical.h" // FORK: Mythical stacks with Dynamax
+#include "fork/dynamax_sleep.h" // FORK: DETERMINISTIC_STATUS Dynamax resists sleep
 #include "pokemon.h"
 #include "random.h"
 #include "sprite.h"
@@ -187,6 +188,7 @@ void ActivateDynamax(enum BattlerId battler)
         TryBattleFormChange(battler, FORM_CHANGE_BATTLE_GIGANTAMAX, GetBattlerAbility(battler));
 
     BattleScriptPushCursorAndCallback(BattleScript_DynamaxBegins);
+    TryDynamaxWakeUp(battler); // FORK: DETERMINISTIC_STATUS Dynamax wakes a sleeper (src/fork/dynamax_sleep.c)
 }
 
 // Unsets the flags used for Dynamaxing and reverts max HP if needed.

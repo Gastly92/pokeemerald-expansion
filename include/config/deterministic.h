@@ -318,6 +318,10 @@
 //     action, so a value of N costs the target N-1 actions, not N. Rest is NOT
 //     governed by this flag: it hardcodes STATUS1_SLEEP_TURN(3) at the EFFECT_REST
 //     site in src/battle_script_commands.c.
+//   - Dynamax resists sleep: a fixed 3-turn sleep would eat two of a Dynamax's three
+//     turns, so a Dynamaxed battler can't be put to sleep (sleep moves, Yawn and
+//     secondary effects fail), and Dynamaxing wakes a sleeping battler and clears
+//     Yawn's drowsiness. See src/fork/dynamax_sleep.c.
 //   - Confusion stops being a 2-5 turn chain of self-hit rolls. The confused
 //     battler's next ATTACKING move makes it hit itself once (the usual 40-BP
 //     typeless self-hit) and then confusion clears; a STATUS move shakes it off
