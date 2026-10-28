@@ -2667,9 +2667,10 @@ takes effect on its side. All three `canon only so far` (no flavor picks).
   `ShouldTriggerAbility`). Thermal Exchange's burn-immunity AI is free (above).
 
 Suppression parity holds via `IsInnateActive()` for all three (Gastro Acid / Neutralizing Gas / not-on-field);
-only Thermal Exchange is `breakable`. **Species (canon only so far):** Steam Engine -> the Rolycoly line (Rolycoly /
+only Thermal Exchange is `breakable`. **Species:** Steam Engine -> the Rolycoly line (Rolycoly /
 Carkol / Coalossal + Coalossal-Gmax), Thermal Exchange -> the Frigibax line (Frigibax / Arctibax / Baxcalibur +
-the fork's Mega), Wind Power -> the Wattrel line (Wattrel / Kilowattrel) — each merged into the species' existing
+the fork's Mega), Wind Power -> the Wattrel line (Wattrel / Kilowattrel) and Thundurus (both formes, whose storm energy Bulbapedia
+describes as lightning combined with wind) — each merged into the species' existing
 innate row. Step 3.5 freed three frontier sets: Coalossal (Steam Engine now innate) -> its complementary real
 slot-2 **Flash Fire**; both Baxcalibur sets (Thermal Exchange + Ice Body both innate = all real abilities innate)
 -> a fork-owned override filling empty slot 1 with **Snow Warning**, whose snow turns on the innate Ice Body heal.
@@ -4573,6 +4574,10 @@ resilience:
 - **Hitmonchan**, whose "indomitable spirit means that it will never give up".
 - **Mew** and **Celebi**, as a legendary buff for the two Psychic Mythicals of Kanto and Johto,
   whose power is framed as mental (Mew "is capable of making itself invisible at will").
+- **Landorus** (both formes), a maintainer's pick outside the Pokédex criterion: its entries are
+  about crops, but it is the steady one of the Forces of Nature, the one who stops and subdues
+  Tornadus and Thundurus (anime *Stopping the Rage of Legends! Part 2*; Pokémon Adventures, *A Stormy
+  Time in the Battle Subway*). It also shores up a physical attacker's weak special side.
 
 Species with no such flavor were left out on purpose, whether special walls (Mantine, Goodra) or
 Sylveon, which it was first proposed for: Sylveon's entry is about lowering the *foe's* guard. No frontier set

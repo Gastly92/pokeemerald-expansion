@@ -370,7 +370,8 @@ and rationale are in [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_rekindl
 **Flavor.** Stamina toughens the body; Willpower toughens the mind, the way Sp. Def is usually
 framed as mental resilience. It goes only on species whose Pokédex text is about a strong will,
 starting with Azelf, the "Willpower Pokémon"; a species that merely has the stats for it does not
-qualify.
+qualify. The one exception is Landorus, the Forces of Nature member that holds the other two in
+check (see its carrier note).
 
 **Trigger.** Stamina's, word for word. The `ABILITYEFFECT_MOVE_END` case in `src/battle_util.c`
 has an `ABILITY_WILLPOWER` arm right beside `ABILITY_STAMINA` that calls
