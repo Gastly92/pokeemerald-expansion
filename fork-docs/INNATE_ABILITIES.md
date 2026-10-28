@@ -1015,7 +1015,8 @@ to attribute beyond its real users): every species whose ability data carries Fi
 Filter), so the signature survives whichever slot a build picks. Mega Aggron already carries innate
 Sturdy (persisting from base Aggron), so it takes the combined `INNATES(STURDY, FILTER)` list. One flavor pick as a legendary buff: **Cresselia**, whose wings shed shining particles "like a veil"; it
 stacks with her innate Multiscale on a super-effective first hit. A second flavor pick: **Stakataka**, a wall
-of stacked stones, carries Filter beside its innate Solid Rock, so a super-effective hit takes 0.75 x 0.75.
+of stacked stones, carries Filter beside its innate Solid Rock, so a super-effective hit takes 0.75 x 0.75. A third legendary buff:
+**Celebi**, whose Psychic/Grass typing carries seven weaknesses including a 4x Bug one.
 
 ### ABILITY_PRESSURE
 
@@ -1940,7 +1941,9 @@ self-avoid branches), so the AI values/avoids the terrain for an innate-priority
 **Species (canon only so far, no flavor picks yet — a priority boost is potent, the same reasoning that kept
 Prankster's flavor set tight):** Gale Wings → the Fletchling line (Fletchling, Fletchinder, Talonflame —
 its canon Hidden-Ability users; no Mega/regional forms to mirror). Triage → Comfey (its only canon user),
-merged into Comfey's existing `INNATES(LEVITATE, NATURAL_CURE)` row.
+merged into Comfey's existing `INNATES(LEVITATE, NATURAL_CURE)` row. One legendary-buff pick: **Celebi**, the
+forest's healer, whose Giga Drain and Recover both carry `healingMove`, so its Grassy Terrain-boosted drain
+moves first.
 
 **Frontier (Step 3.5):** four hardcoded sets were freed. Both Talonflame Gale-Wings sets take a
 complementary REAL slot — chosen **Flame Body** (`:x:` in the progress doc → stable), burning contact
@@ -4568,6 +4571,8 @@ resilience:
 - **Meditite, Medicham** (+ Mega), the "Meditate Pokémon"; Mega Medicham's entry says it "uses
   its amped-up willpower" to create extra arms.
 - **Hitmonchan**, whose "indomitable spirit means that it will never give up".
+- **Mew** and **Celebi**, as a legendary buff for the two Psychic Mythicals of Kanto and Johto,
+  whose power is framed as mental (Mew "is capable of making itself invisible at will").
 
 Species with no such flavor were left out on purpose, whether special walls (Mantine, Goodra) or
 Sylveon, which it was first proposed for: Sylveon's entry is about lowering the *foe's* guard. No frontier set
