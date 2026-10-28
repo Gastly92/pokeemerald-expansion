@@ -77,12 +77,9 @@ void ApplyHealthboxIndicatorPosition(struct Sprite *sprite, enum BattlerId battl
 {
     s32 left = gSprites[gHealthboxSpriteIds[battler]].x + SECOND_SPRITE_LEFT + GetSlotRight(battler) - INDICATOR_WIDTH;
 
-    // Flush with the slot's right edge.
+    // Flush with the slot's right edge. The height stays upstream's for every icon: nudging the
+    // Dynamax icon 1px either way was tried in play and looked worse.
     sprite->x = left - sprite->centerToCornerVecX;
-    // The Dynamax icon sits 1px lower than upstream places it, which reads better beside the
-    // (also lowered) HP %. Tuned by eye in play.
-    if (GetActiveGimmick(battler) == GIMMICK_DYNAMAX)
-        sprite->y2 += 1;
 }
 
 void PrintHealthboxHpPercent(u32 healthboxSpriteId, enum BattlerId battler, s32 currHp, s32 maxHp, const union TextColor textColor, u32 bgColor)

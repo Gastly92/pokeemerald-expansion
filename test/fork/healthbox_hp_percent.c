@@ -49,8 +49,8 @@ TEST("Healthbox HP %: every reading leaves a gap before the gimmick icon")
 }
 
 // The icon is pinned to the healthbox's right edge by a hook in upstream's SpriteCb_GimmickIndicator,
-// and the Dynamax icon sits 1px lower. If upstream moves the indicator's positioning, this fails.
-SINGLE_BATTLE_TEST("Healthbox HP %: the gimmick icon sits at the box's right edge, Dynamax 1px lower")
+// at upstream's height. If upstream moves the indicator's positioning, this fails.
+SINGLE_BATTLE_TEST("Healthbox HP %: the gimmick icon sits at the box's right edge")
 {
     GIVEN {
         PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_SCRATCH); }
@@ -67,7 +67,7 @@ SINGLE_BATTLE_TEST("Healthbox HP %: the gimmick icon sits at the box's right edg
 
             icon->callback(icon);
             EXPECT_EQ(icon->x + icon->centerToCornerVecX + 8, healthbox->x + slotRight);
-            EXPECT_EQ(icon->y2, healthbox->y2 + (battler == B_BATTLER_0 ? 1 : 0));
+            EXPECT_EQ(icon->y2, healthbox->y2);
         }
     }
 }
