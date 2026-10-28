@@ -3151,6 +3151,26 @@ TEST("Innate abilities: grounded Megas do not gain innate Levitate")
     EXPECT(!SpeciesHasInnate(SPECIES_MEWTWO_MEGA_X, ABILITY_LEVITATE));
 }
 
+TEST("Innate abilities: grounded designs do not gain innate Levitate")
+{
+    static const u16 grounded[] =
+    {
+        SPECIES_CLEFABLE, SPECIES_ALAKAZAM, SPECIES_GARDEVOIR, SPECIES_GARDEVOIR_MEGA,
+        SPECIES_RAYQUAZA, SPECIES_RAYQUAZA_MEGA, SPECIES_PALKIA, SPECIES_PALKIA_ORIGIN,
+        SPECIES_GIRATINA_ALTERED, SPECIES_ELGYEM, SPECIES_BEHEEYEM, SPECIES_COFAGRIGUS,
+        SPECIES_GOURGEIST, SPECIES_GOURGEIST_SMALL, SPECIES_GOURGEIST_LARGE, SPECIES_GOURGEIST_SUPER,
+        SPECIES_DHELMISE, SPECIES_SOLGALEO, SPECIES_NECROZMA_DUSK_MANE, SPECIES_XURKITREE,
+        SPECIES_BLACEPHALON, SPECIES_REGIELEKI, SPECIES_IRON_JUGULIS,
+    };
+    for (u32 i = 0; i < ARRAY_COUNT(grounded); i++)
+        EXPECT(!SpeciesHasInnate(grounded[i], ABILITY_LEVITATE));
+    // A Mega whose design floats keeps it though its grounded base does not.
+    EXPECT(SpeciesHasInnate(SPECIES_CLEFABLE_MEGA, ABILITY_LEVITATE));
+    EXPECT(SpeciesHasInnate(SPECIES_ALAKAZAM_MEGA, ABILITY_LEVITATE));
+    // The floating forme keeps it.
+    EXPECT(SpeciesHasInnate(SPECIES_GIRATINA_ORIGIN, ABILITY_LEVITATE));
+}
+
 // Mega forms mirror innates the base gained later (Sand Veil / Snow Cloak), across BOTH the
 // standard Mega and the fork's Mega Z variant, so a Garchomp/Absol keeps the trait whichever
 // Mega Stone it holds (ITEM_GARCHOMPITE -> _MEGA, ITEM_GARCHOMPITE_Z -> _MEGA_Z).
