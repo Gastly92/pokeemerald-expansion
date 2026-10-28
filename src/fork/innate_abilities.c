@@ -7726,7 +7726,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_DEFIANT,
             ABILITY_PRANKSTER,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_WIND_POWER
         )
     },
     { // 0642
@@ -7734,7 +7735,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_DEFIANT,
             ABILITY_PRANKSTER,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_WIND_POWER
         )
     },
     { // 0643
@@ -7757,16 +7759,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0645
         SPECIES_LANDORUS_INCARNATE,
         INNATES(
+            ABILITY_HARVEST,
             ABILITY_PRESSURE,
-            ABILITY_SAND_FORCE
+            ABILITY_SAND_FORCE,
+            ABILITY_WILLPOWER
         )
     },
     { // 0645
         SPECIES_LANDORUS_THERIAN,
         INNATES(
+            ABILITY_HARVEST,
             ABILITY_INTIMIDATE,
             ABILITY_PRESSURE,
-            ABILITY_SAND_FORCE
+            ABILITY_SAND_FORCE,
+            ABILITY_WILLPOWER
         )
     },
     { // 0646
@@ -11831,6 +11837,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0905
         SPECIES_ENAMORUS_THERIAN,
         INNATES(
+            ABILITY_CUTE_CHARM,
             ABILITY_HEALER,
             ABILITY_JUSTIFIED,
             ABILITY_OVERCOAT,
