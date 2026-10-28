@@ -24910,6 +24910,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_PSYCHIC,
         .iv = IVS(SPE, 0),
     },
+    {
+        .species = SPECIES_HOOPA_UNBOUND,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_HYPERSPACE_FURY,
+            MOVE_GUNK_SHOT,
+            MOVE_TRICK_ROOM,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_SHEER_FORCE,
+        .nature = NATURE(ATK_UP, SPE_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_POISON,
+        .iv = IVS(SPE, 0),
+    },
 
     // 0721
     {

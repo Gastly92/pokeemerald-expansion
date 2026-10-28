@@ -9427,21 +9427,31 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0720
         SPECIES_HOOPA,
         INNATES(
+            ABILITY_FRISK,
+            ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_MAGICIAN,
+            ABILITY_OPPORTUNIST,
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0720
         SPECIES_HOOPA_UNBOUND,
         INNATES(
+            ABILITY_FRISK,
+            ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_MAGICIAN,
+            ABILITY_OPPORTUNIST,
             ABILITY_PICKPOCKET,
             ABILITY_PRANKSTER,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TELEPATHY
         )
     },
     { // 0721
