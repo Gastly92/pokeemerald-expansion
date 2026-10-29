@@ -5924,6 +5924,15 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_SUCTION_CUPS
         )
     },
+    { // 0485
+        SPECIES_HEATRAN_MEGA,
+        INNATES(
+            ABILITY_MAGMA_ARMOR,
+            ABILITY_PRESSURE,
+            ABILITY_STURDY,
+            ABILITY_SUCTION_CUPS
+        )
+    },
     { // 0486
         SPECIES_REGIGIGAS,
         INNATES(
@@ -5988,8 +5997,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
-            ABILITY_PRESSURE,
-            ABILITY_UNNERVE
+            ABILITY_PRESSURE
         )
     },
     { // 0491
@@ -5999,9 +6007,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
-            ABILITY_PRESSURE,
-            ABILITY_SHADOW_TAG,
-            ABILITY_UNNERVE
+            ABILITY_PRESSURE
         )
     },
     { // 0492
@@ -7829,6 +7835,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_DANCER,
             ABILITY_HEALER,
+            ABILITY_PRESSURE,
             ABILITY_SERENE_GRACE
         )
     },
@@ -9423,6 +9430,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_HEATPROOF,
             ABILITY_LEVITATE,
             ABILITY_MAGIC_BOUNCE,
+            ABILITY_PRESSURE,
             ABILITY_STURDY
         )
     },
@@ -10555,6 +10563,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
             ABILITY_NEUROFORCE,
+            ABILITY_PRESSURE,
             ABILITY_PRISM_ARMOR
         )
     },
@@ -10572,6 +10581,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CLEAR_BODY,
             ABILITY_CUTE_CHARM,
+            ABILITY_PRESSURE,
             ABILITY_SOUL_HEART
         )
     },
@@ -10580,6 +10590,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CLEAR_BODY,
             ABILITY_CUTE_CHARM,
+            ABILITY_PRESSURE,
             ABILITY_SOUL_HEART
         )
     },
@@ -10588,6 +10599,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CLEAR_BODY,
             ABILITY_CUTE_CHARM,
+            ABILITY_PRESSURE,
             ABILITY_SOUL_HEART
         )
     },
@@ -10650,6 +10662,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_IRON_FIST,
             ABILITY_LIMBER,
+            ABILITY_PRESSURE,
             ABILITY_TOUGH_CLAWS
         )
     },
@@ -10674,7 +10687,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_IRON_FIST,
             ABILITY_MAGMA_ARMOR,
-            ABILITY_MAGNET_PULL
+            ABILITY_MAGNET_PULL,
+            ABILITY_PRESSURE
         )
     },
     { // 0810
@@ -11641,6 +11655,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INNER_FOCUS,
             ABILITY_IRON_FIST,
+            ABILITY_PRESSURE,
             ABILITY_UNSEEN_FIST
         )
     },
@@ -11649,6 +11664,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INNER_FOCUS,
             ABILITY_IRON_FIST,
+            ABILITY_PRESSURE,
             ABILITY_UNSEEN_FIST
         )
     },
@@ -11666,6 +11682,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_INTIMIDATE,
             ABILITY_LEAF_GUARD,
+            ABILITY_PRESSURE,
             ABILITY_TOUGH_CLAWS
         )
     },
@@ -12757,6 +12774,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BAXCALIBUR_MEGA,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_PRESSURE,
             ABILITY_THERMAL_EXCHANGE
         )
     },
@@ -12989,14 +13007,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_OGERPON_TEAL_TERA,
         INNATES(
             ABILITY_DEFIANT,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_PRESSURE
         )
     },
     { // 1017
         SPECIES_OGERPON_WELLSPRING_TERA,
         INNATES(
             ABILITY_DEFIANT,
-            ABILITY_LIMBER
+            ABILITY_LIMBER,
+            ABILITY_PRESSURE
         )
     },
     { // 1017
@@ -13004,7 +13024,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_DEFIANT,
             ABILITY_LIMBER,
-            ABILITY_MOLD_BREAKER
+            ABILITY_MOLD_BREAKER,
+            ABILITY_PRESSURE
         )
     },
     { // 1017
@@ -13012,6 +13033,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_DEFIANT,
             ABILITY_LIMBER,
+            ABILITY_PRESSURE,
             ABILITY_STURDY
         )
     },
