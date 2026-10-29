@@ -14813,7 +14813,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BRAVE_BIRD,
             MOVE_U_TURN,
             MOVE_NIGHT_SLASH,
-            MOVE_PSYCHO_CUT
+            MOVE_IRON_HEAD
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -14833,7 +14833,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAILWIND,
             MOVE_BRAVE_BIRD,
             MOVE_SUCKER_PUNCH,
-            MOVE_PROTECT
+            MOVE_ROCK_SLIDE
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -18665,7 +18665,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_TAILWIND,
             MOVE_BRAVE_BIRD,
-            MOVE_U_TURN,
+            MOVE_BODY_SLAM,
             MOVE_PROTECT
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -19084,7 +19084,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF,
-            MOVE_STONE_EDGE,
+            MOVE_ROCK_SLIDE,
             MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -22207,7 +22207,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -22227,7 +22227,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_TOXIC
         },
-        .ability = ABILITY_SHEER_FORCE,
+        .ability = ABILITY_SAND_STREAM,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -23265,7 +23265,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SWORDS_DANCE,
             MOVE_KNOCK_OFF,
-            MOVE_DRAIN_PUNCH,
+            MOVE_ICE_PUNCH,
             MOVE_SUCKER_PUNCH
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -23852,7 +23852,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_OUTRAGE,
             MOVE_HEAD_SMASH,
-            MOVE_EARTHQUAKE
+            MOVE_FIRE_FANG
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
