@@ -236,7 +236,7 @@
 #define B_FRONTIER_DISABLE_RECORD_BATTLE    TRUE
 
 // If TRUE, Frontier trainer battles use a background matching the opponent's trainer
-// class (Bug Catcher -> long grass, Hiker -> mountain, Swimmer -> water, ...) instead of
+// class (Bug Catcher -> long grass, Hiker -> mountain, Swimmer -> underwater, ...) instead of
 // the stock Frontier backdrop. Frontier Brains get an Elite Four / Champion arena, the
 // Tower's gym-leader bosses the Leader arena. Visual only: gBattleEnvironment (Nature
 // Power, Secret Power, Camouflage) is unchanged. Table in src/fork/frontier_battle_bg.c.
