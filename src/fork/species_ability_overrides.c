@@ -1963,6 +1963,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_COMFEY, 2,
         ABILITY_GRASSY_SURGE
     },
+    { // 0768
+        SPECIES_GOLISOPOD_MEGA, 0,
+        ABILITY_EMERGENCY_EXIT
+    },
+    {
+        SPECIES_GOLISOPOD_MEGA, 1,
+        ABILITY_EMERGENCY_EXIT
+    },
+    {
+        SPECIES_GOLISOPOD_MEGA, 2,
+        ABILITY_EMERGENCY_EXIT
+    },
     { // 0770
         SPECIES_PALOSSAND, 1,
         ABILITY_EARTH_EATER
@@ -2343,6 +2355,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CYCLIZAR, 1,
         ABILITY_MOTOR_DRIVE
     },
+    { // 0970
+        SPECIES_GLIMMORA_MEGA, 0,
+        ABILITY_TOXIC_DEBRIS
+    },
+    {
+        SPECIES_GLIMMORA_MEGA, 1,
+        ABILITY_TOXIC_DEBRIS
+    },
+    {
+        SPECIES_GLIMMORA_MEGA, 2,
+        ABILITY_TOXIC_DEBRIS
+    },
     { // 0973
         SPECIES_FLAMIGO, 0,
         ABILITY_WIND_RIDER
@@ -2417,6 +2441,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0998
         SPECIES_BAXCALIBUR, 1,
+        ABILITY_NO_GUARD
+    },
+    {
+        SPECIES_BAXCALIBUR_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    {
+        SPECIES_BAXCALIBUR_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    {
+        SPECIES_BAXCALIBUR_MEGA, 2,
         ABILITY_NO_GUARD
     },
     { // 1000

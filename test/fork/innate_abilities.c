@@ -3204,6 +3204,121 @@ TEST("Innate abilities: Mega forms inherit later-added base innates")
     EXPECT(SpeciesHasInnate(SPECIES_DARKRAI_MEGA, ABILITY_BAD_DREAMS));
 }
 
+// The two sweeps below walk every Mega Evolution form change rather than form tables: a form
+// table's first entry is not always the species that Mega Evolves (Meowstic-F's lists Meowstic-M).
+static bool32 IsMegaEvolutionMethod(enum FormChanges method)
+{
+    return method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM
+        || method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE;
+}
+
+// Megas are a pure boon: a Mega keeps every innate its base form carries. Rows are keyed by form
+// exactly, so a Mega row that does not mirror its base silently drops the trait the moment the
+// creature Mega Evolves (Mega Darkrai's Pressure, Mega Baxcalibur's Sharpness and Slush Rush,
+// Mega Glimmora's Clear Body, Mega Froslass' Shadow Tag, Mega Scovillain's Anger Point and
+// Harvest, the Mega Tatsugiris' Friend Guard). The one ability a Mega may drop is Levitate,
+// because Mega Evolution can plant a floater on the ground (Mega Gengar, Mega Mewtwo X); which
+// Megas must not float is pinned by "grounded Megas do not gain innate Levitate" above.
+TEST("Innate abilities: every Mega carries its base form's innates")
+{
+    u32 species, f, i;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        const struct FormChange *formChanges;
+
+        // Megas and G-Max forms share the base's form-change table but cannot Mega Evolve; without
+        // this, Mega Charizard X reads as Mega Evolving into Mega Charizard Y.
+        if (!IsSpeciesEnabled(species) || gSpeciesInfo[species].isMegaEvolution || gSpeciesInfo[species].isGigantamax)
+            continue;
+        formChanges = GetSpeciesFormChanges(species);
+        if (formChanges == NULL)
+            continue;
+        for (f = 0; formChanges[f].method != FORM_CHANGE_TERMINATOR; f++)
+        {
+            enum Species mega = formChanges[f].targetSpecies;
+            enum Ability innate;
+
+            if (!IsMegaEvolutionMethod(formChanges[f].method))
+                continue;
+            checked++;
+            for (i = 0; (innate = GetSpeciesInnate(species, i)) != ABILITY_NONE; i++)
+            {
+                if (innate == ABILITY_LEVITATE || SpeciesHasInnate(mega, innate))
+                    continue;
+                offenders++;
+                // gSpeciesInfo names carry no "Mega" prefix, so print the species id too.
+                Test_MgbaPrintf("%S's Mega (species %d) drops base innate %S",
+                                gSpeciesInfo[species].speciesName, mega, gAbilitiesInfo[innate].name);
+            }
+        }
+    }
+
+    EXPECT_GT(checked, 0);
+    EXPECT_EQ(offenders, 0);
+}
+
+// A Mega keeps its base form's ability slot, so whatever ability a base slot runs, the same slot
+// of the Mega replaces it. Where the Mega's slot resolves to one of the Mega's own innates, the
+// base's chosen ability is simply lost: base Darkrai runs a Sheer Force override in slot 1, and
+// Mega Darkrai's empty slot 1 fell back to Bad Dreams, already innate. Golisopod lost Emergency
+// Exit to Mega Golisopod's innate Tough Claws the same way. The fix is the Venusaur pattern:
+// override the Mega's slots to the base's chosen ability. A Mega trading the base's ability for
+// a never-an-innate signature of its own (Mega Kangaskhan's Parental Bond) is not a loss and
+// passes. A base slot that already duplicates a base innate is dead before Mega Evolution, so it
+// is skipped.
+TEST("Innate abilities: no Mega's ability slot resolves to its own innate where the base's does not")
+{
+    u32 species, f, slot;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        const struct FormChange *formChanges;
+
+        // Megas and G-Max forms share the base's form-change table but cannot Mega Evolve; without
+        // this, Mega Charizard X reads as Mega Evolving into Mega Charizard Y.
+        if (!IsSpeciesEnabled(species) || gSpeciesInfo[species].isMegaEvolution || gSpeciesInfo[species].isGigantamax)
+            continue;
+        formChanges = GetSpeciesFormChanges(species);
+        if (formChanges == NULL)
+            continue;
+        for (f = 0; formChanges[f].method != FORM_CHANGE_TERMINATOR; f++)
+        {
+            enum Species mega = formChanges[f].targetSpecies;
+
+            if (!IsMegaEvolutionMethod(formChanges[f].method))
+                continue;
+            checked++;
+            for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+            {
+                enum Ability baseAbility, megaAbility;
+
+                if (GetSpeciesAbility(species, slot) == ABILITY_NONE)
+                    continue;
+                baseAbility = GetAbilityBySpecies(species, slot);
+                if (SpeciesHasInnate(species, baseAbility))
+                    continue;
+                megaAbility = GetAbilityBySpecies(mega, slot);
+                if (!SpeciesHasInnate(mega, megaAbility))
+                    continue;
+                offenders++;
+                Test_MgbaPrintf("%S slot %d runs %S, but its Mega (species %d) gets innate %S there -- override the Mega's slot to %S",
+                                gSpeciesInfo[species].speciesName, slot, gAbilitiesInfo[baseAbility].name,
+                                mega, gAbilitiesInfo[megaAbility].name, gAbilitiesInfo[baseAbility].name);
+            }
+        }
+    }
+
+    EXPECT_GT(checked, 0);
+    EXPECT_EQ(offenders, 0);
+}
+
 // The Own Tempo Rockruff is a SEPARATE species from ordinary Rockruff for one reason: it is the
 // only one that evolves into Lycanroc-Dusk, and Own Tempo is the whole difference between them.
 // Its row used to be a byte-for-byte copy of base Rockruff's, so the form's defining trait was the
