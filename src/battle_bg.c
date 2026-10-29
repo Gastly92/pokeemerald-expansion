@@ -28,6 +28,7 @@
 #include "constants/trainers.h"
 #include "constants/battle_anim.h"
 #include "constants/battle_partner.h"
+#include "fork/frontier_battle_bg.h"
 #include "data/battle_environment.h"
 
 // .rodata
@@ -902,6 +903,13 @@ static u8 GetBattleEnvironmentOverride(void)
     {
         return gBattleEnvironment;
     }
+#if B_FRONTIER_THEMED_BACKGROUNDS
+    // FORK: themed Frontier backgrounds (src/fork/frontier_battle_bg.c). Must sit above the
+    // stock Frontier case below; link and e-Reader battles still take that one.
+    else if ((gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+          && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER)))
+        return GetFrontierBattleEnvironment();
+#endif
     else if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER))
         return BATTLE_ENVIRONMENT_FRONTIER;
     else if (gBattleTypeFlags & BATTLE_TYPE_LEGENDARY)
