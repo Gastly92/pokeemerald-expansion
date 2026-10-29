@@ -7384,7 +7384,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
-            ABILITY_LEVITATE,
             ABILITY_REKINDLE,
             ABILITY_SHADOW_TAG
         )
@@ -12797,7 +12796,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0999
         SPECIES_GIMMIGHOUL_ROAMING,
         INNATES(
-            ABILITY_LEVITATE,
             ABILITY_PICKUP,
             ABILITY_RATTLED
         )
@@ -13129,7 +13127,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_CORROSION,
             ABILITY_CURSED_BODY,
-            ABILITY_LEVITATE,
             ABILITY_PRESSURE
         )
     },
