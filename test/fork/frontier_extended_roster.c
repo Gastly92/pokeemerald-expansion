@@ -317,8 +317,8 @@ TEST("Frontier extended roster: no set uses ABILITY_NONE (every set names a real
 // Sheer Force hands it to every set that resolves to that slot -- whatever it chose as its
 // base ability. That is exactly how the Klutz/Toxic Orb/Switcheroo Lopunny lost its Fake Out
 // flinch: LOPUNNY_MEGA had Sheer Force in all three slots, so Mega Evolving silently swapped
-// Klutz for Sheer Force. Slot 1 now mirrors the base form's Klutz; slot 2 keeps Sheer Force
-// for the set that deliberately runs it (which carries no Fake Out).
+// Klutz for Sheer Force. Slot 1 now mirrors the base form's Klutz; slot 2 mirrors the base
+// form's Fluffy for the other set.
 //
 // This sweeps both halves: the set's own chosen ability, and the ability its slot resolves to
 // on every Mega form it can turn into.

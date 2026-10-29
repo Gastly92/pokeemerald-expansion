@@ -3484,7 +3484,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_QUICK_FEET,
             ABILITY_RATTLED,
-            ABILITY_STAKEOUT
+            ABILITY_STAKEOUT,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0262
@@ -3493,7 +3494,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_INTIMIDATE,
             ABILITY_MOXIE,
             ABILITY_QUICK_FEET,
-            ABILITY_STAKEOUT
+            ABILITY_STAKEOUT,
+            ABILITY_STRONG_JAW
         )
     },
     { // 0263
@@ -4025,6 +4027,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_RATTLED,
             ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST,
+            ABILITY_STRONG_JAW,
             ABILITY_SWIFT_SWIM
         )
     },
@@ -4034,6 +4037,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_MOXIE,
             ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST,
+            ABILITY_STRONG_JAW,
             ABILITY_SWIFT_SWIM
         )
     },

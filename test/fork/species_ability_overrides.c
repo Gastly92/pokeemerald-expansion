@@ -33,21 +33,21 @@ SINGLE_BATTLE_TEST("Ability overrides: a Klutz Lopunny keeps Fake Out's flinch t
     }
 }
 
-// The other half of the same table: slot 2 is where the roster's deliberate Sheer
-// Force Lopunny lives, so that set must still come out of the Mega with Sheer Force.
-SINGLE_BATTLE_TEST("Ability overrides: a Sheer Force Lopunny keeps Sheer Force through Mega Evolution")
+// The other half of the same table: slot 2 is where the roster's Fluffy Lopunny
+// lives, so that set must still come out of the Mega with Fluffy.
+SINGLE_BATTLE_TEST("Ability overrides: a Fluffy Lopunny keeps Fluffy through Mega Evolution")
 {
     GIVEN {
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
         WITH_CONFIG(FEATURE_FREE_GIMMICKS, TRUE);
-        ASSUME(GetSpeciesAbility(SPECIES_LOPUNNY, 2) == ABILITY_SHEER_FORCE);
-        PLAYER(SPECIES_LOPUNNY) { Ability(ABILITY_SHEER_FORCE); Moves(MOVE_CELEBRATE); }
+        ASSUME(GetSpeciesAbility(SPECIES_LOPUNNY, 2) == ABILITY_FLUFFY);
+        PLAYER(SPECIES_LOPUNNY) { Ability(ABILITY_FLUFFY); Moves(MOVE_CELEBRATE); }
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE, gimmick: GIMMICK_MEGA); MOVE(opponent, MOVE_CELEBRATE); }
     } THEN {
         EXPECT_EQ(player->species, SPECIES_LOPUNNY_MEGA);
-        EXPECT_EQ(player->ability, ABILITY_SHEER_FORCE);
+        EXPECT_EQ(player->ability, ABILITY_FLUFFY);
     }
 }
 

@@ -384,19 +384,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0130
         SPECIES_GYARADOS, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_ANGER_SHELL
     },
     {
         SPECIES_GYARADOS_MEGA, 0,
-        ABILITY_SHEER_FORCE
+        ABILITY_ANGER_SHELL
     },
     {
         SPECIES_GYARADOS_MEGA, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_ANGER_SHELL
     },
     {
         SPECIES_GYARADOS_MEGA, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_ANGER_SHELL
     },
     { // 0142
         SPECIES_AERODACTYL, 2,
@@ -508,7 +508,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0164
         SPECIES_NOCTOWL, 0,
-        ABILITY_SHEER_FORCE
+        ABILITY_PSYCHIC_AFFINITY
     },
     { // 0166
         SPECIES_LEDIAN, 0,
@@ -708,7 +708,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0262
         SPECIES_MIGHTYENA, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_HUSTLE
     },
     { // 0264
         SPECIES_LINOONE, 1,
@@ -792,19 +792,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0308
         SPECIES_MEDICHAM, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_MEDICHAM_MEGA, 0,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_MEDICHAM_MEGA, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     {
         SPECIES_MEDICHAM_MEGA, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     { // 0310
         SPECIES_MANECTRIC_MEGA, 0,
@@ -832,19 +832,19 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0319
         SPECIES_SHARPEDO, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_HUSTLE
     },
     {
         SPECIES_SHARPEDO_MEGA, 0,
-        ABILITY_SHEER_FORCE
+        ABILITY_HUSTLE
     },
     {
         SPECIES_SHARPEDO_MEGA, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_HUSTLE
     },
     {
         SPECIES_SHARPEDO_MEGA, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_HUSTLE
     },
     { // 0321
         SPECIES_WAILORD, 0,
@@ -1140,11 +1140,11 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0428
         SPECIES_LOPUNNY, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_FLUFFY
     },
     { // 0428
         SPECIES_LOPUNNY_MEGA, 0,
-        ABILITY_SHEER_FORCE
+        ABILITY_FLUFFY
     },
     { // 0428
         SPECIES_LOPUNNY_MEGA, 1,
@@ -1152,7 +1152,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0428
         SPECIES_LOPUNNY_MEGA, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_FLUFFY
     },
     { // 0429
         SPECIES_MISMAGIUS, 1,
@@ -1444,7 +1444,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0508
         SPECIES_STOUTLAND, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_FLUFFY
     },
     { // 0510
         SPECIES_LIEPARD, 1,
@@ -1464,7 +1464,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0521
         SPECIES_UNFEZANT, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_WIND_RIDER
     },
     { // 0530
         SPECIES_EXCADRILL, 2,
@@ -1628,7 +1628,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0614
         SPECIES_BEARTIC, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_SNOW_WARNING
     },
     {
         SPECIES_BEARTIC, 2,
@@ -1640,7 +1640,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0617
         SPECIES_ACCELGOR, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_PROTEAN
     },
     { // 0620
         SPECIES_MIENSHAO, 2,
@@ -1831,7 +1831,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0697
         SPECIES_TYRANTRUM, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_SAND_STREAM
     },
     { // 0701
         SPECIES_HAWLUCHA, 1,
@@ -1907,7 +1907,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0735
         SPECIES_GUMSHOOS, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_GORILLA_TACTICS
     },
     { // 0738
         SPECIES_VIKAVOLT, 1,
@@ -2011,7 +2011,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0779
         SPECIES_BRUXISH, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_PSYCHIC_SURGE
     },
     { // 0780
         SPECIES_DRAMPA_MEGA, 0,
@@ -2127,7 +2127,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0820
         SPECIES_GREEDENT, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_FLUFFY
     },
     { // 0823
         SPECIES_CORVIKNIGHT, 1,
@@ -2367,7 +2367,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0943
         SPECIES_MABOSSTIFF, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_GORILLA_TACTICS
     },
     { // 0956
         SPECIES_ESPATHRA, 1,
@@ -2387,7 +2387,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0966
         SPECIES_REVAVROOM, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_TOXIC_DEBRIS
     },
     { // 0967
         SPECIES_CYCLIZAR, 1,
