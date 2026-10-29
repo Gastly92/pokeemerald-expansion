@@ -2296,8 +2296,8 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Comatose announces itself o
     }
 }
 
-// Blanket buff: every species in the TIER_LEGENDARY / TIER_MYTHICAL lists (src/fork/species_tiers.c)
-// carries Pressure innately. A species added to either tier list must get it in its INNATES(...) row.
+// Blanket buff: every species in the TIER_LEGENDARY / TIER_MYTHICAL lists (src/fork/species_tiers.c),
+// and every form of one, carries Pressure innately. A species added to either tier list must get it in its INNATES(...) row.
 TEST("Innate abilities: every legendary- and mythical-tier species carries innate Pressure")
 {
     u32 species;
@@ -2306,8 +2306,13 @@ TEST("Innate abilities: every legendary- and mythical-tier species carries innat
 
     for (species = 1; species < NUM_SPECIES; species++)
     {
-        enum SpeciesTier tier = GetSpeciesTier(species);
+        enum SpeciesTier tier;
 
+        if (!IsSpeciesEnabled(species))
+            continue;
+        // Tier lists name base species only, so a Mega/Primal/alternate form is checked under its
+        // base form's tier -- otherwise Mega Darkrai could (and did) silently drop Pressure.
+        tier = GetSpeciesTier(GET_BASE_SPECIES_ID(species));
         if (tier != TIER_LEGENDARY && tier != TIER_MYTHICAL)
             continue;
         checked++;

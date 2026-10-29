@@ -1392,6 +1392,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_DARKRAI, 1,
         ABILITY_SHEER_FORCE
     },
+    {
+        SPECIES_DARKRAI_MEGA, 0,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_DARKRAI_MEGA, 1,
+        ABILITY_SHEER_FORCE
+    },
+    {
+        SPECIES_DARKRAI_MEGA, 2,
+        ABILITY_SHEER_FORCE
+    },
     { // 0492
         SPECIES_SHAYMIN, 1,
         ABILITY_GRASSY_SURGE
