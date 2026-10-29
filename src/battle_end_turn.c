@@ -8,7 +8,7 @@
 #include "battle_stat_change.h"
 #include "battle_gimmick.h"
 #include "battle_scripts.h"
-#include "fork/innate_abilities.h"
+#include "fork/innate_abilities.h" // FORK: IsInnateActive (innate sandstorm immunity)
 #include "constants/battle.h"
 #include "constants/battle_string_ids.h"
 #include "constants/abilities.h"

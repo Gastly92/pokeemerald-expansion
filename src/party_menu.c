@@ -27,7 +27,7 @@
 #include "fldeff.h"
 #include "fldeff_misc.h"
 #include "follower_npc.h"
-#include "fork/frontier_legality.h"
+#include "fork/frontier_legality.h" // FORK: IsSpeciesFrontierBanned (B_FRONTIER_ALL_SPECIES_LEGAL)
 #include "frontier_util.h"
 #include "gpu_regs.h"
 #include "graphics.h"

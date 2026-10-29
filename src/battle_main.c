@@ -1,6 +1,6 @@
 #include "global.h"
 #include "battle.h"
-#include "fork/innate_abilities.h" // SpeciesHasInnate (off-field innate lookup)
+#include "fork/innate_abilities.h" // FORK: SpeciesHasInnate (off-field innate lookup)
 #include "battle_anim.h"
 #include "battle_ai_main.h"
 #include "battle_ai_record.h"

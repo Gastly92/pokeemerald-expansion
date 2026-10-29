@@ -16,16 +16,16 @@
 #define DISABLED_ON_RELEASE TRUE
 #endif
 
-#include "config/accessibility.h"
+#include "config/accessibility.h" // FORK: fork-owned COLOR_BLIND flag
 #include "config/ai.h"
 #include "config/battle.h"
 #include "config/caps.h"
 #include "config/contest.h"
 #include "config/debug.h"
-#include "config/deterministic.h"
+#include "config/deterministic.h" // FORK: fork-owned DETERMINISTIC_* flags
 #include "config/dexnav.h"
 #include "config/follower_npc.h"
-#include "config/frontier.h"
+#include "config/frontier.h" // FORK: fork-owned B_FRONTIER_* flags
 #include "config/general.h"
 #include "config/item.h"
 #include "config/map_preview_screen.h"

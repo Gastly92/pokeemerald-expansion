@@ -28,7 +28,7 @@
 #include "item.h"
 #include "item_icon.h"
 #include "item_use.h"
-#include "fork/healthbox_hp_percent.h"
+#include "fork/healthbox_hp_percent.h" // FORK: B_HEALTHBOX_HP_PERCENT
 #include "test_runner.h"
 #include "constants/battle_anim.h"
 #include "constants/rgb.h"
