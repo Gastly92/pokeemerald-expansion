@@ -27,13 +27,13 @@ static const u8 sFacilityClassEnvironments[FACILITY_CLASSES_COUNT] =
     [FACILITY_CLASS_YOUNGSTER]            = BG(GRASS),
     [FACILITY_CLASS_LASS]                 = BG(GRASS),
     [FACILITY_CLASS_CAMPER]               = BG(GRASS),
-    [FACILITY_CLASS_PICNICKER]            = BG(GRASS),
+    [FACILITY_CLASS_PICNICKER]            = BG(POND),     // lakeside picnic
     [FACILITY_CLASS_AROMA_LADY]           = BG(GRASS),
     [FACILITY_CLASS_PKMN_BREEDER_M]       = BG(GRASS),
     [FACILITY_CLASS_PKMN_BREEDER_F]       = BG(GRASS),
 
     // Open routes
-    [FACILITY_CLASS_BIRD_KEEPER]          = BG(PLAIN),
+    [FACILITY_CLASS_BIRD_KEEPER]          = BG(RAYQUAZA), // Sky Pillar rooftop
     [FACILITY_CLASS_POKEFAN_M]            = BG(PLAIN),
     [FACILITY_CLASS_POKEFAN_F]            = BG(PLAIN),
     [FACILITY_CLASS_BEAUTY]               = BG(PLAIN),
@@ -48,18 +48,18 @@ static const u8 sFacilityClassEnvironments[FACILITY_CLASSES_COUNT] =
     [FACILITY_CLASS_TUBER_F]              = BG(SAND),
     [FACILITY_CLASS_SWIMMER_M]            = BG(WATER),
     [FACILITY_CLASS_SWIMMER_F]            = BG(WATER),
-    [FACILITY_CLASS_SAILOR]               = BG(WATER),
+    [FACILITY_CLASS_SAILOR]               = BG(AQUA),
     [FACILITY_CLASS_SWIMMING_TRIATHLETE_M] = BG(UNDERWATER),
     [FACILITY_CLASS_SWIMMING_TRIATHLETE_F] = BG(UNDERWATER),
-    [FACILITY_CLASS_FISHERMAN]            = BG(POND),
+    [FACILITY_CLASS_FISHERMAN]            = BG(KYOGRE),   // stormy water
 
     // Mountains and caves
     [FACILITY_CLASS_HIKER]                = BG(MOUNTAIN),
-    [FACILITY_CLASS_EXPERT_M]             = BG(MOUNTAIN),
-    [FACILITY_CLASS_EXPERT_F]             = BG(MOUNTAIN),
+    [FACILITY_CLASS_EXPERT_M]             = BG(MAGMA),
+    [FACILITY_CLASS_EXPERT_F]             = BG(MAGMA),
     [FACILITY_CLASS_RUIN_MANIAC]          = BG(CAVE),
     [FACILITY_CLASS_POKEMANIAC]           = BG(CAVE),
-    [FACILITY_CLASS_KINDLER]              = BG(MAGMA),
+    [FACILITY_CLASS_KINDLER]              = BG(GROUDON),  // volcanic cave
 
     // Gyms
     [FACILITY_CLASS_COOLTRAINER_M]        = BG(GYM),

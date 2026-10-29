@@ -37,6 +37,25 @@ TEST("Themed Frontier backgrounds: every Frontier Brain has an arena with real a
     }
 }
 
+TEST("Themed Frontier backgrounds: every background with art is used by some trainer or Brain")
+{
+    u32 i, environment;
+    bool32 used[BATTLE_ENVIRONMENT_COUNT] = {0};
+
+    for (i = 0; i < FRONTIER_TRAINERS_COUNT; i++)
+        used[GetFrontierEnvironmentForFacilityClass(gBattleFrontierTrainers[i].facilityClass)] = TRUE;
+    for (i = 0; i < NUM_FRONTIER_FACILITIES; i++)
+        used[GetFrontierBrainEnvironment(i)] = TRUE;
+    used[BATTLE_ENVIRONMENT_LEADER] = TRUE;   // Tower gym-leader bosses
+    used[BATTLE_ENVIRONMENT_FRONTIER] = TRUE; // the fallback
+
+    for (environment = 0; environment < BATTLE_ENVIRONMENT_COUNT; environment++)
+    {
+        if (HasBackgroundArt(environment))
+            EXPECT(used[environment]);
+    }
+}
+
 TEST("Themed Frontier backgrounds: a class without a theme keeps the Frontier backdrop")
 {
     EXPECT_EQ(GetFrontierEnvironmentForFacilityClass(FACILITY_CLASS_AQUA_GRUNT_M), BATTLE_ENVIRONMENT_FRONTIER);
