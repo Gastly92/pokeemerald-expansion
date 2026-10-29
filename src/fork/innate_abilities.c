@@ -5985,17 +5985,23 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_DARKRAI,
         INNATES(
             ABILITY_BAD_DREAMS,
+            ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
             ABILITY_MYTHICAL,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_UNNERVE
         )
     },
     { // 0491
         SPECIES_DARKRAI_MEGA,
         INNATES(
             ABILITY_BAD_DREAMS,
+            ABILITY_INFILTRATOR,
             ABILITY_LEVITATE,
-            ABILITY_MYTHICAL
+            ABILITY_MYTHICAL,
+            ABILITY_PRESSURE,
+            ABILITY_SHADOW_TAG,
+            ABILITY_UNNERVE
         )
     },
     { // 0492
