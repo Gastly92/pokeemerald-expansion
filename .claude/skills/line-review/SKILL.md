@@ -225,7 +225,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
   Trick, Switcheroo or Transform.
 - **Five set defects the full sweep kept finding — check all five explicitly.**
   None is a matter of taste, and four are invisible field-by-field, appearing only
-  when the set is read as a whole. **(1), (2) and (4) are now CI gates**, so they fail
+  when the set is read as a whole. **(1), (2), (4) and (5) are now CI gates**, so they fail
   the build rather than needing to be spotted: (1) **a move on the wrong stat** (Celesteela's
   Heavy Slam on a 0-Attack spread, Pheromosa's Ice Beam off 4 Sp. Atk, Melmetal's
   4 Attack EVs) — read the nature and spread first, then every move's category
@@ -234,7 +234,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
   special set) — sometimes forced, but then say so in the PR; (4) **two sets that
   are one set**, same moves/spread/ability differing only by item, which wastes a
   Factory draw (Inteleon, Barraskewda, Polteageist, Kingambit); (5) **an untyped
-  Hidden Power**, which is a 60 BP *Normal* move.
+  Hidden Power** (no `.iv`, so the default all-31 IVs make it Hidden Power Dark).
 - **A line with no innate row has a signature** — its only canon abilities are all
   never-an-innate, so there was nothing to seed from. That is structural, not
   careless, and it means the row must be built from flavor. When there is nothing

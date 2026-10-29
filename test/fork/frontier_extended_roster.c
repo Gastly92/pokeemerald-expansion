@@ -1558,6 +1558,37 @@ static enum Species SignatureTypeItemOwner(enum HoldEffect holdEffect)
     }
 }
 
+// Hidden Power's type comes from the low bit of each IV. A set that leaves .iv unset gets the
+// Factory's fixed IVs, all 31 under B_FRONTIER_MAX_IVS, and all-odd IVs always make Hidden Power
+// Dark: an accidental coverage type nobody picked (Lurantis once carried it as a Grass special
+// attacker). Naming the IVs is the only way a set's Hidden Power type is a decision.
+TEST("Frontier extended roster: no set carries Hidden Power without choosing its IVs")
+{
+    u32 i, j;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        checked++;
+        if (set->iv != 0)
+            continue;
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            if (set->moves[j] == MOVE_NONE || GetMoveEffect(set->moves[j]) != EFFECT_HIDDEN_POWER)
+                continue;
+            offenders++;
+            Test_MgbaPrintf("roster[%d] %S: carries Hidden Power with default IVs, so it is Hidden Power Dark -- set .iv to the spread for the type the set wants",
+                            i, gSpeciesInfo[set->species].speciesName);
+        }
+    }
+
+    EXPECT_GT(checked, 0);
+    EXPECT_EQ(offenders, 0);
+}
+
 TEST("Frontier extended roster: no set holds a signature type item its species cannot use")
 {
     u32 i;

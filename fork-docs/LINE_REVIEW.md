@@ -1104,8 +1104,11 @@ than one whose existing set is about to be rewritten.
       Band sets share three moves but are genuinely different plans (guaranteed
       first Fishious Rend vs. raw power), so they both stay. The test is whether
       you would draft them differently.
-   5. **An untyped Hidden Power**, which is a 60 BP **Normal** move — the worst
-      slot on any set, and it was sitting on a Grass special attacker (Lurantis).
+   5. **An untyped Hidden Power** — one whose set leaves `.iv` unset. Hidden Power
+      takes its type from the low bit of each IV, and the Factory's default IVs are all
+      31 (`B_FRONTIER_MAX_IVS`), so it is always **Hidden Power Dark**: a coverage type
+      nobody chose, which was sitting on a Grass special attacker (Lurantis). Now gated by
+      `TEST("Frontier extended roster: no set carries Hidden Power without choosing its IVs")`.
 
    Note what niche each surviving set fills, so Part B adds variety rather than
    duplicating.
@@ -1573,9 +1576,9 @@ most lines of Gens 7–9; what changes that is the required field in the PR
 template, not another sentence here. When a rule keeps being missed, the next
 version of it should be a procedure or a test, not a stronger adjective.
 
-### Four of the recurring defects are now CI gates
+### Five of the recurring defects are now CI gates
 
-Part A defects 1, 2 and 4 stopped being advice and became tests in
+Part A defects 1, 2, 4 and 5 stopped being advice and became tests in
 `test/fork/frontier_extended_roster.c`, joined later by the signature-item gate.
 Both of the original pair found real defects the human passes had missed, which is
 the argument for them:
@@ -1586,6 +1589,7 @@ the argument for them:
 | **`no species carries two sets that are the same set`** | 6 pairs — Kyogre, Galarian Darmanitan, Toucannon, Dhelmise, Iron Bundle, Ogerpon |
 | **`no set holds an item none of its moves can activate`** | 2 sets — Centiskorch and Tatsugiri, both holding Throat Spray with no sound move (Centiskorch's twice over: that set is physical, and Throat Spray raises Sp. Attack) |
 | **`no set holds a signature type item its species cannot use`** | 0 — added *with* the change that created the hazard (`BUFF_SIGNATURE_TYPE_ITEMS` locking Plates/Memories/Drives/orbs to one species), so it is the one gate written before the defect rather than after it |
+| **`no set carries Hidden Power without choosing its IVs`** | 0 — no roster set runs Hidden Power today; it guards defect 5 (Lurantis' accidental Hidden Power Dark) from coming back |
 
 The wrong-stat gate needs two exclusion lists to be usable, and they are the
 interesting part. A naive "physical move on a special set" rule fires on **78**
