@@ -10,7 +10,7 @@
 #include "battle_tower.h"
 #include "fork/battle_tower_trainers.h" // FORK: tower brain/boss static teams
 #include "field_specials.h"
-#include "fork/frontier_legality.h"
+#include "fork/frontier_legality.h" // FORK: IsSpeciesFrontierBanned (B_FRONTIER_ALL_SPECIES_LEGAL)
 #include "battle.h"
 #include "script_pokemon_util.h"
 #include "main.h"

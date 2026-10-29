@@ -9,8 +9,8 @@
 #include "battle_tower.h"
 #include "item.h"
 #include "random.h"
-#include "fork/frontier_extended_mons.h"
-#include "fork/species_tiers.h"
+#include "fork/frontier_extended_mons.h" // FORK: B_FRONTIER_EXTENDED_MONS roster draw
+#include "fork/species_tiers.h" // FORK: species tiers for the frontier draft
 #include "fork/frontier_draft.h" // FORK: shared competitive-draft rules
 #include "constants/battle_ai.h"
 #include "fork/frontier_ai.h" // FORK: boss/regular AI tier split for the facilities
