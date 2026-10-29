@@ -28,7 +28,7 @@
 #include "constants/trainers.h"
 #include "constants/battle_anim.h"
 #include "constants/battle_partner.h"
-#include "fork/frontier_battle_bg.h"
+#include "fork/frontier_battle_bg.h" // FORK: B_FRONTIER_THEMED_BACKGROUNDS
 #include "data/battle_environment.h"
 
 // .rodata
