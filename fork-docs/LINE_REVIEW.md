@@ -1708,14 +1708,23 @@ Megas stay pinned by the existing grounded-Levitate test. Its first run found ei
 had silently dropped a base innate: Darkrai (Pressure), Baxcalibur, Glimmora, Froslass,
 Scovillain and the three Tatsugiris.
 
-Its sibling covers Step 2 point 4 (the Venusaur pattern). A Mega keeps the base's ability
-*slot*, so where the Mega's slot resolves to one of its own innates, the base's chosen ability
-is lost on Mega Evolution. Mega Darkrai's empty slot 1 fell back to Bad Dreams and dropped the
-Sheer Force override; Golisopod, Glimmora and Baxcalibur lost Emergency Exit, Toxic Debris and
-No Guard the same way. `TEST("Innate abilities: no Mega's ability slot resolves to its own
-innate where the base's does not")` has no exceptions: a Mega replacing the base's ability
-with its own never-an-innate signature (Parental Bond, Aerilate) is fine and passes.
+Its sibling covers Step 2 point 4 (the Venusaur pattern) for every slot-inheriting battle form:
+Mega, G-Max, Primal and Ultra Burst. The form keeps the base's ability *slot*, so where the
+form's slot resolves to one of its own innates, the base's chosen ability is lost on
+transformation. Mega Darkrai's empty slot 1 fell back to Bad Dreams and dropped the Sheer Force
+override; Golisopod, Glimmora and Baxcalibur lost Emergency Exit, Toxic Debris and No Guard on
+Mega Evolution, and eleven G-Max forms (Snorlax, Melmetal, Inteleon, Corviknight, Orbeetle,
+Drednaw, Toxtricity, Hatterene, Grimmsnarl, both Urshifu) lost theirs on Gigantamax.
+`TEST("Innate abilities: no battle form's ability slot resolves to its own innate where the
+base's does not")` has no exceptions: a form replacing the base's ability with its own
+never-an-innate signature (Parental Bond, Aerilate) is fine and passes.
 
-Both gates find a Mega through the Mega Evolution form changes, not through form tables: a
-form table's first entry is not always the species that Mega Evolves (Meowstic-F's table
-starts with Meowstic-M), and Megas and G-Max forms share their base's table.
+The innate-mirror gate stays Megas-only on purpose. Widened to G-Max and Ultra Burst it hits
+only deliberate rows: G-Max Blastoise drops Sniper on its own dex text (*"not very good at
+precision shooting"*, #651), and Ultra Necrozma cannot coherently carry both Dusk Mane's Full
+Metal Body and Dawn Wings' Shadow Shield. Those are taste, which is the restoration problem
+again, so they stay a reviewer's call.
+
+Both gates find each form through the battle form changes, not through form tables: a form
+table's first entry is not always the species that transforms (Meowstic-F's table starts with
+Meowstic-M), and Megas and G-Max forms share their base's table.

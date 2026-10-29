@@ -3212,6 +3212,16 @@ static bool32 IsMegaEvolutionMethod(enum FormChanges method)
         || method == FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE;
 }
 
+// Every in-battle transformation that re-derives the ability from the new form's slot: Mega
+// Evolution, Gigantamax, Primal Reversion and Ultra Burst.
+static bool32 IsSlotInheritingBattleForm(enum FormChanges method)
+{
+    return IsMegaEvolutionMethod(method)
+        || method == FORM_CHANGE_BATTLE_GIGANTAMAX
+        || method == FORM_CHANGE_BATTLE_PRIMAL_REVERSION
+        || method == FORM_CHANGE_BATTLE_ULTRA_BURST;
+}
+
 // Megas are a pure boon: a Mega keeps every innate its base form carries. Rows are keyed by form
 // exactly, so a Mega row that does not mirror its base silently drops the trait the moment the
 // creature Mega Evolves (Mega Darkrai's Pressure, Mega Baxcalibur's Sharpness and Slush Rush,
@@ -3260,16 +3270,16 @@ TEST("Innate abilities: every Mega carries its base form's innates")
     EXPECT_EQ(offenders, 0);
 }
 
-// A Mega keeps its base form's ability slot, so whatever ability a base slot runs, the same slot
-// of the Mega replaces it. Where the Mega's slot resolves to one of the Mega's own innates, the
-// base's chosen ability is simply lost: base Darkrai runs a Sheer Force override in slot 1, and
-// Mega Darkrai's empty slot 1 fell back to Bad Dreams, already innate. Golisopod lost Emergency
-// Exit to Mega Golisopod's innate Tough Claws the same way. The fix is the Venusaur pattern:
-// override the Mega's slots to the base's chosen ability. A Mega trading the base's ability for
-// a never-an-innate signature of its own (Mega Kangaskhan's Parental Bond) is not a loss and
-// passes. A base slot that already duplicates a base innate is dead before Mega Evolution, so it
-// is skipped.
-TEST("Innate abilities: no Mega's ability slot resolves to its own innate where the base's does not")
+// A Mega, G-Max, Primal or Ultra Burst form keeps its base form's ability slot, so whatever
+// ability a base slot runs, the same slot of the form replaces it. Where the form's slot resolves
+// to one of its own innates, the base's chosen ability is simply lost: base Darkrai runs a Sheer
+// Force override in slot 1, and Mega Darkrai's empty slot 1 fell back to Bad Dreams, already
+// innate. G-Max Snorlax lost Sap Sipper to its innate Thick Fat the same way. The fix is the
+// Venusaur pattern: override the form's slot to the base's chosen ability. A form trading the
+// base's ability for a never-an-innate signature of its own (Mega Kangaskhan's Parental Bond)
+// is not a loss and passes, as does a form whose slot resolves to the same ability. A base slot
+// that already duplicates a base innate is dead before the transformation, so it is skipped.
+TEST("Innate abilities: no battle form's ability slot resolves to its own innate where the base's does not")
 {
     u32 species, f, slot;
     u32 checked = 0;
@@ -3292,7 +3302,7 @@ TEST("Innate abilities: no Mega's ability slot resolves to its own innate where 
         {
             enum Species mega = formChanges[f].targetSpecies;
 
-            if (!IsMegaEvolutionMethod(formChanges[f].method))
+            if (!IsSlotInheritingBattleForm(formChanges[f].method))
                 continue;
             checked++;
             for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
@@ -3305,10 +3315,10 @@ TEST("Innate abilities: no Mega's ability slot resolves to its own innate where 
                 if (SpeciesHasInnate(species, baseAbility))
                     continue;
                 megaAbility = GetAbilityBySpecies(mega, slot);
-                if (!SpeciesHasInnate(mega, megaAbility))
+                if (megaAbility == baseAbility || !SpeciesHasInnate(mega, megaAbility))
                     continue;
                 offenders++;
-                Test_MgbaPrintf("%S slot %d runs %S, but its Mega (species %d) gets innate %S there -- override the Mega's slot to %S",
+                Test_MgbaPrintf("%S slot %d runs %S, but its battle form (species %d) gets innate %S there -- override that form's slot to %S",
                                 gSpeciesInfo[species].speciesName, slot, gAbilitiesInfo[baseAbility].name,
                                 mega, gAbilitiesInfo[megaAbility].name, gAbilitiesInfo[baseAbility].name);
             }
@@ -6221,7 +6231,8 @@ TEST("Innate abilities: no ability override or frontier set names a reserved abi
 // Lokix were repointed off it; this keeps them off.
 static bool32 MayHaveDarkAura(u16 species)
 {
-    enum SpeciesTier tier = GetSpeciesTier(species);
+    // Tier lists name base species only, so a form (G-Max Urshifu) is judged by its base's tier.
+    enum SpeciesTier tier = GetSpeciesTier(IsSpeciesEnabled(species) ? GET_BASE_SPECIES_ID(species) : species);
 
     return tier == TIER_LEGENDARY || tier == TIER_MYTHICAL;
 }
