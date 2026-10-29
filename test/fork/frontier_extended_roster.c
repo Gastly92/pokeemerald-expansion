@@ -1558,6 +1558,33 @@ static enum Species SignatureTypeItemOwner(enum HoldEffect holdEffect)
     }
 }
 
+// Terastallizing replaces the holder's types, and Black Sludge heals only a Poison type: under any
+// other Tera it deals 1/8 max HP a turn instead. Maintainer preference is that a Black Sludge set
+// keeps healing whether or not it Terastallizes, so it names Tera Poison.
+TEST("Frontier extended roster: every Black Sludge set is Tera Poison")
+{
+    u32 i;
+    u32 checked = 0;
+    u32 offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        if (GetItemHoldEffect(set->heldItem) != HOLD_EFFECT_BLACK_SLUDGE)
+            continue;
+        checked++;
+        if (set->teraType == TYPE_POISON)
+            continue;
+        offenders++;
+        Test_MgbaPrintf("roster[%d] %S: holds Black Sludge with Tera %S, so the item hurts it once it Terastallizes -- make it Tera Poison or give it a different item",
+                        i, gSpeciesInfo[set->species].speciesName, gTypesInfo[set->teraType].name);
+    }
+
+    EXPECT_GT(checked, 0);
+    EXPECT_EQ(offenders, 0);
+}
+
 TEST("Frontier extended roster: no set holds a signature type item its species cannot use")
 {
     u32 i;
