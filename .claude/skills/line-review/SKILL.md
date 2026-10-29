@@ -223,8 +223,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
   Surf → Muddy Water, or Earth Power on a special set); Explosion and its two
   siblings are exempt. And a Choice item never coexists with a status move except
   Trick, Switcheroo or Transform.
-- **Five set defects the full sweep kept finding — check all five explicitly.**
-  None is a matter of taste, and four are invisible field-by-field, appearing only
+- **Four set defects the full sweep kept finding — check all four explicitly.**
+  None is a matter of taste, and each is invisible field-by-field, appearing only
   when the set is read as a whole. **(1), (2) and (4) are now CI gates**, so they fail
   the build rather than needing to be spotted: (1) **a move on the wrong stat** (Celesteela's
   Heavy Slam on a 0-Attack spread, Pheromosa's Ice Beam off 4 Sp. Atk, Melmetal's
@@ -233,8 +233,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
   no sound move); (3) **an ability that can never fire** (Flapple's Hustle on a
   special set) — sometimes forced, but then say so in the PR; (4) **two sets that
   are one set**, same moves/spread/ability differing only by item, which wastes a
-  Factory draw (Inteleon, Barraskewda, Polteageist, Kingambit); (5) **an untyped
-  Hidden Power** (no `.iv`, so the default all-31 IVs make it Hidden Power Dark).
+  Factory draw (Inteleon, Barraskewda, Polteageist, Kingambit).
 - **A line with no innate row has a signature** — its only canon abilities are all
   never-an-innate, so there was nothing to seed from. That is structural, not
   careless, and it means the row must be built from flavor. When there is nothing

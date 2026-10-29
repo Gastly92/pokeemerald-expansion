@@ -1069,11 +1069,11 @@ than one whose existing set is about to be rewritten.
    g. **Base-form viability** — re-check the set against the base stat line per
       the free-gimmicks rule below.
 
-   **The five defects the full sweep actually found.** The field-by-field audit
+   **The four defects the full sweep actually found.** The field-by-field audit
    above is the method; these are the specific things it keeps catching, and none
    of them is a matter of taste — each is a set that is objectively not doing what
-   it was written to do. Check for all five explicitly, because four of them are
-   invisible field by field and only appear when the set is read **as a whole**.
+   it was written to do. Check for all four explicitly, because each is invisible
+   field by field and only appears when the set is read **as a whole**.
 
    1. **A move on the wrong stat.** The commonest defect by far, and now **CI-gated**. Celesteela ran
       Heavy Slam, its main STAB, on two sets with an Attack-lowering nature and
@@ -1104,10 +1104,6 @@ than one whose existing set is about to be rewritten.
       Band sets share three moves but are genuinely different plans (guaranteed
       first Fishious Rend vs. raw power), so they both stay. The test is whether
       you would draft them differently.
-   5. **An untyped Hidden Power** — one whose set leaves `.iv` unset. Hidden Power
-      takes its type from the low bit of each IV, and the Factory's default IVs are all
-      31 (`B_FRONTIER_MAX_IVS`), so it is always **Hidden Power Dark**: a coverage type
-      nobody chose, which was sitting on a Grass special attacker (Lurantis).
 
    Note what niche each surviving set fills, so Part B adds variety rather than
    duplicating.
