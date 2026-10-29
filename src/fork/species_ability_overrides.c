@@ -418,6 +418,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_SNORLAX, 1,
         ABILITY_SAP_SIPPER
     },
+    {
+        SPECIES_SNORLAX_GMAX, 1,
+        ABILITY_SAP_SIPPER
+    },
     { // 0144
         SPECIES_ARTICUNO, 1,
         ABILITY_SNOW_WARNING
@@ -1963,6 +1967,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_COMFEY, 2,
         ABILITY_GRASSY_SURGE
     },
+    { // 0768
+        SPECIES_GOLISOPOD_MEGA, 0,
+        ABILITY_EMERGENCY_EXIT
+    },
+    {
+        SPECIES_GOLISOPOD_MEGA, 1,
+        ABILITY_EMERGENCY_EXIT
+    },
+    {
+        SPECIES_GOLISOPOD_MEGA, 2,
+        ABILITY_EMERGENCY_EXIT
+    },
     { // 0770
         SPECIES_PALOSSAND, 1,
         ABILITY_EARTH_EATER
@@ -2103,8 +2119,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MELMETAL, 1,
         ABILITY_WELL_BAKED_BODY
     },
+    {
+        SPECIES_MELMETAL_GMAX, 1,
+        ABILITY_WELL_BAKED_BODY
+    },
     { // 0818
         SPECIES_INTELEON, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_INTELEON_GMAX, 1,
         ABILITY_WATER_ABSORB
     },
     { // 0820
@@ -2115,8 +2139,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CORVIKNIGHT, 1,
         ABILITY_BULLETPROOF
     },
+    {
+        SPECIES_CORVIKNIGHT_GMAX, 1,
+        ABILITY_BULLETPROOF
+    },
     { // 0826
         SPECIES_ORBEETLE, 2,
+        ABILITY_SYNCHRONIZE
+    },
+    {
+        SPECIES_ORBEETLE_GMAX, 2,
         ABILITY_SYNCHRONIZE
     },
     { // 0828
@@ -2125,6 +2157,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0834
         SPECIES_DREDNAW, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_DREDNAW_GMAX, 1,
         ABILITY_WATER_ABSORB
     },
     { // 0836
@@ -2151,6 +2187,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_TOXTRICITY_LOW_KEY, 0,
         ABILITY_VOLT_ABSORB
     },
+    {
+        SPECIES_TOXTRICITY_AMPED_GMAX, 0,
+        ABILITY_VOLT_ABSORB
+    },
     { // 0853
         SPECIES_GRAPPLOCT, 1,
         ABILITY_WATER_ABSORB
@@ -2159,8 +2199,16 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_HATTERENE, 1,
         ABILITY_PSYCHIC_SURGE
     },
+    {
+        SPECIES_HATTERENE_GMAX, 1,
+        ABILITY_PSYCHIC_SURGE
+    },
     { // 0861
         SPECIES_GRIMMSNARL, 2,
+        ABILITY_FLUFFY
+    },
+    {
+        SPECIES_GRIMMSNARL_GMAX, 2,
         ABILITY_FLUFFY
     },
     { // 0862
@@ -2246,6 +2294,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0892
         SPECIES_URSHIFU_RAPID_STRIKE, 1,
         ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_URSHIFU_RAPID_STRIKE_GMAX, 1,
+        ABILITY_WATER_ABSORB
+    },
+    {
+        SPECIES_URSHIFU_SINGLE_STRIKE_GMAX, 1,
+        ABILITY_DARK_AURA
     },
     { // 0893
         SPECIES_ZARUDE, 1,
@@ -2343,6 +2399,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_CYCLIZAR, 1,
         ABILITY_MOTOR_DRIVE
     },
+    { // 0970
+        SPECIES_GLIMMORA_MEGA, 0,
+        ABILITY_TOXIC_DEBRIS
+    },
+    {
+        SPECIES_GLIMMORA_MEGA, 1,
+        ABILITY_TOXIC_DEBRIS
+    },
+    {
+        SPECIES_GLIMMORA_MEGA, 2,
+        ABILITY_TOXIC_DEBRIS
+    },
     { // 0973
         SPECIES_FLAMIGO, 0,
         ABILITY_WIND_RIDER
@@ -2417,6 +2485,18 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0998
         SPECIES_BAXCALIBUR, 1,
+        ABILITY_NO_GUARD
+    },
+    {
+        SPECIES_BAXCALIBUR_MEGA, 0,
+        ABILITY_NO_GUARD
+    },
+    {
+        SPECIES_BAXCALIBUR_MEGA, 1,
+        ABILITY_NO_GUARD
+    },
+    {
+        SPECIES_BAXCALIBUR_MEGA, 2,
         ABILITY_NO_GUARD
     },
     { // 1000

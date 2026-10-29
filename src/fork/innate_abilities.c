@@ -5804,6 +5804,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ICE_BODY,
             ABILITY_INNER_FOCUS,
             ABILITY_LEVITATE,
+            ABILITY_SHADOW_TAG,
             ABILITY_SNOW_CLOAK
         )
     },
@@ -12301,7 +12302,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0952
         SPECIES_SCOVILLAIN_MEGA,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_CHLOROPHYLL,
+            ABILITY_HARVEST,
             ABILITY_INSOMNIA
         )
     },
@@ -12462,6 +12465,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GLIMMORA_MEGA,
         INNATES(
             ABILITY_ADAPTABILITY,
+            ABILITY_CLEAR_BODY,
             ABILITY_CORROSION
         )
     },
@@ -12561,6 +12565,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0978
         SPECIES_TATSUGIRI_CURLY_MEGA,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_RATTLED,
             ABILITY_SWIFT_SWIM
         )
@@ -12568,6 +12573,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0978
         SPECIES_TATSUGIRI_DROOPY_MEGA,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_RATTLED,
             ABILITY_SWIFT_SWIM
         )
@@ -12575,6 +12581,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0978
         SPECIES_TATSUGIRI_STRETCHY_MEGA,
         INNATES(
+            ABILITY_FRIEND_GUARD,
             ABILITY_RATTLED,
             ABILITY_SWIFT_SWIM
         )
@@ -12775,6 +12782,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ICE_BODY,
             ABILITY_PRESSURE,
+            ABILITY_SHARPNESS,
+            ABILITY_SLUSH_RUSH,
             ABILITY_THERMAL_EXCHANGE
         )
     },
