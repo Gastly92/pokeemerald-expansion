@@ -267,29 +267,11 @@ from the repo root; each carries its usage in a docstring.
   a rejection in one line only touches another if they shared a resource (the
   same item, the same borrowed ability), which is worth checking and usually
   isn't the case.
-- **Run the filtered checks as the last step of the batch — you will have missed
-  something.** Five CI gates cover the whole dex unconditionally: innate-row
-  coverage, pre-evolution coverage, a legal observable slot per drafted species, no
-  ally-hitting spread move on a doubles set, and no status move stranded under a
-  Choice item. Run `make check TESTS="Innate"` and
-  `TESTS="Frontier extended roster"` and fix whatever they name. That is the
-  batch's real completion criterion.
-
-  Treat it as a certainty rather than a formality. **Every single run of this step
-  across the whole sweep found something the per-line pass had walked straight
-  past** — 55 ally-hitting spread moves the first time, inside territory already
-  reviewed; four items in Gen 6; four in Gen 7; four in Gen 8; three in Gen 9,
-  where the Paradox mons' sets went unchecked because the pass had just finished
-  writing their innate rows and moved on. The five gates used to be **ratchets**
-  bounded by a reviewed-through-dex constant that each batch raised; the sweep
-  finished at Pecharunt and both constants were retired, so there is nothing left
-  to bump — but the *reason* to run them is unchanged and is not going away.
-
-  A batch that touches many sets should also run one filtered check **early**,
-  after the first two or three lines, rather than only at the end. A systematic
-  mistake caught on line 3 costs one fix; the same mistake caught on line 60 costs
-  sixty. Batch 12 added a duplicate `.iv` designator to three sets before anything
-  compiled and only found out at the end.
+- **Run the filtered checks as the last step of the batch, and fix whatever they
+  name:** `make check TESTS="Innate"` and `TESTS="Frontier extended roster"`. That
+  is the batch's real completion criterion. A batch that touches many sets should
+  also run one **early**, after the first two or three lines: a systematic mistake
+  caught on line 3 costs one fix, the same mistake caught on line 60 costs sixty.
 
 ---
 
@@ -337,13 +319,6 @@ from the repo root; each carries its usage in a docstring.
   rather than arguing from memory — the evidence usually settles it in the
   maintainer's favor, and occasionally it will support the pick, which is worth
   saying plainly.
-- **Ten CI tests gate this data** — keep them green (see each step). All ten
-  are absolute now: two on abilities (an override or set naming an innate-capable
-  or reserved ability), five on coverage and set shape, and three added after the
-  sweep (a damaging move on the stat the set dumped, two sets on one species that
-  are the same set, and an item none of the set's moves can activate). The latter five were
-  review ratchets during the sweep and lost their dex bound when it finished. See
-  "Shipping the batch" above.
 
 ---
 
@@ -543,13 +518,10 @@ For each species/form in the line:
    carry a flight ability its winged final stage earns, a placid pre-evo shouldn't
    carry a rage ability its vicious evolution earns. Escalate the list up the line
    where the creature changes.
-7. **HARD CONSTRAINT — only allowlisted abilities.** An innate must be one whose
-   behavior is actually *wired* at an effect site. The CI source of truth is
-   `sImplementedInnates[]` in `test/fork/innate_abilities.c`, mirrored by the
-   SCOPE list in `include/fork/innate_abilities.h`. **Naming an unwired ability
-   fails the build.** A line review adds *already-implemented* innates to a
-   species — it does **not** wire brand-new abilities (that's a separate, much
-   larger task with its own doc updates).
+7. **The pool is the implemented innates.** An innate must be one whose behavior
+   is actually *wired* at an effect site: `sImplementedInnates[]` in
+   `test/fork/innate_abilities.c`. A line review picks from that list — it does
+   **not** wire brand-new abilities (that's a separate, much larger task).
 8. **Forms:**
    - A form gets innates **only if it has its own row** — add/maintain rows for
      `_MEGA`, `_GMAX`, regional forms, etc.
@@ -559,29 +531,10 @@ For each species/form in the line:
      (see the free-gimmicks note in Step 3): a Mega whose set leads with a recoil
      move wants `RECKLESS` *live*, not just as flavor; a special-attacking Mega
      wants a Sp. Atk booster, not a physical one.
-     **When the Mega's own ability is itself an implemented innate** (e.g. Mega
-     Venusaur's Thick Fat), adding it as an innate here means the Mega's single
-     observable slot would waste on a duplicate — so pair this with an override on
-     the Mega form that matches the base form's chosen ability (see Step 2, point 4).
+     When the Mega's own ability is itself an implemented innate, it goes here and
+     the Mega's slots take the base's override (Step 2, point 4).
    - **Watch grounded forms:** a form that shouldn't float must not inherit
      `LEVITATE` (see the Mega Gengar / Mega Mewtwo X notes in the file header).
-
-**A species with NO row at all is a bug, and the reason it happens is
-structural.** Twenty-two were found by hand across the Gen 1-3 sweep. The cause
-is always the same: when every one of a species' canon abilities is
-*never-an-innate*, there is nothing to seed a row from and it gets skipped
-entirely. Kecleon (Color Change, Protean), the Manectric line (Static, Lightning
-Rod, Minus) and the whole weather trio (Drizzle, Drought, Air Lock) all landed
-this way. **The row still has to exist** — build it from the rest of the dex
-entry and the design instead. Two consequences worth knowing before you start a
-line: a species like this will *never* suggest its own innates, and its
-observable slot is forced to hold whatever never-an-innate ability is left over,
-which is often somebody's signature (see Step 2).
-
-**Verify:** `make check TESTS="Innate"` — five tests, three of them the coverage
-gates: every species with a set has a row, every pre-evolution of one does too,
-and every species the roster drafts has at least one slot that can legally hold
-an observable ability.
 
 **Before Step 2:** settle the innate list. Which slots Step 2 may repurpose is
 determined by the innates you have actually decided on, so don't start Step 2
@@ -596,8 +549,6 @@ so a frontier set can run a genuine second trait alongside the innates. For the
 line:
 
 1. **Read the existing override row(s), if any.** Confirm:
-   - **The chosen ability is NOT one of the species' innates** (otherwise the
-     one observable pick is a wasted duplicate — the whole point of the row).
    - **It's a STABLE pick: an ability absent from `sImplementedInnates[]`**
      (`test/fork/innate_abilities.c`) — one that can **never** become an innate
      (Lightning Rod, Water Absorb, Sheer Force, Grassy Surge, Bulletproof …). That
@@ -610,37 +561,17 @@ line:
      both wastes that slot's only purpose — a trait the species can express no
      other way — and leaves a latent duplicate that collapses the moment a future
      line review gives the species that ability innately.
-     **This rule was previously written the other way round** ("or an
-     already-implemented innate the species does not itself carry"), which is
-     wrong and left a large legacy backlog — since cleared in one sweep, so every
-     row and set now conforms. The guard is
-     `TEST("Innate abilities: no ability override or frontier set names an
-     innate-capable ability")` in `test/fork/innate_abilities.c`, which is **no
-     longer `KNOWN_FAILING`**: it is a real CI gate, so a non-conforming pick now
-     fails the build. New picks must be `:x:`.
 
-   - **A RESERVED ABILITY IS BANNED OUTRIGHT, never-an-innate or not.** A handful
-     of abilities are welded to one species line, listed in `sReservedAbilities[]`
-     (`test/fork/innate_abilities.c`) — **Illusion** (Zorua/Zoroark) is the first.
-     They are `:x:` abilities, so the innate-capable gate above waves them through;
-     the second gate, `TEST("Innate abilities: no ability override or frontier set
-     names a reserved ability")`, is what rejects them. A set may name one only for
-     a species whose vanilla `gSpeciesInfo` already grants it. See
-     [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#reserved-abilities-welded-to-one-line-banned-everywhere-else).
+   - **Reserved abilities are off the pool.** A handful are welded to one species
+     line, listed in `sReservedAbilities[]` (`test/fork/innate_abilities.c`) —
+     **Illusion** (Zorua/Zoroark) is the first — and only that line may use them.
 
    - **A CONVERSION CAN STILL LAND IN A REVIEW.** Wiring a new innate makes that
      ability innate-capable, which can retroactively invalidate an existing
      override row or set that names it. When that happens on the line you are
      reviewing, **converting it is in scope for Step 2**, the same as proposing a
      new row: pick a `:x:` replacement, and repoint every set whose `.ability`
-     named the old one. Check the line with:
-
-     ```bash
-     make check TESTS="no ability override or frontier set names an innate-capable ability"
-     ```
-
-     and grep its output for your species. Two things follow that are easy to get
-     wrong. First, **a conversion can cost the line a trait it was built around** —
+     named the old one. Two things follow that are easy to get wrong. First, **a conversion can cost the line a trait it was built around** —
      if the old pick was the observable half of a package (Farfetch'd's Super Luck
      feeding its Leek crits), say so plainly in the proposal rather than quietly
      swapping in something weaker; the maintainer may prefer a different `:x:`
@@ -648,8 +579,6 @@ line:
      a set cannot keep an ability the override no longer supplies, so flag the
      affected sets in Step 2 and treat their `.ability` field as settled there,
      leaving the rest of each set to its normal Part A audit.
-     See [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md) ("Direction") for the
-     rationale, the current counts, and the promotion criterion.
    - **The freed slot is safe to repurpose:** filling an *empty* (`ABILITY_NONE`)
      slot is always safe. Repurposing a *real* slot deletes that ability from the
      species game-wide — only do it when the slot is redundant (that ability is
@@ -708,12 +637,9 @@ line:
    became its innate, and the observable slot holds No Guard. When this happens,
    say so in the PR body rather than reaching for a worse pick.
 
-   **Dark Aura is legends-only.** Only a species tiered `TIER_LEGENDARY` or
-   `TIER_MYTHICAL` in `src/fork/species_tiers.c` may get it from an override row
-   or name it on a set; it boosts every Dark move on the field, partners
-   included, and read as broken on ordinary Dark mons. Gated by `TEST("Innate
-   abilities: only legendary or mythical species get Dark Aura from an override
-   or set")`.
+   **Dark Aura is legends-only** (a species tiered `TIER_LEGENDARY` or
+   `TIER_MYTHICAL` in `src/fork/species_tiers.c`): it boosts every Dark move on the
+   field, partners included, and reads as broken on ordinary Dark mons.
 3. **Don't override a base form to hand it its Mega's ability.** Under
    `FEATURE_FREE_GIMMICKS` a base Factory set Mega Evolves on its own (see the
    free-gimmicks note in Step 3) and *becomes* the Mega, gaining the Mega's real
@@ -721,79 +647,22 @@ line:
    a "Mega X" set is dead weight — the set is Mega X within a turn and has Tough
    Claws for real. Overrides earn their keep for mons whose chosen trait must be
    observable *without* transforming, not for pre-transform placeholders.
-4. **DO override a MEGA form to match the base form when the Mega's own ability
-   is already an innate.** Per Step 1, a Mega mirrors the base's innates and adds
-   its own signature ability. When that signature is an *implemented* innate, the
-   Mega already carries it as an always-on innate — so the Mega's single
-   observable ability slot would otherwise default to that same ability, a wasted
-   duplicate (exactly what Step 2's point 1 forbids). The fix: override **every
-   real slot** of the Mega form to the **base form's chosen override ability**, so
-   the base's observable trait persists through the transformation instead of
-   collapsing into the now-innate Mega ability. Worked example — the whole
-   Venusaur pattern: base Venusaur overrides to `GRASSY_SURGE`; Mega Venusaur adds
-   `THICK_FAT` as an innate (Step 1) **and** overrides slots 0/1/2 to
-   `GRASSY_SURGE`. A set authored on base Venusaur shows Grassy Surge, Megas turn
-   one, and *still* shows Grassy Surge — now with Thick Fat live on top. (Contrast
-   point 3: that's about not handing a *base* form its Mega's ability; this is
-   handing the *Mega* the base's ability so the observable trait carries over.)
-
-   **This is the most-missed rule in the file** — about twenty Megas were found
-   with the innate half done and the override half absent, across every batch of
-   the Gen 1-3 sweep. CI now catches it: "every reviewed species the roster drafts
-   has a legal observable slot" fails when all of a form's slots hold
-   innate-capable abilities, which is exactly this bug's signature. **The
-   three outcomes, so you can tell at a glance which applies:**
-   - Mega's ability is on `sImplementedInnates[]` → **innate + override all
-     slots** (Venusaur, Sableye, Mawile, Aggron, Medicham, Banette, Metagross,
-     Latias, Latios, Chimecho, Manectric).
-   - Mega's ability is **never-an-innate** → **the Mega keeps it, no rows at all**
-     (Gardevoir/Pixilate, Tyranitar/Sand Stream, Salamence/Aerilate,
-     Rayquaza/Delta Stream, Glalie/Refrigerate, and both Primals) — **unless it
-     CONTRADICTS the line's innates**, in which case override every real slot to the
-     base's ability as above. Mega Staraptor is the case that found this: upstream
-     gives it `CONTRARY`, which inverts every stat change applied to the holder, so
-     the line's innate `MOXIE` read as Attack −1 on a KO instead of +1. Contrary is
-     double-edged and therefore never-an-innate, so it cannot be re-homed on the
-     innate row the way a Thick Fat can — the only fix is the override half (Mega
-     Staraptor → base Staraptor's `HUSTLE` on slots 0/1/2). Check this whenever the
-     Mega's ability touches stat stages, immunities or ability suppression.
-   - Mega's ability already equals the base's override → **nothing to do**
-     (Sceptile/Lightning Rod, Pinsir/Aerilate, Camerupt/Sheer Force).
-5. **Pre-evolutions don't need an override row.** An override earns its keep by
-   letting a *Factory set* run a real second trait alongside the innates — so a
-   species with no sets has nothing to spend it on, and a row there is dead data.
-   Give the row to the stage that actually gets drafted (normally the final one,
-   plus any regional/Mega form that is its own final stage) and leave the pre-evos
-   alone. The exception follows Step 3's: a pre-evo that *does* carry sets (the
-   Eviolite walls) is treated as a final stage for this purpose.
-   Note the asymmetry with Step 1 — **innates still cover the whole line**, because
-   an innate is always-on identity that a Vulpix has whether or not anything drafts
-   it, while an override only exists to be selected by a set.
+4. **DO carry the base's override through a Mega (or G-Max) form when the form's
+   own ability is already an innate.** The form keeps the base's ability *slot*, so
+   that slot would otherwise land on the now-innate ability and the base's
+   observable trait would vanish on transformation. Override the form's slots to the
+   base form's chosen ability — the Venusaur pattern: base Venusaur overrides to
+   `GRASSY_SURGE`; Mega Venusaur adds `THICK_FAT` as an innate (Step 1) **and**
+   overrides slots 0/1/2 to `GRASSY_SURGE`. Do the same when a never-an-innate Mega
+   ability **contradicts** the line's innates: Mega Staraptor's upstream `CONTRARY`
+   turned its innate Moxie into Attack −1 on a KO, so its slots point at base
+   Staraptor's `HUSTLE`. Otherwise a Mega keeps its own never-an-innate ability
+   (Pixilate, Aerilate, Parental Bond).
+5. **Overrides go where sets are.** An override only exists to be selected by a
+   set, so it belongs on the stages that get drafted (normally the final one, plus
+   the niche Eviolite pre-evos), while innates still cover the whole line.
 6. **Slot/dex ordering:** rows are sorted by National Dex number with a trailing
    `// <dex>` comment; forms share the base number and follow it.
-
-**Verify:** `make check TESTS="Innate abilities: no species' chosen ability inverts"`
-gates the contradiction case above — it sweeps every species whose observable ability
-inverts stat changes and fails when that species also carries a self-stat-raising
-innate, so a Mega left on an upstream `CONTRARY` no longer ships silently.
-
-**Verify:** `make check TESTS="Frontier extended roster"` — four tests enforce the
-invariants: "every set's ability is legal for its species" and "no set's chosen
-ability duplicates a species innate" cover the sets that select a slot, "no
-species ability override duplicates a species innate" sweeps the **whole override
-table** independently, so a redundant row fails CI even before any set uses it, and
-"no set uses ABILITY_NONE" bans the let-the-Factory-pick escape hatch. Pairing a new
-override with a set that uses it is still good practice (it proves the slot resolves
-end-to-end), but it is no longer what catches a duplicate.
-
-**The two duplicate-innate tests are scoped PER SPECIES, which is what makes the
-second stable branch legal.** Both gate on `SpeciesHasInnate(species, ability)`, and
-that helper walks only *that species'* innate list (`src/fork/innate_abilities.c`) —
-it never asks whether the ability is an innate on some *other* species. So borrowing
-an implemented innate the species doesn't carry is not a near-miss the tests tolerate;
-it is the intended design, and the table already does it at scale (`ABILITY_UNAWARE`
-in 10 rows, `ABILITY_STICKY_HOLD` in 3, plus Harvest and Gooey). The only thing that
-fails is naming an ability *this* species already has innately.
 
 **Before Step 3:** settle the override rows. A set's `.ability` may only name an
 ability that is already a real slot for the species or comes from an override row
@@ -993,14 +862,7 @@ than one whose existing set is about to be rewritten.
       Polish, Agility, Autotomize, Shell Smash, or a Swift Swim / Chlorophyll
       innate the set turns on itself.
 
-      **Do not turn (i) into a mechanical rule** — it was tried, and a category-
-      versus-nature sweep returns 133 hits of which most are correct by design.
-      Foul Play attacks off the *target's* Attack; Body Press off Defence; Seismic
-      Toss and Night Shade are fixed damage; Counter and Mirror Coat return what
-      they took; and U-turn, Flip Turn, Rapid Spin, Fake Out, Knock Off and Icy
-      Wind are drafted for their effect, not their damage. This one is a
-      judgement call, which is why it is here and not in CI. On IVs:
-      only ~42 of 1200+ sets set `.iv` at all, and `CreateFacilityMon` applies it
+      On IVs: few sets set `.iv` at all, and `CreateFacilityMon` applies it
       only `if (fmon->iv)`, so leaving it unset means "facility default" and is
       normal — the usual reason to set one is minimum Speed for Trick Room.
       **Footgun:** `TRAINER_PARTY_IVS(hp, atk, def, speed, spatk, spdef)` takes
@@ -1008,37 +870,13 @@ than one whose existing set is about to be rewritten.
       order (`hp/atk/def/spa/spd/spe`). Reading the IV macro as if it matched the
       EV field order silently zeroes Sp. Atk instead of Speed.
 
-      **The 510 EV cap is not enforced, and one species deliberately breaks it.**
-      `CreateFacilityMon` (`src/battle_frontier.c`) `SetMonData`s each stat with no
-      cap check, so a set that spends more than 510 EVs simply gets the better
-      spread. **Pikachu's two sets carry 252 in all six stats on purpose** — it is
-      frail enough that Light Ball alone does not make it draftable, and the
-      perfect spread is the handicap offset that does. **Do not "fix" it.** The Gen
-      2 pass read 1512 EVs on a 510 budget as an obvious typo and normalised both
-      sets; the maintainer caught it in review. Because the no-comments rule keeps
-      the data files bare, there was nothing at the row to read — so the intent now
-      lives in CI instead: `TEST("Frontier extended roster: only the documented
-      exceptions exceed the EV cap")` fails **both** on a new over-cap set and on a
-      documented exception being normalised away. If you genuinely want another
-      one, add the species to `SpeciesIsADocumentedOverCapException` and say why
-      here; don't widen the test.
-   e. **Ability — still the right pick** given the species' innates (CI already
-      enforces legal-and-non-innate; this is the flavor//usefulness question).
+   e. **Ability — still the right pick** given the species' innates: the flavor and
+      usefulness question.
    f. **Format tag** — does a `FORMAT_BOTH` set genuinely hold up in both, and is
       the line's coverage across singles/doubles balanced?
 
-      **Spread moves that hit your own ally are the single most common defect in
-      this file, and CI now gates it.** A `TARGET_FOES_AND_ALLY` move damages the
-      holder's partner every time it is clicked, so it is wrong on any
-      `FORMAT_DOUBLES` or `FORMAT_BOTH` set. Nineteen moves are in this class:
-      Earthquake, Bulldoze, Magnitude, **Surf**, Sludge Wave, Discharge, Lava
-      Plume, Petal Blizzard, Boomburst, Sparkling Aria, Searing Shot, Mind Blown,
-      Brutal Swing, Corrosive Gas, Parabolic Charge, Synchronoise, Teeter Dance,
-      and the self-KO pair. **Surf is the one that hides**: its source line reads
-      `B_UPDATED_MOVE_DATA >= GEN_4 ? TARGET_FOES_AND_ALLY : TARGET_BOTH`, so a
-      text search for the constant misses it while the build resolves to the
-      ally-hitting branch. Do not trust a grep — ask `GetMoveTarget`.
-      Usual repairs: **Earthquake → a single-target Ground move that fits the
+      **A doubles set wants moves that spare its partner.** When an ally-hitting
+      spread move has to go, the usual repairs are **Earthquake → a single-target Ground move that fits the
       species** (see the Earthquake note below), **Surf → Muddy Water** (both 90 BP; Muddy Water is
       `TARGET_BOTH`, foes only), **Sludge Wave → Sludge Bomb**, **Discharge →
       Thunderbolt**, **Boomburst → Hyper Voice**; on a *special* set the Ground
@@ -1057,55 +895,28 @@ than one whose existing set is about to be rewritten.
       flyers and floaters (Gyarados, Salamence, Glalie) usually read best as a
       `FORMAT_SINGLES` Earthquake set, as long as the species keeps a doubles
       set; if retagging leaves it without one, write a doubles set for it.
-      **Exempt:** Explosion, Self-Destruct and Misty Explosion. Hitting everything
-      adjacent is what they are, and pressing one is a deliberate last act.
-
-      **A Choice item and a status move do not coexist.** The lock makes the
-      status move either unreachable (you clicked something else) or a dead end
-      (you clicked it and are stuck). Sharpedo shipped Choice Scarf beside Destiny
-      Bond. Only three exceptions, all cases where the lock costs nothing: Trick
-      and Switcheroo (handing the item over *is* the payload) and Transform
-      (Ditto's set is four copies of it). Also gated by CI.
    g. **Base-form viability** — re-check the set against the base stat line per
       the free-gimmicks rule below.
 
-   **The five defects the full sweep actually found.** The field-by-field audit
-   above is the method; these are the specific things it keeps catching, and none
-   of them is a matter of taste — each is a set that is objectively not doing what
-   it was written to do. Check for all five explicitly, because four of them are
-   invisible field by field and only appear when the set is read **as a whole**.
+   **Three defects to read for.** The field-by-field audit above is the method;
+   these are what it keeps catching, and each only appears when the set is read
+   **as a whole**.
 
-   1. **A move on the wrong stat.** The commonest defect by far, and now **CI-gated**. Celesteela ran
-      Heavy Slam, its main STAB, on two sets with an Attack-lowering nature and
-      zero Attack EVs. Pheromosa ran Ice Beam *and* Thunderbolt off 4 Sp. Attack
-      on a 252-Attack spread. Arctozolt ran Blizzard on a 252-Attack physical
-      build; Melmetal's Assault Vest set had **4 Attack EVs** under an
-      Attack-boosting nature with four physical moves. Read the nature and the EV
-      spread first, then check every move's damage category against it.
-   2. **An item that can never trigger**, now **CI-gated** for the statically
-      decidable cases. Popplio's Throat Spray set carried Hydro
-      Pump, Moonblast, Energy Ball and Psychic — not one a sound move, so the item
-      did nothing for the entire set. Ask what makes each item fire and find the
-      move or condition that does it.
-   3. **An ability that can never fire.** Flapple's Hustle on a 252 Sp. Attack
+   1. **An item that can never trigger.** Ask what makes each item fire and find
+      the move or condition on the set that does it.
+   2. **An ability that can never fire.** Flapple's Hustle on a 252 Sp. Attack
       set (Hustle boosts physical Attack). Sheer Force on a set with no
       chance-based secondary to trade away. Magician on a set that holds an item,
       when it only triggers with an empty slot. Sometimes this is unavoidable —
       when every other slot is innate-capable the species has only one legal
       observable — but then **say so in the PR body** rather than leaving it to
       look like an oversight.
-   4. **Two sets that are one set**, now **CI-gated**. Same four moves, same ability,
-      differing only by item — which wastes a Factory draw, since the drafter picks
-      among a species' sets. Inteleon's Choice Specs and Choice Scarf sets were
-      each other with the moves reordered; Barraskewda's two Choice sets differed
-      by one move; Polteageist's two sets were identical bar item and format;
-      Kingambit had two. The fix is to repurpose one — usually into the format the
-      line is missing. Not every near-pair is a duplicate: Dracovish's Scarf and
+   3. **Two sets that play the same.** Near-identical sets waste a Factory draw,
+      since the drafter picks among a species' sets; repurpose one, usually into the
+      format the line is missing. Not every near-pair is a duplicate: Dracovish's Scarf and
       Band sets share three moves but are genuinely different plans (guaranteed
       first Fishious Rend vs. raw power), so they both stay. The test is whether
       you would draft them differently.
-   5. **An untyped Hidden Power**, which is a 60 BP **Normal** move — the worst
-      slot on any set, and it was sitting on a Grass special attacker (Lurantis).
 
    Note what niche each surviving set fills, so Part B adds variety rather than
    duplicating.
@@ -1116,8 +927,7 @@ than one whose existing set is about to be rewritten.
 2. **PART B — write the new sets. Aim for at least 2 quality sets per species** — that is the bar, not a
    quota to fill. Read it as **two sets a drafter would play differently**, not
    two rows: a species at "two sets" that are the same set twice is at one (see
-   defect 4 above), and the sweep found five such pairs plus nine species genuinely
-   sitting at one set. When adding the second, prefer the format the line is
+   defect 3 above). When adding the second, prefer the format the line is
    missing — but only where the species has a real job in it. Arctovish was left at
    two singles sets precisely because it has no doubles identity to build around,
    and a set nobody would draft is worse than no set. Each should occupy a distinct niche so the Factory has real
@@ -1150,19 +960,9 @@ than one whose existing set is about to be rewritten.
    padding — the same reasoning as the "don't pad to a number" rule for innates in
    Step 1.
 
-   **Pre-evolutions don't get sets.** The "would you actually draft this" bar above,
-   applied to a whole stage: a Vulpix or an Ivysaur set is drafted into the same team
-   slot as fully-evolved mons and simply loses, so building one adds a draw nobody
-   wants. The two-sets-per-species bar means **per species that gets sets at all** —
-   it is not an instruction to give the base stage a pool. Spend the line's budget on
-   the final stage and on any regional/Mega form that is its own final stage.
-
-   The roster already works this way and is worth checking against: of **642 species
-   with sets, the only non-final stages are Chansey, Porygon2 and Dusclops** — and
-   all four of those sets hold **Eviolite**, which is the entire reason they qualify.
-   That is the exception in full: a pre-evo gets sets when Eviolite (or a comparable
-   niche) makes it genuinely better at something than its evolution. If you cannot
-   name what it beats its evolution at, it does not get a set.
+   **Pre-evolutions don't get sets** unless something like Eviolite makes one
+   genuinely better at a job than its evolution (Chansey, Porygon2, Dusclops): the
+   two-set bar is per species that gets sets at all.
 3. **Cover both battle formats across the line's sets.** Every set is tagged
    `FORMAT_SINGLES`, `FORMAT_DOUBLES`, or `FORMAT_BOTH` (see the `.tags` field in
    point 7), and the Factory
@@ -1180,9 +980,7 @@ than one whose existing set is about to be rewritten.
    ability, or a gimmick. Don't force a themed item onto every set.
 
    **Roster-wide item distribution is not a line-review concern** — pick the item
-   the set wants. `test/fork/held_item_tracker.c` gates it separately (every drafted
-   item on at least two sets, none over `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` of the
-   roster, no set on an ignored item), and CI runs it.
+   the set wants.
 5. **Account for this fork's mechanics when picking moves and items** — they
    change what's good in ways stock knowledge misses:
    - **`DETERMINISTIC_*` flags** (`include/config/deterministic.h`) replace the
@@ -1208,17 +1006,9 @@ than one whose existing set is about to be rewritten.
      (0/unset stalls the selector). Keep enough of each format across the roster.
    - `.heldItem` — any item.
    - `.moves` — up to 4; **no legality restriction**.
-   - `.ability` — the chosen ability. Must resolve to a real slot for the species
-     (via `GetSpeciesAbility`, i.e. through the override table) **and** must not be
-     an innate. **`ABILITY_NONE` is banned** — a fourth roster test
-     (*"no set uses ABILITY_NONE"*, `test/fork/frontier_extended_roster.c`) fails on
-     it outright. Letting the Factory pick yields an unlabeled ability that, for the
-     fork's all-innate species, can only land on a redundant innate; gating the
-     override table behind `FEATURE_INNATE_ABILITIES` removed the last reason to
-     allow it, so every set names a real chosen ability, freeing a slot with a fork
-     override where needed. (Note the test file's *own* comment in the
-     duplicate-innate test still describes `ABILITY_NONE` as acceptable — it predates
-     the ban.)
+   - `.ability` — the chosen ability: a real slot for the species (through the
+     override table) that is not one of its innates. Always name one; free a slot
+     with a fork override where needed.
    - `.nature` — `NATURE(DEF_UP, ATK_DOWN)` style (boosted, lowered).
    - `.ev` — `EVS(.hp = 252, .def = 252, .spd = 4)` (names: hp/atk/def/spa/spd/spe).
    - `.teraType` — optional Tera type.
@@ -1391,12 +1181,8 @@ This cuts **both** ways, and both are easy to get wrong:
   That is fixed, and the calculus is now inverted for any set splitting its damage across
   both boosted types. Both Lati@s Calm Mind sets hold Soul Dew today.
 
-Two practical notes when you add one of these sets:
+One practical note when you add one of these sets:
 
-- **A forme set needs an innate row too.** `gSpeciesInnates` is keyed per forme, and a
-  roster gate requires every drafted species to have one — so `SPECIES_SILVALLY_BUG` needs
-  its own row in `src/fork/innate_abilities.c` carrying the line's identity, not just a
-  roster entry. Targeted tests miss this; only the full `make check` catches it.
 - **A Drive does not re-type Genesect.** It re-types Techno Blast, but every Genesect forme
   stays Bug/Steel, so a Drive is +40% *off*-STAB. A Memory and a Plate re-type their holder,
   so those are +40% *on top of* STAB. Do not price them the same.
@@ -1572,159 +1358,3 @@ paragraph in this doc for three batches and kept biting until the fix became a
 most lines of Gens 7–9; what changes that is the required field in the PR
 template, not another sentence here. When a rule keeps being missed, the next
 version of it should be a procedure or a test, not a stronger adjective.
-
-### Four of the recurring defects are now CI gates
-
-Part A defects 1, 2 and 4 stopped being advice and became tests in
-`test/fork/frontier_extended_roster.c`, joined later by the signature-item gate.
-Both of the original pair found real defects the human passes had missed, which is
-the argument for them:
-
-| Gate | Found on first run |
-|---|---|
-| **`no set carries an attacking move on the stat it dumped`** | 16 sets — Groudon, Unfezant, Greninja, Centiskorch, Hatterene ×2, Arctozolt, Brambleghast, Silvally ×3, Minior, Solgaleo, Dragapult, Regieleki, Enamorus |
-| **`no species carries two sets that are the same set`** | 6 pairs — Kyogre, Galarian Darmanitan, Toucannon, Dhelmise, Iron Bundle, Ogerpon |
-| **`no set holds an item none of its moves can activate`** | 2 sets — Centiskorch and Tatsugiri, both holding Throat Spray with no sound move (Centiskorch's twice over: that set is physical, and Throat Spray raises Sp. Attack) |
-| **`no set holds a signature type item its species cannot use`** | 0 — added *with* the change that created the hazard (`BUFF_SIGNATURE_TYPE_ITEMS` locking Plates/Memories/Drives/orbs to one species), so it is the one gate written before the defect rather than after it |
-
-The wrong-stat gate needs two exclusion lists to be usable, and they are the
-interesting part. A naive "physical move on a special set" rule fires on **78**
-sets, essentially all of them correct: a special attacker running U-turn to pivot,
-Icy Wind for speed control or Fake Out to flinch is doing the right thing, because
-those moves are picked for their *effect* and the damage is incidental. So the
-gate carries a 70 base-power floor plus a list of effect-first moves, and a second
-list of moves that never scale with the holder's attacking stat at all (Body
-Press, Foul Play, fixed damage, the pick-the-higher-stat moves). Sets naming
-Contrary are skipped outright — Lurantis runs Superpower on a special set for the
-inverted +1 Attack and +1 Defence, which is deliberate.
-
-The dead-item gate only covers what a table can actually decide: Throat Spray
-without a sound move. Weakness Policy and Sitrus need battle state, so they stay a
-reviewer's job. The **signature-item** gate is a second kind of dead item, and it is
-decidable from the table alone — species versus hold effect, no battle state — which
-is why it is a gate and not a paragraph. It is keyed on hold effect rather than on
-40-odd item ids, so an item arriving with an upstream sync is covered the moment it
-carries one of those effects.
-
-It very nearly shipped with a **wrong** second entry. Blunder Policy looks dead
-here — its stock trigger is the holder's move missing, and nothing misses under
-`DETERMINISTIC_ACCURACY_EVASION` — so a gate was written asserting exactly that,
-and it would have failed the build on a legitimate set. The fork **rebuilt** the
-item rather than leaving it broken: it arms on the deterministic blunders instead
-(Protect, a semi-invulnerable target, Wide/Quick/Crafty Guard, Psychic Terrain, a
-type immunity, a blocking ability, an Air Balloon). That is written in
-`deterministic.h`'s own flag comment, in the `DETERMINISTIC_HOLD_EFFECTS` row of
-the table above, and in `test/fork/deterministic_hold_effects.c`. Three places,
-none of them read, because the claim felt obvious. See "these flags convert; they
-rarely delete" in the regime section — that is the rule this violated.
-
-The duplicate gate compares the move *set* and the ability while ignoring order,
-item, spread, tera and format. Ignoring order is what catches Inteleon (the same
-four moves listed differently); ignoring the rest is what leaves Dracovish alone,
-whose two Choice sets share three moves but are genuinely different plans. It
-compares species **ids**, which is how it caught Ogerpon carrying the same set
-twice under `SPECIES_OGERPON` and `SPECIES_OGERPON_TEAL`.
-
-### Restoration cannot be a gate — and that is worth knowing
-
-The third candidate was the restoration check (Step 1 point 5), and it looked like
-the best of the three: no judgement, just compare a row against its
-pre-evolution's. **It does not work as a hard gate.** Run as an invariant it flags
-**91 evolutions**; narrowed to "canon dropped the ability and it is innate-capable"
-it still flags **70**. The overwhelming majority are deliberate:
-
-- Metapod's Shed Skin and Shell Armor not carrying to Butterfree, or Kakuna's to
-  Beedrill — a cocoon's armour is exactly what a line *should* shed.
-- Magikarp's Rattled not carrying to Gyarados: a timid fish becomes a rampaging
-  serpent.
-- Tyrogue's Steadfast, Guts and Vital Spirit split deliberately across the three
-  Hitmons.
-- Duraludon's Light Metal not carrying to Archaludon, which this doc documents as
-  a mechanics-driven exception.
-
-Those are Step 1 point 6 working as intended ("differentiate by form when
-morphology or temperament justifies it"). A gate would need an exception list
-roughly as long as its finding list, and it would freeze judgements the doc
-explicitly leaves to the reviewer.
-
-**So restoration stays a prose rule and stays the highest-yield one** — it changed
-over forty lines across the sweep. The distinction worth carrying forward: a check
-becomes a test when its violations are *always* wrong, and stays prose when it is a
-strong heuristic with principled exceptions. Confirm which by dry-running the rule
-over the data before writing the test, not after.
-
-### The canon floor *can* be a gate — and now is
-
-Restoration failed as a gate because it asks a judgement. The rule one level below it
-does not: **a species the roster drafts must carry its own vanilla abilities that the
-fork can run as innates.** That is where Step 1 starts (point 3 — a line with no row
-has a signature), it needs no flavor call, and it is now
-`TEST("Innate abilities: every roster species carries its own innate-capable
-abilities")`.
-
-Dry-running it first is what made it shippable, and also what stopped it shipping
-*wrong*. It flags three of the 692 drafted species — Spinda (Own Tempo), Zangoose
-(Immunity) and Lucario (Steadfast) — and all three are already-argued contradiction
-carve-outs: the ability would cancel an innate the species does carry (Own Tempo
-blocks the confusion Tangled Feet needs; Immunity blocks the poison Toxic Boost needs;
-Inner Focus blocks the flinch Steadfast needs). The first instinct was to "fix" the
-first two by adding the innate, which would have broken both rows. They are the
-test's exemption table instead, each with its reason.
-
-So it finds nothing today, and that is the point: it is a **regression** gate, not a
-defect-finder. It is also the shape to copy when a rule *does* have exceptions — the
-bar for an exemption is a mechanical contradiction, which is checkable, and each
-exemption is re-verified against the data every run so it cannot quietly go stale.
-Compare restoration, whose exceptions are taste.
-
-Scope is the roster, per the maintainer's ask — but the dex-wide run was worth doing
-anyway, because it found eight more, every one a **form**, and two of them were real.
-
-**Mega Darkrai had no innate Bad Dreams** while base Darkrai does. That is not cosmetic:
-Bad Dreams is Darkrai's *sole* real ability, so its frontier sets take the Sheer Force
-override and get the nightmare aura from the innate — and because rows are keyed by form
-exactly, Mega Evolving switched the aura off. Fixed, and pinned by the existing
-Mega-mirror test. **Rockruff-Own-Tempo's row was a byte-for-byte copy of ordinary
-Rockruff's**, so the one trait that distinguishes the two species was the one thing its
-row did not say. That one was never a loss in battle (Own Tempo is the form's only real
-ability, so it is always the chosen one too) — it is redundant-but-correct, the way the
-Oricorio forms carry Dancer, and it survives a Skill Swap or Gastro Acid.
-
-The rest are either the same contradiction carve-outs as the roster's exemptions or forms
-with no innate row at all — a separate gap, not this one.
-
-The general lesson is the Mega Darkrai one: **a gate is worth dry-running one scope wider
-than you intend to ship it.** The roster scope found nothing; the scope around it found a
-live trait loss on a drafted legend, for the cost of one extra column in the same run.
-
-### Megas mirror their base — and that one *is* a gate
-
-Restoration across evolutions has principled exceptions; restoration across Mega Evolution
-has exactly one, and it is mechanical. Step 1 already says a Mega mirrors its base's list,
-and the only drop the sweep ever made on purpose is **Levitate**, when the Mega stands on the
-ground (Mega Gengar, Mega Mewtwo X). So `TEST("Innate abilities: every Mega carries its base
-form's innates")` exempts that one ability rather than a list of species, and the grounded
-Megas stay pinned by the existing grounded-Levitate test. Its first run found eight Megas that
-had silently dropped a base innate: Darkrai (Pressure), Baxcalibur, Glimmora, Froslass,
-Scovillain and the three Tatsugiris.
-
-Its sibling covers Step 2 point 4 (the Venusaur pattern) for every slot-inheriting battle form:
-Mega, G-Max, Primal and Ultra Burst. The form keeps the base's ability *slot*, so where the
-form's slot resolves to one of its own innates, the base's chosen ability is lost on
-transformation. Mega Darkrai's empty slot 1 fell back to Bad Dreams and dropped the Sheer Force
-override; Golisopod, Glimmora and Baxcalibur lost Emergency Exit, Toxic Debris and No Guard on
-Mega Evolution, and eleven G-Max forms (Snorlax, Melmetal, Inteleon, Corviknight, Orbeetle,
-Drednaw, Toxtricity, Hatterene, Grimmsnarl, both Urshifu) lost theirs on Gigantamax.
-`TEST("Innate abilities: no battle form's ability slot resolves to its own innate where the
-base's does not")` has no exceptions: a form replacing the base's ability with its own
-never-an-innate signature (Parental Bond, Aerilate) is fine and passes.
-
-The innate-mirror gate stays Megas-only on purpose. Widened to G-Max and Ultra Burst it hits
-only deliberate rows: G-Max Blastoise drops Sniper on its own dex text (*"not very good at
-precision shooting"*, #651), and Ultra Necrozma cannot coherently carry both Dusk Mane's Full
-Metal Body and Dawn Wings' Shadow Shield. Those are taste, which is the restoration problem
-again, so they stay a reviewer's call.
-
-Both gates find each form through the battle form changes, not through form tables: a form
-table's first entry is not always the species that transforms (Meowstic-F's table starts with
-Meowstic-M), and Megas and G-Max forms share their base's table.

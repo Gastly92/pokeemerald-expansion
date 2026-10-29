@@ -122,8 +122,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
    converging on the same borrowed ability. Spread them.
 6. **Verify once at the end**, not per line — the two filtered `make check` runs
    are a build each, and CI runs the full suite on the PR. Running them and fixing
-   whatever they name is the batch's real completion criterion; see "Verify and
-   ship" below for what the five gates cover and why they always find something.
+   whatever they name is the batch's real completion criterion.
 7. **One branch `claude/lines-<first>-<last>-review`, one PR** for the batch, with
    **a section per line** in the body carrying everything a single-line PR body
    would (per-step reasoning, flavor evidence with recall flagged, Part A verdicts
@@ -139,13 +138,14 @@ Everything in "Do this" still applies **per line**, at the same depth.
   ability interacts. Settled convention, actively enforced — prose added here gets
   stripped by a later PR. Put the reasoning in `fork-docs/`, on the config
   `#define`, or in the PR body.
-- **Innates:** only *already-implemented* abilities (the `sImplementedInnates[]`
-  allowlist in `test/fork/innate_abilities.c`) — an unwired pick fails CI. Don't
-  wire new abilities in a line review. **A species with no row at all is a bug**,
-  and it happens for a structural reason: when every one of a species' canon
-  abilities is never-an-innate there is nothing to seed a row from, so it gets
-  skipped (Kecleon, the Manectric line, the whole weather trio). Build the row
-  from the rest of the dex entry instead.
+- **The pools.** Innates come from `sImplementedInnates[]`
+  (`test/fork/innate_abilities.c`); don't wire new abilities in a line review. An
+  override must be a **never-an-innate** ability (one *off* that list), because an
+  ability that can be an innate is given as one; `sReservedAbilities[]` (Illusion)
+  belongs to its own line only. Wiring a new innate can invalidate an existing
+  override, so converting the line you touch is in scope for Step 2. Only repurpose
+  a *real* slot that's redundant and not test-pinned; filling an empty slot is always
+  safe.
 - **Flavor test — count the canon users first** (group `.abilities` across
   `src/data/pokemon/species_info/*.h`). **One user = a signature**, welded to that
   creature's design; giving it away is inventing, not borrowing (Berserk→Drampa,
@@ -171,70 +171,24 @@ Everything in "Do this" still applies **per line**, at the same depth.
   to *reject* a candidate is the tell that the honesty requirement has turned into an
   incentive to omit. The canon-user count is still the gate — media evidence picks
   *which* ability fits, and never licenses a 1-user signature.
-- **Overrides:** the chosen ability must be a **never-an-innate** pick — one
-  **absent from `sImplementedInnates[]`** (`test/fork/innate_abilities.c`, the
-  single source of truth: on it = implemented innate, off it = never-an-innate).
-  An innate-capable ability is **not** legal even when this species doesn't carry
-  it — if an ability *can* be an innate it is given as an innate, and the one
-  observable slot is spent on something that can only ever be observable. The
-  legacy backlog is cleared, so `TEST("Innate abilities: no ability override or
-  frontier set names an innate-capable ability")` is a **real CI gate** — a
-  non-conforming pick fails the build. Wiring a new innate can still invalidate an
-  existing row, so treat converting the line you touch as in-scope for Step 2. See
-  `fork-docs/INNATE_ABILITIES.md` ("Direction"). Separately, an ability on
-  `sReservedAbilities[]` (Illusion, welded to Zorua/Zoroark) is banned outright even
-  though it *is* never-an-innate, under its own gate `TEST("Innate abilities: no
-  ability override or frontier set names a reserved ability")`. Only repurpose a
-  *real* slot that's redundant and not test-pinned; filling an empty slot is always
-  safe.
 - **No override where the species already owns a usable pick.** If a vanilla slot
   holds a never-an-innate ability the species doesn't carry innately, the frontier
   sets run *that*, not a borrow, unless the ability is on `sLowValueAbilities[]`
-  (Run Away, Rivalry, Plus/Minus, Klutz, Stall, ...). Gated by `TEST("Innate
-  abilities: no frontier set runs an override over its species' own usable
-  ability")`. An override is for species whose every vanilla slot is innate-capable,
-  already innate, or low-value.
-- **Pre-evolutions get no override rows and no frontier sets.** An override exists
-  to be selected by a set, and a pre-evo set is drafted against fully-evolved mons
-  and loses — so both are dead data on a Vulpix or an Ivysaur. Spend them on the
-  final stage plus any regional/Mega form that is its own final stage. The roster
-  agrees: of 642 species with sets, the only non-final stages are **Chansey,
-  Porygon2 and Dusclops, all on Eviolite** — that niche is the whole exception, so
-  if you can't name what a pre-evo beats its evolution at, it gets nothing.
-  **Innates are the opposite and still cover the whole line** — an innate is
-  always-on identity a pre-evo carries whether or not anything drafts it.
-- **Megas whose ability is an innate:** when a Mega's own ability is an
-  implemented innate, give the Mega that ability as an *innate* (Step 1) and
-  override *every* real slot of the Mega form to the **base form's** chosen
-  override ability, so the base's observable trait carries through the
-  transformation (the Venusaur pattern: base → Grassy Surge override; Mega →
-  Thick Fat innate + Grassy Surge override). See the rubric Step 2, point 4.
-- **Megas whose ability CONTRADICTS the line's innates** get the override half too,
-  even though a never-an-innate Mega ability normally stays put. Mega Staraptor's
-  upstream `CONTRARY` inverted the line's innate `MOXIE` into Attack −1 on a KO;
-  Contrary is double-edged so it cannot be re-homed as an innate, and the fix was to
-  point every Mega slot at the base's `HUSTLE`. Gated by `TEST("Innate abilities: no
-  species' chosen ability inverts its own stat-raising innates")`.
-- **Two set shapes are CI-gated, so check them in Part A.** A
-  `TARGET_FOES_AND_ALLY` move (Earthquake, **Surf**, Sludge Wave, Discharge, Lava
-  Plume, Boomburst …) on a `FORMAT_DOUBLES`/`FORMAT_BOTH` set damages the holder's
-  own partner — swap for a single-target twin (Earthquake → a Ground move that fits the
-  species — see `fork-docs/LINE_REVIEW.md`, High Horsepower only for hoofed/charging mons,
-  Surf → Muddy Water, or Earth Power on a special set); Explosion and its two
-  siblings are exempt. And a Choice item never coexists with a status move except
-  Trick, Switcheroo or Transform.
-- **Five set defects the full sweep kept finding — check all five explicitly.**
-  None is a matter of taste, and four are invisible field-by-field, appearing only
-  when the set is read as a whole. **(1), (2) and (4) are now CI gates**, so they fail
-  the build rather than needing to be spotted: (1) **a move on the wrong stat** (Celesteela's
-  Heavy Slam on a 0-Attack spread, Pheromosa's Ice Beam off 4 Sp. Atk, Melmetal's
-  4 Attack EVs) — read the nature and spread first, then every move's category
-  against it; (2) **an item that can never trigger** (Popplio's Throat Spray with
-  no sound move); (3) **an ability that can never fire** (Flapple's Hustle on a
-  special set) — sometimes forced, but then say so in the PR; (4) **two sets that
-  are one set**, same moves/spread/ability differing only by item, which wastes a
-  Factory draw (Inteleon, Barraskewda, Polteageist, Kingambit); (5) **an untyped
-  Hidden Power**, which is a 60 BP *Normal* move.
+  (Run Away, Rivalry, Plus/Minus, Klutz, Stall, ...). An override is for species
+  whose every vanilla slot is innate-capable, already innate, or low-value.
+- **Overrides and sets go where the drafting is** — the final stage, any
+  regional/Mega form that is its own final stage, and the rare Eviolite pre-evo that
+  beats its evolution at something. **Innates still cover the whole line**: an innate
+  is always-on identity a pre-evo carries whether or not anything drafts it.
+- **Battle forms carry the base's observable trait.** A Mega or G-Max form keeps
+  the base's ability slot; when the form's own ability is an innate (or contradicts
+  the line's innates, as Mega Staraptor's Contrary did Moxie), override its slots to
+  the base's chosen ability — the Venusaur pattern, rubric Step 2 point 4.
+- **Three set defects to read for**, each visible only when the set is read as a
+  whole: **an item that can never trigger** (ask what makes it fire, and find that on
+  the set); **an ability that can never fire** (Flapple's Hustle on a special set) —
+  sometimes forced, but then say so in the PR; and **two sets that play the same**,
+  which wastes a Factory draw.
 - **A line with no innate row has a signature** — its only canon abilities are all
   never-an-innate, so there was nothing to seed from. That is structural, not
   careless, and it means the row must be built from flavor. When there is nothing
@@ -271,16 +225,13 @@ Everything in "Do this" still applies **per line**, at the same depth.
   freely including **other species' signature moves**. If you're about to conclude a
   species "has a narrow kit," that is the gate talking; every move in the game is
   available to every set.
-  Aim for **at least 2 quality sets per species that gets sets at all** (see the
-  pre-evolution rule above), each filling a different niche — a bar, not a quota. More is welcome when each set earns its place; two excellent
+  Aim for **at least 2 quality sets per species that gets sets at all**, each filling a different niche — a bar, not a quota. More is welcome when each set earns its place; two excellent
   sets beat five where three are filler. **Cover both formats** across the line's sets
   (`FORMAT_SINGLES` / `FORMAT_DOUBLES` / `FORMAT_BOTH`) — doubles sets can lean on
   redirection/support (Rage Powder, Follow Me, Helping Hand, Fake Out, spread
   moves), singles sets want self-sufficiency. Held items are **one lens among
   several** (iterate items for fun ideas; a set can start from a move, ability, or
-  gimmick just as well). Pick the item the set wants; roster-wide item distribution (a per-item
-  set floor and a share cap) is gated by `test/fork/held_item_tracker.c`, so a
-  review needs no special handling for it. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
+  gimmick just as well). Pick the item the set wants. Account for the fork's `DETERMINISTIC_*` flags and `BUFF_*` item
   improvements (Shell Bell, Leech Seed) when choosing moves and items —
   **deterministic does NOT mean "always happens"**: secondary effects land only on
   a super-effective hit (or STAB for Normal moves), crit *stages* stay dead while
@@ -294,11 +245,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
   Guard, Keen Eye, Compound Eyes and evasion items are all still live.
   Read the "`DETERMINISTIC_*` regime" section of the rubric —
   and `include/config/deterministic.h` itself, which is the source of truth —
-  before building a set around any mechanic. The set's `.ability` must resolve to a real
-  slot and not be an innate of **that** species — the duplicate-innate tests are scoped
-  per species, so borrowing an implemented innate another species carries is intended,
-  not a loophole. **`ABILITY_NONE` is banned** by a fourth roster test; free a slot with
-  a fork override instead.
+  before building a set around any mechanic.
 - **Smogon is a legitimate input: read it after drafting from the creature, for
   ideas and for evaluation.** Run `tools/smogon.py <NAME>` (every published set, all
   gens and formats) rather than citing it from memory. It sharpens both parts of
@@ -340,14 +287,8 @@ Everything in "Do this" still applies **per line**, at the same depth.
 
 After applying changes: `make check TESTS="Frontier extended roster"` and
 `make check TESTS="Innate"` (filtered — let CI run the full suite on the PR).
-**Expect these to find something.** Every run of this step across the whole sweep
-caught a defect the per-line pass had walked past — 55 ally-hitting spread moves
-the first time, and three or four items in each of the last four batches. Five
-gates cover the whole dex unconditionally (they were ratchets bounded by a
-reviewed-through-dex constant until the sweep finished; both constants are gone,
-so there is nothing to bump), plus two added after it: a damaging move on the stat
-a set dumped, two sets on one species that are the same set, and an item none of
-the set's moves can activate. On a batch that touches many sets, run one filtered
+They enforce the mechanical rules, so **expect them to find something** and fix
+whatever they name. On a batch that touches many sets, run one filtered
 check **early**, after two or three lines — a systematic mistake caught on line 3
 costs one fix, the same mistake caught on line 60 costs sixty.
 Keep rows in dex order. Update `fork-docs/FORK.md` only if the change warrants an
