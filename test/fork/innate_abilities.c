@@ -11323,9 +11323,10 @@ TEST("Innate abilities: every species with a frontier set has an innate row")
 }
 
 // Innates cover the WHOLE line, pre-evolutions included -- an innate is identity a Ralts carries
-// whether or not anything drafts it. So a species whose evolution has a row must have one too. This is the check that catches the *second* kind of gap
-// the sweep found: Electrike had no row because Manectric had none, and once Manectric was given
-// one its pre-evolution would have been left behind silently.
+// whether or not anything drafts it. So a species whose evolution has a row must have one too.
+// This is the check that catches the *second* kind of gap the sweep found: Electrike had no row
+// because Manectric had none, and once Manectric was given one its pre-evolution would have been
+// left behind silently.
 TEST("Innate abilities: every pre-evolution of a species with innates has a row")
 {
     u32 species;
