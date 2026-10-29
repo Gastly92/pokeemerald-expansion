@@ -21757,7 +21757,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_VOLCARONA,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_HEAT_ROCK,
+        .heldItem = ITEM_COVERT_CLOAK,
         .moves =
         {
             MOVE_QUIVER_DANCE,
