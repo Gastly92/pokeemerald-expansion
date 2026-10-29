@@ -1470,8 +1470,8 @@ TEST("Frontier extended roster: no set holds an item none of its moves can activ
 // files bare, so there is nothing to read at the row), so the intent lives here instead: normalising
 // a documented exception fails the build and names the reason.
 //
-// Adding a new over-cap set is a deliberate act. If you want one, put the species in this list and
-// say why in fork-docs/LINE_REVIEW.md -- do not widen the test.
+// Adding a new over-cap set is a deliberate act. If you want one, put the species in this list with
+// a comment saying why -- do not widen the test.
 static bool32 SpeciesIsADocumentedOverCapException(enum Species species)
 {
     switch (species)
