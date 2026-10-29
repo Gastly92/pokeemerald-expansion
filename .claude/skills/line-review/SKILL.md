@@ -225,7 +225,7 @@ Everything in "Do this" still applies **per line**, at the same depth.
   Trick, Switcheroo or Transform.
 - **Five set defects the full sweep kept finding — check all five explicitly.**
   None is a matter of taste, and four are invisible field-by-field, appearing only
-  when the set is read as a whole. **(1), (2), (4) and (5) are now CI gates**, so they fail
+  when the set is read as a whole. **(1), (2) and (4) are now CI gates**, so they fail
   the build rather than needing to be spotted: (1) **a move on the wrong stat** (Celesteela's
   Heavy Slam on a 0-Attack spread, Pheromosa's Ice Beam off 4 Sp. Atk, Melmetal's
   4 Attack EVs) — read the nature and spread first, then every move's category
