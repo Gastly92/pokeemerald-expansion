@@ -1628,7 +1628,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0614
         SPECIES_BEARTIC, 1,
-        ABILITY_SNOW_WARNING
+        ABILITY_SHEER_FORCE
     },
     {
         SPECIES_BEARTIC, 2,
