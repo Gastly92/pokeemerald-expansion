@@ -318,6 +318,7 @@
     F(BUFF_REBURN, buffReburn, (u32, TRUE)) \
     F(BUFF_REPOISON, buffRepoison, (u32, TRUE)) \
     F(BUFF_REPARALYZE, buffReparalyze, (u32, TRUE)) \
+    F(BUFF_GIMMICK_MOVES_IGNORE_DEF_BOOSTS, buffGimmickMovesIgnoreDefBoosts, (u32, TRUE)) \
 
 // FORK: the FEATURE_* flags (config/feature.h) gate standalone gameplay
 // features this fork adds, riding the same runtime config system as the
