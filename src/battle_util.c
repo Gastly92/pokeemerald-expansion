@@ -4140,30 +4140,15 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 }
                 break;
             case ABILITY_CUD_CHEW:
-                if (gBattleMons[battler].volatiles.cudChew == TRUE)
+                if (--gBattleMons[battler].volatiles.cudChewTimer == 0)
                 {
                     gBattleScripting.battler = battler;
-                    // FORK: Sand Spit is the only ability that reaches BattleScript_WeatherAbilityActivates
-                    // through TryChangeBattleWeather's ABILITY_NONE path, and that path is the one branch
-                    // that does not set animArg1 — so the script's `playanimation_var BS_BATTLER_0,
-                    // sB_ANIM_ARG1` played whatever animation id was last left in that byte (0 /
-                    // B_ANIM_STATS_CHANGE on the first activation of a battle, the previous weather's
-                    // animation later, and a binding move's id truncated to 8 bits after a Wrap tick —
-                    // which indexes past the 64-entry sBattleAnims_General[] and hangs the battle on a
-                    // garbage script pointer). Pin the sandstorm animation here so it is deterministic.
-                    // On conflict, keep this line rather than dropping it.
-                    gBattleScripting.animArg1 = B_ANIM_SANDSTORM_CONTINUES;
-                    gBattleMons[battler].volatiles.cudChew = FALSE;
                     gLastUsedItem = GetBattlerPartyState(battler)->usedHeldItem;
                     GetBattlerPartyState(battler)->usedHeldItem = ITEM_NONE;
                     if (GetBattlerAbility(battler) != gLastUsedAbility) // FORK: innate Cud Chew — pop-up shows the innate
                         gBattleScripting.abilityPopupOverwrite = gLastUsedAbility;
                     BattleScriptCall(BattleScript_CudChewActivates);
                     effect++;
-                }
-                else if (!gBattleMons[battler].volatiles.cudChew && GetItemPocket(GetBattlerPartyState(battler)->usedHeldItem) == POCKET_BERRIES)
-                {
-                    gBattleMons[battler].volatiles.cudChew = TRUE;
                 }
                 break;
             default:
@@ -6088,7 +6073,7 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         abilityAffected = TRUE;
         battleScript = BattleScript_AbilityProtectsDoesntAffect;
     }
-    else if ((sideBattler = IsFlowerVeilProtected(battlerDef)))
+    else if (!gBattleStruct->ignoreOrbFailure && (sideBattler = IsFlowerVeilProtected(battlerDef)))
     {
         abilityAffected = TRUE;
         battlerDef = sideBattler - 1;
@@ -6100,7 +6085,7 @@ bool32 CanSetNonVolatileStatus(enum BattlerId battlerAtk, enum BattlerId battler
         abilityDef = ABILITY_FLOWER_VEIL;
         battleScript = BattleScript_FlowerVeilProtects;
     }
-    else if (IsSafeguardProtected(battlerAtk, battlerDef, abilityAtk))
+    else if (!gBattleStruct->ignoreOrbFailure && IsSafeguardProtected(battlerAtk, battlerDef, abilityAtk))
     {
         battleScript = BattleScript_SafeguardProtected;
     }
@@ -10837,16 +10822,20 @@ void TryRestoreHeldItems(void)
 void RestoreCaughtWildMonHeldItem(struct Pokemon *mon, enum BattlerId battler)
 {
     struct LostItem *lostItem = GetLostItemState(GetBattlerTrainer(battler), gBattlerPartyIndexes[battler]);
+    enum Item itemToRestore = lostItem->originalItem;
 
-    if (GetMonData(mon, MON_DATA_HELD_ITEM) != lostItem->originalItem)
+    if (GetMonData(mon, MON_DATA_HELD_ITEM) != itemToRestore)
     {
-        enum Item itemToRestore = ITEM_NONE;
-        SetMonData(mon, MON_DATA_HELD_ITEM, &itemToRestore);
+        enum Item item = ITEM_NONE;
+        SetMonData(mon, MON_DATA_HELD_ITEM, &item);
     }
 
-    if (lostItem->wildItemPending)
+    bool32 shouldRestoreBattleItem = B_RESTORE_HELD_BATTLE_ITEMS >= GEN_9
+                                  && itemToRestore != ITEM_NONE
+                                  && GetItemPocket(itemToRestore) != POCKET_BERRIES;
+
+    if (lostItem->wildItemPending || shouldRestoreBattleItem)
     {
-        enum Item itemToRestore = lostItem->originalItem;
         SetMonData(mon, MON_DATA_HELD_ITEM, &itemToRestore);
         lostItem->wildItemPending = FALSE;
     }

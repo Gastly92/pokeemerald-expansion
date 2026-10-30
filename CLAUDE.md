@@ -352,6 +352,21 @@ None of them got a conflict marker:
   gimmick anyway, so the marker became the mon's actual Tera Type: it would Terastallize into
   Mystery. `ApplyDraftGimmickReadiness` now clears both markers when the feature is on.
 
+Two more from the Oct 2026 sync to upstream #10989 (17 commits, 1 conflicted file):
+
+- **A fork fix that an earlier sync had dropped into the wrong `case`.** The Sand Spit
+  `animArg1` pin (#495) was found sitting in `ABILITY_CUD_CHEW`, where it did nothing. Upstream
+  had since routed Sand Spit through `TryChangeWeatherWithAbility`, which sets `animArg1`
+  itself, so the fork tests still passed and nothing showed the line was dead. It only came to
+  light because #10981 edited the Cud Chew block. **Lesson: when a conflict hunk holds a `FORK:`
+  comment about a different feature from the code around it, it has drifted. Find the feature's
+  real hook and check whether upstream already covers it before keeping the line.**
+- **An upstream fix that moved an ability check to a new place.** #10981 moved Cud Chew's arming
+  from the end-of-turn ability switch (which the fork runs for innates too) into `Cmd_removeitem`
+  behind `GetBattlerAbility() == ABILITY_CUD_CHEW`, so innate Cud Chew stopped arming. Only
+  `test/fork/innate_abilities.c` covers it. **Lesson: when upstream moves an ability's logic, grep
+  the new site for `GetBattlerAbility(...) == ABILITY_X` and add the innate clause.**
+
 The general shape: a clean merge proves nothing about behaviour. Budget for a full
 `make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
 the upstream commit behind any test that changed state.
