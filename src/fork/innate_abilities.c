@@ -10537,9 +10537,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0800
         SPECIES_NECROZMA,
         INNATES(
+            ABILITY_BEAST_BOOST,
+            ABILITY_BERSERK,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
-            ABILITY_PRISM_ARMOR
+            ABILITY_PRISM_ARMOR,
+            ABILITY_TINTED_LENS
         )
     },
     { // 0800
