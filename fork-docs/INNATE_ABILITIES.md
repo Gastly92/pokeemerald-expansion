@@ -1879,7 +1879,8 @@ Caterpie, Weedle, Wurmple + Dustox, Scatterbug + Vivillon, Cutiefly/Ribombee, Sn
 Venomoth (Spewpa is deliberately excluded — its own data is Shed Skin/Friend Guard, not Shield Dust,
 and the accuracy-abilities integrity test pins that exclusion).
 Tinted Lens: Butterfree(+Gmax), Venonat/Venomoth, Hoothoot/Noctowl, Illumise, Yanmega, Sigilyph,
-Braviary-Hisui, Nymble/Lokix. Scrappy: Kangaskhan(+Mega, mirroring the base), Farfetch'd-Galar/
+Braviary-Hisui, Nymble/Lokix, plus the flavor pick **Necrozma** (base form only; Bulbapedia Biology: it
+fires absorbed light as lasers "using the power of a prism to blast through anything"). Scrappy: Kangaskhan(+Mega, mirroring the base), Farfetch'd-Galar/
 Sirfetch'd, Miltank, Taillow/Swellow, Loudred/Exploud, Herdier/Stoutland, Pancham/Pangoro,
 Decidueye-Hisui, Flamigo. **Mega Lopunny carries the innate** rather than being omitted under the
 sole-ability-redundant rule: the override table spends all three of its slots (Sheer Force / Klutz /
@@ -3245,7 +3246,8 @@ not-on-field); none is `breakable`, so Mold Breaker never touches them.
 - **Berserk (canon only so far).** Only **Drampa** — its non-Berserk slots (Sap Sipper / Cloud Nine) leave the innate
   **observable**. **Sole-Berserk species are OMITTED as redundant** (the Mega Lopunny / Scrappy precedent): **Galarian
   Moltres** (a frontier set that keeps its now-redundant chosen Berserk) and **Drampa-Mega** (a sole-Berserk Mega, so
-  its pure-boon mirror could never be observed).
+  its pure-boon mirror could never be observed). One flavor pick: **base Necrozma** (Bulbapedia Biology: "extremely
+  violent behavior due to the constant, maddening pain it suffers in its incomplete state"); its formes don't take it.
 - **Soul-Heart (flavor-only — the Bad Dreams / Darkrai precedent).** Its sole canon user **Magearna** (all four forms:
   base / Original / the fork's two Megas) is **sole-Soul-Heart**, so an innate could never be observed on it — it is
   **OMITTED as redundant** (its frontier sets keep the now-redundant chosen Soul-Heart). Instead a tight
@@ -3689,7 +3691,8 @@ self-faint check and the sacrifice-the-ally spread scoring) that pair `IsMoxieTy
 `IsMoxieTypeInnateActive(b)` already reach it — Beast Boost was **added to `IsMoxieTypeInnateActive`**
 (`src/battle_ai_util.c`) so an innate holder is credited. No other AI site reads Beast Boost.
 
-**Species (canon only so far, no flavor picks yet).** Every canon Beast Boost user is an **Ultra Beast whose sole ability is
+**Species.** One flavor pick: **base Necrozma**, from Ultra Space, code-named "UB Black" and feared as a "pillager
+of light" (Bulbapedia Biology, which calls its Ultra Beast status unclear); its formes don't take it. Every canon Beast Boost user is an **Ultra Beast whose sole ability is
 Beast Boost**, so the ten evolved/frontier UBs take the innate **plus a fork-owned chosen override** in their empty
 slot 1 (`src/fork/species_ability_overrides.c`), each a stable `:x:` never-an-innate pick or an implemented
 `:white_check_mark:` innate the species does not itself carry: **Nihilego → Merciless** (auto-crits its poisoned
