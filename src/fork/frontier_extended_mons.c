@@ -24398,7 +24398,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_SYNTHESIS
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(DEF_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -24418,7 +24418,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK,
             MOVE_SHADOW_SNEAK
         },
-        .ability = ABILITY_WELL_BAKED_BODY,
+        .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(ATK_UP, SPE_DOWN),
         .ev = EVS(
             .hp = 252,
