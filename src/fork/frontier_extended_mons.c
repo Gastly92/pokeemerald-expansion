@@ -26395,7 +26395,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_BAND,
         .moves =
         {
-            MOVE_FIRST_IMPRESSION,
+            MOVE_LEECH_LIFE,
             MOVE_LIQUIDATION,
             MOVE_CLOSE_COMBAT,
             MOVE_AQUA_JET
