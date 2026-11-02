@@ -287,6 +287,43 @@ TEST("Frontier extended roster: no set holds an accuracy item its ability alread
     EXPECT_EQ(wasted, 0);
 }
 
+// A Choice item locks the holder into its first move. A move that only works on the
+// holder's first turn out (First Impression, Fake Out, Mat Block) then fails every turn
+// after, and the holder is stuck clicking it until it switches. Golisopod's banded set
+// shipped like that; this keeps it from coming back.
+TEST("Frontier extended roster: no Choice-item set carries a first-turn-only move")
+{
+    u32 i, j;
+    u32 bad = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        enum HoldEffect holdEffect = GetItemHoldEffect(set->heldItem);
+
+        if (holdEffect != HOLD_EFFECT_CHOICE_BAND
+         && holdEffect != HOLD_EFFECT_CHOICE_SPECS
+         && holdEffect != HOLD_EFFECT_CHOICE_SCARF)
+            continue;
+
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            enum BattleMoveEffects effect = GetMoveEffect(set->moves[j]);
+            if (effect == EFFECT_FIRST_TURN_ONLY || effect == EFFECT_MAT_BLOCK)
+            {
+                bad++;
+                Test_MgbaPrintf("roster[%d] %S: %S locks it into %S, which fails after its first turn out -- change the item or the move",
+                                i,
+                                gSpeciesInfo[set->species].speciesName,
+                                gItemsInfo[set->heldItem].name,
+                                GetMoveName(set->moves[j]));
+            }
+        }
+    }
+
+    EXPECT_EQ(bad, 0);
+}
+
 TEST("Frontier extended roster: no set uses ABILITY_NONE (every set names a real chosen ability)")
 {
     u32 i;
