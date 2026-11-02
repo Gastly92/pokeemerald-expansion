@@ -5984,7 +5984,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HYDRATION,
             ABILITY_PRESSURE,
-            ABILITY_RAIN_DISH
+            ABILITY_RAIN_DISH,
+            ABILITY_SWIFT_SWIM,
+            ABILITY_TELEPATHY,
+            ABILITY_WATER_VEIL
         )
     },
     { // 0490
@@ -5992,7 +5995,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_HYDRATION,
             ABILITY_PRESSURE,
-            ABILITY_RAIN_DISH
+            ABILITY_RAIN_DISH,
+            ABILITY_SWIFT_SWIM,
+            ABILITY_TELEPATHY,
+            ABILITY_WATER_VEIL
         )
     },
     { // 0491
