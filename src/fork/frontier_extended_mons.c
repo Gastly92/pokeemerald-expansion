@@ -4285,7 +4285,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_WEEZING_GALAR,
         .tags = FORMAT_BOTH,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_MISTY_SEED,
         .moves =
         {
             MOVE_WILL_O_WISP,
@@ -32070,7 +32070,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_OINKOLOGNE_F,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_MISTY_SEED,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_HELPING_HAND,
@@ -32078,7 +32078,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DEFOG,
             MOVE_PROTECT
         },
-        .ability = ABILITY_MISTY_SURGE,
+        .ability = ABILITY_LINGERING_AROMA,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -32098,7 +32098,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_REST
         },
-        .ability = ABILITY_MISTY_SURGE,
+        .ability = ABILITY_LINGERING_AROMA,
         .nature = NATURE(SPD_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
