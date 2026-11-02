@@ -655,7 +655,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRILL_PECK,
             MOVE_DRILL_RUN,
             MOVE_KNOCK_OFF,
-            MOVE_U_TURN
+            MOVE_DOUBLE_EDGE
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -1831,7 +1831,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_KNOCK_OFF,
             MOVE_FAKE_OUT,
             MOVE_PLAY_ROUGH,
-            MOVE_U_TURN
+            MOVE_GUNK_SHOT
         },
         .ability = ABILITY_RIVALRY,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -1935,7 +1935,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_THIEF,
             MOVE_SLASH,
             MOVE_FAKE_OUT,
-            MOVE_U_TURN
+            MOVE_PLAY_ROUGH
         },
         .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -10068,7 +10068,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_LIFE,
             MOVE_DUAL_WINGBEAT,
             MOVE_SHADOW_CLAW,
-            MOVE_U_TURN
+            MOVE_PROTECT
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -13747,7 +13747,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TAILWIND,
             MOVE_BRAVE_BIRD,
             MOVE_CLOSE_COMBAT,
-            MOVE_U_TURN
+            MOVE_PROTECT
         },
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -26189,7 +26189,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_HIGH_JUMP_KICK,
             MOVE_PLAY_ROUGH,
-            MOVE_U_TURN
+            MOVE_GRASSY_GLIDE
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -27344,7 +27344,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_WILD_CHARGE,
             MOVE_BRAVE_BIRD,
-            MOVE_U_TURN,
+            MOVE_ROOST,
             MOVE_NATURES_MADNESS
         },
         .ability = ABILITY_ELECTRIC_SURGE,
@@ -27781,7 +27781,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CLOSE_COMBAT,
             MOVE_TRIPLE_AXEL,
             MOVE_LEECH_LIFE,
-            MOVE_U_TURN
+            MOVE_THROAT_CHOP
         },
         .ability = ABILITY_LINGERING_AROMA,
         .nature = NATURE(SPE_UP, SPD_DOWN),
@@ -28132,7 +28132,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_FLEUR_CANNON,
             MOVE_FLASH_CANNON,
-            MOVE_VOLT_SWITCH,
+            MOVE_THUNDERBOLT,
             MOVE_AURA_SPHERE
         },
         .ability = ABILITY_MISTY_SURGE,
@@ -28599,7 +28599,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PYRO_BALL,
             MOVE_HIGH_JUMP_KICK,
             MOVE_SUCKER_PUNCH,
-            MOVE_U_TURN
+            MOVE_IRON_HEAD
         },
         .ability = ABILITY_LIBERO,
         .nature = NATURE(SPE_UP, SPA_DOWN),
