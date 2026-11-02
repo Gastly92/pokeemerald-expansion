@@ -1855,7 +1855,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0711
         SPECIES_GOURGEIST_SUPER, 0,
-        ABILITY_WELL_BAKED_BODY
+        ABILITY_SEED_SOWER
     },
     { // 0713
         SPECIES_AVALUGG, 2,
