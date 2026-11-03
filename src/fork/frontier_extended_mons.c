@@ -29018,7 +29018,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_MAGNET,
         .moves =
         {
-            MOVE_BOLT_BEAK,
+            MOVE_THUNDER_FANG,
             MOVE_CRUNCH,
             MOVE_PLAY_ROUGH,
             MOVE_FIRE_FANG
@@ -29038,7 +29038,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_BOLT_BEAK,
+            MOVE_THUNDER_FANG,
             MOVE_ICE_FANG,
             MOVE_PLAY_ROUGH,
             MOVE_PROTECT
