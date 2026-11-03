@@ -1048,9 +1048,7 @@ innate Pressure is exactly as (in)visible to the AI as a real one.
 Who carries it: every species whose ability data carries Pressure in any slot (so the signature
 survives whichever slot a build picks), **plus every species in the `TIER_LEGENDARY` and
 `TIER_MYTHICAL` lists of `src/fork/species_tiers.c`** — a blanket buff for the legend-grade tiers,
-which also covers the non-legends those tiers deliberately include (Ultra Beasts, the six 590-BST
-Paradox Pokémon, Bloodmoon Ursaluna). The other fourteen Paradox mons and the pseudo-legendaries
-(Dragapult and Baxcalibur, Mega included) are `TIER_PSEUDO` and do not carry it.
+including any non-legend those tiers include. `TIER_PSEUDO` species do not carry it.
 `test/fork/innate_abilities.c` checks that every tiered species carries it, so a species added to either tier list must get Pressure in its `INNATES(...)` row.
 
 ### ABILITY_STENCH

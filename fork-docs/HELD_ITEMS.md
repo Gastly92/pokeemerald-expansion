@@ -374,7 +374,7 @@ which correctly hold no plate.
 "the largest single win in the audit" on exactly that mistake. Three facts cap it, and they
 are worth keeping here so the error is not repeated for some other species-locked class:
 
-- **Arceus is `TIER_MYTHICAL`** (`src/fork/species_tiers.c`). `TierRejectsCandidate()` bans
+- **Arceus is legend-tier** (`src/fork/species_tiers.c`). `TierRejectsCandidate()` bans
   legendaries and mythicals from every normal slot — the player's rental pool
   (`src/battle_factory.c:625`) and ordinary Tower opponents (`src/battle_frontier.c:320`)
   alike. Arceus is reachable only through a *reserved forced-tier slot* on Factory

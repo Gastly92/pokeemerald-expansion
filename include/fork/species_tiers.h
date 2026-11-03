@@ -10,34 +10,21 @@
 // so upstream syncs never touch it and the upstream species data stays untouched.
 //
 // The tiers are this fork's own power bands, NOT the official Game Freak
-// categories — official Mythicals are split across both legend tiers by strength,
-// and the official pseudo-legendaries are not all TIER_PSEUDO:
-//   - TIER_MYTHICAL  : the restricted box/cover legends (Mewtwo, Lugia/Ho-Oh, the
-//                      weather trio, Dialga/Palkia/Giratina, Reshiram/Zekrom,
-//                      Zacian/Zamazenta, Koraidon/Miraidon, ...), their fused or
-//                      Origin/Crowned formes, plus the strongest Mythicals
-//                      (Arceus, Darkrai, Shaymin-Sky, Deoxys' battle formes).
-//   - TIER_LEGENDARY : everything else legend-grade — the sub-legendaries (birds,
-//                      beasts, lake trio, Regis, genies, musketeers, Tapus,
-//                      Treasures of Ruin, Loyal Three, Ogerpon, ...), the other
-//                      Mythicals (Mew, Celebi, Jirachi, Diancie, Magearna,
-//                      Pecharunt, ...), the Ultra Beasts, the six 590-BST Paradox
-//                      Pokemon (Walking Wake onward), and Bloodmoon Ursaluna,
-//                      a non-legend strong enough to share the quota.
-//   - TIER_PSEUDO    : non-legendary standouts capped at one per team — some
-//                      600-BST pseudo-legendaries (Dragonite, Garchomp, Metagross,
-//                      Dragapult, Baxcalibur, ...) alongside other top picks (Gengar, Lucario, the fossil
-//                      quartet, the fourteen original Paradox Pokemon, Gholdengo,
-//                      Archaludon, ...).
+// categories: a species' official category does not decide its tier, its power does.
+// The arrays in src/fork/species_tiers.c are the only list of who is in which tier;
+// this comment describes the bands, not their members.
+//   - TIER_MYTHICAL  : the strongest band — restricted legends and the strongest
+//                      Mythicals. Exactly one per Frontier Brain battle.
+//   - TIER_LEGENDARY : everything else legend-grade, plus any non-legend strong
+//                      enough to share the quota. Exactly one per boss battle.
+//   - TIER_PSEUDO    : non-legendary standouts. At most one per draft team.
 //   - TIER_NORMAL    : everything else (the default; not stored in the table).
 //
 // The table is keyed by EXACT species id, so each forme is classified on its own
 // merits rather than inheriting a single tier from its base species' Pokedex
-// number. This lets a powerful forme outrank its base — Shaymin-Sky is
-// TIER_MYTHICAL while ordinary Shaymin is TIER_LEGENDARY — and a weak base sit
-// below its formes — base Calyrex is TIER_LEGENDARY while its Ice/Shadow riders
-// are TIER_MYTHICAL. List every forme you want classified; anything not listed
-// is TIER_NORMAL.
+// number: a powerful forme can outrank its base, and a weak base can sit below
+// its formes. List every forme you want classified; anything not listed is
+// TIER_NORMAL.
 //
 // CAVEAT — an omitted forme is not "inherits its base's tier", it is TIER_NORMAL,
 // i.e. draftable into any party slot with no quota. Every forme of a restricted

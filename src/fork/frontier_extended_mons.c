@@ -35927,11 +35927,11 @@ static u32 CountDrawableSetsInDexRun(u16 id, u32 formatTag, const struct DraftSl
 // how many drawable sets its dex number has, so every dex number carries equal total
 // weight and each of its sets 1/n of it. Seventeen Silvally or Arceus sets are no more
 // likely than one set, and counting n over the slot's own filter keeps a dex number
-// whose formes span tiers (Kyurem is TIER_LEGENDARY, Kyurem-Black/White TIER_MYTHICAL)
-// from being diluted by sets that slot could never take. There is no difficulty
-// scaling by streak (the roster has no weak->strong tier ordering). Lives here, with
-// the roster data, rather than in the upstream battle_factory.c, and is shared so any
-// facility (Battle Factory, Battle Tower) can field teams from the competitive list;
+// whose formes span tiers from being diluted by sets that slot could never take. There
+// is no difficulty scaling by streak (the roster has no weak->strong tier ordering).
+// Lives here, with the roster data, rather than in the upstream battle_factory.c, and is
+// shared so any facility (Battle Factory, Battle Tower) can field teams from the
+// competitive list;
 // callers handle their own species/held-item dedup on top of this.
 u16 GetRandomFrontierExtendedMonIdForSlot(enum SpeciesTier slotTier, u32 pseudoCount)
 {
