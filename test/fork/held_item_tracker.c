@@ -476,16 +476,67 @@ static enum ItemTrackerList GetItemTrackerList(enum Item item)
     return TRACKER_UNLISTED;
 }
 
-static u32 CountRosterSetsHolding(enum Item item)
+// The draft is per FORMAT: the Factory only draws a set whose .tags include the current
+// battle mode (include/fork/frontier_extended_mons.h), so a singles challenge never sees a
+// FORMAT_DOUBLES set. Counting the whole roster therefore overstates reach -- an item held
+// by two doubles-only sets read as "done, two sets" while a singles player could never draft
+// it, and 47 done items were in that state when this was added. The distribution gates run
+// once per scope in sGatedFormats[] below.
+//
+// A scope is a FORMAT_* mask, and a set counts when its tags overlap it, so FORMAT_BOTH means
+// "any set" (the whole roster) and FORMAT_SINGLES means "draftable in singles".
+static bool32 SetIsInFormat(const struct TrainerMon *set, u32 format)
+{
+    return (set->tags & format) != 0;
+}
+
+static u32 CountRosterSetsInFormat(u32 format)
 {
     u32 i, count = 0;
 
     for (i = 0; i < gFrontierExtendedMonsCount; i++)
     {
-        if (gFrontierExtendedMons[i].heldItem == item)
+        if (SetIsInFormat(&gFrontierExtendedMons[i], format))
             count++;
     }
     return count;
+}
+
+static u32 CountRosterSetsHoldingInFormat(enum Item item, u32 format)
+{
+    u32 i, count = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        if (gFrontierExtendedMons[i].heldItem == item && SetIsInFormat(&gFrontierExtendedMons[i], format))
+            count++;
+    }
+    return count;
+}
+
+static u32 CountRosterSetsHolding(enum Item item)
+{
+    return CountRosterSetsHoldingInFormat(item, FORMAT_BOTH);
+}
+
+// The scopes the distribution gates (share cap, at least one set, not a single set) are run
+// in. FORMAT_DOUBLES belongs here too and is not YET: doubles still has items on zero or one
+// doubles-eligible set, and adding it is the job of the doubles roster pass. Add it in the
+// same commit that makes doubles green -- do not add it with an allowlist of offenders.
+static const u32 sGatedFormats[] =
+{
+    FORMAT_BOTH,    // the whole roster
+    FORMAT_SINGLES,
+};
+
+static const u8 *GetFormatScopeName(u32 format)
+{
+    switch (format)
+    {
+    case FORMAT_SINGLES: return COMPOUND_STRING("singles");
+    case FORMAT_DOUBLES: return COMPOUND_STRING("doubles");
+    default:             return COMPOUND_STRING("the whole roster");
+    }
 }
 
 // An item needs tracking if it does something when held, OR if the roster already holds
@@ -656,38 +707,56 @@ TEST("Held item tracker: every held item is on exactly one tracker list")
 
 TEST("Held item tracker: no done item exceeds the roster share cap")
 {
-    u32 i;
+    u32 f, i;
     u32 offenders = 0;
 
-    for (i = 0; i < ARRAY_COUNT(sDoneItems); i++)
+    for (f = 0; f < ARRAY_COUNT(sGatedFormats); f++)
     {
-        u32 sets = CountRosterSetsHolding(sDoneItems[i]);
+        u32 total = CountRosterSetsInFormat(sGatedFormats[f]);
 
-        // Integer-only: sets * 100 > cap * total avoids a division and any rounding.
-        if (sets * 100 > HELD_ITEM_MAX_ROSTER_SHARE_PERCENT * gFrontierExtendedMonsCount)
+        for (i = 0; i < ARRAY_COUNT(sDoneItems); i++)
         {
-            offenders++;
-            Test_MgbaPrintf("%S is on %d of %d sets, over the %d%% cap. Only one of each item can appear per team (src/battle_frontier.c), so an over-concentrated item is drafted LESS often -- move sets onto the long tail rather than raising the cap. fork-docs/HELD_ITEMS.md lists the uncontested items",
-                            GetItemName(sDoneItems[i]), sets, gFrontierExtendedMonsCount,
-                            HELD_ITEM_MAX_ROSTER_SHARE_PERCENT);
+            u32 sets = CountRosterSetsHoldingInFormat(sDoneItems[i], sGatedFormats[f]);
+
+            // Integer-only: sets * 100 > cap * total avoids a division and any rounding.
+            if (sets * 100 > HELD_ITEM_MAX_ROSTER_SHARE_PERCENT * total)
+            {
+                offenders++;
+                Test_MgbaPrintf("%S is on %d of %d sets in %S, over the %d%% cap. Only one of each item can appear per team (src/battle_frontier.c), so an over-concentrated item is drafted LESS often -- move sets onto the long tail rather than raising the cap. fork-docs/HELD_ITEMS.md lists the uncontested items",
+                                GetItemName(sDoneItems[i]), sets, total, GetFormatScopeName(sGatedFormats[f]),
+                                HELD_ITEM_MAX_ROSTER_SHARE_PERCENT);
+            }
         }
     }
 
     EXPECT_EQ(offenders, 0);
 }
 
+// Guards the scoping itself: if FORMAT_SINGLES ever stopped filtering (a tag encoding change,
+// every set retagged FORMAT_BOTH), the per-format gates would silently collapse back into the
+// whole-roster count this file used to run, and a doubles-only item would pass again.
+TEST("Held item tracker: the singles scope really excludes doubles-only sets")
+{
+    EXPECT_GT(CountRosterSetsInFormat(FORMAT_SINGLES), 0);
+    EXPECT_LT(CountRosterSetsInFormat(FORMAT_SINGLES), CountRosterSetsInFormat(FORMAT_BOTH));
+    EXPECT_EQ(CountRosterSetsInFormat(FORMAT_BOTH), gFrontierExtendedMonsCount);
+}
+
 TEST("Held item tracker: every done item appears on at least one set")
 {
-    u32 i;
+    u32 f, i;
     u32 offenders = 0;
 
-    for (i = 0; i < ARRAY_COUNT(sDoneItems); i++)
+    for (f = 0; f < ARRAY_COUNT(sGatedFormats); f++)
     {
-        if (CountRosterSetsHolding(sDoneItems[i]) == 0)
+        for (i = 0; i < ARRAY_COUNT(sDoneItems); i++)
         {
-            offenders++;
-            Test_MgbaPrintf("%S is on the done list but no set holds it, so nothing it does is reachable. Give a set the item, or move it to sIgnoredItems[] and lower HELD_ITEM_DONE_FLOOR if you mean to stop drafting it",
-                            GetItemName(sDoneItems[i]));
+            if (CountRosterSetsHoldingInFormat(sDoneItems[i], sGatedFormats[f]) == 0)
+            {
+                offenders++;
+                Test_MgbaPrintf("%S is on the done list but no set in %S holds it, so nothing it does is reachable there. Give a set in that format the item (retagging a format-neutral set to FORMAT_BOTH counts), or move it to sIgnoredItems[] and lower HELD_ITEM_DONE_FLOOR if you mean to stop drafting it",
+                                GetItemName(sDoneItems[i]), GetFormatScopeName(sGatedFormats[f]));
+            }
         }
     }
 
@@ -702,7 +771,7 @@ TEST("Held item tracker: every done item appears on at least one set")
 // drift recurs on every batch.
 TEST("Held item tracker: no done item sits on a single set")
 {
-    u32 i;
+    u32 f, i;
     u32 offenders = 0;
 
     for (i = 0; i < ARRAY_COUNT(sDoneItems); i++)
@@ -717,11 +786,14 @@ TEST("Held item tracker: no done item sits on a single set")
          || ItemSharesHoldEffectWithAFormeUnlocker(sDoneItems[i]))
             continue;
 
-        if (CountRosterSetsHolding(sDoneItems[i]) == 1)
+        for (f = 0; f < ARRAY_COUNT(sGatedFormats); f++)
         {
-            offenders++;
-            Test_MgbaPrintf("%S is on the done list but only one set holds it, and with one of each item per team that is a roll away from never appearing. Graduation takes TWO sets unless one is its ceiling: give it a second set, or move it to sIgnoredItems[] and lower HELD_ITEM_DONE_FLOOR if you mean to stop drafting it",
-                            GetItemName(sDoneItems[i]));
+            if (CountRosterSetsHoldingInFormat(sDoneItems[i], sGatedFormats[f]) == 1)
+            {
+                offenders++;
+                Test_MgbaPrintf("%S is on the done list but only one set in %S holds it, and with one of each item per team that is a roll away from never appearing. Graduation takes TWO sets per format unless one is its ceiling: give it a second set there (retagging a format-neutral set to FORMAT_BOTH counts), or move it to sIgnoredItems[] and lower HELD_ITEM_DONE_FLOOR if you mean to stop drafting it",
+                                GetItemName(sDoneItems[i]), GetFormatScopeName(sGatedFormats[f]));
+            }
         }
     }
 

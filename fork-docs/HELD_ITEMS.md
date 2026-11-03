@@ -32,7 +32,7 @@ lists, and the list *is* the status:
 
 | List | Meaning | Gated? |
 | --- | --- | --- |
-| `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, **more than one** unless one is its ceiling, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster |
+| `sDoneItems[]` | Balance is right **and** the roster uses it | Yes — at least one set holds it, **more than one** unless one is its ceiling, and it stays under `HELD_ITEM_MAX_ROSTER_SHARE_PERCENT` (20%) of the roster. Each of these is checked **per format** as well as across the whole roster (see below) |
 | `sIgnoredItems[]` | **No set holds it** — either nothing it does is reachable in a frontier battle, or the effect works and we have deliberately decided not to draft it | Exempt from the done gates, but **no set may hold one**, which is enforced |
 
 There used to be a third list, `sPendingItems[]`, for work outstanding. **It was removed
@@ -51,6 +51,21 @@ item down, for a deliberate one the set is undoing a considered call — and in 
 fix is a reviewed edit rather than a drift. To start drafting one, move it to `sDoneItems[]`
 in the commit that gives it sets.
 
+
+**The distribution gates count per format, because the draft does.** The Factory only draws
+a set whose `.tags` include the current battle mode, so a `FORMAT_DOUBLES` set does not exist
+as far as a singles challenge is concerned. Counted across the whole roster, an item on two
+doubles-only sets looked "done, two sets" while no singles player could ever draft it; when
+the per-format count was added, 47 done items were short in singles like that, 18 of them on
+no singles set at all. The gates therefore run once per scope in `sGatedFormats[]`: the
+whole roster and singles. **Doubles is not gated yet** — it still has done items on zero or
+one doubles-eligible set — and joins that list in the commit that makes it green.
+
+The cheapest fix for a format shortfall is usually a **retag, not a new set**: a doubles set
+whose four moves all work in singles (no Follow Me, Rage Powder, Helping Hand, Wide Guard,
+Ally Switch) is `FORMAT_BOTH` in all but name. Where the only other holder genuinely is a
+doubles build, re-item a set in the short format whose current item has sets to spare, under
+the same screens as any other placement.
 
 A **one-set count is not automatically a shortfall.** The form-change enablers — Adamant
 Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and Shield, the three
