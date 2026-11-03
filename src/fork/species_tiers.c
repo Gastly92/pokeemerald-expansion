@@ -146,7 +146,6 @@ static const u16 sLegendarySpecies[] =
     SPECIES_BLACEPHALON,           // 0806
     SPECIES_ZERAORA,               // 0807
     SPECIES_MELMETAL,              // 0809
-    SPECIES_DRAGAPULT,             // 0887
     SPECIES_URSHIFU,               // 0892
     SPECIES_URSHIFU_RAPID_STRIKE,  // 0892
     SPECIES_ZARUDE,                // 0893
@@ -158,7 +157,6 @@ static const u16 sLegendarySpecies[] =
     SPECIES_URSALUNA_BLOODMOON,    // 0901
     SPECIES_ENAMORUS,              // 0905
     SPECIES_ENAMORUS_THERIAN,      // 0905
-    SPECIES_BAXCALIBUR,            // 0998
     SPECIES_WO_CHIEN,              // 1001
     SPECIES_CHIEN_PAO,             // 1002
     SPECIES_TING_LU,               // 1003
@@ -201,6 +199,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_ARCTOZOLT,             // 0881
     SPECIES_DRACOVISH,             // 0882
     SPECIES_ARCTOVISH,             // 0883
+    SPECIES_DRAGAPULT,             // 0887
     SPECIES_URSALUNA,              // 0901
     SPECIES_SNEASLER,              // 0903
     SPECIES_GREAT_TUSK,            // 0984
@@ -215,6 +214,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_IRON_JUGULIS,          // 0993
     SPECIES_IRON_MOTH,             // 0994
     SPECIES_IRON_THORNS,           // 0995
+    SPECIES_BAXCALIBUR,            // 0998
     SPECIES_GHOLDENGO,             // 1000
     SPECIES_ROARING_MOON,          // 1005
     SPECIES_IRON_VALIANT,          // 1006

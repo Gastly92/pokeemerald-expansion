@@ -11583,8 +11583,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_CLEAR_BODY,
             ABILITY_CURSED_BODY,
             ABILITY_INFILTRATOR,
-            ABILITY_LEVITATE,
-            ABILITY_PRESSURE
+            ABILITY_LEVITATE
         )
     },
     { // 0888
@@ -12784,7 +12783,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BAXCALIBUR,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_PRESSURE,
             ABILITY_SHARPNESS,
             ABILITY_SLUSH_RUSH,
             ABILITY_THERMAL_EXCHANGE
@@ -12794,7 +12792,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BAXCALIBUR_MEGA,
         INNATES(
             ABILITY_ICE_BODY,
-            ABILITY_PRESSURE,
             ABILITY_SHARPNESS,
             ABILITY_SLUSH_RUSH,
             ABILITY_THERMAL_EXCHANGE
