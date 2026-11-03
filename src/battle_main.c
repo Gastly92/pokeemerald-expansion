@@ -82,6 +82,7 @@
 #include "fork/deterministic_moves.h" // FORK: DETERMINISTIC_MOVE_RESULTS speed ties
 #include "fork/free_gimmick_struggle.h" // FORK: ShouldOpenMoveMenuForGimmick, ShouldStruggleFromGimmickMoveMenu
 #include "fork/mythical.h" // FORK: Mythical HP boost undone on faint / at battle end
+#include "fork/frontier_pokedex.h" // FORK: MarkFrontierBattleMonsSeen
 
 extern const struct BgTemplate gBattleBgTemplates[];
 extern const struct WindowTemplate *const gBattleWindowTemplates[];
@@ -5386,6 +5387,10 @@ static void HandleEndTurn_FinishBattle(void)
                 }
             }
         }
+        // FORK: the loop above skips BATTLE_TYPE_FRONTIER; this marks Frontier battles'
+        // mons seen instead (FRONTIER_MARKS_DEX_SEEN, src/fork/frontier_pokedex.c). On
+        // conflict keep this call right after upstream's seen loop.
+        MarkFrontierBattleMonsSeen();
 
         if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK
                                   | BATTLE_TYPE_RECORDED_LINK
