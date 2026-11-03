@@ -669,14 +669,42 @@ enum RosterCoverage
     COVERAGE_TRANSFORMED_FORM,   // temporary in-battle shape; the base forme is what you rent
 };
 
-static bool32 RosterHasSpecies(u32 species)
+// Coverage is per FORMAT, because the draft is: the Factory only draws a set whose .tags
+// include the current battle mode, so a species whose only sets are FORMAT_DOUBLES does not
+// exist in a singles challenge. A scope is a FORMAT_* mask and a set counts when its tags
+// overlap it, so FORMAT_BOTH means "any set" (the whole roster).
+static bool32 RosterHasSpeciesInFormat(u32 species, u32 format)
 {
     for (u32 i = 0; i < gFrontierExtendedMonsCount; i++)
     {
-        if (gFrontierExtendedMons[i].species == species)
+        if (gFrontierExtendedMons[i].species == species && (gFrontierExtendedMons[i].tags & format))
             return TRUE;
     }
     return FALSE;
+}
+
+static bool32 RosterHasSpecies(u32 species)
+{
+    return RosterHasSpeciesInFormat(species, FORMAT_BOTH);
+}
+
+// The scopes the coverage gate runs in. FORMAT_DOUBLES belongs here too and is not YET: several
+// profiles (signature-item formes among them) still have singles-only sets. Add it in the same
+// commit that makes doubles green, not with an allowlist of offenders.
+static const u32 sCoverageGatedFormats[] =
+{
+    FORMAT_BOTH,    // the whole roster
+    FORMAT_SINGLES,
+};
+
+static const u8 *GetCoverageScopeName(u32 format)
+{
+    switch (format)
+    {
+    case FORMAT_SINGLES: return COMPOUND_STRING("singles");
+    case FORMAT_DOUBLES: return COMPOUND_STRING("doubles");
+    default:             return COMPOUND_STRING("the whole roster");
+    }
 }
 
 static bool32 IsNicheNfe(u32 species)
@@ -811,15 +839,16 @@ static bool32 SameBattleProfile(u32 a, u32 b)
     return TRUE;
 }
 
-// TRUE when this species' profile is already answered for -- by a set on any forme sharing it,
-// or by an exception row on any of them.
-static bool32 ProfileIsAccountedFor(u32 species)
+// TRUE when this species' profile is already answered for in this format -- by a set in the
+// format on any forme sharing it, or by an exception row on any of them. An exception row
+// answers for every format: it says the profile cannot, or need not, be built at all.
+static bool32 ProfileIsAccountedFor(u32 species, u32 format)
 {
     for (u32 other = 1; other < NUM_SPECIES; other++)
     {
         if (!SameBattleProfile(species, other))
             continue;
-        if (RosterHasSpecies(other) || CoverageExceptionReason(other) != NULL)
+        if (RosterHasSpeciesInFormat(other, format) || CoverageExceptionReason(other) != NULL)
             return TRUE;
     }
     return FALSE;
@@ -848,12 +877,18 @@ TEST("Frontier extended roster: every fully-evolved species has at least one set
             continue;
 
         required++;
-        if (ProfileIsAccountedFor(species) || !IsProfileSpokesman(species))
+        if (!IsProfileSpokesman(species))
             continue;
 
-        uncovered++;
-        Test_MgbaPrintf("uncovered %S (species %d): fully evolved, no set on any forme of this profile -- add a build to gFrontierExtendedMons, or a reasoned row to sCoverageExceptions[]",
-                        gSpeciesInfo[species].speciesName, species);
+        for (u32 f = 0; f < ARRAY_COUNT(sCoverageGatedFormats); f++)
+        {
+            if (ProfileIsAccountedFor(species, sCoverageGatedFormats[f]))
+                continue;
+
+            uncovered++;
+            Test_MgbaPrintf("uncovered %S (species %d): fully evolved, no set in %S on any forme of this profile -- add a build to gFrontierExtendedMons (retagging a format-neutral set to FORMAT_BOTH counts), or a reasoned row to sCoverageExceptions[]",
+                            gSpeciesInfo[species].speciesName, species, GetCoverageScopeName(sCoverageGatedFormats[f]));
+        }
     }
 
     // Guard against a vacuous pass: if the classifier ever starts excusing everything (a renamed
