@@ -817,8 +817,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_ELECTRIC,
     },
     {
-        // Light Ball's second singles home: the doubles set above is a Helping Hand
-        // support build, so singles had only the Volt Tackle set to draw.
         .species = SPECIES_PIKACHU,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LIGHT_BALL,
@@ -28761,9 +28759,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_NORMAL,
     },
     {
-        // Body Press wall. Stuff Cheeks eats the Ganlon for +2 Def on top of the berry's
-        // own Defense boost, innate Cheek Pouch heals a third on every bite, and innate
-        // Harvest regrows it, so every Stuff Cheeks stacks Defense and heals.
         .species = SPECIES_GREEDENT,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_GANLON_BERRY,
@@ -29307,8 +29302,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GRASS,
     },
     {
-        // Roseli's second singles home. Appletun is Grass/Dragon, so Fairy is a real
-        // weakness, and innate Ripen doubles the berry while innate Harvest regrows it.
         .species = SPECIES_APPLETUN,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_ROSELI_BERRY,
