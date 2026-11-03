@@ -257,6 +257,17 @@ static void GiveStartingBattleGimmickItems(void)
 }
 #endif // START_WITH_BATTLE_GIMMICK_ITEMS
 
+#if START_WITH_NATIONAL_POKEDEX
+// FORK: the stock game hands out the Pokédex in Birch's lab, which this hack never
+// visits. Give it at new game with the National Dex on, since Frontier rosters span
+// every species and the Hoenn dex would hide most of what the player sees.
+static void GiveStartingPokedex(void)
+{
+    FlagSet(FLAG_SYS_POKEDEX_GET);
+    EnableNationalPokedex();
+}
+#endif // START_WITH_NATIONAL_POKEDEX
+
 void Sav2_ClearSetDefault(void)
 {
     ClearSav2();
@@ -336,6 +347,9 @@ void NewGameInitData(void)
 #endif
 #if START_WITH_BATTLE_GIMMICK_ITEMS
     GiveStartingBattleGimmickItems(); // FORK: any point after ClearBag() above works; grouped here with the other new-game setup
+#endif
+#if START_WITH_NATIONAL_POKEDEX
+    GiveStartingPokedex(); // FORK: must run after ResetPokedex()/InitEventData() above, which clear the dex flags
 #endif
 #if IS_FRLG
         StringCopy(gSaveBlock1Ptr->rivalName, rivalName);
