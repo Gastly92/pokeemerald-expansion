@@ -91,6 +91,14 @@ still evolves, or it's a temporary in-battle shape (Mega/Primal/Ultra Burst/Giga
 Tera/Totem, or a forme its own form-change table enters mid-battle like Aegislash-Blade
 or Palafin-Hero). Everything else must be covered or listed.
 
+Coverage is also judged **per format**, because the draft is: the Factory only draws a set
+whose `.tags` include the current battle mode, so a species with only `FORMAT_DOUBLES`
+sets does not exist in a singles challenge. The gate runs once for the whole roster and
+once for singles; when it went per-format, Meowstic and Indeedee-F were the two profiles
+with no singles set. **Doubles is not gated yet** and joins in the commit that makes it
+green. An exception row answers for every format, since it says the profile cannot or need
+not be built at all.
+
 Coverage is judged per **battle profile** — formes sharing a National Dex number, base
 stat spread and ability set count as one requirement, satisfied by any one of them having
 a set. That's why Vivillon's 19 patterns, Unown's 27 letters and the cap Pikachus are one

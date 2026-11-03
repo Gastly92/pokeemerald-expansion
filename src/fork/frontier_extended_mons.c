@@ -23366,7 +23366,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0678
     {
         .species = SPECIES_MEOWSTIC,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
@@ -30514,6 +30514,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .iv = IVS(SPE, 0),
         .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_INDEEDEE_F,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_TWISTED_SPOON,
+        .moves =
+        {
+            MOVE_CALM_MIND,
+            MOVE_EXPANDING_FORCE,
+            MOVE_DRAINING_KISS,
+            MOVE_MYSTICAL_FIRE
+        },
+        .ability = ABILITY_PSYCHIC_SURGE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spa = 4
+        ),
+        .teraType = TYPE_FAIRY,
     },
 
     // 0877
