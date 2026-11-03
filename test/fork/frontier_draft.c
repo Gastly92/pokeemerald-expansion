@@ -221,8 +221,8 @@ TEST("Frontier draft: a regular Battle Tower opponent's party fills")
 }
 
 // Whether the dex run around roster index `id` holds a `format` set that a `slotTier` slot
-// rejects: those are the dex numbers the draft used to underweight in that slot (base
-// Kyurem is TIER_LEGENDARY, Kyurem-Black/White TIER_MYTHICAL).
+// rejects: those are the dex numbers the draft used to underweight in that slot (a dex
+// number whose formes sit in different tiers).
 static bool32 DexRunHasRejectedSet(u32 id, u32 format, enum SpeciesTier slotTier, u32 pseudoCount)
 {
     enum NationalDexOrder dexNum = SpeciesToNationalPokedexNum(gFrontierExtendedMons[id].species);

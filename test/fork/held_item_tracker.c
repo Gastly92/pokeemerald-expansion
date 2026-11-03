@@ -570,8 +570,8 @@ static bool32 ItemUnlocksExactlyOneForme(enum Item item)
 // (src/battle_frontier.c, "Ensure this Pokemon species isn't a duplicate"), so one team can
 // field Dialga holding the Orb AND Dialga-Origin holding the Crystal at once. Putting an
 // orb on a SECOND set of the same forme would buy appearance rate by spending set variety,
-// on species that get very few slots to begin with -- all six formes are TIER_MYTHICAL
-// (src/fork/species_tiers.c), so they arrive only through a reserved forced-tier slot.
+// on species that get very few slots to begin with -- legend-tier species
+// (src/fork/species_tiers.c) arrive only through a reserved forced-tier slot.
 //
 // HOLD_EFFECT_NONE must not match, or the gate would gut itself: Rusted Sword and Rusted
 // Shield are form-change enablers with NO hold effect at all, so without that guard every

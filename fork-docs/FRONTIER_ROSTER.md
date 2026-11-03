@@ -41,8 +41,8 @@ filled** (its tier quota, below). Without this, Silvally and Arceus (one
 set per type form) were drafted ~17× as often as a single-set Pokémon. Formes and regional
 variants share their dex number's weight (Ninetales and Alolan Ninetales split one share).
 Counting n per slot means a dex number whose formes span tiers isn't diluted by sets the
-slot can't take: Kyurem-Black/White (mythical) and base Kyurem (legendary) each get a full
-share in their own slot, as do Ursaluna (pseudo) and Bloodmoon Ursaluna (legendary). This
+slot can't take: formes of one dex number in different tiers each get a full share in
+their own slot. This
 relies on each dex number's sets being contiguous, which a roster test enforces.
 
 ### Species Clause
@@ -148,23 +148,22 @@ table with `GetSpeciesTier(species)` / `SpeciesIsTier(species, tier)` accessors,
 facility logic can control what appears where. Data lives in a fork-owned file, never in
 `gSpeciesInfo` — modeled on `src/fork/innate_abilities.c`.
 
-These are **this fork's own groupings, not the official Game Freak categories**:
+These are **this fork's own groupings, not the official Game Freak categories**. The arrays
+in `src/fork/species_tiers.c` are the only list of members; this table describes the bands.
 
 | Tier | Contents |
 |---|---|
-| `TIER_MYTHICAL` | Restricted box/cover legends (Mewtwo, Lugia/Ho-Oh, weather trio, creation trio, Zacian/Zamazenta, Koraidon/Miraidon…) and their Origin/Crowned/fused formes, plus the strongest Mythicals (Arceus, Darkrai, Shaymin-Sky, Deoxys' battle formes) |
-| `TIER_LEGENDARY` | Everything else legend-grade: sub-legendaries (birds, beasts, lake trio, Regis, genies, musketeers, Tapus, Treasures of Ruin, Loyal Three, Ogerpon…), the other Mythicals (Mew, Celebi, Jirachi, Diancie, Magearna, Pecharunt…), Ultra Beasts, the six 590-BST Paradox Pokémon (Walking Wake, Iron Leaves, Gouging Fire, Raging Bolt, Iron Boulder, Iron Crown), and Bloodmoon Ursaluna |
-| `TIER_PSEUDO` | Non-legendary standouts capped at one per team: some pseudo-legendaries (Dragonite, Garchomp, Metagross, Dragapult, Baxcalibur…) and other top picks (Gengar, Lucario, the fossil quartet, the fourteen original Paradox Pokémon, Gholdengo, Archaludon…) |
+| `TIER_MYTHICAL` | The strongest band: restricted legends and the strongest Mythicals. Exactly one per Frontier Brain battle |
+| `TIER_LEGENDARY` | Everything else legend-grade, plus any non-legend strong enough to share the quota. Exactly one per boss battle |
+| `TIER_PSEUDO` | Non-legendary standouts. At most one per draft team |
 | `TIER_NORMAL` | Everything else — species simply absent from the table |
 
 Derived from the upstream `isRestrictedLegendary` / `isSubLegendary` / `isMythical` /
 `isUltraBeast` / `isParadox` flags with those groupings layered on top.
 
 **Keyed by exact species id, so formes are classified on their own merits** rather than
-inheriting one tier from the base's dex number. A powerful forme can outrank its base —
-**Shaymin-Sky is `TIER_MYTHICAL`** (its fork-boosted Serene Grace) while ordinary
-Shaymin is `TIER_LEGENDARY` — and a weak base can sit below its formes — **base Calyrex is
-`TIER_LEGENDARY`** while its Ice/Shadow riders are `TIER_MYTHICAL`.
+inheriting one tier from the base's dex number: a powerful forme can outrank its base, and
+a weak base can sit below its formes.
 
 Currently covers the special species and formes the roster uses; anything unlisted
 returns `TIER_NORMAL`.
