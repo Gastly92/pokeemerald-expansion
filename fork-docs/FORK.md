@@ -45,7 +45,7 @@ Legend: ✅ done · ⚠️ partial / has known limitations.
 | New-game option defaults | `NEW_GAME_TEXT_SPEED`, `NEW_GAME_BATTLE_STYLE` | `config/fork.h` | ✅ | Starts at Fast text and Set battle style; the player can still change them. |
 | Start with battle-gimmick items | `START_WITH_BATTLE_GIMMICK_ITEMS` | `config/fork.h` | ⚠️ partial | Gives Mega Ring / Z-Power Ring / Dynamax Band / Tera Orb. Moot while `FEATURE_FREE_GIMMICKS` is on. |
 | Start with the National Pokédex | `START_WITH_NATIONAL_POKEDEX` | `config/fork.h`, `src/new_game.c` | ✅ | New game gives the Pokédex (normally from Birch's lab) with the National Dex on. |
-| Frontier battles mark the dex | `FRONTIER_MARKS_DEX_SEEN` | `src/fork/frontier_pokedex.c` | ✅ | Every mon sent out in a Frontier battle, either side, is marked seen (never caught); upstream skips Frontier battles. Test: `test/fork/frontier_pokedex.c`. |
+| Frontier battles mark the dex | `FRONTIER_MARKS_DEX_SEEN` | `src/fork/frontier_pokedex.c` | ✅ | Your whole team and every opponent sent out in a Frontier battle are marked seen (never caught); upstream skips Frontier battles. Test: `test/fork/frontier_pokedex.c`. |
 | Debug menus always on | `DEBUG_OVERWORLD_MENU`, `DEBUG_BATTLE_MENU` | `config/debug.h` | ✅ | Overworld menu (hold R + Start), battle menu (Select). |
 
 ## Battle Frontier

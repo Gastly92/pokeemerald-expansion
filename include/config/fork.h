@@ -29,7 +29,7 @@
 #define NEW_GAME_BATTLE_STYLE        OPTIONS_BATTLE_STYLE_SET  // Default battle style for a new game. Vanilla: OPTIONS_BATTLE_STYLE_SHIFT. Options: OPTIONS_BATTLE_STYLE_{SHIFT,SET}.
 
 // Pokédex.
-#define FRONTIER_MARKS_DEX_SEEN      TRUE    // If TRUE, Frontier battles mark every Pokémon that was sent out, on both sides (your own rented team included), as SEEN in the Pokédex when the battle ends. Upstream skips Frontier battles entirely. Never marks CAUGHT; link battles and recorded-battle playback are skipped. See src/fork/frontier_pokedex.c.
+#define FRONTIER_MARKS_DEX_SEEN      TRUE    // If TRUE, Frontier battles mark your whole team (benched mons included) and every opposing Pokémon that was sent out as SEEN in the Pokédex when the battle ends. Upstream skips Frontier battles entirely. Never marks CAUGHT; link battles and recorded-battle playback are skipped. See src/fork/frontier_pokedex.c.
 
 // Battle UI.
 #define B_CLEAN_HEALTHBOX            TRUE    // If TRUE, declutters the battle healthboxes: removes the triangular pointer/tail on each box's corner (it points at the mon and, in doubles, can cover the on-healthbox type icons), and removes the EXP bar + its wrap-around frame from the singles player box. Keeps the B_ prefix because it reads as a battle config at its use sites (src/battle_interface.c, src/graphics.c); it is fork-only, which is why it lives here rather than in config/battle.h.

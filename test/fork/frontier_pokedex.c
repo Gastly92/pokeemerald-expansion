@@ -52,3 +52,21 @@ TEST("Frontier Pokédex: every sent-out mon is marked seen, never caught")
     EXPECT(!GetSetPokedexFlag(NATIONAL_DEX_BULBASAUR, FLAG_GET_CAUGHT));
     EXPECT(!GetSetPokedexFlag(NATIONAL_DEX_SQUIRTLE, FLAG_GET_CAUGHT));
 }
+
+TEST("Frontier Pokédex: the player's whole party is marked seen, benched mons included")
+{
+    struct Pokemon party[PARTY_SIZE];
+
+    for (u32 i = 0; i < PARTY_SIZE; i++)
+        ZeroMonData(&party[i]);
+    CreateMon(&party[0], SPECIES_PIKACHU, 50, 0, OTID_STRUCT_PRESET(0));
+    CreateMon(&party[5], SPECIES_EEVEE, 50, 0, OTID_STRUCT_PRESET(0)); // never sent out
+    ClearDexFlags(NATIONAL_DEX_PIKACHU);
+    ClearDexFlags(NATIONAL_DEX_EEVEE);
+
+    MarkWholePartyDexSeen(party);
+
+    EXPECT(GetSetPokedexFlag(NATIONAL_DEX_PIKACHU, FLAG_GET_SEEN));
+    EXPECT(GetSetPokedexFlag(NATIONAL_DEX_EEVEE, FLAG_GET_SEEN));
+    EXPECT(!GetSetPokedexFlag(NATIONAL_DEX_EEVEE, FLAG_GET_CAUGHT));
+}
