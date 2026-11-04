@@ -6243,6 +6243,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_FURRET,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SCARF,
+        .moves =
+        {
+            MOVE_DOUBLE_EDGE,
+            MOVE_KNOCK_OFF,
+            MOVE_U_TURN,
+            MOVE_TRICK
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_FURRET,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
@@ -6347,7 +6367,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_LEDIAN,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
@@ -7008,6 +7028,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_JUMPLUFF,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FLYING_GEM,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_ACROBATICS,
+            MOVE_STRENGTH_SAP,
+            MOVE_SLEEP_POWDER
+        },
+        .ability = ABILITY_COTTON_DOWN,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_JUMPLUFF,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB,
         .moves =
@@ -7196,6 +7236,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_UMBREON,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_FOUL_PLAY,
+            MOVE_MOONLIGHT,
+            MOVE_YAWN,
+            MOVE_HEAL_BELL
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_POISON,
+    },
+    {
+        .species = SPECIES_UMBREON,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
@@ -7369,6 +7429,27 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK_ROOM,
             MOVE_ALLY_SWITCH,
             MOVE_PSYCHIC,
+            MOVE_MEMENTO
+        },
+        .ability = ABILITY_NEUTRALIZING_GAS,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .iv = IVS(SPE, 0),
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_UNOWN,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_TRICK_ROOM,
+            MOVE_PSYCHIC,
+            MOVE_ANCIENT_POWER,
             MOVE_MEMENTO
         },
         .ability = ABILITY_NEUTRALIZING_GAS,
@@ -8152,7 +8233,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DELIBIRD,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
@@ -8564,11 +8645,31 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GHOST,
     },
+    {
+        .species = SPECIES_SMEARGLE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_FOCUS_SASH,
+        .moves =
+        {
+            MOVE_STEALTH_ROCK,
+            MOVE_STICKY_WEB,
+            MOVE_SPORE,
+            MOVE_WHIRLWIND
+        },
+        .ability = ABILITY_MOODY,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 0237
     {
         .species = SPECIES_HITMONTOP,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
