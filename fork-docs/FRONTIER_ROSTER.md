@@ -88,8 +88,11 @@ defaulting everything to Choice items and Life Orb.
 fully-evolved one has no set, so a species arriving with an upstream sync can't sit
 unbuilt unnoticed. Three rules excuse a species mechanically — it's compiled out, it
 still evolves, or it's a temporary in-battle shape (Mega/Primal/Ultra Burst/Gigantamax/
-Tera/Totem, or a forme its own form-change table enters mid-battle like Aegislash-Blade
-or Palafin-Hero). Everything else must be covered or listed.
+Tera/Totem, or a forme its own form-change table enters mid-battle or at battle start like
+Aegislash-Blade, Palafin-Hero or Crowned Zacian). Everything else must be covered or listed.
+The roster always names the forme you **rent** — Hero Zacian holding the Rusted Sword,
+Terapagos with Tera Shift — never the shape the battle turns it into, and a test fails on any
+set that names a battle-only forme.
 
 Coverage is also judged **per format**, because the draft is: the Factory only draws a set
 whose `.tags` include the current battle mode, so a species with only `FORMAT_DOUBLES`
@@ -100,7 +103,7 @@ row answers for every format, since it says the profile cannot or need not be bu
 **Depth is a ratchet on top of coverage.** One set guarantees a species can be drafted, but it
 plays the same way every time, so singles is being brought to **two singles sets per profile**
 one generation at a time. `ROSTER_SINGLES_DEPTH_THROUGH_DEX` is the National Dex number the
-rule currently reaches (809, through Gen 7). Each generation's PR fills its gaps and raises the
+rule currently reaches (905, through Gen 8). Each generation's PR fills its gaps and raises the
 ceiling in the same commit, and it never goes down. `sSinglesDepthExceptions[]` holds the
 profiles that structurally cannot field a second distinct set (Ditto, whose only move is
 Transform), with a stale-row check like the coverage exceptions. Doubles depth comes after.
@@ -179,8 +182,9 @@ Derived from the upstream `isRestrictedLegendary` / `isSubLegendary` / `isMythic
 inheriting one tier from the base's dex number: a powerful forme can outrank its base, and
 a weak base can sit below its formes.
 
-Currently covers the special species and formes the roster uses; anything unlisted
-returns `TIER_NORMAL`.
+It lists **only species the roster rents** — never a battle shape like Crowned Zacian or
+Terapagos-Terastal, since the draft looks up the rented forme — and a test fails on any row
+no roster set rents. Anything unlisted returns `TIER_NORMAL`.
 
 Because an unlisted forme returns `TIER_NORMAL` rather than inheriting its base's tier,
 **every draftable forme of a restricted species has to be listed in its own right** — the

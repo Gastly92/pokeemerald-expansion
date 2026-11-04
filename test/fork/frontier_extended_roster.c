@@ -598,9 +598,9 @@ TEST("Frontier extended roster: Factory party rebuild keeps the fork's facility-
 //        roster deliberately DOES build (Eviolite Chansey and friends).
 //  - COVERAGE_TRANSFORMED_FORM  a temporary in-battle shape: Mega/Primal/Ultra Burst/
 //        Gigantamax/Tera/Totem by species flag, or a non-base forme its own form-change
-//        table enters mid-battle (Aegislash-Blade, Darmanitan-Zen, Mimikyu-Busted,
-//        Palafin-Hero, Minior's cores). You never rent these -- you rent the base forme and
-//        the engine swaps to them.
+//        table enters mid-battle or at battle start (Aegislash-Blade, Darmanitan-Zen,
+//        Mimikyu-Busted, Palafin-Hero, Minior's cores, Crowned Zacian / Zamazenta). You never
+//        rent these -- you rent the base forme and the engine swaps to them.
 //
 // The rest must be covered, and coverage is judged per *battle profile* rather than per
 // species id: formes sharing a National Dex number, base stat spread and ability set are one
@@ -658,7 +658,6 @@ static const struct RosterCoverageException sCoverageExceptions[] =
     { SPECIES_SQUAWKABILLY_YELLOW, "plumage variant differing from Green only in its hidden ability; Squawkabilly-Green carries the line" },
     { SPECIES_ZYGARDE_50,          "Aura Break variant; the roster builds Zygarde-50%-Power-Construct" },
     { SPECIES_ZYGARDE_10_AURA_BREAK, "Aura Break variant; the roster builds Zygarde-10%-Power-Construct" },
-    { SPECIES_TERAPAGOS_NORMAL,    "Tera Shift converts it on send-out, so the roster builds Terapagos-Terastal directly" },
 };
 
 enum RosterCoverage
@@ -768,6 +767,29 @@ static bool32 IsTransformedBattleForm(u32 species)
     if (formChanges == NULL)
         return FALSE;
 
+    // A forme the battle restores when it ends, and does not put in place when it starts, is the
+    // forme you rent, however often the fight also returns to it: Galarian Darmanitan's table
+    // targets Galar-Standard from Zen mode at turn end, but END_BATTLE restores Galar-Standard,
+    // so it is the resting shape and must stay on the required list. Crowned and
+    // Terapagos-Terastal are not restored -- the battle ends on Hero and Normal -- and Minior's
+    // cores are restored but also entered at BEGIN_BATTLE (the roster rents the Meteor base
+    // forme and Shields Down swaps by HP), so all three still classify as transformations below.
+    {
+        bool32 restoredAtEnd = FALSE, enteredAtStart = FALSE;
+
+        for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+        {
+            if (formChanges[i].targetSpecies != species)
+                continue;
+            if (formChanges[i].method == FORM_CHANGE_END_BATTLE)
+                restoredAtEnd = TRUE;
+            else if (formChanges[i].method == FORM_CHANGE_BEGIN_BATTLE)
+                enteredAtStart = TRUE;
+        }
+        if (restoredAtEnd && !enteredAtStart)
+            return FALSE;
+    }
+
     for (u32 i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
     {
         if (formChanges[i].targetSpecies != species)
@@ -790,6 +812,10 @@ static bool32 IsTransformedBattleForm(u32 species)
         case FORM_CHANGE_BATTLE_AFTER_MOVE:
         case FORM_CHANGE_STATUS:
         case FORM_CHANGE_BEGIN_WILD_ENCOUNTER:
+        // Entered when the battle starts, from the base forme and (for Zacian / Zamazenta) its
+        // held item: Crowned is Hero + Rusted Sword / Shield, so the roster builds the Hero forme
+        // holding the item and the engine converts it (Iron Head -> Behemoth Blade / Bash).
+        case FORM_CHANGE_BEGIN_BATTLE:
             return TRUE;
         default:
             break;
@@ -926,7 +952,7 @@ TEST("Frontier extended roster: every fully-evolved species has at least one set
 // singles-draftable sets (summed over the formes that share the profile, as for coverage).
 // Raise the ceiling in the same commit that fills the next generation's gaps; never lower it.
 // Doubles depth is a later pass.
-#define ROSTER_SINGLES_DEPTH_THROUGH_DEX 809
+#define ROSTER_SINGLES_DEPTH_THROUGH_DEX 905
 
 // Profiles that structurally cannot field a second distinct singles set. The duplicate-set
 // test rejects two sets with the same moves and ability, so a species with one usable move
@@ -1025,6 +1051,31 @@ TEST("Frontier extended roster: no stale singles depth exception")
     }
 
     EXPECT_EQ(stale, 0);
+}
+
+// The roster names the forme you RENT, never a shape the battle puts it in. A set on a battle-only
+// forme (Crowned Zacian, Terapagos-Terastal) skips the form change that should produce it: the
+// rental screen shows the wrong Pokemon, the move the change rewrites (Iron Head -> Behemoth
+// Blade) has to be pre-written by hand, and the coverage and depth gates count the shape as a
+// separate species and demand sets for it. Build the base forme with the item or ability that
+// triggers the change instead.
+TEST("Frontier extended roster: no set names a battle-only forme")
+{
+    u32 offenders = 0;
+
+    for (u32 i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        u32 species = gFrontierExtendedMons[i].species;
+
+        if (!IsTransformedBattleForm(species))
+            continue;
+
+        offenders++;
+        Test_MgbaPrintf("roster[%d] %S (species %d) is a battle-only forme -- build its base forme holding the item / running the ability that triggers the change",
+                        i, gSpeciesInfo[species].speciesName, species);
+    }
+
+    EXPECT_EQ(offenders, 0);
 }
 
 TEST("Frontier extended roster: no stale coverage exception")

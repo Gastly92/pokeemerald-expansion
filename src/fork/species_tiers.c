@@ -62,9 +62,7 @@ static const u16 sMythicalSpecies[] =
     SPECIES_NECROZMA_DAWN_WINGS,   // 0800
     SPECIES_NECROZMA_DUSK_MANE,    // 0800
     SPECIES_ZACIAN,                // 0888
-    SPECIES_ZACIAN_CROWNED,        // 0888
     SPECIES_ZAMAZENTA,             // 0889
-    SPECIES_ZAMAZENTA_CROWNED,     // 0889
     SPECIES_ETERNATUS,             // 0890
     SPECIES_CALYREX_ICE,           // 0898
     SPECIES_CALYREX_SHADOW,        // 0898
@@ -112,7 +110,6 @@ static const u16 sLegendarySpecies[] =
     SPECIES_LANDORUS,              // 0645
     SPECIES_LANDORUS_THERIAN,      // 0645
     SPECIES_KYUREM,                // 0646
-    SPECIES_KELDEO,                // 0647
     SPECIES_KELDEO_RESOLUTE,       // 0647
     SPECIES_MELOETTA,              // 0648
     SPECIES_GENESECT,              // 0649
@@ -172,7 +169,7 @@ static const u16 sLegendarySpecies[] =
     SPECIES_RAGING_BOLT,           // 1021
     SPECIES_IRON_BOULDER,          // 1022
     SPECIES_IRON_CROWN,            // 1023
-    SPECIES_TERAPAGOS_TERASTAL,    // 1024
+    SPECIES_TERAPAGOS_NORMAL,      // 1024
     SPECIES_PECHARUNT,             // 1025
 };
 
@@ -318,5 +315,27 @@ bool32 SpeciesTierListIsUnsorted(u16 *outSpecies, u16 *outPrevSpecies)
     }
 
     return FALSE;
+}
+
+u32 GetTierListedSpeciesCount(void)
+{
+    u32 list, count = 0;
+
+    for (list = 0; list < ARRAY_COUNT(sAllTierLists); list++)
+        count += sAllTierLists[list].count;
+    return count;
+}
+
+u16 GetTierListedSpecies(u32 index)
+{
+    u32 list;
+
+    for (list = 0; list < ARRAY_COUNT(sAllTierLists); list++)
+    {
+        if (index < sAllTierLists[list].count)
+            return sAllTierLists[list].list[index];
+        index -= sAllTierLists[list].count;
+    }
+    return SPECIES_NONE;
 }
 #endif // TESTING

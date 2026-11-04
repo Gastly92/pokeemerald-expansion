@@ -69,6 +69,8 @@ bool32 SpeciesTierListsOverlap(u16 *outSpecies);
 // each row -- a comment that disagrees with the species it labels still passes
 // as long as the row itself is in the right place.
 bool32 SpeciesTierListIsUnsorted(u16 *outSpecies, u16 *outPrevSpecies);
+u32 GetTierListedSpeciesCount(void);
+u16 GetTierListedSpecies(u32 index);
 #endif
 
 #endif // GUARD_SPECIES_TIERS_H

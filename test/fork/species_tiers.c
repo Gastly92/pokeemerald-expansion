@@ -116,3 +116,25 @@ TEST("Species tiers: no drafted forme is less restricted than its base forme")
 
     EXPECT_EQ(offenders, 0);
 }
+
+TEST("Species tiers: every listed species is one the roster rents")
+{
+    u32 i, j, offenders = 0;
+
+    for (i = 0; i < GetTierListedSpeciesCount(); i++)
+    {
+        u16 species = GetTierListedSpecies(i);
+        bool32 rented = FALSE;
+
+        for (j = 0; j < gFrontierExtendedMonsCount && !rented; j++)
+            rented = (gFrontierExtendedMons[j].species == species);
+        if (rented)
+            continue;
+
+        Test_MgbaPrintf("tier list names %S (species %d), which no roster set rents", gSpeciesInfo[species].speciesName, species);
+        offenders++;
+    }
+
+    EXPECT_GT(GetTierListedSpeciesCount(), 0);
+    EXPECT_EQ(offenders, 0);
+}
