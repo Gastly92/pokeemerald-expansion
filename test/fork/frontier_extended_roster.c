@@ -926,7 +926,7 @@ TEST("Frontier extended roster: every fully-evolved species has at least one set
 // singles-draftable sets (summed over the formes that share the profile, as for coverage).
 // Raise the ceiling in the same commit that fills the next generation's gaps; never lower it.
 // Doubles depth is a later pass.
-#define ROSTER_SINGLES_DEPTH_THROUGH_DEX 151
+#define ROSTER_SINGLES_DEPTH_THROUGH_DEX 251
 
 // Profiles that structurally cannot field a second distinct singles set. The duplicate-set
 // test rejects two sets with the same moves and ability, so a species with one usable move
