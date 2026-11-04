@@ -13119,6 +13119,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1024
         SPECIES_TERAPAGOS_NORMAL,
         INNATES(
+            ABILITY_PRESSURE,
             ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
@@ -13134,6 +13135,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 1024
         SPECIES_TERAPAGOS_STELLAR,
         INNATES(
+            ABILITY_PRESSURE,
             ABILITY_SHELL_ARMOR,
             ABILITY_STURDY
         )
