@@ -172,6 +172,7 @@ static const u16 sLegendarySpecies[] =
     SPECIES_RAGING_BOLT,           // 1021
     SPECIES_IRON_BOULDER,          // 1022
     SPECIES_IRON_CROWN,            // 1023
+    SPECIES_TERAPAGOS_NORMAL,      // 1024
     SPECIES_TERAPAGOS_TERASTAL,    // 1024
     SPECIES_PECHARUNT,             // 1025
 };

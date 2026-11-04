@@ -116,3 +116,39 @@ TEST("Species tiers: no drafted forme is less restricted than its base forme")
 
     EXPECT_EQ(offenders, 0);
 }
+
+// A rented forme that turns into another the moment the battle starts or it is sent out (Hero
+// Zacian holding the Rusted Sword becomes Crowned; Terapagos becomes Terastal through Tera Shift)
+// is drafted under the RENTED forme's tier but fights as the other. The roster builds these from
+// the base forme, so the table has to rank that base forme at least as high as its battle shape,
+// or the draft quota is applied to the weaker forme and the stronger one walks in unrestricted.
+TEST("Species tiers: no drafted forme is less restricted than the shape it enters battle as")
+{
+    u32 i, offenders = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        u32 species = gFrontierExtendedMons[i].species;
+        const struct FormChange *formChanges = GetSpeciesFormChanges(species);
+        u32 j;
+
+        for (j = 0; formChanges != NULL && formChanges[j].method != FORM_CHANGE_TERMINATOR; j++)
+        {
+            u32 target = formChanges[j].targetSpecies;
+
+            if (formChanges[j].method != FORM_CHANGE_BEGIN_BATTLE
+             && formChanges[j].method != FORM_CHANGE_BATTLE_SWITCH_IN)
+                continue;
+            if (target == species)
+                continue;
+            if (TierRestrictionRank(GetSpeciesTier(species)) >= TierRestrictionRank(GetSpeciesTier(target)))
+                continue;
+
+            Test_MgbaPrintf("roster entry %d: species %d is tier %d, but it enters battle as species %d, tier %d",
+                            i, species, GetSpeciesTier(species), target, GetSpeciesTier(target));
+            offenders++;
+        }
+    }
+
+    EXPECT_EQ(offenders, 0);
+}

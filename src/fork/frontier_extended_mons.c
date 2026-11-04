@@ -37306,7 +37306,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 1024
     {
-        .species = SPECIES_TERAPAGOS_TERASTAL,
+        .species = SPECIES_TERAPAGOS_NORMAL,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_LEFTOVERS,
         .moves =
@@ -37316,7 +37316,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTH_POWER,
             MOVE_RECOVER
         },
-        .ability = ABILITY_TERA_SHELL,
+        .ability = ABILITY_TERA_SHIFT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -37326,7 +37326,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_NORMAL,
     },
     {
-        .species = SPECIES_TERAPAGOS_TERASTAL,
+        .species = SPECIES_TERAPAGOS_NORMAL,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
@@ -37336,7 +37336,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DARK_PULSE,
             MOVE_FLAMETHROWER
         },
-        .ability = ABILITY_TERA_SHELL,
+        .ability = ABILITY_TERA_SHIFT,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,

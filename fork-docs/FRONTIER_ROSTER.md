@@ -88,8 +88,11 @@ defaulting everything to Choice items and Life Orb.
 fully-evolved one has no set, so a species arriving with an upstream sync can't sit
 unbuilt unnoticed. Three rules excuse a species mechanically — it's compiled out, it
 still evolves, or it's a temporary in-battle shape (Mega/Primal/Ultra Burst/Gigantamax/
-Tera/Totem, or a forme its own form-change table enters mid-battle like Aegislash-Blade
-or Palafin-Hero). Everything else must be covered or listed.
+Tera/Totem, or a forme its own form-change table enters mid-battle or at battle start like
+Aegislash-Blade, Palafin-Hero or Crowned Zacian). Everything else must be covered or listed.
+The roster always names the forme you **rent** — Hero Zacian holding the Rusted Sword,
+Terapagos with Tera Shift — never the shape the battle turns it into, and a test fails on any
+set that names a battle-only forme.
 
 Coverage is also judged **per format**, because the draft is: the Factory only draws a set
 whose `.tags` include the current battle mode, so a species with only `FORMAT_DOUBLES`
