@@ -2310,9 +2310,12 @@ TEST("Innate abilities: every legendary- and mythical-tier species carries innat
 
         if (!IsSpeciesEnabled(species))
             continue;
-        // Tier lists name base species only, so a Mega/Primal/alternate form is checked under its
-        // base form's tier -- otherwise Mega Darkrai could (and did) silently drop Pressure.
+        // The tier lists name the formes the roster rents, so a Mega/Primal/alternate form is checked
+        // under its base form's tier -- otherwise Mega Darkrai could (and did) silently drop Pressure --
+        // and under its own, for a rented forme whose base is not listed (Keldeo-Resolute).
         tier = GetSpeciesTier(GET_BASE_SPECIES_ID(species));
+        if (tier != TIER_LEGENDARY && tier != TIER_MYTHICAL)
+            tier = GetSpeciesTier(species);
         if (tier != TIER_LEGENDARY && tier != TIER_MYTHICAL)
             continue;
         checked++;

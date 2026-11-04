@@ -182,8 +182,9 @@ Derived from the upstream `isRestrictedLegendary` / `isSubLegendary` / `isMythic
 inheriting one tier from the base's dex number: a powerful forme can outrank its base, and
 a weak base can sit below its formes.
 
-Currently covers the special species and formes the roster uses; anything unlisted
-returns `TIER_NORMAL`.
+It lists **only species the roster rents** — never a battle shape like Crowned Zacian or
+Terapagos-Terastal, since the draft looks up the rented forme — and a test fails on any row
+no roster set rents. Anything unlisted returns `TIER_NORMAL`.
 
 Because an unlisted forme returns `TIER_NORMAL` rather than inheriting its base's tier,
 **every draftable forme of a restricted species has to be listed in its own right** — the
