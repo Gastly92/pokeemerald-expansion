@@ -946,13 +946,9 @@ TEST("Frontier extended roster: every fully-evolved species has at least one set
 // on the same profile. Dead rows are worse than no rows -- they hide the next real gap -- so each
 // one has to justify itself every run.
 // DEPTH, the next promise after coverage: one set per format guarantees a species can be
-// drafted, but a species with a single set plays identically every time it is. Singles is
-// being brought to TWO sets per profile one generation at a time, so this gate is a ratchet on
-// the National Dex number: every required profile at or below the ceiling must have two
-// singles-draftable sets (summed over the formes that share the profile, as for coverage).
-// Raise the ceiling in the same commit that fills the next generation's gaps; never lower it.
-// Doubles depth is a later pass.
-#define ROSTER_SINGLES_DEPTH_THROUGH_DEX 905
+// drafted, but a species with a single set plays identically every time it is. Every required
+// profile needs TWO singles-draftable sets (summed over the formes that share the profile, as
+// for coverage). Doubles depth is a later pass.
 
 // Profiles that structurally cannot field a second distinct singles set. The duplicate-set
 // test rejects two sets with the same moves and ability, so a species with one usable move
@@ -996,7 +992,7 @@ static void BuildSinglesSetsBySpecies(void)
     }
 }
 
-TEST("Frontier extended roster: every profile up to the depth ceiling has two singles sets")
+TEST("Frontier extended roster: every profile has two singles sets")
 {
     u32 checked = 0;
     u32 shallow = 0;
@@ -1006,7 +1002,7 @@ TEST("Frontier extended roster: every profile up to the depth ceiling has two si
     {
         u32 sets;
 
-        if (!IsSpeciesEnabled(species) || SpeciesToNationalPokedexNum(species) > ROSTER_SINGLES_DEPTH_THROUGH_DEX)
+        if (!IsSpeciesEnabled(species))
             continue;
         if (ClassifySpeciesForRoster(species) != COVERAGE_REQUIRED || CoverageExceptionReason(species) != NULL)
             continue;
