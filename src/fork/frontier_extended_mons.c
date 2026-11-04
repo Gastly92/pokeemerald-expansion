@@ -19399,7 +19399,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_SIMISEAR,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
@@ -19441,7 +19441,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_SIMIPOUR,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_EXPERT_BELT,
         .moves =
         {
@@ -19546,7 +19546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_UNFEZANT,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SHARP_BEAK,
         .moves =
         {
@@ -19588,7 +19588,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_ZEBSTRIKA,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SITRUS_BERRY,
         .moves =
         {
@@ -19672,7 +19672,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_SWOOBAT,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_THROAT_SPRAY,
         .moves =
         {
@@ -19771,6 +19771,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .def = 128,
             .spd = 128
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_AUDINO,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_KNOCK_OFF,
+            MOVE_WISH,
+            MOVE_PROTECT,
+            MOVE_THUNDER_WAVE
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
         .teraType = TYPE_FAIRY,
     },
@@ -20047,7 +20067,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_LEAVANNY,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
@@ -20139,6 +20159,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEECH_SEED,
             MOVE_ENCORE,
             MOVE_U_TURN
+        },
+        .ability = ABILITY_COTTON_DOWN,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FAIRY,
+    },
+    {
+        .species = SPECIES_WHIMSICOTT,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_MENTAL_HERB,
+        .moves =
+        {
+            MOVE_MOONBLAST,
+            MOVE_ENCORE,
+            MOVE_STUN_SPORE,
+            MOVE_MEMENTO
         },
         .ability = ABILITY_COTTON_DOWN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -20297,7 +20337,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_BASCULIN_RED_STRIPED,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MUSCLE_BAND,
         .moves =
         {
@@ -20331,6 +20371,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 4,
             .atk = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ROCK,
+    },
+    {
+        .species = SPECIES_BASCULIN_BLUE_STRIPED,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SCARF,
+        .moves =
+        {
+            MOVE_WAVE_CRASH,
+            MOVE_HEAD_SMASH,
+            MOVE_CRUNCH,
+            MOVE_FLIP_TURN
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_ROCK,
@@ -20816,6 +20876,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CARRACOSTA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_STEALTH_ROCK,
+            MOVE_LIQUIDATION,
+            MOVE_STONE_EDGE,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 4,
+            .def = 252
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_CARRACOSTA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SHELL_BELL,
         .moves =
@@ -21026,7 +21106,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CINCCINO,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH,
         .moves =
         {
@@ -21153,7 +21233,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_SWANNA,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_COVERT_CLOAK,
         .moves =
         {
@@ -21195,7 +21275,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_VANILLUXE,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ICY_ROCK,
         .moves =
         {
@@ -21442,6 +21522,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GRASS,
     },
+    {
+        .species = SPECIES_AMOONGUSS,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_SPORE,
+            MOVE_SLUDGE_BOMB,
+            MOVE_GIGA_DRAIN,
+            MOVE_TOXIC
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GRASS,
+    },
 
     // 0593
     {
@@ -21528,6 +21628,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_ALOMOMOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_FLIP_TURN,
+            MOVE_SCALD,
+            MOVE_WISH,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_WATER_ABSORB,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_WATER,
+    },
+    {
+        .species = SPECIES_ALOMOMOLA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY,
         .moves =
@@ -21570,7 +21690,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_GALVANTULA,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
@@ -21737,6 +21857,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4
         ),
         .iv = IVS(ATK, 0, SPE, 0),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_BEHEEYEM,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LIFE_ORB,
+        .moves =
+        {
+            MOVE_NASTY_PLOT,
+            MOVE_PSYCHIC,
+            MOVE_SHADOW_BALL,
+            MOVE_THUNDERBOLT
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(SPA_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .spa = 252,
+            .spd = 4
+        ),
         .teraType = TYPE_PSYCHIC,
     },
     {
@@ -21929,7 +22069,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_BEARTIC,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
@@ -21971,7 +22111,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CRYOGONAL,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
@@ -22121,7 +22261,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_STUNFISK,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
         {
@@ -22831,7 +22971,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_TORNADUS,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
@@ -22915,7 +23055,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_THUNDURUS,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_BAND,
         .moves =
         {
