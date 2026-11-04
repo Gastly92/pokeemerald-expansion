@@ -32297,35 +32297,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0888
     {
-        .species = SPECIES_ZACIAN_CROWNED,
+        .species = SPECIES_ZACIAN,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_RUSTED_SWORD,
         .moves =
         {
-            MOVE_BEHEMOTH_BLADE,
+            MOVE_IRON_HEAD,
             MOVE_PLAY_ROUGH,
             MOVE_CLOSE_COMBAT,
             MOVE_SWORDS_DANCE
-        },
-        .ability = ABILITY_SWORD_OF_RUIN,
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FAIRY,
-    },
-    {
-        .species = SPECIES_ZACIAN_CROWNED,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_RUSTED_SWORD,
-        .moves =
-        {
-            MOVE_BEHEMOTH_BLADE,
-            MOVE_CLOSE_COMBAT,
-            MOVE_PLAY_ROUGH,
-            MOVE_PSYCHIC_FANGS
         },
         .ability = ABILITY_SWORD_OF_RUIN,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -32379,12 +32359,12 @@ const struct TrainerMon gFrontierExtendedMons[] =
 
     // 0889
     {
-        .species = SPECIES_ZAMAZENTA_CROWNED,
+        .species = SPECIES_ZAMAZENTA,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_RUSTED_SHIELD,
         .moves =
         {
-            MOVE_BEHEMOTH_BASH,
+            MOVE_IRON_HEAD,
             MOVE_BODY_PRESS,
             MOVE_IRON_DEFENSE,
             MOVE_CRUNCH
@@ -32395,26 +32375,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .def = 144,
             .spd = 112
-        ),
-        .teraType = TYPE_STEEL,
-    },
-    {
-        .species = SPECIES_ZAMAZENTA_CROWNED,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_RUSTED_SHIELD,
-        .moves =
-        {
-            MOVE_BEHEMOTH_BASH,
-            MOVE_CLOSE_COMBAT,
-            MOVE_CRUNCH,
-            MOVE_STONE_EDGE
-        },
-        .ability = ABILITY_TABLETS_OF_RUIN,
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
-            .spe = 252
         ),
         .teraType = TYPE_STEEL,
     },
@@ -32434,26 +32394,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 252,
             .def = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FIGHTING,
-    },
-    {
-        .species = SPECIES_ZAMAZENTA,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_CHOICE_BAND,
-        .moves =
-        {
-            MOVE_CLOSE_COMBAT,
-            MOVE_CRUNCH,
-            MOVE_PSYCHIC_FANGS,
-            MOVE_STONE_EDGE
-        },
-        .ability = ABILITY_TABLETS_OF_RUIN,
-        .nature = NATURE(SPE_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .spd = 4,
             .spe = 252
         ),
         .teraType = TYPE_FIGHTING,

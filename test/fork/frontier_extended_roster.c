@@ -598,9 +598,9 @@ TEST("Frontier extended roster: Factory party rebuild keeps the fork's facility-
 //        roster deliberately DOES build (Eviolite Chansey and friends).
 //  - COVERAGE_TRANSFORMED_FORM  a temporary in-battle shape: Mega/Primal/Ultra Burst/
 //        Gigantamax/Tera/Totem by species flag, or a non-base forme its own form-change
-//        table enters mid-battle (Aegislash-Blade, Darmanitan-Zen, Mimikyu-Busted,
-//        Palafin-Hero, Minior's cores). You never rent these -- you rent the base forme and
-//        the engine swaps to them.
+//        table enters mid-battle or at battle start (Aegislash-Blade, Darmanitan-Zen,
+//        Mimikyu-Busted, Palafin-Hero, Minior's cores, Crowned Zacian / Zamazenta). You never
+//        rent these -- you rent the base forme and the engine swaps to them.
 //
 // The rest must be covered, and coverage is judged per *battle profile* rather than per
 // species id: formes sharing a National Dex number, base stat spread and ability set are one
@@ -790,6 +790,10 @@ static bool32 IsTransformedBattleForm(u32 species)
         case FORM_CHANGE_BATTLE_AFTER_MOVE:
         case FORM_CHANGE_STATUS:
         case FORM_CHANGE_BEGIN_WILD_ENCOUNTER:
+        // Entered when the battle starts, from the base forme and (for Zacian / Zamazenta) its
+        // held item: Crowned is Hero + Rusted Sword / Shield, so the roster builds the Hero forme
+        // holding the item and the engine converts it (Iron Head -> Behemoth Blade / Bash).
+        case FORM_CHANGE_BEGIN_BATTLE:
             return TRUE;
         default:
             break;
