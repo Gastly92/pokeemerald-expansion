@@ -100,7 +100,7 @@ row answers for every format, since it says the profile cannot or need not be bu
 **Depth is a ratchet on top of coverage.** One set guarantees a species can be drafted, but it
 plays the same way every time, so singles is being brought to **two singles sets per profile**
 one generation at a time. `ROSTER_SINGLES_DEPTH_THROUGH_DEX` is the National Dex number the
-rule currently reaches (649, through Gen 5). Each generation's PR fills its gaps and raises the
+rule currently reaches (721, through Gen 6). Each generation's PR fills its gaps and raises the
 ceiling in the same commit, and it never goes down. `sSinglesDepthExceptions[]` holds the
 profiles that structurally cannot field a second distinct set (Ditto, whose only move is
 Transform), with a stale-row check like the coverage exceptions. Doubles depth comes after.

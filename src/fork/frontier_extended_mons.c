@@ -24118,6 +24118,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_VIVILLON,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SPECS,
+        .moves =
+        {
+            MOVE_BUG_BUZZ,
+            MOVE_HURRICANE,
+            MOVE_ENERGY_BALL,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_WIND_RIDER,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_VIVILLON,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_MENTAL_HERB,
         .moves =
@@ -24388,6 +24408,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_FURFROU,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_ROCKY_HELMET,
+        .moves =
+        {
+            MOVE_U_TURN,
+            MOVE_THUNDER_WAVE,
+            MOVE_RETURN,
+            MOVE_TOXIC
+        },
+        .ability = ABILITY_FLUFFY,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
+    {
+        .species = SPECIES_FURFROU,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_ROCKY_HELMET,
         .moves =
@@ -24425,6 +24465,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .def = 4,
             .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_MEOWSTIC,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .moves =
+        {
+            MOVE_YAWN,
+            MOVE_PSYSHOCK,
+            MOVE_THUNDER_WAVE,
+            MOVE_CHARM
+        },
+        .ability = ABILITY_SYNCHRONIZE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
         ),
         .teraType = TYPE_PSYCHIC,
     },
@@ -24574,6 +24634,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_FAIRY,
         .iv = IVS(SPE, 0),
+    },
+    {
+        .species = SPECIES_AROMATISSE,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEFTOVERS,
+        .moves =
+        {
+            MOVE_CALM_MIND,
+            MOVE_MOONBLAST,
+            MOVE_PSYSHOCK,
+            MOVE_WISH
+        },
+        .ability = ABILITY_MISTY_SURGE,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spa = 4
+        ),
+        .teraType = TYPE_FAIRY,
     },
     {
         .species = SPECIES_AROMATISSE,
@@ -24994,7 +25074,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_AURORUS,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
@@ -25224,7 +25304,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_CARBINK,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
@@ -25371,7 +25451,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0707
     {
         .species = SPECIES_KLEFKI,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
@@ -25831,6 +25911,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GROUND,
     },
     {
+        .species = SPECIES_ZYGARDE_50_PC,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_BAND,
+        .moves =
+        {
+            MOVE_THOUSAND_ARROWS,
+            MOVE_OUTRAGE,
+            MOVE_EXTREME_SPEED,
+            MOVE_STONE_EDGE
+        },
+        .ability = ABILITY_POWER_CONSTRUCT,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .atk = 252,
+            .spe = 4
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
         .species = SPECIES_ZYGARDE_10_PC,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
@@ -25847,6 +25947,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .atk = 252,
             .spe = 252,
             .hp = 4
+        ),
+        .teraType = TYPE_GROUND,
+    },
+    {
+        .species = SPECIES_ZYGARDE_10_PC,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SCARF,
+        .moves =
+        {
+            MOVE_THOUSAND_ARROWS,
+            MOVE_OUTRAGE,
+            MOVE_STONE_EDGE,
+            MOVE_IRON_HEAD
+        },
+        .ability = ABILITY_POWER_CONSTRUCT,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
         ),
         .teraType = TYPE_GROUND,
     },
