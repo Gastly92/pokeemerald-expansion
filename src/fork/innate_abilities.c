@@ -2003,6 +2003,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARTICUNO,
         INNATES(
             ABILITY_ICE_BODY,
+            ABILITY_ICE_SCALES,
             ABILITY_PRESSURE,
             ABILITY_SNOW_CLOAK
         )
@@ -2011,6 +2012,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ARTICUNO_GALAR,
         INNATES(
             ABILITY_COMPETITIVE,
+            ABILITY_MAGIC_BOUNCE,
             ABILITY_PRESSURE
         )
     },
@@ -2018,14 +2020,16 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ZAPDOS,
         INNATES(
             ABILITY_ELECTROMORPHOSIS,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_TRANSISTOR
         )
     },
     { // 0145
         SPECIES_ZAPDOS_GALAR,
         INNATES(
             ABILITY_DEFIANT,
-            ABILITY_PRESSURE
+            ABILITY_PRESSURE,
+            ABILITY_RECKLESS
         )
     },
     { // 0146
@@ -2041,6 +2045,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_MOLTRES_GALAR,
         INNATES(
             ABILITY_BERSERK,
+            ABILITY_PACIFY,
             ABILITY_PRESSURE
         )
     },

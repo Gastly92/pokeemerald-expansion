@@ -1546,7 +1546,8 @@ keyed off the real battler (like Technician / Filter, unlike Sturdy's dedicated 
 a status one" nudge and the Adaptability "Conversion is more valuable" nudge (both `src/battle_ai_main.c`),
 plus the Sand Force sandstorm sites above.
 
-**Canon only so far (no flavor picks yet)** — a flat conditional power boost is potent, so like the pinch / weather
+**Mostly canon** (flavor picks since include Galarian Zapdos + Reckless, a Brave Bird user that "runs through the
+mountains at over 180 mph") — a flat conditional power boost is potent, so like the pinch / weather
 abilities the set stays to species whose ability data carries the booster in any slot (every form is listed
 where its own data carries it, and a Mega whose base creature has the innate mirrors it as a pure boon —
 e.g. Gallade-Mega keeps Sharpness, Starmie-Mega keeps Analytic, Excadrill-Mega keeps Sand Force, even where
@@ -1637,7 +1638,8 @@ line or theme: Heatproof adds the rest of Rolycoly's coal/lava line (Carkol, Coa
 Friend Guard adds the support fairies that complete the Clefairy / Jigglypuff / Chansey lines (Clefable,
 Wigglytuff, Chansey, Blissey) alongside the canon pre-evos. The potent reducers (Multiscale, Solid Rock, Fur
 Coat, Ice Scales, Water Bubble) stay canon only, with one legendary buff: Multiscale on Cresselia, a full-HP
-wall that recovers with Moonlight (alongside innate Filter and Magic Bounce). Several species already carry other innates, so they take a
+wall that recovers with Moonlight (alongside innate Filter and Magic Bounce), and Ice Scales on Articuno, whose wing
+flaps "chill the air" (a special wall that runs Roost and Haze). Several species already carry other innates, so they take a
 combined `INNATES(...)` list. Frontier roster sets that hardcoded these are freed (Step 3.5) to a complementary
 REAL slot where one exists (Dragonite's Multiscale → chosen Inner Focus; Camerupt's Solid Rock → Magma Armor;
 Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhyperior's Solid Rock → Lightning Rod;
@@ -3419,7 +3421,7 @@ entries in `src/data/abilities.h`), and the boost lives in the shared damage cal
 real battler, so on-field damage prediction is innate-aware automatically. **Suppression parity** holds via
 `IsInnateActive()`; neither is `breakable`, so Mold Breaker never touches them.
 
-**Species (canon only so far — sole-ability signature legends).** **Transistor → Regieleki** (added beside its existing
+**Species (canon users, plus one flavor pick: Transistor → Zapdos, which "has the ability to control electricity").** **Transistor → Regieleki** (added beside its existing
 innate Levitate) and **Dragon's Maw → Regidrago**, each the ability's **sole** canon user. Both are
 **sole-ability genderless Regi legends with a frontier set**, so — like Glastrier / Spectrier — each takes
 the innate **plus a fork-owned chosen override** in its empty slot 1 (`src/fork/species_ability_overrides.c`) so
@@ -4287,7 +4289,8 @@ Opportunist / Mold Breaker / Purifying Salt). The non-Mega canon carriers — **
 Anticipation / Healer) — take it, and it is *observable* there (their chosen slot can be Synchronize / Early Bird /
 Healer / Anticipation). The Mega carriers whose real ability **is** Magic Bounce — **Sableye / Absol (+ Mega-Z) /
 Diancie / Clefable** Megas — get it as a pure-boon Mega row on top of the base creature's inherited innates. The one
-non-canon pick is **Cresselia**, a legendary buff for her stay-in Calm Mind set, whose usual answers are Taunt and Toxic.
+non-canon picks are **Cresselia**, a legendary buff for her stay-in Calm Mind set, whose usual answers are Taunt and Toxic,
+and **Galarian Articuno**, a Psychic bird like Xatu that also runs Calm Mind and Roost.
 
 **Step 3.5 — partial free, partial defer.** `grep -n ABILITY_MAGIC_BOUNCE src/fork/frontier_extended_mons.c` hit six
 sets. The **Xatu** set and **both Espeon** sets have a real, non-innate complementary slot (Synchronize, `:x:`
@@ -4617,6 +4620,8 @@ weakening a foe's hostility or fighting spirit:
   Meganium gives off "its becalming scent to blunt the foe's fighting spirit".
 - **Mega Audino**: "a soothing pulse from its body that reduces hostility in others". Base Audino's
   entry is about sensing feelings, not calming them, so it is left out.
+- **Galarian Moltres**: its aura "will consume the spirit of any creature it hits. Victims become
+  burned-out shadows of themselves."
 
 Entries that soothe *people* or allies rather than foes (Venusaur, Oinkologne, Skeledirge) were
 left out on purpose. No frontier set gives any carrier a chosen Pacify, so there is no Step 3.5 work.
