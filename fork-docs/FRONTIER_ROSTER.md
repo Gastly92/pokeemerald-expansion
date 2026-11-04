@@ -97,6 +97,14 @@ sets does not exist in a singles challenge. The gate runs for the whole roster, 
 singles and for doubles, so every required profile needs a set in each format. An exception
 row answers for every format, since it says the profile cannot or need not be built at all.
 
+**Depth is a ratchet on top of coverage.** One set guarantees a species can be drafted, but it
+plays the same way every time, so singles is being brought to **two singles sets per profile**
+one generation at a time. `ROSTER_SINGLES_DEPTH_THROUGH_DEX` is the National Dex number the
+rule currently reaches (151, Gen 1). Each generation's PR fills its gaps and raises the
+ceiling in the same commit, and it never goes down. `sSinglesDepthExceptions[]` holds the
+profiles that structurally cannot field a second distinct set (Ditto, whose only move is
+Transform), with a stale-row check like the coverage exceptions. Doubles depth comes after.
+
 Coverage is judged per **battle profile** — formes sharing a National Dex number, base
 stat spread and ability set count as one requirement, satisfied by any one of them having
 a set. That's why Vivillon's 19 patterns, Unown's 27 letters and the cap Pikachus are one

@@ -919,6 +919,114 @@ TEST("Frontier extended roster: every fully-evolved species has at least one set
 // grows to cover the species (an upstream sync flags the forme Tera, say), or a second row lands
 // on the same profile. Dead rows are worse than no rows -- they hide the next real gap -- so each
 // one has to justify itself every run.
+// DEPTH, the next promise after coverage: one set per format guarantees a species can be
+// drafted, but a species with a single set plays identically every time it is. Singles is
+// being brought to TWO sets per profile one generation at a time, so this gate is a ratchet on
+// the National Dex number: every required profile at or below the ceiling must have two
+// singles-draftable sets (summed over the formes that share the profile, as for coverage).
+// Raise the ceiling in the same commit that fills the next generation's gaps; never lower it.
+// Doubles depth is a later pass.
+#define ROSTER_SINGLES_DEPTH_THROUGH_DEX 151
+
+// Profiles that structurally cannot field a second distinct singles set. The duplicate-set
+// test rejects two sets with the same moves and ability, so a species with one usable move
+// and one usable ability has exactly one set to give. A row is not for a gap nobody has got to.
+static const struct { u16 species; const char *why; } sSinglesDepthExceptions[] =
+{
+    { SPECIES_DITTO, "Transform is its only move and Imposter its only useful ability, so a second set would be the same set" },
+};
+
+static EWRAM_DATA u8 sSinglesSetsBySpecies[NUM_SPECIES] = {0};
+
+static u32 ProfileSinglesSetCount(u32 species)
+{
+    u32 count = 0;
+
+    for (u32 other = 1; other < NUM_SPECIES; other++)
+    {
+        if (sSinglesSetsBySpecies[other] != 0 && SameBattleProfile(species, other))
+            count += sSinglesSetsBySpecies[other];
+    }
+    return count;
+}
+
+static const char *SinglesDepthExceptionReason(u32 species)
+{
+    for (u32 i = 0; i < ARRAY_COUNT(sSinglesDepthExceptions); i++)
+    {
+        if (SameBattleProfile(species, sSinglesDepthExceptions[i].species))
+            return sSinglesDepthExceptions[i].why;
+    }
+    return NULL;
+}
+
+static void BuildSinglesSetsBySpecies(void)
+{
+    memset(sSinglesSetsBySpecies, 0, sizeof(sSinglesSetsBySpecies));
+    for (u32 i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        if (gFrontierExtendedMons[i].tags & FORMAT_SINGLES)
+            sSinglesSetsBySpecies[gFrontierExtendedMons[i].species]++;
+    }
+}
+
+TEST("Frontier extended roster: every profile up to the depth ceiling has two singles sets")
+{
+    u32 checked = 0;
+    u32 shallow = 0;
+
+    BuildSinglesSetsBySpecies();
+    for (u32 species = 1; species < NUM_SPECIES; species++)
+    {
+        u32 sets;
+
+        if (!IsSpeciesEnabled(species) || SpeciesToNationalPokedexNum(species) > ROSTER_SINGLES_DEPTH_THROUGH_DEX)
+            continue;
+        if (ClassifySpeciesForRoster(species) != COVERAGE_REQUIRED || CoverageExceptionReason(species) != NULL)
+            continue;
+        if (SinglesDepthExceptionReason(species) != NULL)
+            continue;
+
+        checked++;
+        sets = ProfileSinglesSetCount(species);
+        if (sets >= 2 || !IsProfileSpokesman(species))
+            continue;
+
+        shallow++;
+        Test_MgbaPrintf("shallow %S (dex %d): %d singles set(s) on this profile, needs 2 -- retag a format-neutral doubles set to FORMAT_BOTH or add a singles set",
+                        gSpeciesInfo[species].speciesName, SpeciesToNationalPokedexNum(species), sets);
+    }
+
+    EXPECT_GT(checked, 50);
+    EXPECT_EQ(shallow, 0);
+}
+
+TEST("Frontier extended roster: no stale singles depth exception")
+{
+    u32 stale = 0;
+
+    BuildSinglesSetsBySpecies();
+    for (u32 i = 0; i < ARRAY_COUNT(sSinglesDepthExceptions); i++)
+    {
+        u32 species = sSinglesDepthExceptions[i].species;
+
+        if (ProfileSinglesSetCount(species) >= 2)
+        {
+            stale++;
+            Test_MgbaPrintf("depth exception %S: this profile now has two singles sets -- delete the row",
+                            gSpeciesInfo[species].speciesName);
+        }
+        else if (ClassifySpeciesForRoster(species) != COVERAGE_REQUIRED)
+        {
+            stale++;
+            Test_MgbaPrintf("depth exception %S: the species is no longer required -- delete the row",
+                            gSpeciesInfo[species].speciesName);
+        }
+    }
+
+    EXPECT_EQ(stale, 0);
+}
+
 TEST("Frontier extended roster: no stale coverage exception")
 {
     u32 stale = 0;

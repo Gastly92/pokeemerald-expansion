@@ -626,6 +626,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_RATICATE_ALOLA,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_SILK_SCARF,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_DOUBLE_EDGE,
+            MOVE_KNOCK_OFF,
+            MOVE_SUCKER_PUNCH
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_NORMAL,
+    },
+    {
+        .species = SPECIES_RATICATE_ALOLA,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_SITRUS_BERRY,
         .moves =
@@ -1473,7 +1493,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_NINETALES_ALOLA,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
@@ -1865,7 +1885,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_DUGTRIO_ALOLA,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_SOFT_SAND,
         .moves =
         {
@@ -3104,6 +3124,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_FARFETCHD,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LEEK,
+        .moves =
+        {
+            MOVE_SWORDS_DANCE,
+            MOVE_BRAVE_BIRD,
+            MOVE_LEAF_BLADE,
+            MOVE_KNOCK_OFF
+        },
+        .ability = ABILITY_HUSTLE,
+        .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_FLYING,
+    },
+    {
+        .species = SPECIES_FARFETCHD,
         .tags = FORMAT_DOUBLES,
         .heldItem = ITEM_FOCUS_SASH,
         .moves =
@@ -4136,7 +4176,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0105
     {
         .species = SPECIES_MAROWAK,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_THICK_CLUB,
         .moves =
         {
@@ -4199,7 +4239,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_MAROWAK_ALOLA,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_THICK_CLUB,
         .moves =
         {
@@ -4493,7 +4533,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     // 0119
     {
         .species = SPECIES_SEAKING,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_MYSTIC_WATER,
         .moves =
         {
@@ -4634,6 +4674,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
+    },
+    {
+        .species = SPECIES_MR_MIME,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_LIGHT_CLAY,
+        .moves =
+        {
+            MOVE_REFLECT,
+            MOVE_LIGHT_SCREEN,
+            MOVE_PSYCHIC,
+            MOVE_ENCORE
+        },
+        .ability = ABILITY_SOUNDPROOF,
+        .nature = NATURE(DEF_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
     },
 
     // 0124
@@ -5015,7 +5075,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     },
     {
         .species = SPECIES_LAPRAS,
-        .tags = FORMAT_DOUBLES,
+        .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIGHT_CLAY,
         .moves =
         {
