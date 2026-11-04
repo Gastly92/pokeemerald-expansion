@@ -520,13 +520,13 @@ static u32 CountRosterSetsHolding(enum Item item)
 }
 
 // The scopes the distribution gates (share cap, at least one set, not a single set) are run
-// in. FORMAT_DOUBLES belongs here too and is not YET: doubles still has items on zero or one
-// doubles-eligible set, and adding it is the job of the doubles roster pass. Add it in the
-// same commit that makes doubles green -- do not add it with an allowlist of offenders.
+// in. Every item is gated in every format: there is no per-format exemption list, so an item
+// that only suits one format still needs its sets there and a home in the other.
 static const u32 sGatedFormats[] =
 {
     FORMAT_BOTH,    // the whole roster
     FORMAT_SINGLES,
+    FORMAT_DOUBLES,
 };
 
 static const u8 *GetFormatScopeName(u32 format)
@@ -732,13 +732,15 @@ TEST("Held item tracker: no done item exceeds the roster share cap")
     EXPECT_EQ(offenders, 0);
 }
 
-// Guards the scoping itself: if FORMAT_SINGLES ever stopped filtering (a tag encoding change,
+// Guards the scoping itself: if a format scope ever stopped filtering (a tag encoding change,
 // every set retagged FORMAT_BOTH), the per-format gates would silently collapse back into the
-// whole-roster count this file used to run, and a doubles-only item would pass again.
-TEST("Held item tracker: the singles scope really excludes doubles-only sets")
+// whole-roster count this file used to run, and a one-format item would pass again.
+TEST("Held item tracker: each format scope really excludes the other format's sets")
 {
     EXPECT_GT(CountRosterSetsInFormat(FORMAT_SINGLES), 0);
+    EXPECT_GT(CountRosterSetsInFormat(FORMAT_DOUBLES), 0);
     EXPECT_LT(CountRosterSetsInFormat(FORMAT_SINGLES), CountRosterSetsInFormat(FORMAT_BOTH));
+    EXPECT_LT(CountRosterSetsInFormat(FORMAT_DOUBLES), CountRosterSetsInFormat(FORMAT_BOTH));
     EXPECT_EQ(CountRosterSetsInFormat(FORMAT_BOTH), gFrontierExtendedMonsCount);
 }
 

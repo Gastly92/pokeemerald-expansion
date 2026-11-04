@@ -58,14 +58,15 @@ as far as a singles challenge is concerned. Counted across the whole roster, an 
 doubles-only sets looked "done, two sets" while no singles player could ever draft it; when
 the per-format count was added, 47 done items were short in singles like that, 18 of them on
 no singles set at all. The gates therefore run once per scope in `sGatedFormats[]`: the
-whole roster and singles. **Doubles is not gated yet** — it still has done items on zero or
-one doubles-eligible set — and joins that list in the commit that makes it green.
+whole roster, singles and doubles. **There are no per-format exemptions** — an item that
+mostly suits one format (Grip Claw, a Rest set's Chesto) still needs two sets in the other.
 
-The cheapest fix for a format shortfall is usually a **retag, not a new set**: a doubles set
+The cheapest fix for a format shortfall is usually a **retag, not a new set**. A doubles set
 whose four moves all work in singles (no Follow Me, Rage Powder, Helping Hand, Wide Guard,
-Ally Switch) is `FORMAT_BOTH` in all but name. Where the only other holder genuinely is a
-doubles build, re-item a set in the short format whose current item has sets to spare, under
-the same screens as any other placement.
+Ally Switch) is `FORMAT_BOTH` in all but name, and so is a singles set with no move that
+hits its own partner (Earthquake, Surf, Sludge Wave and the rest of `TARGET_FOES_AND_ALLY`)
+and nothing built around Perish Song. Where no such set exists, add a set in the short
+format on a species that already holds the item, so the item's placement screens still hold.
 
 A **one-set count is not automatically a shortfall.** The form-change enablers — Adamant
 Crystal, Lustrous Globe, Griseous Core, Red/Blue Orb, Rusted Sword and Shield, the three
