@@ -688,13 +688,12 @@ static bool32 RosterHasSpecies(u32 species)
     return RosterHasSpeciesInFormat(species, FORMAT_BOTH);
 }
 
-// The scopes the coverage gate runs in. FORMAT_DOUBLES belongs here too and is not YET: several
-// profiles (signature-item formes among them) still have singles-only sets. Add it in the same
-// commit that makes doubles green, not with an allowlist of offenders.
+// The scopes the coverage gate runs in: every required profile needs a set in each format.
 static const u32 sCoverageGatedFormats[] =
 {
     FORMAT_BOTH,    // the whole roster
     FORMAT_SINGLES,
+    FORMAT_DOUBLES,
 };
 
 static const u8 *GetCoverageScopeName(u32 format)
@@ -839,19 +838,34 @@ static bool32 SameBattleProfile(u32 a, u32 b)
     return TRUE;
 }
 
-// TRUE when this species' profile is already answered for in this format -- by a set in the
-// format on any forme sharing it, or by an exception row on any of them. An exception row
-// answers for every format: it says the profile cannot, or need not, be built at all.
-static bool32 ProfileIsAccountedFor(u32 species, u32 format)
+// FORMAT_* bits each species has a set in, built once per sweep: the coverage gate asks this
+// for every forme of every profile, and walking the roster each time blows the test's timeout.
+static EWRAM_DATA u8 sRosterFormatsBySpecies[NUM_SPECIES] = {0};
+
+static void BuildRosterFormatsBySpecies(void)
 {
-    for (u32 other = 1; other < NUM_SPECIES; other++)
+    memset(sRosterFormatsBySpecies, 0, sizeof(sRosterFormatsBySpecies));
+    for (u32 i = 0; i < gFrontierExtendedMonsCount; i++)
+        sRosterFormatsBySpecies[gFrontierExtendedMons[i].species] |= gFrontierExtendedMons[i].tags;
+}
+
+// The FORMAT_* bits this species' profile is answered for -- by a set on any forme sharing it,
+// or by an exception row on any of them. An exception row answers for every format: it says
+// the profile cannot, or need not, be built at all. One sweep returns every format at once,
+// because the profile comparison is the expensive part and the gate asks about several scopes.
+static u32 ProfileAccountedForFormats(u32 species)
+{
+    u32 formats = sRosterFormatsBySpecies[species];
+
+    for (u32 other = 1; other < NUM_SPECIES && (formats & FORMAT_BOTH) != FORMAT_BOTH; other++)
     {
         if (!SameBattleProfile(species, other))
             continue;
-        if (RosterHasSpeciesInFormat(other, format) || CoverageExceptionReason(other) != NULL)
-            return TRUE;
+        if (CoverageExceptionReason(other) != NULL)
+            return FORMAT_BOTH;
+        formats |= sRosterFormatsBySpecies[other];
     }
-    return FALSE;
+    return formats;
 }
 
 // One complaint per profile: the lowest-numbered required forme speaks for the rest, so a
@@ -871,18 +885,21 @@ TEST("Frontier extended roster: every fully-evolved species has at least one set
     u32 required = 0;
     u32 uncovered = 0;
 
+    BuildRosterFormatsBySpecies();
     for (u32 species = 1; species < NUM_SPECIES; species++)
     {
         if (ClassifySpeciesForRoster(species) != COVERAGE_REQUIRED)
             continue;
 
         required++;
-        if (!IsProfileSpokesman(species))
+        u32 covered = ProfileAccountedForFormats(species);
+        if ((covered & FORMAT_BOTH) == FORMAT_BOTH || !IsProfileSpokesman(species))
             continue;
 
         for (u32 f = 0; f < ARRAY_COUNT(sCoverageGatedFormats); f++)
         {
-            if (ProfileIsAccountedFor(species, sCoverageGatedFormats[f]))
+            // FORMAT_BOTH is the whole-roster scope: any set at all answers it.
+            if (covered & sCoverageGatedFormats[f])
                 continue;
 
             uncovered++;
