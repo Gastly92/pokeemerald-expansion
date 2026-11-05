@@ -4238,6 +4238,8 @@ BattleScript_PowderMoveNoEffect::
 	jumpiftype BS_SCRIPTING, TYPE_GRASS, BattleScript_PowderMoveNoEffectPrint
 	jumpifability BS_SCRIPTING, ABILITY_OVERCOAT, BattleScript_PowderMoveNoEffectOvercoat
 	setlastuseditem BS_SCRIPTING
+	@ FORK: show the item pop-up like other held items do (test/fork/status_preview.c).
+	call BattleScript_ItemPopUp_ScriptingNoFlush
 	printstring STRINGID_SAFETYGOGGLESPROTECTED
 	goto BattleScript_PowderMoveNoEffectWaitMsg
 BattleScript_PowderMoveNoEffectOvercoat:

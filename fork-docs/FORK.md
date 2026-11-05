@@ -27,7 +27,7 @@ doc below. A row records only what neither of those can — status, and the poin
 | [`HELD_ITEMS.md`](HELD_ITEMS.md) | Held-item usage across the roster and the audit behind each item's place |
 | [`FREE_GIMMICKS.md`](FREE_GIMMICKS.md) | Item-free Mega/Z/Tera/Dynamax and the gimmick picker |
 | [`BATTLE_INFO.md`](BATTLE_INFO.md) | The in-battle INFO viewer and its reveal-gating rules |
-| [`DAMAGE_PREVIEW.md`](DAMAGE_PREVIEW.md) | The move menu's damage-range readout: what the range spans and what it hides |
+| [`DAMAGE_PREVIEW.md`](DAMAGE_PREVIEW.md) | The move menu's damage-range readout (what the range spans and what it hides) and its status-move "Fails" readout |
 | [`HEALTHBOX_HP_PERCENT.md`](HEALTHBOX_HP_PERCENT.md) | The healthbox HP % that replaces the level: rounding, the empty full-HP slot, fitting beside gimmick icons |
 | [`LINE_REVIEW.md`](LINE_REVIEW.md) | The per-species-line review playbook (innates, overrides, Factory sets) |
 
@@ -68,6 +68,7 @@ Legend: ✅ done · ⚠️ partial / has known limitations.
 | Disable Frontier battle recording | `B_FRONTIER_DISABLE_RECORD_BATTLE` | `config/frontier.h`, `src/frontier_util.c` | ✅ | No battle-recording offer, since replays desync on the expansion engine (an upstream fragility). The recording code is intact. |
 | In-battle INFO viewer | `B_FRONTIER_BATTLE_INFO` | `config/frontier.h`, `src/fork/frontier_battle_info.c` | ⚠️ partial | The BAG slot opens a read-only, reveal-gated reference: overview (speed tiers, types, HP), field, stats, battle log, foe, base stats, innates. Foe page reads opponent A only. [Details](BATTLE_INFO.md) |
 | Move damage preview | `B_MOVE_DAMAGE_PREVIEW` | `config/fork.h`, `src/fork/damage_preview.c` | ✅ | The move menu shows the selected move's damage as a % of the foe's HP and the type it is fired as, with a KO verdict, using only what the player has seen and an armed Mega form. [Details](DAMAGE_PREVIEW.md) · `test/fork/damage_preview.c` |
+| Status move fail preview | `B_MOVE_STATUS_PREVIEW` | `config/fork.h`, `src/fork/status_preview.c` | ✅ | The move menu reads `<Type> Fails` for a status move the player can already tell will fail (a type, innate or revealed-ability immunity, a revealed Safety Goggles, Substitute, existing status...), using only what the player has seen. [Details](DAMAGE_PREVIEW.md#status-moves-b_move_status_preview) · `test/fork/status_preview.c` |
 
 ## Determinism (`DETERMINISTIC_*`)
 
