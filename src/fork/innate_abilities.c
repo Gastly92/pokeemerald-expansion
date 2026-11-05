@@ -7750,6 +7750,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_JUSTIFIED,
             ABILITY_LEGENDARY,
             ABILITY_PRESSURE,
+            ABILITY_SERENE_GRACE,
             ABILITY_SHARPNESS,
             ABILITY_SPEED_BOOST
         )

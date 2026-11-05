@@ -1588,7 +1588,8 @@ This populates the canon Serene Grace users so they keep the signature effect-do
 picks (Togepi/Togetic/Togekiss, the Chansey/Happiny/Blissey line, Dunsparce/Dudunsparce incl. the three-segment form,
 Jirachi, Shaymin-Sky, the seasonal Deerling/Sawsbuck, Meloetta incl. the Pirouette form), plus a tight graceful/elegant
 flavor set lacking the real ability: the Gardevoir line (Ralts/Kirlia/Gardevoir/Gardevoir-Mega, the elegant "Embrace
-Pokémon"), the serene beauty Milotic, and the lunar-blessing Cresselia. Several flavor/canon picks already carry other
+Pokémon"), the serene beauty Milotic, the lunar-blessing Cresselia, and the graceful Virizion (under the deterministic
+flags its Sharpness-boosted Air Slash and its Zen Headbutt flinch every other turn). Several flavor/canon picks already carry other
 innates, so they take a combined `INNATES(...)` list. Frontier roster sets that hardcoded Serene Grace are freed
 (Step 3.5) to a complementary REAL slot where one exists (Chansey/Blissey → Healer, Togekiss → Super Luck, Dudunsparce →
 Rattled); the three sole-real-ability species take a fork-owned chosen-ability override (`species_ability_overrides.c`):
