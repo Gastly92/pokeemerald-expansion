@@ -204,27 +204,79 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Stench flinches on the first turn b
     }
 }
 
-SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Moody raises the lowest-valued stat and lowers the highest")
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Moody sets every stat, accuracy and evasion included, to the next step of its swing")
+{
+    u32 turns;
+    s32 stage;
+    PARAMETRIZE { turns = 1;  stage = +1; }
+    PARAMETRIZE { turns = 2;  stage = -1; }
+    PARAMETRIZE { turns = 3;  stage = +2; }
+    PARAMETRIZE { turns = 4;  stage = -2; }
+    PARAMETRIZE { turns = 5;  stage = +3; }
+    PARAMETRIZE { turns = 6;  stage = -3; }
+    PARAMETRIZE { turns = 7;  stage = +6; }
+    PARAMETRIZE { turns = 8;  stage = -6; }
+    PARAMETRIZE { turns = 9;  stage = +6; }
+    PARAMETRIZE { turns = 10; stage = -6; }
+    PARAMETRIZE { turns = 11; stage = +6; }
+
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_MOODY); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        for (u32 turn = 0; turn < turns; turn++)
+            TURN {}
+    } THEN {
+        for (enum Stat stat = STAT_ATK; stat < NUM_BATTLE_STATS; stat++)
+            EXPECT_EQ(player->statStages[stat], DEFAULT_STAT_STAGE + stage);
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Moody announces each step of its swing with one pop-up")
 {
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
-        // Explicit, distinct stats: Sp. Def is uniquely lowest, Speed uniquely
-        // highest, so the raise/lower targets are unambiguous.
-        PLAYER(SPECIES_WOBBUFFET) {
-            Ability(ABILITY_MOODY);
-            Attack(100); Defense(110); SpAttack(120); SpDefense(60); Speed(130);
-        }
-        OPPONENT(SPECIES_WOBBUFFET) { Speed(50); }
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_MOODY); }
+        OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
-        TURN {}
+        for (u32 turn = 0; turn < 10; turn++)
+            TURN {}
     } SCENE {
         ABILITY_POPUP(player, ABILITY_MOODY);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player);
+        MESSAGE("Wobbuffet increased all its stats!");
+        MESSAGE("Wobbuffet decreased all its stats!");
+        MESSAGE("Wobbuffet sharply increased all its stats!");
+        MESSAGE("Wobbuffet sharply decreased all its stats!");
+        MESSAGE("Wobbuffet drastically increased all its stats!");
+        MESSAGE("Wobbuffet drastically decreased all its stats!");
+        MESSAGE("Wobbuffet maximized all its stats!");
+        MESSAGE("Wobbuffet minimized all its stats!");
+        MESSAGE("Wobbuffet maximized all its stats!");
+        MESSAGE("Wobbuffet minimized all its stats!");
+    }
+}
+
+SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Moody's swing restarts when the holder switches back in")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_MOODY); }
+        PLAYER(SPECIES_WYNAUT);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN {}
+        TURN {}
+        TURN {}
+        TURN { SWITCH(player, 1); }
+        TURN { SWITCH(player, 0); }
+    } SCENE {
+        MESSAGE("Wobbuffet sharply increased all its stats!");
+        MESSAGE("Wobbuffet increased all its stats!");
     } THEN {
-        EXPECT_EQ(player->statStages[STAT_SPDEF], DEFAULT_STAT_STAGE + 2); // lowest -> +2
-        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE - 1); // highest -> -1
-        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE);
-        EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE);
-        EXPECT_EQ(player->statStages[STAT_SPATK], DEFAULT_STAT_STAGE);
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1);
+        EXPECT_EQ(player->statStages[STAT_EVASION], DEFAULT_STAT_STAGE + 1);
     }
 }
 

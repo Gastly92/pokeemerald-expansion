@@ -919,6 +919,14 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_SLEEPPREVENTED]                       = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents sleep!"), // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
     [STRINGID_FREEZEPREVENTED]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents freezing!"), // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
     [STRINGID_FROSTBITEPREVENTED]                   = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents frostbite!"), // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
+    [STRINGID_MOODYSTATSUP1]                        = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} increased all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
+    [STRINGID_MOODYSTATSDOWN1]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} decreased all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
+    [STRINGID_MOODYSTATSUP2]                        = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} sharply increased all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
+    [STRINGID_MOODYSTATSDOWN2]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} sharply decreased all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
+    [STRINGID_MOODYSTATSUP3]                        = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} drastically increased all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
+    [STRINGID_MOODYSTATSDOWN3]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} drastically decreased all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
+    [STRINGID_MOODYSTATSMAXED]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} maximized all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
+    [STRINGID_MOODYSTATSMINIMIZED]                  = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} minimized all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
 };
 
 const u16 gTrainerUsedItemStringIds[] =

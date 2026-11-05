@@ -21,6 +21,7 @@
 #include "fork/buff_berries.h" // FORK: BUFF_RESIST_BERRIES
 #include "fork/dynamax_sleep.h" // FORK: DETERMINISTIC_STATUS Dynamax resists sleep
 #include "fork/buff_gimmick_moves.h" // FORK: BUFF_GIMMICK_MOVES_IGNORE_DEF_BOOSTS
+#include "fork/deterministic_moody.h" // FORK: DETERMINISTIC_ABILITIES Moody
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -1798,20 +1799,6 @@ u32 GetBattlerAffectionHearts(enum BattlerId battler)
 bool32 MoodyCantRaiseStat(u32 stat)
 {
     return CompareStat(gBattlerAttacker, stat, MAX_STAT_STAGE, CMP_EQUAL, GetBattlerAbility(gBattlerAttacker));
-}
-
-// FORK: raw current value of one of the five battle stats, used by deterministic
-// Moody (DETERMINISTIC_ABILITIES) to pick which stat to raise/lower by value.
-static u32 GetMoodyStatValue(enum BattlerId battler, enum Stat stat)
-{
-    switch (stat)
-    {
-    case STAT_ATK:   return gBattleMons[battler].attack;
-    case STAT_DEF:   return gBattleMons[battler].defense;
-    case STAT_SPEED: return gBattleMons[battler].speed;
-    case STAT_SPATK: return gBattleMons[battler].spAttack;
-    default:         return gBattleMons[battler].spDefense; // STAT_SPDEF
-    }
 }
 
 // gBattlerAttacker is the battler that's trying to lower their stats and due to limitations of RandomUniformExcept, cannot be an argument
@@ -4003,58 +3990,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
             case ABILITY_MOODY:
                 if (GetConfig(DETERMINISTIC_ABILITIES))
                 {
-                    // FORK: deterministic Moody. Compare the *raw* current values of the
-                    // five battle stats (accuracy/evasion always excluded), raise the
-                    // lowest-valued raisable stat(s) by +2 and lower the highest-valued
-                    // lowerable stat(s) by -1; ties affect every tied stat. Raw values
-                    // differ from turn 1, so there is no degenerate all-equal case.
-                    enum Stat stat;
-                    u32 statValue, raiseMask = 0, lowerMask = 0;
-                    u32 lowestValue = UINT32_MAX, highestValue = 0;
-
-                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
-                    {
-                        statValue = GetMoodyStatValue(battler, stat);
-                        if (CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility) && statValue < lowestValue)
-                            lowestValue = statValue;
-                    }
-                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
-                    {
-                        statValue = GetMoodyStatValue(battler, stat);
-                        if (CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN, gLastUsedAbility) && statValue == lowestValue)
-                            raiseMask |= 1u << stat;
-                    }
-                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
-                    {
-                        if (raiseMask & (1u << stat)) // Can't lower a stat we're raising.
-                            continue;
-                        statValue = GetMoodyStatValue(battler, stat);
-                        if (CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN, gLastUsedAbility) && statValue > highestValue)
-                            highestValue = statValue;
-                    }
-                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
-                    {
-                        if (raiseMask & (1u << stat))
-                            continue;
-                        statValue = GetMoodyStatValue(battler, stat);
-                        if (CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN, gLastUsedAbility) && statValue == highestValue)
-                            lowerMask |= 1u << stat;
-                    }
-
-                    // Queue raises before lowers, matching stock Moody's order.
-                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
-                    {
-                        if (raiseMask & (1u << stat))
-                            SetStatChange(battler, stat, 2);
-                    }
-                    for (stat = STAT_ATK; stat <= STAT_SPDEF; stat++)
-                    {
-                        if (lowerMask & (1u << stat))
-                            SetStatChange(battler, stat, -1);
-                    }
-
-                    gEffectBattler = gBattlerAbility = battler;
-                    BattleScriptCall(BattleScript_AbilityStatChange);
+                    // FORK: deterministic Moody sets every stat stage (acc/evasion included)
+                    // to a fixed +1/-1/+2/-2/+3/-3/+6/-6 swing; logic lives in
+                    // src/fork/deterministic_moody.c. Keep this hook on conflict.
+                    ApplyDeterministicMoody(battler);
                     effect++;
                 }
                 else
