@@ -2768,6 +2768,17 @@ static enum CancelerResult CancelerAccuracyCheck(struct BattleCalcValues *cv)
         TRY_SECOND_TARGET,
     };
 
+    // UPSTREAM: Z-Moves and Max Moves skip the accuracy roll via the early return below, which also
+    // skipped the "no target left" end check at the bottom of this function. A Z/Max Move already
+    // blocked by CancelerTargetFailure (Volt Absorb, Levitate, a type immunity) then went on to play
+    // its full attack animation after the ability pop-up. Regression test: test/fork/zmax_absorb_animation.c.
+    if ((IsMaxMove(cv->move) || IsZMove(cv->move)) && !IsAnyTargetAffected())
+    {
+        gBattlescriptCurrInstr = BattleScript_MoveEnd;
+        gBattleStruct->eventState.atkCanceler = CANCELER_END;
+        return CANCELER_RESULT_END;
+    }
+
     if (ShouldSkipFRLGAccuracyCheck()
      || ShouldSkipAccuracyCalcPastFirstHit(cv->battlerAtk, cv->abilities[cv->battlerAtk], cv->holdEffects[cv->battlerAtk], cv->moveEffect)
      || IsMaxMove(cv->move)

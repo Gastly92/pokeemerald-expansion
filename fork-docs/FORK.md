@@ -194,6 +194,10 @@ plain `#if` compile-time flags, not registered.
   `STRINGID_SUBSTITUTEDAMAGED` names `gBattlerTarget` rather than the Substitute's owner
   (wrong foe on a doubles spread move), and `CancelerSubstitute()`'s loop tests
   `cv->battlerDef` instead of its own `battler`.
+- **Blocked Z-Moves / Max Moves playing their animation (upstream)** is fixed here
+  (`UPSTREAM:` in `CancelerAccuracyCheck`, test `test/fork/zmax_absorb_animation.c`).
+  Upstream's "Max Moves don't bypass absorbing abilities" test can't catch it: it asserts
+  the animation before the ability pop-up, and the stray animation played after it.
 
 ## CI / infrastructure
 
