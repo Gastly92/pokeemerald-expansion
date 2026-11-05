@@ -4640,6 +4640,16 @@ Gastro Acid, Neutralizing Gas and Mold Breaker.
 **Species: every `TIER_MYTHICAL` species** (gated by `test/fork/mythical.c`), plus the Mega, Primal,
 Complete, Ultra and Active forms they take in battle.
 
+### ABILITY_LEGENDARY
+
+**The fork's own ability, innate-only** (its definition is in
+[`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-legendary)). Mythical's twin: raises the holder's max HP
+by 50% while it is on the field instead of doubling it. Wired exactly like Mythical, through the same
+`SwitchInInnateAbilityEffect` line and `TryActivateMythical()`.
+
+**Species: every `TIER_LEGENDARY` species** (gated by `test/fork/legendary.c`), plus the Mega, Pirouette,
+Gigantamax and Tera forms they take in battle.
+
 ### ABILITY_VICTORY_STAR
 
 Boosts the accuracy of the holder and its partner by 10%. Wired as an innate so Victini, whose

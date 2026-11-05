@@ -913,6 +913,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_FLINCHPREVENTED]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents flinching!"), // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
     [STRINGID_PARALYSISPPDRAIN]                     = COMPOUND_STRING("{B_DEF_NAME_WITH_PREFIX}'s moves each lost {B_BUFF1} PP!"), // FORK: BUFF_REPARALYZE
     [STRINGID_MYTHICALPRESENCE]                     = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX}'s mythical presence fills the battlefield!"), // FORK: Mythical ability
+    [STRINGID_LEGENDARYPRESENCE]                    = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX}'s legendary presence fills the battlefield!"), // FORK: Legendary ability
     [STRINGID_PARALYSISPREVENTED]                   = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents paralysis!"), // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
     [STRINGID_POISONPREVENTED]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents poisoning!"), // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
     [STRINGID_BURNPREVENTED]                        = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX}'s {B_BUFF1} prevents burns!"), // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION

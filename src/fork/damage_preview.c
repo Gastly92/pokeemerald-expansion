@@ -397,7 +397,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
         species = GetIllusionMonSpecies(battlerDef);
         level = GetMonData(GetIllusionMonPtr(battlerDef), MON_DATA_LEVEL, NULL);
     }
-    // A Dynamaxed or Mythical-boosted foe's bar is its multiplied HP, so the % is read against that.
+    // A Dynamaxed or Mythical/Legendary-boosted foe's bar is its multiplied HP, so the % is read against that.
     hpScaleNum = realDef.maxHP;
     hpScaleDen = GetNonDynamaxMaxHP(battlerDef);
     if (hpScaleDen == 0)

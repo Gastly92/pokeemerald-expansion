@@ -293,6 +293,9 @@
 //   mapping it to the ABILITYEFFECT_ON_SWITCHIN case, whose logic lives in src/fork/mythical.c. cantBeSuppressed
 //   and not breakable, so Gastro Acid, Neutralizing Gas and Mold Breaker never reach it. Carriers: every
 //   TIER_MYTHICAL species plus the forms they take in battle, gated by test/fork/mythical.c.
+//   LEGENDARY (the fork's own ability, innate-only): Mythical's twin at x1.5 max HP instead of x2, on the same
+//   SwitchInInnateAbilityEffect line and src/fork/mythical.c logic. Carriers: every TIER_LEGENDARY species plus
+//   the forms they take in battle, gated by test/fork/legendary.c.
 //   VICTORY_STAR: x1.1 accuracy for the holder and a living partner in GetTotalAccuracy
 //   (src/battle_util.c), and the repurposed evasion-ignore for both in GetAccEvasionStageDelta
 //   (src/fork/deterministic_moves.c). A 1:1 copy, guarded against a chosen Victory Star so it never

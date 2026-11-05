@@ -648,7 +648,7 @@ static const struct RosterCoverageException sCoverageExceptions[] =
     { SPECIES_FLOETTE_ETERNAL,     "unreleased event forme; cannot be obtained or rented" },
     { SPECIES_ETERNATUS_ETERNAMAX, "battle-only shape with no legal encounter; its stats are not balanceable against anything" },
     { SPECIES_GRENINJA_ASH,        "Battle Bond transformation, entered mid-battle; the roster builds Greninja and Greninja-Battle-Bond" },
-    { SPECIES_ZYGARDE_COMPLETE,    "Power Construct shape, entered mid-battle from the 10%/50% formes" },
+    { SPECIES_ZYGARDE_COMPLETE,    "Power Construct shape, entered mid-battle from the 50% forme" },
 
     // ---- A sibling profile the roster does build stands in ----
     { SPECIES_DEOXYS_NORMAL,       "the Attack/Defense/Speed formes carry Deoxys" },
@@ -657,7 +657,7 @@ static const struct RosterCoverageException sCoverageExceptions[] =
     { SPECIES_GOURGEIST_LARGE,     "Gourgeist-Super carries the size formes" },
     { SPECIES_SQUAWKABILLY_YELLOW, "plumage variant differing from Green only in its hidden ability; Squawkabilly-Green carries the line" },
     { SPECIES_ZYGARDE_50,          "Aura Break variant; the roster builds Zygarde-50%-Power-Construct" },
-    { SPECIES_ZYGARDE_10_AURA_BREAK, "Aura Break variant; the roster builds Zygarde-10%-Power-Construct" },
+    { SPECIES_ZYGARDE_10_POWER_CONSTRUCT, "Power Construct variant; the roster builds Zygarde-10%-Aura-Break. A legendary-tier 10% that turns Complete (and, with free gimmicks, Mega) would pick up the Mythical forms' x2 HP" },
 };
 
 enum RosterCoverage

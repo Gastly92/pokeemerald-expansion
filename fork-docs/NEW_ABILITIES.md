@@ -472,3 +472,28 @@ what the battle really does.
 Frontier has no Exp., so this is not wired.
 
 Covered by `test/fork/mythical.c`.
+
+## Case study: Legendary
+
+**`Legendary`** (`ABILITY_LEGENDARY`) is Mythical's twin for the fork's `TIER_LEGENDARY` band: the
+same innate-only HP boost, at **x1.5 instead of x2** ("{mon}'s legendary presence fills the
+battlefield!"). Everything in the Mythical case study above applies unchanged (Dynamax stacking,
+undo on leaving the field, nothing can suppress it, Regenerator, the AI's switch-in simulations).
+
+**One engine.** Both run through `src/fork/mythical.c`: `TryActivateMythical()` picks the multiplier
+from the ability that fired, and `gBattleStruct->legendaryHPBoosted` marks which boosted party slots
+are x1.5. A boosted value is `floor(x * 3/2)`, and `ceil(boosted * 2/3)` gets `x` back exactly, so
+a switch-out returns the same HP and max HP the mon came in with, even when the value is odd.
+
+**Carriers.** Every `TIER_LEGENDARY` species, enforced by `TEST("Legendary: every TIER_LEGENDARY
+species carries the Legendary innate")`, plus the forms they take in battle (Mega Latias/Latios,
+Heatran, Diancie, Magearna and Zeraora, Pirouette Meloetta, Gigantamax Melmetal and Urshifu, the
+four Tera Ogerpon, Terastal and Stellar Terapagos). No species carries both Legendary and Mythical.
+
+**Zygarde.** Complete and Mega Zygarde carry Mythical, and a Power Construct Zygarde reaches
+both mid-battle (Mega through free gimmicks). So the only Power Construct Zygarde is the
+`TIER_MYTHICAL` 50% forme. The legendary-tier Zygarde-10% is the Aura Break forme, which never
+changes shape. A 10% Power Construct would keep x1.5 through its first stay as Complete, then
+come back in at x2.
+
+Covered by `test/fork/legendary.c`.
