@@ -108,6 +108,8 @@ SINGLE_BATTLE_TEST("Status preview: Safety Goggles stay hidden until they block 
         TURN { MOVE(player, MOVE_SLEEP_POWDER); }
     } SCENE {
         MESSAGE("Wobbuffet used Sleep Powder!");
+        ITEM_POPUP(opponent, ITEM_SAFETY_GOGGLES);
+        MESSAGE("The opposing Wobbuffet is not affected thanks to its Safety Goggles!");
         NOT STATUS_ICON(opponent, sleep: TRUE);
     } THEN {
         EXPECT(gBattleStruct->infoItemRevealed[B_SIDE_OPPONENT] & 1u);
