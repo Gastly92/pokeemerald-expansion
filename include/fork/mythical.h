@@ -1,6 +1,10 @@
 #ifndef GUARD_FORK_MYTHICAL_H
 #define GUARD_FORK_MYTHICAL_H
 
+// "Mythical" and its twin "Legendary". Everything below describes Mythical; Legendary is the same boost at x1.5
+// instead of x2, carried by every TIER_LEGENDARY species, and shares every function here (the multiplier is
+// chosen by the ability that fired and remembered per party slot in gBattleStruct->legendaryHPBoosted).
+//
 // "Mythical" -- an innate-only ability carried by every TIER_MYTHICAL species (include/fork/species_tiers.h,
 // enforced by test/fork/mythical.c). When the holder enters battle its presence is announced and its max HP
 // doubles, the way Dynamax raises it: the HP fraction is kept, and the boost is undone when the holder
@@ -21,11 +25,12 @@
 //   - Cmd_switchoutabilities, before Regenerator heals              -> UndoMythicalHPBoost
 //   - the AI's switch-in simulations / FreeRestoreBattleMons        -> SimulateMythicalSwitchIn / ClearSimulatedMythicalSwitchIns
 
-// TRUE if `battler`'s mon currently has its HP doubled by Mythical.
+// TRUE if `battler`'s mon currently has its HP boosted by Mythical or Legendary.
 bool32 IsMythicalHPBoosted(enum BattlerId battler);
 
-// Doubles the battler's HP and max HP and queues the announcement. Returns TRUE when it fired. `ability` is the
-// Mythical being processed (chosen or innate), for the pop-up.
+// Boosts the battler's HP and max HP (x2 for ABILITY_MYTHICAL, x1.5 for ABILITY_LEGENDARY) and queues the
+// announcement. Returns TRUE when it fired. `ability` is the one being processed (chosen or innate), which also
+// picks the multiplier and the pop-up.
 bool32 TryActivateMythical(enum BattlerId battler, enum Ability ability);
 
 // Reverts the battler's boost, keeping its HP fraction (rounded up, so a living mon never drops to 0).
@@ -36,7 +41,7 @@ void UndoMythicalHPBoost(enum BattlerId battler);
 void UndoAllMythicalHPBoosts(void);
 
 // Call right after CalculateMonStats has rebuilt a boosted mon's max HP from scratch (form change, Dynamax
-// ending). `hpBefore` / `maxHPBefore` are the mon's HP and max HP before that call. Re-doubles the max HP
+// ending). `hpBefore` / `maxHPBefore` are the mon's HP and max HP before that call. Re-boosts the max HP
 // and restores the HP the way CalculateMonStats would have. Touches the party data only; both callers copy it
 // into gBattleMons afterwards.
 void ReapplyMythicalHPBoost(enum BattlerId battler, struct Pokemon *mon, u32 hpBefore, u32 maxHPBefore);
@@ -46,7 +51,7 @@ u32 RemoveMythicalHPBoost(enum BattlerId battler, u32 hp);
 
 // AI switch-in simulations (InitializeSwitchinCandidate, the predicted player switch-in) copy a benched mon into
 // gBattleMons at its party HP, which is never boosted. Call right after that copy, once the candidate's ability is
-// set: if the candidate would gain Mythical on entry, its simulated HP and max HP are doubled, and until
+// set: if the candidate would gain Mythical or Legendary on entry, its simulated HP and max HP are boosted, and until
 // ClearSimulatedMythicalSwitchIns (called from FreeRestoreBattleMons) RemoveMythicalHPBoost answers for the
 // candidate rather than for the mon really on the field.
 void SimulateMythicalSwitchIn(enum BattlerId battler);

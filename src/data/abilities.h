@@ -2649,4 +2649,18 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .cantBeSuppressed = TRUE,
         .cantBeOverwritten = TRUE,
     },
+
+    // FORK: given as an innate to every TIER_LEGENDARY species. Mythical's twin with a x1.5 multiplier
+    // instead of x2; everything else (Dynamax stacking, unsuppressable) is shared. See src/fork/mythical.c.
+    [ABILITY_LEGENDARY] =
+    {
+        .name = _("Legendary"),
+        .description = COMPOUND_STRING("Raises max HP by 50% in battle."),
+        .aiRating = 9,
+        .cantBeCopied = TRUE,
+        .cantBeSwapped = TRUE,
+        .cantBeTraced = TRUE,
+        .cantBeSuppressed = TRUE,
+        .cantBeOverwritten = TRUE,
+    },
 };

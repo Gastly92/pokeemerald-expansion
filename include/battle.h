@@ -796,6 +796,8 @@ struct BattleStruct
     // FORK: per-trainer bitmask of the party slots whose HP the Mythical ability has doubled
     // (src/fork/mythical.c). Keyed by party slot, not battler, so Ally Switch can't misplace it.
     u8 mythicalHPBoosted[MAX_BATTLE_TRAINERS];
+    // FORK: the subset of mythicalHPBoosted whose boost came from Legendary (x1.5 rather than x2).
+    u8 legendaryHPBoosted[MAX_BATTLE_TRAINERS];
 };
 
 struct AiBattleData

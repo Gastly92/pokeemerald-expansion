@@ -5173,6 +5173,13 @@ BattleScript_MythicalActivates::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: Legendary ability (src/fork/mythical.c). The HP is raised by 50% in C before this runs.
+BattleScript_LegendaryActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_LEGENDARYPRESENCE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 @ FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION (src/fork/flinch_prevention.c)
 BattleScript_FlinchPreventedByAbility::
 	call BattleScript_AbilityPopUp

@@ -3563,6 +3563,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 effect = TryActivatePacify(battler, gLastUsedAbility);
             break;
         case ABILITY_MYTHICAL: // FORK: doubles max HP on entry, chosen or innate. Logic in src/fork/mythical.c; keep this case on conflict.
+        case ABILITY_LEGENDARY: // FORK: Mythical's x1.5 twin, same logic in src/fork/mythical.c; keep this case on conflict.
             if (shouldAbilityTrigger)
                 effect = TryActivateMythical(battler, gLastUsedAbility);
             break;
