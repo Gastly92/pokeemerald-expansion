@@ -928,7 +928,6 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_MOODYSTATSDOWN3]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} drastically decreased all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
     [STRINGID_MOODYSTATSMAXED]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} maximized all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
     [STRINGID_MOODYSTATSMINIMIZED]                  = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} minimized all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
-    [STRINGID_GUARDDOGPREVENTSPHASING]              = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} refuses to be forced out!"), // FORK: FEATURE_ANNOUNCE_GUARD_DOG
 };
 
 const u16 gTrainerUsedItemStringIds[] =

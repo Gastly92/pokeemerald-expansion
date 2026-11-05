@@ -106,11 +106,13 @@
 // See src/fork/status_prevention.c.
 #define FEATURE_ANNOUNCE_STATUS_PREVENTION TRUE
 
-// When TRUE, Guard Dog (chosen ability or innate) announces itself when it stops a forced switch:
-// the Guard Dog pop-up and "<mon> refuses to be forced out!". Stock play says only "But it
-// failed!" for Roar / Whirlwind and nothing at all for Dragon Tail / Circle Throw; Suction Cups
-// already announces itself in both. Roar / Whirlwind still count as failed (Stomping Tantrum).
-// See src/fork/guard_dog_phasing.c.
-#define FEATURE_ANNOUNCE_GUARD_DOG TRUE
+// When TRUE, a move that fails because of an ability shows that ability's pop-up before the usual
+// "But it failed!", so the player can see why: Roar / Whirlwind into Guard Dog, Psycho Shift into a
+// status-blocking ability (Limber, Immunity, Insomnia, Comatose, Purifying Salt, the Veils, ...),
+// and Rest blocked by Leaf Guard in sun, Shields Down or Sweet Veil. Dragon Tail / Circle Throw
+// into Guard Dog, which hit but stay silent about the blocked switch, show the pop-up too. Chosen
+// ability or innate. Rule failures (Skill Swap on Wonder Guard, Soak on Multitype, ...) stay plain,
+// as nothing is protecting the target there. See src/fork/ability_failure_popup.c.
+#define FEATURE_ANNOUNCE_ABILITY_FAILURES TRUE
 
 #endif // GUARD_CONFIG_FEATURE_H

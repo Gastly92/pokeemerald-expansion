@@ -5207,20 +5207,6 @@ BattleScript_StatusPreventedByItem::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-@ FORK: FEATURE_ANNOUNCE_GUARD_DOG (src/fork/guard_dog_phasing.c). Roar / Whirlwind still fail
-@ (MOVE_RESULT_FAILED, as BattleScript_ButItFailed sets); the Ret form is Dragon Tail's, which hit.
-BattleScript_GuardDogPreventsPhasingOut::
-	setmoveresultflags MOVE_RESULT_FAILED
-	call BattleScript_GuardDogPreventsPhasingOutRet
-	goto BattleScript_MoveEnd
-
-BattleScript_GuardDogPreventsPhasingOutRet::
-	pause B_WAIT_TIME_SHORT
-	call BattleScript_AbilityPopUp
-	printstring STRINGID_GUARDDOGPREVENTSPHASING
-	waitmessage B_WAIT_TIME_LONG
-	return
-
 @ FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES (src/fork/silent_ability_popup.c)
 BattleScript_SilentAbilityRevealed::
 	copybyte gBattlerAbility, sBATTLER

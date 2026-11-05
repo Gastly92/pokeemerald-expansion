@@ -271,8 +271,6 @@ extern const u8 BattleScript_FlinchPreventedByAbility[]; // FORK: FEATURE_ANNOUN
 extern const u8 BattleScript_FlinchPreventedByItem[]; // FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION
 extern const u8 BattleScript_StatusPreventedByAbility[]; // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
 extern const u8 BattleScript_StatusPreventedByItem[]; // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
-extern const u8 BattleScript_GuardDogPreventsPhasingOut[]; // FORK: FEATURE_ANNOUNCE_GUARD_DOG
-extern const u8 BattleScript_GuardDogPreventsPhasingOutRet[]; // FORK: FEATURE_ANNOUNCE_GUARD_DOG
 extern const u8 BattleScript_SilentAbilityRevealed[]; // FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES
 extern const u8 BattleScript_ToxicSpikesPoisoned[];
 extern const u8 BattleScript_ToxicSpikesBadlyPoisoned[];

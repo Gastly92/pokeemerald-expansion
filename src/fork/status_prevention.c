@@ -94,6 +94,12 @@ void NoteNonVolatileStatusBlocker(enum BattlerId battler, enum Ability ability)
     sBlockerAbility = ability;
 }
 
+enum Ability GetNonVolatileStatusBlocker(enum BattlerId *battler)
+{
+    *battler = sBlockerBattler;
+    return sBlockerAbility;
+}
+
 void TryAnnounceBlockedStatusEffect(struct BattleCalcValues *cv, struct SetEffect *se, bool32 affectsUser)
 {
     enum BattlerId battler = se->effectBattler;

@@ -81,7 +81,7 @@
 #include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
 #include "fork/buff_status_reapply.h" // FORK: BUFF_REBURN
 #include "fork/mythical.h" // FORK: Mythical HP boost undone on switch-out
-#include "fork/guard_dog_phasing.h" // FORK: FEATURE_ANNOUNCE_GUARD_DOG
+#include "fork/ability_failure_popup.h" // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES
 
 // Helper for accessing command arguments and advancing gBattlescriptCurrInstr.
 //
@@ -10681,9 +10681,9 @@ void BS_JumpIfRoarFails(void)
         gBattlescriptCurrInstr = cmd->jumpInstr;
     else if (FlagGet(WE_FLAG_NO_RUNNING))
         gBattlescriptCurrInstr = cmd->jumpInstr;
-    // FORK: FEATURE_ANNOUNCE_GUARD_DOG -- Guard Dog's pop-up instead of the script's bare "But it failed!".
-    else if (TryPrepareGuardDogPhasingPopUp(gBattlerTarget))
-        gBattlescriptCurrInstr = BattleScript_GuardDogPreventsPhasingOut;
+    // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES -- Guard Dog's pop-up before the script's "But it failed!".
+    else if (TryFailWithGuardDogPopUp(gBattlerTarget, cmd->jumpInstr))
+        return;
     // FORK: innate-aware Guard Dog / Suction Cups block Roar/Whirlwind (FEATURE_INNATE_ABILITIES).
     // BattleScript_EffectRoar's own jumpifability lines only see the chosen slot, so credit an
     // innate here (only when the chosen ability differs, so chosen holders keep the script's path).
@@ -11565,6 +11565,7 @@ void BS_TryPsychoShift(void)
     else
     {
         gBattlescriptCurrInstr = cmd->failInstr;
+        TryAnnouncePsychoShiftBlocker(); // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES -- the blocking ability's pop-up first
         return;
     }
     gBattleMons[gBattlerTarget].status1 = gBattleMons[gBattlerAttacker].status1 & STATUS1_ANY;
@@ -12189,10 +12190,14 @@ void BS_JumpIfAbilityPreventsRest(void)
         gBattlescriptCurrInstr = cmd->jumpInstr;
     else if (IsShieldsDownProtected(battler, ability))
         gBattlescriptCurrInstr = cmd->jumpInstr;
-    else if (IsAbilityOnSide(battler, ABILITY_SWEET_VEIL))
+    else if (IsAbilityOnSide(battler, ABILITY_SWEET_VEIL)
+          || IsInnateOnSide(battler, ABILITY_SWEET_VEIL)) // FORK: innate Sweet Veil blocks Rest too (FEATURE_INNATE_ABILITIES)
         gBattlescriptCurrInstr = cmd->jumpInstr;
     else
         gBattlescriptCurrInstr = cmd->nextInstr;
+
+    if (gBattlescriptCurrInstr == cmd->jumpInstr)
+        TryAnnounceRestBlocker(battler); // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES -- the blocking ability's pop-up first
 }
 
 void BS_CutOneThirdHpAndRaiseStats(void)
