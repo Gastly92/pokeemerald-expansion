@@ -2075,7 +2075,7 @@ recoil site in `src/battle_move_resolution.c` (`EFFECT_RECOIL` / `EFFECT_CHLOROB
 `IsAbilityAndRecord(...ABILITY_ROCK_HEAD)` test — an `IsInnateActive` clause that does NOT record (the
 chosen slot stays identity, mirroring the Propeller Tail/Stalwart pattern). No pop-up (silent).
 AI is innate-aware: `AI_IsDamagedByRecoil` (`src/battle_ai_util.c`) credits an innate Rock Head so the AI
-doesn't over-fear its own recoil. Canon only so far. Many canon Rock Head users are frontier sets; those whose
+doesn't over-fear its own recoil. Many canon Rock Head users are frontier sets; those whose
 every real ability is now innate take a fork-owned override.
 
 ### ABILITY_LONG_REACH

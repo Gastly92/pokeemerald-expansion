@@ -13193,9 +13193,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOUGING_FIRE,
         INNATES(
             ABILITY_INNER_FOCUS,
+            ABILITY_INTIMIDATE,
             ABILITY_LEGENDARY,
             ABILITY_PRESSURE,
-            ABILITY_PROTOSYNTHESIS
+            ABILITY_PROTOSYNTHESIS,
+            ABILITY_ROCK_HEAD,
+            ABILITY_TOUGH_CLAWS
         )
     },
     { // 1021
