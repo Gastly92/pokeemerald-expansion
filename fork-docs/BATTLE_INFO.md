@@ -41,10 +41,10 @@ path.
 | Page | Shows |
 |---|---|
 | **Overview** | Every revealed foe's type icons, *possible* Speed range (scaled by everything known about it) and HP, sorted into a speed tier against your effective Speed and HP (see below) |
+| **Battle Log** | Every move used this battle, newest first, with the damage it dealt as a % of the target's max HP (see below) |
 | **Field** | Weather, terrain, whole-field effects (Trick Room, Gravity, Magic/Wonder Room, the Sports, Fairy Lock, Ion Deluge) with turns left, plus entry hazards and side screens for both sides |
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides, with turns left where the duration is knowable (see below) |
 | **Stat Changes** | Each on-field battler's non-default stat stages, e.g. `Atk+2 Spe-1`, both sides |
-| **Battle Log** | Every move used this battle, newest first, with the damage it dealt as a % of the target's max HP (see below) |
 | **Foe** | The foe's revealed-only party data; `<>` cycles mons — species/gender/level, current `HP n%` (title row, rounded **up** so it reads safely against the [damage preview](DAMAGE_PREVIEW.md#display)'s rounded-down range; 99 at most below full) or `FNT` when fainted, moves/PP/ability/held item |
 | **Base Stats** | One of your party mons (`{UP}{DOWN}`, bench included) and the selected foe as a stat table, each with the Mega/Primal form(s) it can reach |
 | **Innates** | The same foe's innate list, one per row (`FEATURE_INNATE_ABILITIES` only — the page does not exist when the feature is off) |
@@ -71,7 +71,7 @@ rows and has no room for a tenth - check the arithmetic against `LINE_H` and the
 footer's `y` before adding one.
 
 **Overview leads the cycle and is the default page on first open**, because it is
-the page that actually drives a turn decision.
+the page that actually drives a turn decision. The Battle Log follows it as page 2.
 
 ### Position memory resets between battles — deliberately
 
@@ -311,7 +311,7 @@ You Salamence   95  135   80  110   80  100  600
 Foe Charizard   78   84   78  109   85  100  534
   Mega X        78  130  111  130   85  100  634
   Mega Y        78  104   78  159  115  100  634
-{UP}{DOWN}: You  <>: Foe  L/R: Page  B: Close        6/7
+{UP}{DOWN}: You  <>: Foe  L/R: Page  B: Close        7/8
 ```
 
 Nothing else in the game surfaces this. The summary screen shows *computed* stats — the
