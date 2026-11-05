@@ -5511,9 +5511,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 248,
-            .def = 4,
             .spd = 252,
-            .spe = 4
+            .spe = 8
         ),
         .teraType = TYPE_WATER,
     },
@@ -10199,8 +10198,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ev = EVS(
             .hp = 248,
             .atk = 252,
-            .def = 4,
-            .spd = 4
+            .spd = 8
         ),
         .teraType = TYPE_GRASS,
     },
