@@ -490,7 +490,10 @@ species carries the Legendary innate")`, plus the forms they take in battle (Meg
 Heatran, Diancie, Magearna and Zeraora, Pirouette Meloetta, Gigantamax Melmetal and Urshifu, the
 four Tera Ogerpon, Terastal and Stellar Terapagos). No species carries both Legendary and Mythical.
 
-**Known limit.** A Zygarde-10% with Power Construct becomes Complete Zygarde, which carries
-Mythical: it keeps its x1.5 for the rest of that stay, but gets x2 if it comes back in as Complete.
+**Zygarde.** Complete and Mega Zygarde carry Mythical, and a Power Construct Zygarde reaches
+both mid-battle (Mega through free gimmicks). So the only Power Construct Zygarde is the
+`TIER_MYTHICAL` 50% forme. The legendary-tier Zygarde-10% is the Aura Break forme, which never
+changes shape. A 10% Power Construct would keep x1.5 through its first stay as Complete, then
+come back in at x2.
 
 Covered by `test/fork/legendary.c`.

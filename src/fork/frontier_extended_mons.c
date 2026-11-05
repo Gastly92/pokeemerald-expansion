@@ -25931,7 +25931,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GROUND,
     },
     {
-        .species = SPECIES_ZYGARDE_10_PC,
+        .species = SPECIES_ZYGARDE_10_AURA_BREAK,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_LIFE_ORB,
         .moves =
@@ -25941,7 +25941,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_OUTRAGE,
             MOVE_EXTREME_SPEED
         },
-        .ability = ABILITY_POWER_CONSTRUCT,
+        .ability = ABILITY_AURA_BREAK,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -25951,7 +25951,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GROUND,
     },
     {
-        .species = SPECIES_ZYGARDE_10_PC,
+        .species = SPECIES_ZYGARDE_10_AURA_BREAK,
         .tags = FORMAT_SINGLES,
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
@@ -25961,7 +25961,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_IRON_HEAD
         },
-        .ability = ABILITY_POWER_CONSTRUCT,
+        .ability = ABILITY_AURA_BREAK,
         .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

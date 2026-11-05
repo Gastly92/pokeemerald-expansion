@@ -9451,14 +9451,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0718
         SPECIES_ZYGARDE_10,
         INNATES(
+            ABILITY_LEGENDARY,
+            ABILITY_PRESSURE,
             ABILITY_REGENERATOR
         )
     },
     { // 0718
         SPECIES_ZYGARDE_10_PC,
         INNATES(
-            ABILITY_LEGENDARY,
-            ABILITY_PRESSURE,
             ABILITY_REGENERATOR
         )
     },
