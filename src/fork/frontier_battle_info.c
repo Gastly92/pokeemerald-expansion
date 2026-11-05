@@ -101,13 +101,13 @@ enum
     // actually drives a turn decision, so it's both first in the L/R cycle and the default
     // landing page.
     INFO_PAGE_OVERVIEW,
+    // Every move used this battle and the damage it did, newest first, as a % of the
+    // target's max HP (see DrawLogPage). Second, right after Overview: what just happened
+    // is the next thing a turn decision reaches for.
+    INFO_PAGE_LOG,
     INFO_PAGE_FIELD,
     INFO_PAGE_CONDITIONS,
     INFO_PAGE_STATS,
-    // Every move used this battle and the damage it did, newest first, as a % of the
-    // target's max HP (see DrawLogPage). Last of the whole-field pages, ahead of the foe-scoped
-    // ones, so the foe-scoped block stays contiguous.
-    INFO_PAGE_LOG,
     INFO_PAGE_FOE,
     // The foe's base stats, plus a row per Mega/Primal form its species can reach.
     // Foe-scoped like the Foe page (it shares tFoeIndex), and placed directly after it so
