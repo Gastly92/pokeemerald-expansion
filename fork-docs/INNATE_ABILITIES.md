@@ -787,9 +787,23 @@ the two things easiest to skip:
 
 This is the **source of truth for the exact semantics** of every allowlisted
 ability: what it does, where it's wired, the deliberate pure-boon divergences,
-the AI plumbing, and the species-selection rationale. It used to live as a giant
+the AI plumbing, and the species-selection *rule*. It used to live as a giant
 header comment in `src/fork/innate_abilities.c`; it was moved here to keep that
-file's reads cheap. Each ability is a `###` block — grep this file for the
+file's reads cheap.
+
+**Which species carry an ability is not listed here.** `sSpeciesInnates[]` in
+`src/fork/innate_abilities.c` is the only record of that, and CI validates it; a
+prose copy only drifts. Each block's `**Species:**` line gives the selection rule
+(canon only, canon plus a flavor set, …) in one sentence. To see the carriers:
+
+```bash
+awk -v a=ABILITY_X '/^ *SPECIES_/{s=$1} $1==a"," || $1==a {sub(",","",s); print s}' src/fork/innate_abilities.c
+```
+
+Chosen-ability overrides live in `src/fork/species_ability_overrides.c` and
+frontier sets in `src/fork/frontier_extended_mons.c`; neither is restated here.
+A sole-ability species that is also a frontier set takes the innate **plus** a
+chosen override in an empty slot, so the innate is observable. Each ability is a `###` block — grep this file for the
 ability name (e.g. `### ABILITY_STURDY`) to read just the one you need rather
 than the whole record. When you wire a new ability (Step 2 / Step 5), add or edit
 its block here and keep the compact allowlist in
@@ -829,10 +843,9 @@ same as the real ability's `GetBattlerAbility()` path. AI is innate-aware: the h
 any shared calc the AI runs, so the AI's dedicated Regenerator switch/pivot reads
 (`ShouldSwitchIfAbilityBenefit`, the bad-odds and hazard-switchin checks in `src/battle_ai_switch.c`,
 and `ShouldPivot` in `src/battle_ai_util.c`) credit an innate Regenerator via `BattlerHasAbility()`,
-so the AI values an innate-only Regenerator's pivot heal. This populates the canon Regenerator
-users so they keep their signature pivot heal regardless of which ability slot the build
-picks, plus a few flavor regenerators (Staryu/Starmie's regrowing core, the axolotl Wooper
-line, Zygarde's reassembling cells).
+so the AI values an innate-only Regenerator's pivot heal.
+
+**Species:** canon users, plus a few flavor regenerators.
 
 ### ABILITY_UNAWARE
 
@@ -855,10 +868,8 @@ the `AI_IsAbilityOnSide` reads; `IsInnateActive` at the switch site). All are ab
 real Unaware blanks the foe's stat stage in both directions (so it ignores a foe's *drop* too,
 and takes more damage / deals less for it); the innate ignores only the foe's *boosts* and
 keeps the foe's *drops* (always the favorable half — see `InnateUnawareBoonStage`, `battle_util.c`).
-This populates the canon Unaware users so they keep the stat-ignore no matter which slot the
-build picks, plus flavor picks too dull/dazed/asleep to notice the foe's buffs (Numel's
-"doesn't notice being hit", the dazed Psyduck line, the ever-sleeping Komala, the unbothered
-Snorlax line).
+
+**Species:** canon users, plus flavor picks too dull, dazed or asleep to notice the foe's buffs.
 
 ### ABILITY_STURDY
 
@@ -874,15 +885,9 @@ ability. AI is innate-aware too: Sturdy's survival reasoning lives in DEDICATED 
 the shared damage calc (so unlike Unaware it is NOT automatic and had to be wired) — the endure/KO
 predictor (`CanEndureHit`), the OHKO-move avoidance, `BattlerHasMaxHPProtection` (`src/battle_ai_util.c`),
 and the switch-in KO simulation (`src/battle_ai_switch.c`) each credit an innate Sturdy via
-`BattlerHasAbility()`/`SpeciesHasInnate()`, so the AI doesn't blunder a hit it can't actually KO. This
-populates the canon Sturdy users so they keep the signature endure no matter which slot the build
-picks (Mega/regional/form constants are listed so the innate survives a mid-battle form change),
-plus an "impenetrable shell" flavor line (Shellder/Cloyster, whose shell "even a missile can't
-break") that lacks the real ability. Species whose ONLY ability is Sturdy are omitted as redundant
-when unused by the frontier roster (Cosmoem, Togedemaru-Totem). Ogerpon-Cornerstone is the
-exception — it is also sole-Sturdy, but because it IS a frontier set it instead takes the innate
-AND a fork-owned chosen Defiant (`species_ability_overrides.c`), so its frontier slot isn't spent
-on the now-innate Sturdy.
+`BattlerHasAbility()`/`SpeciesHasInnate()`, so the AI doesn't blunder a hit it can't actually KO.
+
+**Species:** canon users.
 
 ### ABILITY_NATURAL_CURE
 
@@ -901,9 +906,9 @@ innate-aware: the cure isn't in any shared calc, so the AI's dedicated Natural C
 reads credit an innate one via `BattlerHasAbility()` — the switch-to-cure heuristic
 (`ShouldSwitchIfAbilityBenefit`, factored into `ShouldSwitchForNaturalCure` like Regenerator),
 the Yawn anti-sleep switch (`ShouldSwitchIfBadlyStatused`), and the burned/frostbitten
-force-switch move scoring (`src/battle_ai_main.c`). This populates the canon Natural Cure users
-so they keep the signature self-cure no matter which slot the build picks, plus herbal/aromatic
-healer flavor (the Chikorita line's restorative aroma, Bellossom's revitalizing dance).
+force-switch move scoring (`src/battle_ai_main.c`).
+
+**Species:** canon users, plus herbal/aromatic healer flavor.
 
 ### ABILITY_PRANKSTER
 
@@ -926,15 +931,8 @@ The doubles Psychic-Terrain heuristic in `src/battle_ai_field_statuses.c` IS mad
 (Psychic Terrain blanks priority moves regardless of source): beside its chosen-only
 `AI_IsAbilityOnSide(ABILITY_PRANKSTER)` reads, the fork helper `AI_IsInnateOnSide()` also credits
 an innate Prankster, so the AI values/avoids the terrain for an innate-Prankster side too.
-Two species groups: the canon Prankster users (the trickster lines keep the signature priority
-no matter which slot the build picks; Mega/regional/Gmax forms are listed only where the form's
-ability data ALSO carries Prankster — Grimmsnarl-Gmax yes; Banette/Sableye/Meowstic Megas and
-the Therian formes have a DIFFERENT signature ability, so they are omitted like the Natural Cure
-rule), plus a deliberately small, on-theme flavor set lacking the real ability (Hoopa the
-"Mischief Pokémon," the playful Aipom line, the illusion-trickster Unovan Zorua line — the
-flavor set is narrower than other abilities' because Prankster's +1 priority is potent).
-Cottonee/Whimsicott, Klefki and Hoopa are also innate-Levitate floaters, so they take the
-combined `INNATES(ABILITY_LEVITATE, ABILITY_PRANKSTER)` list.
+
+**Species:** canon users (the trickster lines), plus a tight flavor set.
 
 ### ABILITY_OVERGROW / ABILITY_BLAZE / ABILITY_TORRENT / ABILITY_SWARM
 
@@ -1019,14 +1017,9 @@ Breaker pierces an innate Filter exactly as it would the real ability. AI is cor
 reduction lives in the shared damage calc the AI runs keyed off the real battler (like Unaware's
 stat-ignore), so the AI both threatens and respects an innate Filter on-field; the off-field
 switch-in damage prediction is left unwired (the Unaware scope call — a 25% reduction is not a
-KO-flipping immunity like Levitate/Sturdy). Canon only so far (no flavor picks yet — the Filter theme is hard
-to attribute beyond its real users): every species whose ability data carries Filter in any slot
-(Mr. Mime and Mime Jr.'s slot-1 Filter, Revavroom's HA, Mega Aggron whose Mega ability data is
-Filter), so the signature survives whichever slot a build picks. Mega Aggron already carries innate
-Sturdy (persisting from base Aggron), so it takes the combined `INNATES(STURDY, FILTER)` list. One flavor pick as a legendary buff: **Cresselia**, whose wings shed shining particles "like a veil"; it
-stacks with her innate Multiscale on a super-effective first hit. A second flavor pick: **Stakataka**, a wall
-of stacked stones, carries Filter beside its innate Solid Rock, so a super-effective hit takes 0.75 x 0.75. A third legendary buff:
-**Celebi**, whose Psychic/Grass typing carries seven weaknesses including a 4x Bug one.
+KO-flipping immunity like Levitate/Sturdy).
+
+**Species:** canon users, plus legendary-buff flavor picks.
 
 ### ABILITY_PRESSURE
 
@@ -1073,12 +1066,9 @@ Out — no `flinchedLastTurn` check. Suppression parity holds via
 `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); Stench is not breakable, so Mold
 Breaker never touches it, same as the real ability. AI needs no wiring: nothing in `src/battle_ai_*.c`
 reads `ABILITY_STENCH` (the AI doesn't model the flinch chance), so an innate Stench is exactly as
-(in)visible to the AI as a real one. Two species groups: the canon Stench users (Grimer/Muk,
-Koffing/Weezing's HA, Stunky/Skuntank, the Trubbish/Garbodor line incl. Gmax, and Gloom's HA — each
-keeps the signature flinch no matter which slot the build picks; Galarian Weezing swaps its HA to
-Misty Surge and is omitted), plus a tight foul-odor flavor set lacking the real ability (Oddish and
-Vileplume completing the canon Gloom line — the "smells atrocious" weed line — and the Gulpin line's
-poison-gas bags). No frontier roster sets hardcoded Stench, so none needed freeing.
+(in)visible to the AI as a real one.
+
+**Species:** canon users, plus a tight foul-smelling flavor set.
 
 ### ABILITY_BATTLE_ARMOR / ABILITY_SHELL_ARMOR
 
@@ -1109,10 +1099,6 @@ Dwebble/Crustle's Sturdy, Slowbro-Mega's Regenerator, Escavalier's Swarm, Chewtl
 Swim, Klawf's Regenerator), so they take a combined `INNATES(...)` list with the armor added. NOTE:
 base Slowbro/Samurott-Hisui are intentionally NOT given the armor — their data carries Regenerator /
 Sharpness there, not the armor, so only the form whose data actually carries it gets the innate.
-Frontier roster sets that hardcoded an armor are freed (Step 3.5): Omastar/Kabutops keep their real
-Weak Armor, Drapion its Sniper, Goodra-Hisui its Sap Sipper, Drednaw its Strong Jaw, while the
-all-real-abilities-now-innate species take a fork-owned chosen override (Armaldo/Samurott → Water
-Absorb, Torterra → Sand Stream, Turtonator → Flame Body) in `species_ability_overrides.c`.
 
 ### ABILITY_SPEED_BOOST
 
@@ -1137,17 +1123,9 @@ innate-aware: the boost isn't in any shared damage calc, but the two AI reads th
 Speed Boost — "don't bother lowering an innate Speed Boost foe's Speed" in `CanLowerStat`
 (`src/battle_ai_util.c`) and `CanStatChange` (`src/battle_stat_change.c`) — now credit an innate holder
 via `IsInnateActive()`; the ability-transfer scoring (`BattlerBenefitsFromAbilityScore`) is left alone
-since innates are never transferable. Canon only so far (no flavor picks yet — a +1 Speed-per-turn snowball is
-potent, like the pinch / weather-doubler / Pressure abilities): every species whose ability data
-carries Speed Boost in any slot, so the signature survives whichever slot a build picks. Forms are
-listed only where the form's ability data still carries it (Blaziken-Mega's ability data IS Speed
-Boost, so it gets the innate; Sharpedo-Mega → Strong Jaw and Scolipede-Mega → Shell Armor are
-omitted for Speed Boost). The Torchic line (innate Blaze) and the Venipede line (innate Swarm)
-already carry an innate, so they take a combined `INNATES(...)` list with Speed Boost added.
-Frontier roster sets that hardcoded Speed Boost are freed (Step 3.5): Ninjask → Infiltrator,
-Sharpedo → Rough Skin, Yanmega → Tinted Lens, Scolipede → Poison Point, Espathra → Opportunist
-(each a real, complementary slot), while Blaziken — whose only real abilities (Blaze, Speed Boost)
-are now BOTH innate — takes a fork-owned chosen Sheer Force override in `species_ability_overrides.c`.
+since innates are never transferable.
+
+**Species:** canon only — a +1 Speed-per-turn snowball is potent.
 
 ### ABILITY_LIMBER
 
@@ -1174,9 +1152,7 @@ slot the build picks; Mega Lopunny → Scrappy and Galarian Stunfisk → Mimicry
 omitted), plus a tight supple-serpent flavor set lacking the real ability (the coiling snakes Ekans/Arbok
 and Seviper, whose limber bodies fit the theme). Purrloin/Liepard already carry innate Prankster and
 Mareanie/Toxapex already carry innate Regenerator, so they take a combined `INNATES(...)` list with Limber
-added. Frontier roster sets that hardcoded Limber are freed (Step 3.5): Persian → Technician, Lopunny →
-Cute Charm, Liepard → Unburden, Toxapex → Merciless, Graploct → Technician (each a real, complementary
-slot the now-innate Limber freed).
+added.
 
 ### ABILITY_CUTE_CHARM
 
@@ -1206,13 +1182,7 @@ Jigglypuff lines). Forms are listed only where the form's ability data still car
 Buneary (Run Away/Klutz/Limber), Bewear (Fluffy/Klutz/Unnerve), Enamorus-Therian (Overcoat) and
 Clefable-Mega lack it in their data and are omitted; only base Lopunny / Stufful's own line member /
 Enamorus-Incarnate carry it. Clefable already carries innate Unaware and Lopunny innate Limber, so
-they take a combined `INNATES(...)` list with Cute Charm added. Frontier roster sets that hardcoded a
-chosen Cute Charm are freed (Step 3.5): Enamorus → Contrary (its real HA), while Lopunny — whose only
-real non-drawback abilities (Cute Charm, Limber) are now BOTH innate — takes a fork-owned chosen
-Sheer Force override in `species_ability_overrides.c` (its slot-2 Limber, now innate-redundant). Audino
-is intentionally NOT given the innate: its ability data lacks Cute Charm (Healer/Regenerator/Klutz);
-it only runs Cute Charm as a fork-chosen ability via the override table, so its frontier set is left
-to keep that chosen Cute Charm and needs no freeing.
+they take a combined `INNATES(...)` list with Cute Charm added.
 
 ### ABILITY_OBLIVIOUS
 
@@ -1234,17 +1204,8 @@ are credited via `IsInnateActive()`/`BattlerHasAbility()` — `AI_CanBeInfatuate
 foe), `CanIntimidateLowerOpponentAtk` (don't switch in an Intimidator against one, in `src/battle_ai_switch.c`),
 and the Cute-Charm contact-punish predictor's attacker-Oblivious check (`src/battle_ai_util.c`). The AI's Taunt
 scoring does not model Oblivious immunity even for the real ability, so it needs no innate wiring (parity).
-Canon only so far (no flavor picks yet): the canon roster — the perpetually-dazed Slowpoke/Numel/Spheal lines, the
-clueless Smoochum/Jynx, the spaced-out Swinub line, etc. — already embodies the "oblivious" theme, so no
-extra flavor picks are warranted (keeping the set tight). Every species whose ability data carries Oblivious
-in any slot gets it, so the immunity survives whichever slot a build picks; forms are listed only where the
-form's data still carries it (the Slowpoke line's Galarian/Mega forms swap to Own Tempo/Shell Armor and are
-omitted; Tsareena loses Oblivious on evolving, so only Bounsweet/Steenee get it). Many species already carry
-other innates (the Slowpoke line's Regenerator, Illumise's Prankster, the Wailmer line's Pressure, Numel's and
-Dondozo's Unaware, Feebas's Swift Swim), so they take a combined `INNATES(...)` list with Oblivious added.
-Frontier roster sets that hardcoded a chosen Oblivious are freed (Step 3.5): Whiscash → Hydration (its real HA),
-while Dondozo — whose only non-Water-Veil real abilities (Unaware, Oblivious) are now BOTH innate — takes its
-real Water Veil slot (burn immunity), no override needed.
+
+**Species:** canon only — the canon roster already embodies the theme.
 
 ### ABILITY_SAND_VEIL / ABILITY_SNOW_CLOAK
 
@@ -1269,25 +1230,9 @@ switch-in `GetSwitchinWeatherImpact` in `src/battle_ai_switch.c`) and the weathe
 weather to enable the evasion). The off-field accuracy prediction is left unwired (the Unaware/Filter
 scope call — a 25% evasion boost is not a KO-flipping immunity). The overworld wild-encounter-rate
 halving (`src/wild_encounter.c`) reads the party lead's chosen ability only and is deliberately left
-alone: innates are a battle-only feature (no battle state out of battle). Canon-only (no flavor
-picks — evasion is a contentious, can-be-frustrating mechanic, so like Prankster / the potent
-abilities the set stays tight to species whose ability data carries it in any slot): the signature
-survives whichever slot a build picks (Garchomp's slot-1 Sand Veil, Gliscor's, Donphan's HA, etc.).
-Forms are listed only where the form's ability data still carries it, plus the Mega mirrors (both
-Garchomp Megas keep it, though their own data swaps to Sand Force / Levitate; Sandaconda-Gmax keeps Sand Veil;
-Vanilluxe / Cetitan / Tyranitar lose it on evolving and are omitted, so only the pre-evos get it).
-Many species already carry other innates (Sandshrew/Sandslash's Sand Rush, the Geodude line and
-Donphan's Sturdy, Stunfisk's Limber, the Swinub line's Oblivious, Articuno's Pressure, the Vanillite
-line and Froslass's Levitate, the Sandshrew-Alola line / Cubchoo / Beartic's Slush Rush), so they take
-a combined `INNATES(...)` list with the evasion ability added. Frontier roster sets that hardcoded a
-chosen Sand Veil / Snow Cloak are freed (Step 3.5): Glaceon → Ice Body, Froslass → Cursed Body and
-Wugtrio → Gooey each take a real complementary slot, while the species whose ALL relevant real
-abilities are now innate take a fork-owned chosen override (`species_ability_overrides.c`) — Donphan →
-Sand Stream and Articuno → Snow Warning, each a stable `:x:` weather-setter that also turns on the mon's
-own evasion innate. Sandslash (→ Earth Eater), Sandslash-Alola (→ Screen Cleaner) and Beartic
-(→ Sheer Force) were re-pointed off their weather-setters: each also carries a matching weather
-speed-doubler innate, which the self-set weather turned into a free x2 Speed every switch-in. See the
-"no self-enabling weather" rule under the speed-doubler section above.
+alone: innates are a battle-only feature (no battle state out of battle).
+
+**Species:** canon only — evasion is a contentious, frustrating mechanic.
 
 ### ABILITY_COMPOUND_EYES / ABILITY_KEEN_EYE / ABILITY_ILLUMINATE
 
@@ -1336,14 +1281,7 @@ Keen Eye + Prankster though its Mega data is Magic Bounce). Watchog carries BOTH
 Many species already carry other innates (Yanma's Speed Boost; the Joltik/Galvantula/Blipbug/Dottler
 Swarm; Staryu/Starmie's Natural Cure + Regenerator; Volbeat's Prankster + Swarm; Sableye/Sableye-Mega/
 Meowstic-M's Prankster; Skarmory's Sturdy; Glameow's Limber; Stunky/Skuntank's Stench; Lycanroc-Midday's
-Sand Rush), so they take a combined `INNATES(...)` list with the accuracy ability added. Frontier roster
-sets that hardcoded one of these are freed (Step 3.5): Butterfree → Tinted Lens, Galvantula → Unnerve,
-Pidgeot → Big Pecks, Fearow → Sniper, Furret → Frisk, Lycanroc → Steadfast (each a real complementary
-slot), while the species whose ALL relevant real abilities are now innate take a fork-owned chosen
-override (`species_ability_overrides.c`) — Skarmory → Bulletproof and Volbeat → Synchronize, each a
-stable `:x:` pick. (Sableye is the exception: its only free real slot is Stall, a drawback that the
-vanilla Stall tests rely on, so it can't be overridden — its roster sets keep a redundant-but-harmless
-chosen Keen Eye instead.)
+Sand Rush), so they take a combined `INNATES(...)` list with the accuracy ability added.
 
 ### ABILITY_INSOMNIA / ABILITY_VITAL_SPIRIT / ABILITY_SWEET_VEIL
 
@@ -1387,10 +1325,7 @@ precedent). Mewtwo-Mega-Y (its data is Insomnia in all three slots, so the chose
 Insomnia) is left as its existing Levitate row — an innate Insomnia would be dead weight. Many species
 already carry other innates (Hoothoot/Noctowl's Keen Eye, Spinarak/Ariados's Swarm, Murkrow's Prankster,
 the Shuppet/Pumpkaboo/Gourgeist Levitate, Capsakid/Scovillain's Chlorophyll, Rockruff/Lycanroc-Midnight's
-Keen Eye, Bounsweet/Steenee's Oblivious), so they take a combined `INNATES(...)` list. Frontier roster sets
-that hardcoded a chosen Insomnia / Vital Spirit / Sweet Veil are freed (Step 3.5) to a complementary real
-slot where one exists, or a fork-owned chosen override (`species_ability_overrides.c`) where all the
-species' real abilities are now innate.
+Keen Eye, Bounsweet/Steenee's Oblivious), so they take a combined `INNATES(...)` list.
 
 ### ABILITY_EARLY_BIRD
 
@@ -1446,9 +1381,7 @@ Gligar (combined with its innate Sand Veil) and Snorlax/Snorlax-Gmax (combined w
 each whose real ability data carries Immunity in some slot. (Zangoose also has slot-0 Immunity in its
 data, but is given innate Toxic Boost instead (see the status-conditional-boosts note): the two are contradictory and
 Toxic Boost is Zangoose's actual frontier identity.) Pastel Veil goes to
-Galarian Ponyta/Rapidash, the only species whose real ability data carries it. Frontier roster sets
-that hardcoded Pastel Veil are freed (Step 3.5): Rapidash-Galar → Anticipation (its real Hidden
-Ability slot).
+Galarian Ponyta/Rapidash, the only species whose real ability data carries it.
 
 ### ABILITY_THICK_FAT
 
@@ -1465,20 +1398,8 @@ the real ability. AI is correct for FREE: the reduction lives in the shared dama
 the AI runs keyed off the real battler (like Filter's / Unaware's reads), so the AI both threatens and
 respects an innate Thick Fat on-field; the off-field switch-in damage prediction is left unwired (the
 Unaware/Filter scope call — a 50% Fire/Ice reduction is not a KO-flipping immunity like Levitate/Sturdy).
-Two species groups: the canon Thick Fat users (every species whose ability data carries it in any slot,
-so the signature survives whichever slot a build picks — the Marill/Azumarill, Seel/Dewgong, Spheal line,
-Swinub line, Makuhita line, Spoink line, Miltank, Purugly, Snorlax line, Alolan Rattata line, Tepig/Pignite,
-Appletun, Lechonk line, and Cetoddle line, plus Mega Venusaur whose Mega ability data is Thick Fat — listed
-only where the form's ability data carries it; Raticate-Alola-Totem, sole-Thick-Fat and unused by the roster,
-is omitted as redundant like the Sturdy precedent), plus a tight blubber-themed flavor pick lacking the real
-ability (the Wailmer/Wailord whale line — insulated by thick blubber against heat and cold). Frontier roster
-sets that hardcoded Thick Fat are freed (Step 3.5): Raticate-Alola → Gluttony (eats its Sitrus early),
-Dewgong/Walrein → Ice Body, Snorlax → Gluttony (Immunity also innate), Miltank → Sap Sipper, Hariyama/Cetitan
-→ Sheer Force, Grumpig → Own Tempo, Purugly → Defiant, Appletun → Ripen, and the Mamoswine sets — whose three
-real abilities (Oblivious/Snow Cloak/Thick Fat) are ALL now innate — take a fork-owned chosen Sap Sipper
-override (`species_ability_overrides.c`), the grazing mammoth's answer to its Grass coverage. (That row was
-a chosen Snow Warning until the self-enabling-weather sweep: Mamoswine also has innate Slush Rush, so its
-own snow doubled its Speed for free.)
+
+**Species:** canon users, plus a tight flavor set.
 
 ### ABILITY_TECHNICIAN
 
@@ -1494,21 +1415,9 @@ Technician is NOT breakable, so Mold Breaker never touches it (same as the real 
 Neutralizing Gas / not-on-field are the relevant suppressors. AI is correct for FREE: the boost lives in the
 shared move-power calc the AI runs keyed off the real battler (like Filter's / Thick Fat's reads, and unlike
 Sturdy's dedicated survival helpers), so the AI both threatens and respects an innate Technician on-field; no
-dedicated `== ABILITY_TECHNICIAN` AI reads exist, so nothing else needs wiring. Canon only so far (no flavor picks yet):
-a flat +50% on every weak move is potent, so like the pinch / weather-speed abilities the set stays to species
-whose ability data carries Technician in any slot, so the signature survives whichever slot a build picks (the
-Meowth/Persian lines incl. their Alolan forms, the Scyther/Scizor line incl. Mega, Hitmontop, Smeargle, the
-Mr. Mime / Mime Jr. line, Breloom, Roserade, Kricketune, Ambipom, the Minccino/Cinccino line, Marshadow, the
-Toxtricity forms incl. Gigantamax, the Clobbopus/Grapploct line, the Maushold forms, and Fezandipiti). Many of
-these already carry other innates (Persian's Limber, Mr. Mime's / Mime Jr.'s Filter, the Scyther/Scizor line's
-Swarm, Kricketune's Swarm, Roserade's Natural Cure, Ambipom's Prankster, the Minccino/Cinccino line's Cute
-Charm, the Clobbopus/Grapploct line's Limber), so they take a combined `INNATES(...)` list with Technician
-added. Frontier roster sets that hardcoded Technician are freed (Step 3.5): Persian-Alola → Fur Coat, Kanto
-Persian → Unnerve, Mr. Mime → Soundproof, Scizor → Light Metal, Hitmontop → Intimidate, Breloom → Effect Spore,
-Roserade → Poison Point, Ambipom → Skill Link, Maushold → Friend Guard, Fezandipiti → Lingering Aroma; and the
-three species whose every real ability is now innate take a fork-owned chosen-ability override
-(`species_ability_overrides.c`): Marshadow (sole Technician) → Trace, Kricketune (Swarm + Technician) →
-Sheer Force, Grapploct (Limber + Technician) → Water Absorb.
+dedicated `== ABILITY_TECHNICIAN` AI reads exist, so nothing else needs wiring.
+
+**Species:** canon only — a flat +50% on every weak move is potent.
 
 ### ABILITY_IRON_FIST / ABILITY_RECKLESS / ABILITY_STRONG_JAW / ABILITY_TOUGH_CLAWS / ABILITY_SHARPNESS / ABILITY_MEGA_LAUNCHER / ABILITY_STEELWORKER / ABILITY_STEELY_SPIRIT / ABILITY_ROCKY_PAYLOAD / ABILITY_SAND_FORCE / ABILITY_ANALYTIC / ABILITY_ADAPTABILITY / ABILITY_PUNK_ROCK / ABILITY_STAKEOUT
 
@@ -1552,14 +1461,7 @@ abilities the set stays to species whose ability data carries the booster in any
 where its own data carries it, and a Mega whose base creature has the innate mirrors it as a pure boon —
 e.g. Gallade-Mega keeps Sharpness, Starmie-Mega keeps Analytic, Excadrill-Mega keeps Sand Force, even where
 the Mega's own ability differs). Many users already carry other innates, so they take a combined
-`INNATES(...)` list with the booster added. Frontier roster sets that hardcoded one of these are freed
-(Step 3.5) to a complementary REAL slot where one exists (e.g. Gigalith's Sand Force → chosen Sand Stream,
-Kleavor's Sharpness → chosen Sheer Force, Dracovish's Strong Jaw → chosen Water Absorb, Hitmonchan's Iron
-Fist → chosen Inner Focus); sets whose only complementary slots are themselves already innate are left as-is
-(still correct — the chosen booster provides the boost). Three sole-real-ability species take a
-fork-owned chosen-ability override (`species_ability_overrides.c`): Clawitzer (sole Mega Launcher) → Water
-Absorb, Melmetal (sole Iron Fist) → Filter, Lycanroc-Dusk (sole Tough Claws) → Rivalry (it was a chosen
-Sand Stream until the self-enabling-weather sweep — Lycanroc-Dusk also has innate Sand Rush).
+`INNATES(...)` list with the booster added.
 
 ### ABILITY_SERENE_GRACE
 
@@ -1584,16 +1486,8 @@ Serene Grace / Rainbow boost *certain* by detecting a **computed chance above th
 (`percentChance > additionalEffect->chance`) — NOT a direct `== ABILITY_SERENE_GRACE` check. Because the innate feeds
 its boost through `CalcSecondaryEffectChance`, an innate holder trips that gate exactly like the real ability, so no
 extra deterministic wiring is needed.
-This populates the canon Serene Grace users so they keep the signature effect-doubling no matter which slot a build
-picks (Togepi/Togetic/Togekiss, the Chansey/Happiny/Blissey line, Dunsparce/Dudunsparce incl. the three-segment form,
-Jirachi, Shaymin-Sky, the seasonal Deerling/Sawsbuck, Meloetta incl. the Pirouette form), plus a tight graceful/elegant
-flavor set lacking the real ability: the Gardevoir line (Ralts/Kirlia/Gardevoir/Gardevoir-Mega, the elegant "Embrace
-Pokémon"), the serene beauty Milotic, the lunar-blessing Cresselia, and the graceful Virizion (under the deterministic
-flags its Sharpness-boosted Air Slash and its Zen Headbutt flinch every other turn). Several flavor/canon picks already carry other
-innates, so they take a combined `INNATES(...)` list. Frontier roster sets that hardcoded Serene Grace are freed
-(Step 3.5) to a complementary REAL slot where one exists (Chansey/Blissey → Healer, Togekiss → Super Luck, Dudunsparce →
-Rattled); the three sole-real-ability species take a fork-owned chosen-ability override (`species_ability_overrides.c`):
-Jirachi → Bulletproof, Shaymin-Sky → Effect Spore, Meloetta → Punk Rock.
+
+**Species:** canon users, plus a tight graceful/elegant flavor set.
 
 ### ABILITY_MULTISCALE / ABILITY_SOLID_ROCK / ABILITY_FUR_COAT / ABILITY_ICE_SCALES / ABILITY_HEATPROOF / ABILITY_FRIEND_GUARD / ABILITY_WATER_BUBBLE
 
@@ -1633,20 +1527,7 @@ keyed off the real battler, so it both threatens and respects them. Per-ability 
   callers innate-aware for free. (The burn-*cure*-on-ability-gain site is left unwired: an innate is permanent, so
   a Water Bubble holder can never be burned in the first place, leaving nothing to cure.)
 
-Species selection is canon users (every species whose ability data carries the ability in any slot, so the
-signature survives whichever slot a build picks), plus a tight flavor extension where it completes an evolution
-line or theme: Heatproof adds the rest of Rolycoly's coal/lava line (Carkol, Coalossal, Coalossal-Gmax), and
-Friend Guard adds the support fairies that complete the Clefairy / Jigglypuff / Chansey lines (Clefable,
-Wigglytuff, Chansey, Blissey) alongside the canon pre-evos. The potent reducers (Multiscale, Solid Rock, Fur
-Coat, Ice Scales, Water Bubble) stay canon only, with one legendary buff: Multiscale on Cresselia, a full-HP
-wall that recovers with Moonlight (alongside innate Filter and Magic Bounce), and Ice Scales on Articuno, whose wing
-flaps "chill the air" (a special wall that runs Roost and Haze). Several species already carry other innates, so they take a
-combined `INNATES(...)` list. Frontier roster sets that hardcoded these are freed (Step 3.5) to a complementary
-REAL slot where one exists (Dragonite's Multiscale → chosen Inner Focus; Camerupt's Solid Rock → Magma Armor;
-Frosmoth's Ice Scales → Shield Dust; Persian-Alola's Fur Coat → Rattled; Rhyperior's Solid Rock → Lightning Rod;
-Araquanid's Water Bubble → Water Absorb); the all-real-abilities-innate / dead-weight-slot cases take a fork-owned
-chosen-ability override (`species_ability_overrides.c`): Lugia → Storm Drain, Carracosta → Water Absorb, Maushold →
-No Guard, Bronzong → Soundproof, Sinistcha → Water Absorb — each a stable `:x:` pick.
+**Species:** canon users, plus a tight flavor extension where it completes an evolution line or theme.
 
 ### ABILITY_GUTS / ABILITY_MARVEL_SCALE / ABILITY_QUICK_FEET / ABILITY_TOXIC_BOOST / ABILITY_FLARE_BOOST
 
@@ -1685,15 +1566,7 @@ check (Flare Boost) each credit an innate holder via `BattlerHasAbility()` so th
 Toxic Boost foe. The ability-transfer scoring (`BattlerBenefitsFromAbilityScore`, the Guts case) is left alone
 since innates are never transferable.
 
-**Species selection is canon only so far (no flavor picks yet)** — a status-fueled stat boost is potent, so like the pinch /
-weather abilities the set stays to species whose ability data carries the booster in any slot, so the signature
-survives whichever slot a build picks. Guts: the Rattata, Machop, Taillow, Shinx, Timburr lines, Flareon,
-Heracross (+ Mega, mirrored as a pure boon), the Larvitar/Makuhita/Tyrogue/Ursaring/Ursaluna lines, Throh,
-Squawkabilly (Green/Blue), Conkeldurr, Obstagoon, … . Quick Feet: Jolteon, Granbull, the Teddiursa/Ursaring,
-Poochyena, Zigzagoon (Hoenn + Galar), Shroomish lines. Marvel Scale: the Dratini line and Milotic. Flare Boost:
-the Drifloon line. Many already carry other innates, so they take a combined `INNATES(...)` list with the booster
-added (Heracross + Swarm, the Makuhita/Hariyama + Thick Fat, Larvitar + Sand Veil, Ursaring + Quick Feet, the
-Timburr line + Iron Fist, Obstagoon + Reckless, Milotic + Cute Charm + Serene Grace).
+**Species:** canon only — a status-fueled stat boost is potent.
 
 **TOXIC_BOOST's user is Zangoose, which carries innate Toxic Boost INSTEAD of innate Immunity.** Zangoose's real
 ability data is Immunity (slot 0) / Toxic Boost (HA), and it was earlier given innate Immunity — but the two are
@@ -1705,14 +1578,6 @@ Snorlax). This is the one place where a species' canon slot-0 ability is *not* i
 species has two contradictory candidate innates (a status-immunity vs a same-status-requiring boost) is to keep the
 one that matches how the species is actually used; Zangoose is currently the only such case (every other
 toxic-themed species is a Poison-type, type-immune to poison, so none competes for Toxic Boost).
-
-**Step 3.5 (frontier roster):** sets that hardcoded one of these are freed to a complementary REAL slot
-(Hariyama/Conkeldurr → Sheer Force; Flareon → Flash Fire; Machamp → No Guard; Heracross/Mightyena → Moxie;
-Ursaring → Unnerve; Milotic → Competitive; Obstagoon → Defiant; Luxray/Squawkabilly → Intimidate; Throh →
-Inner Focus; Ursaluna → Bulletproof; Swellow → Scrappy; Linoone → Gluttony; Drifblim → Unburden; Raticate →
-Run Away). Only **Zangoose** needed a `species_ability_overrides.c` row: its two Toxic Boost (Toxic Orb) sets are
-freed to a chosen **Sheer Force** in its empty slot 1 — not Immunity, which would block the poison its innate Toxic
-Boost needs (a stable `:x:` pick that also skips Life Orb recoil on the SD set).
 
 ### ABILITY_SUPER_LUCK / ABILITY_SNIPER / ABILITY_MERCILESS
 
@@ -1758,33 +1623,7 @@ issue. What the AI *does* keep:
 (Lesson for future crit-touching work: the crit-chance calc is AI-hot and budget-bound — keep it
 `ctx->innatesEnabled`-gated and do **not** set that flag on the AI's `ShouldCalcCritDamage` context.)
 
-**Species (canon, plus one flavor pick** — crit boosts are potent and hard to justify thematically): every
-species whose ability data carries the ability in any slot, in dex order, so the signature survives whichever
-slot a build picks. Sniper: the Beedrill, Spearow/Fearow, Horsea/Seadra/Kingdra, Spinarak/Ariados,
-Remoraid/Octillery, Skorupi/Drapion, Binacle/Barbaracle and Sobble/Drizzile/Inteleon lines (Mega Beedrill /
-Mega Barbaracle / Inteleon-Gmax mirror the base per the Mega convention), plus **Kantonian Farfetch'd** — the
-Farfetch'd line review's one flavor pick, grounded in the repo's own data rather than dex prose: all three forms
-list `ITEM_LEEK` as a wild held item (a crit-ratio item), and the Galarian line's evolution condition is
-`EVO_BATTLE_END … {IF_CRITICAL_HITS_GE, 3}`, so critical hits are the line's mechanical identity in-repo. Super Luck: the Togepi line, the
-Murkrow/Honchkrow line, Absol (+ its Megas), and the Pidove line. Merciless: the Mareanie/Toxapex line. Each
-new ability is merged into the existing innate row where a species already carries one (e.g. Ariados keeps
-Insomnia/Swarm, Kingdra keeps Swift Swim, Toxapex keeps Limber/Regenerator, Togekiss keeps Serene Grace).
-
-**Frontier (Step 3.5):** these abilities were previously *pending* (`:white_large_square:`), so many frontier
-sets had used them as a chosen pick beside an already-innate slot. Only the sets whose species has a
-complementary **real** `:x:` slot are re-pointed, needing no override — **Octillery → Moody** and
-**Kingdra → Damp** (each runs the new ability *plus* its innate). The remaining canon sets are deliberately
-**left on their now-innate-redundant real ability** (Sniper / Super Luck / Merciless) rather than freed.
-Freeing those would require `species_ability_overrides.c` rows **repurposing real slots** (none of these
-species has an empty slot to fill), and that table is consulted unconditionally by `GetSpeciesAbility`
-(it is *not* feature-gated) — so the row removes the real ability **globally** even with the feature off,
-breaking upstream tests that explicitly select it (e.g. `crit_chance.c` / `deterministic_critical_hits.c`
-do `PLAYER(SPECIES_TOGEKISS) { Ability(ABILITY_SUPER_LUCK); }`). A set left on its real
-Sniper/Super Luck/Merciless keeps working unchanged — the chosen ability simply equals the innate
-(redundant but harmless; the effect sites guard against double-applying), so only the second-ability
-*upgrade* is forgone. (An earlier version of this note also blamed the override table's linear scan for
-the `ai_thinking_time.c` budget — overstated: in-battle reads use the cached `gBattleMons[].ability`, not
-`GetSpeciesAbility`. **Empty-slot** override rows remain fine — see the refined override rule.)
+**Species:** canon, plus one flavor pick — crit boosts are potent and hard to justify thematically.
 
 ### ABILITY_SHIELD_DUST / ABILITY_TINTED_LENS / ABILITY_SCRAPPY / ABILITY_WONDER_SKIN / ABILITY_TANGLED_FEET
 
@@ -1874,37 +1713,7 @@ moment the session's first innate lookup happened to land. The index is now a di
 needs no pre-fill), built by a single linear pass over the rows. Lookups became O(1) as well, and
 neither the build nor the lookup grows superlinearly as the table does.
 
-**Species (canon only so far, no flavor picks yet):** every species whose ability data carries the ability in any
-slot, in dex order, merged into existing rows where the species already carries an innate. Shield Dust:
-Caterpie, Weedle, Wurmple + Dustox, Scatterbug + Vivillon, Cutiefly/Ribombee, Snom/Frosmoth and
-Venomoth (Spewpa is deliberately excluded — its own data is Shed Skin/Friend Guard, not Shield Dust,
-and the accuracy-abilities integrity test pins that exclusion).
-Tinted Lens: Butterfree(+Gmax), Venonat/Venomoth, Hoothoot/Noctowl, Illumise, Yanmega, Sigilyph,
-Braviary-Hisui, Nymble/Lokix, plus the flavor pick **Necrozma** (base form only; Bulbapedia Biology: it
-fires absorbed light as lasers "using the power of a prism to blast through anything"). Scrappy: Kangaskhan(+Mega, mirroring the base), Farfetch'd-Galar/
-Sirfetch'd, Miltank, Taillow/Swellow, Loudred/Exploud, Herdier/Stoutland, Pancham/Pangoro,
-Decidueye-Hisui, Flamigo. **Mega Lopunny carries the innate** rather than being omitted under the
-sole-ability-redundant rule: the override table spends all three of its slots (Sheer Force / Klutz /
-Sheer Force), so its data Scrappy is never the chosen ability and the innate is the only thing that
-grants it. Slot 1 mirrors the base form's Klutz on purpose — it had been Sheer Force, which deleted
-the Fake Out flinch of every Lopunny set that Mega Evolved.
-Wonder Skin: Skitty/Delcatty, Venomoth, Sigilyph, Bruxish. Tangled Feet: the Pidgey line (+Mega
-Pidgeot, mirroring the base), Doduo/Dodrio, Spinda, Chatot, Mr. Rime, Flamigo.
-
-**Frontier (Step 3.5):** these abilities were pending, so many sets had spent their `.ability` slot on
-them. Every set was freed, three ways (this work also *refined* the override rule — see below):
-- **Complementary real slot** (no override needed): Kangaskhan → Inner Focus, Miltank → Sap Sipper,
-  Exploud → Soundproof, Sigilyph → Magic Guard, Braviary-Hisui → Sheer Force, Pangoro → Mold Breaker,
-  Flamigo → Costar. (Inner Focus / Magic Guard / Mold Breaker are still pending, so those re-points get
-  revisited when those abilities land — real-slot picks are allowed to be pending; the alternatives were
-  dead slots.)
-- **Empty-slot override rows** (`species_ability_overrides.c`, the established Venusaur/Blaziken shape —
-  filling an `ABILITY_NONE` slot deletes nothing and no upstream test can select an empty slot):
-  Butterfree → Effect Spore, Dustox → Poison Point, Swellow → Quick Feet, Decidueye-Hisui → Sniper,
-  Sirfetch'd → Super Luck, Frosmoth → Snow Warning, Lokix → Tough Claws.
-- **Left on the now-innate-redundant real ability** (harmless — the effect sites guard against
-  double-applying): Venomoth, Dodrio, Noctowl, Illumise, Yanmega, Ribombee — species with **no empty
-  slot**, where an override would have to repurpose a *real* slot.
+**Species:** canon only.
 
 **The refined override rule** (supersedes the blanket "no new rows" reading of the crit-calc note): the
 override table is consulted **unconditionally** by `GetSpeciesAbility` (`src/pokemon.c`) — it is NOT
@@ -1950,22 +1759,7 @@ source) — already innate-aware for Prankster; the fork helper `AI_IsInnateOnSi
 chosen-only `AI_IsAbilityOnSide()` reads for Gale Wings and Triage too (both the foe-harass and
 self-avoid branches), so the AI values/avoids the terrain for an innate-priority side.
 
-**Species (canon only so far, no flavor picks yet — a priority boost is potent, the same reasoning that kept
-Prankster's flavor set tight):** Gale Wings → the Fletchling line (Fletchling, Fletchinder, Talonflame —
-its canon Hidden-Ability users; no Mega/regional forms to mirror). Triage → Comfey (its only canon user),
-merged into Comfey's existing `INNATES(LEVITATE, NATURAL_CURE)` row. One legendary-buff pick: **Celebi**, the
-forest's healer, whose Giga Drain and Recover both carry `healingMove`, so its Grassy Terrain-boosted drain
-moves first.
-
-**Frontier (Step 3.5):** four hardcoded sets were freed. Both Talonflame Gale-Wings sets take a
-complementary REAL slot — chosen **Flame Body** (`:x:` in the progress doc → stable), burning contact
-attackers. Comfey is the ability-constrained case: its Triage (now innate) and Natural Cure (already
-innate) are both redundant, and its only other real ability, Flower Veil, is still pending
-(`:white_large_square:` → future churn). Its slot-1 Triage is pinned by upstream tests
-(`upper_hand.c`, `ai_doubles.c`) so it can't be repurposed; instead the innate-redundant, test-unpinned
-slot-2 Natural Cure is repurposed (`species_ability_overrides.c`) to chosen **Sweet Veil** — an
-already-implemented `:white_check_mark:` innate (stable, like Slurpuff's Unaware) that Comfey lacks
-natively and that is thematic (its soothing aroma keeps the doubles team awake).
+**Species:** canon only — a priority boost is potent (the reasoning that keeps Prankster's set tight).
 
 ### ABILITY_SURGE_SURFER / ABILITY_GRASS_PELT
 
@@ -2005,15 +1799,7 @@ companion `DoesInnateBenefitFromFieldStatus(battler, fieldStatus)` — mirroring
 `DoesAbilityBenefitFromFieldStatus(...)` reads at the Electric- and Grassy-Terrain call sites, so the AI
 values setting the terrain for an innate-Surge-Surfer / innate-Grass-Pelt side too.
 
-**Species (canon only so far, no flavor picks yet):** Surge Surfer → Raichu-Alola (its only canon user). Grass Pelt →
-the Skiddo line (Skiddo, Gogoat — its canon Hidden-Ability users).
-
-**Frontier (Step 3.5):** three hardcoded sets were freed. Raichu-Alola is the ability-locked case — its
-*only* real ability was Surge Surfer, now innate — so it takes a fork-owned chosen **Lightning Rod**
-override (`species_ability_overrides.c`; `:x:` in the progress doc → stable, on-theme for the Electric
-mouse: draws in Electric moves for immunity + a Sp. Atk boost), the same trick as Cornerstone Ogerpon.
-Gogoat's Grass-Pelt set instead frees its slot to its complementary REAL **Sap Sipper** (slot 0; Grass
-immunity + Attack boost), which stacks with the innate Grass Pelt Defense boost.
+**Species:** canon only.
 
 ### ABILITY_HUGE_POWER / ABILITY_PURE_POWER
 
@@ -2048,22 +1834,7 @@ ABILITY_PURE_POWER:` (`src/battle_ai_util.c`) is an ability-*value* rating for T
 decisions (keyed off the hypothetical ability, not the battler's real one), NOT an effect read, so it is
 correctly left untouched — same call the other calc-modifiers leave alone.
 
-**Species (canon only so far, no flavor picks yet):** Huge Power → the Marill line (Azurill, Marill, Azumarill — each
-merged with its existing innate Thick Fat) and the Diggersby line (Bunnelby, Diggersby). Pure Power → the
-Meditite line (Meditite, Medicham). Mega Mawile / Mega Starmie carry Huge Power as their *only, always-chosen*
-ability, so the innate could never be observed — omitted as redundant (their non-Mega bases are NOT Huge
-Power users, so there is no base-creature trait to persist through the Mega). Mega Medicham is likewise
-sole-Pure-Power and not in the roster, so it is omitted for the same reason.
-
-**Frontier (Step 3.5):** seven hardcoded sets were freed. The three Azumarill sets frees their slot to its
-complementary REAL **Sap Sipper** (slot 2 HA; `:x:` → stable; Grass immunity + Attack boost). Medicham
-(chosen Pure Power now innate; its only other real ability, Telepathy, is dead in singles) takes a chosen
-**Reckless** via a fork-owned override on its EMPTY slot 1 (`species_ability_overrides.c`) — an
-implemented `:white_check_mark:` innate it lacks, stable like Slurpuff's Unaware, powering up its High Jump
-Kick STAB. Diggersby's *other* two real abilities (Pickup, Cheek Pouch) are both still *pending* innates, so
-rather than bake in churn its now-redundant slot-2 Huge Power is repurposed via override to a chosen
-**Scrappy** (implemented `:white_check_mark:`, stable; audited — no test pins Diggersby's Huge Power) so its
-Normal STAB (Return / Quick Attack) hits Ghosts.
+**Species:** canon only.
 
 ### ABILITY_CLEAR_BODY / ABILITY_WHITE_SMOKE / ABILITY_HYPER_CUTTER / ABILITY_BIG_PECKS
 
@@ -2105,27 +1876,7 @@ in expecting to lower the Attack of an innate Clear Body / White Smoke / Hyper C
 (`src/battle_ai_util.c`) is an ability-*value* rating for Trace/Skill-Swap-style decisions (keyed off the
 hypothetical ability, not the battler's real one), NOT an effect read, so it is correctly left untouched.
 
-**Species (canon only so far, no flavor picks yet):** every species carrying one of the four in its real ability data,
-in any slot, plus the Mega/Gigantamax mirrors (the FORMS pure-boon convention) — e.g. Clear Body on the
-Tentacool, Metagross (+ Mega), Regi trio, Klink, Carbink, Diancie (+ Mega), Dreepy and Nacli lines; White
-Smoke on Torkoal, Heatmor and the Sizzlipede line (+ Gmax); Hyper Cutter on the Krabby (+ Gmax), Pinsir
-(+ Mega), Gligar, Mawile (+ Mega), Trapinch, Corphish and Crabrawler lines; Big Pecks on the Pidgey (+ Mega),
-Pidove, Ducklett, Vullaby, Fletchling and Rookidee lines, Chatot and Bombirdier. A species already carrying
-another innate is *merged* into its existing row.
-
-**Frontier (Step 3.5):** 28 hardcoded sets were freed. Most take a **complementary REAL slot** with no
-override: Kingler's Hyper Cutter → chosen **Sheer Force** (`:x:`), Pinsir's → chosen **Moxie** (HA),
-Crabominable's → chosen **Anger Point**, Torkoal's White Smoke → chosen **Drought** (`:x:`), Centiskorch's →
-chosen **Flash Fire** (`:x:`), Dragapult's Clear Body → chosen **Infiltrator**. The
-*all-real-abilities-innate* mons take a fork-owned override (`species_ability_overrides.c`): **Pidgeot** /
-**Chatot** (Keen Eye + Tangled Feet + Big Pecks all innate) → a chosen **No Guard** (`:x:`) / **Punk Rock**
-(`:white_check_mark:`), **Crawdaunt** (Hyper Cutter + Shell Armor + Adaptability) → chosen **Sniper**
-(`:white_check_mark:`; its slot-2 Adaptability is pinned by `adaptability.c`, so the unpinned slot-1 Shell
-Armor is repurposed), **Bombirdier** (Big Pecks + Keen Eye + Rocky Payload) → chosen **Reckless**
-(`:white_check_mark:`), **Klinklang** (Clear Body innate; Plus/Minus dead in singles, slot-0 Plus pinned by
-doubles/anim tests) → chosen **Motor Drive** (`:x:`) in its unpinned slot-1 Minus, and **Metagross /
-Regirock / Regice / Registeel / Carbink / Diancie** (Clear Body [+ Sturdy] innate, EMPTY slot 1) → chosen
-**Tough Claws / Solid Rock / Ice Scales / Bulletproof / Solid Rock / Solid Rock** — each stable and thematic.
+**Species:** canon only, plus the Mega/Gigantamax mirrors.
 
 ### ABILITY_DAZZLING / ABILITY_QUEENLY_MAJESTY / ABILITY_ARMOR_TAIL
 
@@ -2155,19 +1906,7 @@ exactly as it would the real ability.
 the same `GetBattlerDazzlingAbility` helper, so the AI won't waste a priority move (First Impression, Quick
 Attack, …) into an innate blocker. On-field only, so `IsInnateActive` covers it.
 
-**Species (canon only so far, no flavor picks yet — blocking every priority move against a mon *and its allies* is a
-potent, hard-to-justify-broadly effect, so the set stays the three canon carriers):** **Dazzling** on
-Bruxish, **Queenly Majesty** on Tsareena (merged into its existing Sweet Veil row), **Armor Tail** on
-Farigiraf. (Tsareena's pre-evolutions and Girafarig don't carry the ability in their real data, so they're
-correctly omitted.)
-
-**Frontier (Step 3.5):** all six hardcoded sets were freed. The **Tsareena** sets take their complementary
-REAL slot-0 **Leaf Guard** (Sweet Veil is already Tsareena's innate, so it can't be reused), the **Farigiraf**
-sets take their complementary REAL HA **Sap Sipper** (`:x:`, a Grass immunity + Attack boost). **Bruxish**
-is the *all-real-abilities-innate* case — Dazzling **and** Strong Jaw **and** Wonder Skin
-are all now innate — so it takes a fork-owned override (`species_ability_overrides.c`) repurposing its
-innate-redundant, test-unpinned slot-1 Strong Jaw to a chosen **Sheer Force** (`:x:`, powers up its biting
-kit); its slot-0 Dazzling stays a real ability because `dazzling.c` / `bide.c` / `last_resort.c` pin it.
+**Species:** the three canon carriers only — blocking priority against a whole side is potent.
 
 ### ABILITY_PROPELLER_TAIL / ABILITY_STALWART
 
@@ -2202,19 +1941,7 @@ not-on-field); neither ability is breakable, so Mold Breaker never touches them,
 attacker is always on-field here) lets the AI correctly predict its own redirection-ignore from an innate
 when picking a spread/redirect-sensitive target.
 
-**Species (canon only so far, no flavor picks yet — redirection-ignore is an abstract, doubles-oriented mechanic that is
-hard to justify thematically and potent in the format, so the set stays the canon carriers):**
-**Propeller Tail** on the Arrokuda / Barraskewda line (merged into their existing Swift Swim rows),
-**Stalwart** on Duraludon / Duraludon-Gmax / Archaludon (merged into Archaludon's existing Sturdy row) and
-**Skarmory-Mega** (a fork form whose ability data is all-Stalwart; merged into its existing Sturdy row).
-
-**Frontier (Step 3.5):** both hardcoded sets were freed. They are the two **Barraskewda** sets, whose
-`.ability` slot was already spent on Propeller Tail (Swift Swim was innate first). Barraskewda is the
-*all-real-abilities-innate* case — its only real abilities (Swift Swim, Propeller Tail) are now both innate —
-so it takes a fork-owned override (`species_ability_overrides.c`) filling its EMPTY slot 1 with a chosen
-**Water Absorb** (`:x:`, a Water immunity + heal, the same pick used for the other water mons in that table),
-so both sets now run Water Absorb **and** the innate Swift Swim / Propeller Tail. Duraludon / Archaludon have
-no frontier set, so no roster change was needed there.
+**Species:** canon only — ignoring redirection is abstract and potent in doubles.
 
 ### ABILITY_SHADOW_TAG / ABILITY_ARENA_TRAP / ABILITY_MAGNET_PULL
 
@@ -2265,27 +1992,7 @@ identity bookkeeping about the mon's *displayed* ability, not an effect read (in
 identity). The overworld wild-encounter lures (Magnet Pull / Arena Trap in `src/wild_encounter.c`) likewise
 stay keyed to the lead's chosen ability — innates are a battle-only feature.
 
-**Species (canon carriers plus one flavor pick — preventing the foe from switching is a potent utility effect, so
-non-canon carriers need a strong case).** **Shadow Tag:** Wobbuffet, Wynaut, the Gothita line, and the Litwick line
-(merged into its existing Levitate rows), plus **Giratina** (Altered + Origin) as a flavor pick: it rules the
-Distortion World and, in Pokémon Adventures, imprisons Dialga and Palkia there. Mega Gengar is *omitted* as redundant (its only ability IS Shadow
-Tag, so an innate could never be observed). **Arena Trap:** Diglett / Dugtrio (Kantonian only — the Alolan
-forms lack it) and Trapinch (merged into its Hyper Cutter row). **Magnet Pull:** Magnemite / Magneton /
-Magnezone, the Alolan Geodude line, and Nosepass / Probopass (all merged into existing rows). Meltan is
-*omitted* as redundant (sole-ability, not a frontier set).
-
-**Frontier (Step 3.5):** eight hardcoded sets were freed. **Golem-Alola** simply repoints to its real
-`:x:` Galvanize slot (Magnet Pull & Sturdy now innate). The rest take fork-owned overrides
-(`species_ability_overrides.c`): **Dugtrio** (all three abilities innate) → chosen **Sand Stream** (repurposing
-its innate-redundant Sand Force slot; self-synergistic with innate Sand Veil / Sand Force); **Magnezone** and
-**Probopass** (all abilities innate) → chosen **Lightning Rod** (`:x:`, draws Electric for immunity + Sp. Atk);
-**Gothitelle** → chosen **Unaware** repurposing its innate-redundant Shadow Tag slot (its real Frisk / Competitive
-slots are kept intact for those future innates). Each repurposed slot was audited against `test/battle/`
-`Ability(ABILITY_X)` pins (Dugtrio's Arena Trap, Magnezone's Magnet Pull / Sturdy are pinned and were left alone).
-**Wobbuffet's set was deliberately *not* freed**: its only complementary slot is the empty slot 1, and filling it
-via an override would change Wobbuffet's game-wide ability data — but Wobbuffet is a ubiquitous test mon whose empty
-slot is exercised by `Ability(ABILITY_NONE)` (e.g. `test/battle/ai/gimmick_z_move.c`), so the set keeps its chosen
-Shadow Tag (redundant with the now-innate one, but harmless) rather than risk those tests.
+**Species:** canon, plus one flavor pick — trapping is potent, so a non-canon carrier needs a strong case.
 
 ### ABILITY_MAGMA_ARMOR / ABILITY_WATER_VEIL / ABILITY_OWN_TEMPO / ABILITY_INNER_FOCUS / ABILITY_LEAF_GUARD / ABILITY_OVERCOAT
 
@@ -2333,32 +2040,7 @@ record overwrite shows the innate, not the chosen ability.
 Magma Armor / Water Veil / Own Tempo / Inner Focus / Leaf Guard / Overcoat are all breakable, so an
 attacker's Mold Breaker pierces the innate exactly as it would the real ability.
 
-**Species selection — canon only so far, with two contradiction carve-outs and one flavor set.** Every canon
-user (any ability slot, forms + Mega parity per the FORMS/Mega rules) carries the innate. Magma Armor
-adds a tight molten/burning-body flavor set that can't freeze (Torkoal, the Coalossal line). Two
-contradiction carve-outs (like Zangoose's Immunity/Toxic Boost): **Spinda keeps innate Tangled Feet,
-not Own Tempo** (Own Tempo would block the confusion Tangled Feet needs). Both carve-outs are now
-machine-readable rather than prose-only — they are rows in `sInnateCoverageExemptions[]`
-(`test/fork/innate_abilities.c`), the exemption table of the gate that otherwise requires a drafted
-species to carry its own innate-capable abilities. **Sole-ability species are
-omitted as redundant** (their sole chosen ability already grants the effect) *unless* they are a
-frontier set — **Zarude** (sole Leaf Guard) and **Enamorus-Therian** (sole Overcoat) instead take the
-innate + a fork-owned chosen override (Tough Claws / Sheer Force), like Ogerpon-Cornerstone.
-
-**Frontier slot freeing (Step 3.5) is partial here.** These status-immunity species are
-unusually innate-dense — many already carry several innates — so most frontier sets that hardcoded one
-of these six abilities are on species whose *remaining* real slots are all likewise innate (or a
-drawback, or a still-pending innate). The cleanly-tractable sets were freed: 11 species took an
-**empty-slot override** to a stable pick (Dragonite→Reckless, Meganium→Grassy Surge, Forretress→Filter,
-Raikou→Lightning Rod, Entei→Flame Body, Suicune→Water Absorb, Huntail/Floatzel→Water Absorb,
-Revavroom→Sheer Force, plus Zarude→Tough Claws, Enamorus-Therian→Sheer Force), and 5 were repointed to
-an existing stable real slot (Kommo-o→Bulletproof, Lurantis→Contrary, Slowking-Galar→Curious Medicine,
-Lickilicky→Cloud Nine, Oranguru→Symbiosis). The remaining ~24 all-innate species (Slowbro/Slowking,
-Hitmonchan, Kangaskhan, the Slow/Lilligant/Tsareena/etc. lines) keep `.ability` on the now-innate
-ability — functional and CI-safe (it still resolves to a real slot), just redundant — because freeing
-them would require overrides that *delete* a real ability game-wide (the override table is not
-feature-gated), each needing a per-species `test/battle` audit; that broad sweep is deferred to a
-focused follow-up rather than risked here.
+**Species:** canon, plus a tight molten-body flavor set for Magma Armor, with two [contradiction](#contradicting-abilities-the-observable-slot-may-not-invert-its-own-innates) carve-outs.
 
 ### ABILITY_SUCTION_CUPS / ABILITY_GUARD_DOG
 
@@ -2498,12 +2180,9 @@ the pop-up on `gBattlerAbility` but don't all set it (a foe eating a Berry earli
 stale). AI is innate-aware where the effect lives outside the shared calc: the weather-heal / status-cure
 switch-in predictions (`GetSwitchinWeatherImpact`, `GetSwitchinStatusDamage`,
 `GetSwitchinRecurringHealing`, the Rest-worthiness reads in `battle_ai_main.c`, the sleep-switch check and
-hail-damage predictor) credit an innate Rain Dish / Ice Body / Shed Skin / Hydration. Canon only so far for all
-nine EXCEPT **Bad Dreams**, whose sole canon user (Darkrai) always has it chosen and so can't *observe* an
-innate Bad Dreams — a tight dream-eater flavor pair (the Munna line, whose real abilities are all
-non-Bad-Dreams) carries an observable innate Bad Dreams. Sole-ability species whose only ability is an
-end-of-turn ability are omitted as redundant (Cascoon/Silcoon/Kakuna/Metapod/Pupitar/Audino-Mega/Darkrai-Mega)
-unless they are a frontier set (Manaphy/Phione keep their rows).
+hail-damage predictor) credit an innate Rain Dish / Ice Body / Shed Skin / Hydration.
+
+**Species:** canon only for all nine, except Bad Dreams: Darkrai always has it chosen, so a dream-eater flavor pair (the Munna line) carries the observable innate.
 
 ### ABILITY_POISON_HEAL
 
@@ -2600,15 +2279,9 @@ that later on-hit sub-groups reuse — the on-hit analogue of the Speed Boost en
   read (the generic contact-move logic already covers the Speed drop).
 
 Suppression parity holds for all four via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field);
-none is `breakable`, so Mold Breaker never touches them. **Species:** the canon users of each ability get their
-rows (merged into existing rows where the species already carried an innate) — Rough Skin (Carvanha / Sharpedo
-+ Mega, the Gible line + both Garchomp Megas, Druddigon), Iron Barbs (Ferroseed / Ferrothorn, Togedemaru),
-Gooey (the Goomy line + both Hisui forms, Wiglett / Wugtrio), Tangling Hair (Diglett-Alola / Dugtrio-Alola).
-The Megas mirror the base creature's contact reaction (pure-boon persistence, like the Mega convention). Step
-3.5 freed twelve frontier sets: Druddigon -> Sheer Force, Togedemaru -> Lightning Rod, Goodra -> Sap Sipper
-(complementary REAL slots); Sharpedo -> Strong Jaw, Garchomp -> Sand Stream, Ferrothorn -> Filter, Wugtrio ->
-Water Absorb (fork-owned overrides); Dugtrio-Alola's Tangling Hair set is kept because that slot is test-pinned
-(`test/battle/move_effect/pursuit.c`), so it stays a real ability — a permanent exclusion.
+none is `breakable`, so Mold Breaker never touches them.
+
+**Species:** canon users of each ability, with Megas mirroring the base creature.
 
 ### ABILITY_AFTERMATH / ABILITY_INNARDS_OUT
 
@@ -2632,15 +2305,9 @@ move. Both `canon only so far` (no flavor picks).
   wiring is needed** — the AI does not currently reason about on-faint retaliation, chosen or innate.
 
 Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); neither is
-`breakable`, so Mold Breaker never touches them. **Species:** every canon carrier gets a row (merged into
-existing rows where the species already carried an innate) — Aftermath: the Voltorb line + both Hisui forms,
-the Drifloon line, the Stunky line, the Trubbish line (+ Garbodor-Gmax); Innards Out: Pyukumuku and the fork's
-Mega Victreebel. Step 3.5 freed five frontier sets, all via fork-owned overrides since every affected species
-now has its useful real abilities innate: Drifblim ×2 (Aftermath/Unburden/Flare Boost all innate) -> chosen
-Unaware (unpinned slot-0 repurpose), Skuntank (Aftermath/Stench/Keen Eye all innate) -> chosen Poison Touch,
-Garbodor (Aftermath innate; slot-1 Weak Armor a wall drawback) -> chosen Poison Touch, Pyukumuku (Innards
-Out/Unaware innate) -> chosen Water Absorb (empty slot 1; its slot-0 Innards Out stays a real, test-pinned
-ability).
+`breakable`, so Mold Breaker never touches them.
+
+**Species:** canon users only.
 
 ### ABILITY_STEAM_ENGINE / ABILITY_THERMAL_EXCHANGE / ABILITY_WIND_POWER
 
@@ -2679,14 +2346,9 @@ takes effect on its side. All three `canon only so far` (no flavor picks).
   `ShouldTriggerAbility`). Thermal Exchange's burn-immunity AI is free (above).
 
 Suppression parity holds via `IsInnateActive()` for all three (Gastro Acid / Neutralizing Gas / not-on-field);
-only Thermal Exchange is `breakable`. **Species:** Steam Engine -> the Rolycoly line (Rolycoly /
-Carkol / Coalossal + Coalossal-Gmax), Thermal Exchange -> the Frigibax line (Frigibax / Arctibax / Baxcalibur +
-the fork's Mega), Wind Power -> the Wattrel line (Wattrel / Kilowattrel) and Thundurus (both formes, whose storm energy Bulbapedia
-describes as lightning combined with wind) — each merged into the species' existing
-innate row. Step 3.5 freed three frontier sets: Coalossal (Steam Engine now innate) -> its complementary real
-slot-2 **Flash Fire**; both Baxcalibur sets (Thermal Exchange + Ice Body both innate = all real abilities innate)
--> a fork-owned override filling empty slot 1 with **Snow Warning**, whose snow turns on the innate Ice Body heal.
-Wattrel/Kilowattrel have no frontier set to free.
+only Thermal Exchange is `breakable`.
+
+**Species:** canon users, plus Thundurus for Wind Power.
 
 ### ABILITY_CURSED_BODY
 
@@ -2712,18 +2374,9 @@ When the holder takes damage from a move, **Cursed Body** has a 30% chance (alwa
   to make innate-aware (the same as Aftermath / Innards Out).
 
 Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); Cursed Body is not
-`breakable`, so Mold Breaker never touches it, same as the real ability. **Species (canon only so far):** every canon
-Cursed Body user in any real slot — the **Shuppet / Banette** line (incl. **Mega Banette** as a pure-boon mirror),
-**Froslass** (+ the fork's Mega), the **Frillish / Jellicent** line, the **Sinistea / Polteageist** forms, the
-**Dreepy / Dragapult** line, **Corsola-Galar**, and merged onto **Marowak-Alola**'s existing Rock Head row.
-**Gengar / Gengar-Gmax are omitted** as redundant: Cursed Body is their **sole** (therefore always-chosen) ability,
-so an innate could never be observed (the Mega Lopunny / Scrappy precedent) — they keep their innate Levitate rows.
-Step 3.5 freed two frontier sets to a complementary real slot with a stable `:x:` pick — **Jellicent** (Cursed Body
-now innate) -> chosen **Water Absorb**, **Polteageist** -> its only other real slot **Weak Armor**. The
-sole/all-abilities-innate sets keep their now-redundant chosen Cursed Body (still correct — the chosen runs it, the
-innate is redundant-but-skipped): **Froslass x2** (Snow Cloak + Cursed Body both innate) and **Banette x1** (only
-the still-pending Frisk left), deferred as a focused follow-up. Gengar's four sets are untouched
-(Gengar isn't in the innate table, so its chosen Cursed Body is its real, observed ability).
+`breakable`, so Mold Breaker never touches it, same as the real ability.
+
+**Species:** canon users only.
 
 ### ABILITY_PICKPOCKET / ABILITY_MAGICIAN / ABILITY_LIQUID_OOZE
 
@@ -2769,16 +2422,9 @@ Suppression parity holds for all three via `IsInnateActive()` (Gastro Acid / Neu
 `breakable`, so Mold Breaker never touches them. **Known limitation (Sticky Hold vs innate Pickpocket):** exactly as for
 a *chosen* Pickpocket, an innate Sticky Hold on the attacker does not block an innate Pickpocket's on-contact steal — the
 attacker-side Sticky-Hold precheck reads the cached chosen ability, the same cross-cutting `jumpifability` limitation
-already documented for Sticky Hold. **Species (canon only so far):** Pickpocket -> the **Seedot / Nuzleaf / Shiftry**,
-**Sneasel (+ Hisui) / Weavile**, **Binacle / Barbaracle**, **Impidimp / Morgrem / Grimmsnarl (+ Gmax)**, **Shroodle**,
-and **Tinkatink / Tinkatuff / Tinkaton** lines; Magician -> the **Fennekin / Braixen / Delphox** line (+ the fork's
-**Mega Delphox** as a pure-boon mirror), **Klefki**, and both **Hoopa** forms; Liquid Ooze -> the **Tentacool /
-Tentacruel** and **Gulpin / Swalot** lines — each merged into the species' existing innate row. **Step 3.5** touched
-sixteen frontier sets, all **deferred** (like the Cursed Body sub-group): every affected species now has
-all its useful real abilities innate (or only the still-pending Frisk free), so they keep their now-redundant chosen
-ability — still correct (the chosen runs it; the innate is redundant-but-skipped). **Tentacruel** / **Swalot** keep
-chosen Liquid Ooze; the three **Weavile** and three **Grimmsnarl** sets keep chosen Pickpocket; the three **Delphox**,
-two **Klefki** and three **Hoopa / Hoopa-Unbound** sets keep chosen Magician — each a real, roster-legal slot.
+already documented for Sticky Hold.
+
+**Species:** canon users only.
 
 ### ABILITY_INTIMIDATE
 
@@ -2823,21 +2469,7 @@ foe-Intimidate **free-switch timing** read (`BattlerHasAbility(opposingBattler, 
 in `battle_ai_util.c` (`case ABILITY_INTIMIDATE`) is left keyed to the chosen ability — a soft ability-swap-move heuristic,
 not a hard effect read, consistent with how Unaware left its softest heuristics.
 
-**Species (canon only so far, no flavor picks yet** — Intimidate is a strong, common ability with a ~45-species canon set, so like
-Prankster the flavor set is deliberately omitted). Every canon Intimidate user in **any** real slot gets a row (merged into
-an existing innate row where present), keyed **exactly per form**: the Ekans / Growlithe (+ Hisui) / Arcanine (+ Hisui) /
-Tauros (+ Paldea forms) / Gyarados / Snubbull / Granbull / Qwilfish (+ Hisui) / Overqwil / Stantler / Wyrdeer / Mightyena /
-Masquerain / Mawile / Salamence / Staravia / Staraptor / Shinx / Luxio / Luxray / Herdier / Stoutland / Sandile / Krokorok /
-Krookodile / Scraggy / Scrafty / Litten / Torracat / Incineroar / Squawkabilly (all four plumages) / Maschiff / Mabosstiff
-/ Hitmontop lines, plus base creatures' **Megas as pure-boon mirrors** (Gyarados / Salamence / Mawile Megas keep base
-Intimidate though their Mega ability differs). **Sole-Intimidate Megas are OMITTED as redundant** (Manectric-Mega,
-Scrafty-Mega — their sole, always-chosen ability IS Intimidate, so an innate could never be observed, the Mega Lopunny /
-Scrappy precedent). **Landorus-Therian** is sole-Intimidate but a **frontier set**, so — like Ogerpon-Cornerstone — it takes
-the innate **and** a fork-owned chosen **Sheer Force** override (`src/fork/species_ability_overrides.c`; Sheer Force is `:x:`
-(never an innate -> stable) and its Incarnate forme's signature), and its two frontier sets now run Sheer Force on top of the
-innate Intimidate. **Step 3.5** touched ~40 frontier sets: Landorus-Therian is freed via the override above; the rest are
-**deferred** — they keep their now-redundant chosen Intimidate (still correct: the chosen runs it, the
-innate is redundant-but-skipped) rather than a game-wide complementary-slot sweep.
+**Species:** canon only — Intimidate is strong and its canon set is already large.
 
 ### ABILITY_ANTICIPATION / ABILITY_FOREWARN / ABILITY_FRISK
 
@@ -2866,18 +2498,7 @@ none is `breakable`, so Mold Breaker never touches them.
 wiring is needed**: they change no stat or state the switch-in sim reasons about, and the AI already benefits
 from the revealed move/item records through the shared move/item bookkeeping keyed off the real battler.
 
-**Species (canon only so far, no flavor picks yet** — a switch-in reveal is pure information with no thematic hook
-off-roster). Every canon user in **any** real slot gets a row (merged into an existing innate row where
-present), keyed **exactly per form**: **Frisk** -> the Gothita / Shuppet (+ Banette, incl. **Mega Banette as a
-pure-boon mirror**) / Duskull / Flittle / Espathra / Munkidori / Wigglytuff / Exeggutor-Alola / Typhlosion-Hisui
-/ Sentret / Yanma / Stantler / Wyrdeer / Phantump / Pumpkaboo (all sizes) / Gourgeist (all sizes) / Noibat /
-Orbeetle (+ Gmax) / Impidimp lines; **Forewarn** -> the Munna / Drowzee / Smoochum lines; **Anticipation** ->
-Ferrothorn / the Barboach / Flittle / Ponyta-Galar / Eevee-Starter / Wormadam (all cloaks) / Croagunk /
-Hatenna (+ Gmax) lines, plus one non-canon pick: **Shedinja** gets Anticipation, because under Wonder Guard the shudder tells the player whether the foe has the one kind of move that can hit it. **Flittle carries both Frisk and Anticipation**, matching its real ability data. No
-species is sole-ability for any of the three, so there are no redundant omissions or override rows. **Step 3.5**:
-the ~14 frontier sets that hardcoded chosen Frisk / Anticipation now carry it innately, so they keep their
-now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the
-complementary-slot freeing is **deferred** like the Intimidate sub-group.
+**Species:** canon only — a switch-in reveal has no thematic hook off-roster.
 
 ### ABILITY_DOWNLOAD / ABILITY_SUPERSWEET_SYRUP
 
@@ -2914,17 +2535,7 @@ Contrary / Defiant / Competitive exactly like the real case). The Eject-Pack fre
 whose Intimidate / Supersweet Syrup triggers switches before the turn starts) also now credits an innate
 Supersweet Syrup foe via `BattlerHasAbility`, mirroring the Intimidate treatment on the same line.
 
-**Species (canon only so far, no flavor picks yet** — a switch-in stat swing is potent, so like Intimidate the set stays the
-canon users). **Download** -> the Porygon / Porygon2 / Porygon-Z line (merged onto their existing Analytic /
-Levitate rows) and **every Genesect form** (base + Douse / Shock / Burn / Chill drives, keyed exactly per form).
-**Supersweet Syrup** -> the Dipplin / Hydrapple line (merged onto their existing Sticky Hold rows). No omissions:
-Genesect is sole-Download but **is** a frontier set, so it takes the innate (see Step 3.5) rather than being
-dropped as redundant. **Step 3.5**: the Porygon2 Download frontier set is freed to its complementary REAL slot-0
-**Trace** (`:x:` stable — copies a foe ability). The all-real-abilities-innate Porygon-Z sets and the sole-ability
-Genesect sets were freed via fork chosen-ability overrides (`src/fork/species_ability_overrides.c`):
-Porygon-Z repurposes its innate-redundant slot-2 Analytic HA to **Simple** (`:x:` stable; slot-0 Adaptability is
-test-pinned so it stays), and Genesect fills its EMPTY slot 1 with **Sheer Force** (`:x:` stable). Supersweet Syrup has no other
-frontier set to free (Dipplin is off-roster; Hydrapple already runs a fork-owned chosen Grassy Surge override).
+**Species:** canon only — a switch-in stat swing is potent.
 
 ### ABILITY_UNNERVE / ABILITY_HOSPITALITY
 
@@ -2976,19 +2587,7 @@ which discounts a Berry the AI would rely on when the opposing battler has Unner
 changes no stat or state the AI's switch-in simulation reasons about (`SetBattlerStatStagesForSwitchin` handles
 stat stages, not the ally-heal), so it needs no AI wiring.
 
-**Species (canon only so far, no flavor picks yet).** **Unnerve** → every canon user in **any** real slot, keyed exactly per
-form (merged into an existing innate row where present): the Ekans / Meowth (+ Galar / Gmax) / Persian / Aerodactyl
-(+ Mega) / Mewtwo (+ Mega X/Y) / Ursaring / Ursaluna / Houndour / Houndoom (+ Mega) / Tyranitar (+ Mega) / Masquerain
-/ Vespiquen / Joltik / Galvantula / Axew / Fraxure / Haxorus / Litleo / Pyroar / Bewear / Rookidee / Corvisquire /
-Corviknight (+ Gmax) lines, plus base creatures' **Megas as pure-boon mirrors** (Aerodactyl / Mewtwo X-Y / Houndoom /
-Tyranitar Megas keep base Unnerve though their Mega ability differs). **Sole-Unnerve Calyrex is OMITTED as
-redundant** (not a frontier set; its sole chosen ability already grants it — the Mega Lopunny / Scrappy precedent).
-**Hospitality** → the Poltchageist / Sinistcha line (all four forms — Counterfeit / Artisan / Unremarkable /
-Masterpiece — merged onto their existing Heatproof / Levitate rows). **Step 3.5**: Sinistcha's Hospitality frontier
-set is freed to its complementary chosen **Water Absorb** override (the sibling Sinistcha set already runs it — both
-its real abilities, Hospitality and Heatproof, are now innate); the ~14 frontier sets that hardcoded chosen Unnerve
-now carry it innately, so they keep their now-redundant chosen Unnerve (still correct: the chosen runs it, the
-innate is redundant-but-skipped) — the complementary-slot freeing **deferred** like the earlier sub-groups.
+**Species:** canon only.
 
 ### ABILITY_DEFIANT / ABILITY_COMPETITIVE
 
@@ -3028,22 +2627,7 @@ the ability-swap-move value path) is **left keyed to the chosen ability**, mirro
 (`ShouldTriggerAbility` / the `scoringPartnerAbility` switch in `battle_ai_main.c`) has **no** Defiant / Competitive
 case, so there's nothing to make innate-aware there.
 
-**Species (canon only so far, no flavor picks yet — a +2 swing is potent and hard to justify thematically off-roster).**
-**Defiant** → every canon user in **any** real slot, keyed exactly per form (merged into an existing innate row where
-present): the Mankey / Primeape / Annihilape, Farfetchd (Kantonian), Pawniard / Bisharp / Kingambit, Braviary
-(Kantonian), Tornadus-Incarnate, Thundurus-Incarnate, Purugly, Passimian, Obstagoon, and Falinks (base) lines.
-**Competitive** → the Jigglypuff line (Igglybuff / Jigglypuff / Wigglytuff), Milotic, the Piplup / Prinplup / Empoleon
-line (Competitive is their Hidden Ability under the shipping `P_UPDATED_ABILITIES >= GEN_9`; the pre-Gen-9 `#else`
-gives them Defiant, which is compiled out, so they're Competitive-only here), Gothita / Gothorita / Gothitelle,
-Meowstic-F, Wattrel / Kilowattrel, and Boltund. **Sole-ability species are OMITTED as redundant** (their sole chosen
-ability already grants it, so an innate could never be observed — the Mega Lopunny / Scrappy precedent): **Zapdos-Galar**
-(sole Defiant), **Articuno-Galar** (sole Competitive), **Ogerpon / Ogerpon-Teal** (sole Defiant), and **Falinks-Mega**
-(sole Defiant — its existing `BATTLE_ARMOR` innate row stays, since *that* is observable while its chosen ability is
-Defiant). **Innate Rattled** — which also reacts through `BS_TryDefiantRattled`, but only to Intimidate (Speed +1) — is
-a **separate sub-group**, deliberately not credited here. **Step 3.5**: the ~30 frontier sets that hardcoded
-chosen Defiant / Competitive already resolve to the species' real slot (these are canon users), so they keep their
-now-redundant chosen ability (still correct: the chosen runs it, the innate is redundant-but-skipped) — the
-complementary-slot freeing **deferred** as a focused follow-up, like the earlier sub-groups.
+**Species:** canon only — a +2 swing is potent.
 
 ### ABILITY_JUSTIFIED / ABILITY_STAMINA / ABILITY_WATER_COMPACTION / ABILITY_ANGER_POINT
 
@@ -3087,32 +2671,7 @@ innate-aware:
 **Suppression parity** holds for all four via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas,
 not-on-field); none is `breakable`, so Mold Breaker never touches them.
 
-**Species (canon only so far, no flavor picks yet — a reactive stat boost is potent and hard to justify thematically
-off-roster).** Every canon user in **any** real slot, keyed exactly per form (merged into an existing innate row
-where present), plus base creatures' **Megas** as pure-boon mirrors:
-- **Justified** → the **Growlithe / Arcanine** (Kantonian; Hisui carries Rock Head, not Justified), **Absol** (+ Mega),
-  **Gallade** (+ Mega), and **Lucario** (+ Mega, + the fork's **Mega-Z** which carries Justified in its own ability
-  data) lines.
-- **Stamina** → the **Mudbray / Mudsdale** line and **Archaludon**.
-- **Water Compaction** → the **Sandygast / Palossand** line.
-- **Anger Point** → the **Mankey / Primeape**, **Tauros** (+ all three Paldea forms — Combat / Blaze / Aqua),
-  **Camerupt** (+ Mega), **Sandile / Krokorok / Krookodile**, and **Crabrawler / Crabominable** lines.
-
-**Sole-ability species are OMITTED as redundant** (their sole chosen ability already grants it, so an innate could
-never be observed — the Mega Lopunny / Scrappy precedent, matching the Defiant / Competitive sub-group): the
-**Swords of Justice** trio (**Cobalion / Terrakion / Virizion**) and **Keldeo** (both formes), all sole-Justified.
-They *are* frontier sets, but their `.ability = ABILITY_JUSTIFIED` is their real (and only) slot, so it keeps working
-untouched; the innate + a fork-owned chosen override (the Landorus-Therian route) is **deferred** as a focused
-follow-up.
-
-**Step 3.5**: the frontier sets that hardcoded these abilities — chosen Justified (Absol, Gallade, Lucario),
-Stamina (Mudsdale, Archaludon), Water Compaction (Palossand), Anger Point (Crabominable) — already resolve to the
-species' real slot, so they keep their now-redundant chosen ability (still correct: the chosen runs it, the innate
-is redundant-but-skipped, and for the several sets whose *other* real abilities are also now innate the set simply
-runs all of them). A few of these slots were freed **earlier** to what was then a pending ability
-(Gallade's Sharpness sweep → chosen Justified; Crabominable's Hyper Cutter / Iron Fist sweep → chosen Anger Point);
-now that those become innate the chosen pick is redundant, but harmless — the complementary-slot re-pointing is
-**deferred** as a focused follow-up, like the Defiant / Competitive sub-group.
+**Species:** canon only — a reactive stat boost is potent.
 
 ### ABILITY_RATTLED / ABILITY_STEADFAST
 
@@ -3163,29 +2722,12 @@ the chosen ability, mirroring the Defiant / Competitive decision.
 **Suppression parity** holds via `IsInnateActive()` (feature flag, Gastro Acid, Neutralizing Gas, not-on-field);
 neither is `breakable`, so Mold Breaker never touches them.
 
-**Species (canon only so far, no flavor picks yet).** Every canon user in **any** real slot, keyed exactly per form (merged into
-an existing innate row where present):
-- **Rattled** → the **Meowth-Alola / Persian-Alola**, **Magikarp**, **Ledyba**, **Bonsly / Sudowoodo**, **Whismur**,
-  **Snubbull / Granbull**, **Poochyena**, **Dunsparce / Dudunsparce** (both segment forms), **Clamperl**,
-  **Basculin-White-Striped**, **Cubchoo**, **Yamper**, **Toxel**, and **Wiglett / Wugtrio** lines.
-- **Steadfast** → the **Machop / Machoke / Machamp** (+ Gmax), **Farfetch'd-Galar / Sirfetch'd**, **Tyrogue /
-  Hitmontop**, **Scyther**, **Gallade** (+ Mega, as a pure-boon mirror), **Rockruff / Lycanroc-Midday**, and
-  **Dubwool** lines.
-
-**Sole-ability species are OMITTED as redundant** (their sole chosen ability already grants it — the Mega Lopunny /
-Scrappy precedent): **Gimmighoul-Chest** (sole Rattled) and **Mega Mewtwo X** (sole Steadfast — its Pressure innate
-row is kept). Where a line splits, only the members that *actually* carry the ability get a row (e.g. Magikarp but
-not Gyarados, Cubchoo but not Beartic, Scyther but not Scizor/Kleavor, Lycanroc-Midday but not Midnight/Dusk).
+**Species:** canon only.
 
 **Deliberate contradiction omission (Steadfast vs innate Inner Focus).** The **Riolu / Lucario** line (incl. Mega /
 Mega-Z) carries innate **Inner Focus**, which prevents flinching outright — so an innate Steadfast could **never**
 trigger on them (the same class of conflict as Spinda's Tangled-Feet-vs-Own-Tempo note). Inner Focus (never flinch)
 is the stronger, already-wired boon, so **Steadfast is dropped** on that line.
-
-**Step 3.5**: the frontier sets that hardcoded chosen Rattled (Persian-Alola, Dunsparce / Dudunsparce) and Steadfast
-(a Machamp-family set, Lycanroc-Midday) already resolve to the species' real slot, so they keep their now-redundant
-chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with the complementary-slot
-re-pointing **deferred** as a focused follow-up, like the earlier sub-groups.
 
 ### ABILITY_MOXIE / ABILITY_BERSERK / ABILITY_SOUL_HEART
 
@@ -3238,28 +2780,7 @@ Soul-Heart have **no** `battle_ai_*.c` read, so no AI wiring is needed):
 **Suppression parity** holds via `IsInnateActive()` for all three (feature flag, Gastro Acid, Neutralizing Gas,
 not-on-field); none is `breakable`, so Mold Breaker never touches them.
 
-**Species.**
-- **Moxie (canon only so far, no flavor picks yet — a snowballing +1-per-KO is potent and hard to justify thematically
-  off-roster).** Every canon user in **any** real slot, keyed exactly per form (merged into an existing innate row
-  where present), plus base creatures' **Megas** as pure-boon mirrors: the **Pinsir** (+ Mega), **Gyarados** (+ Mega),
-  **Honchkrow**, **Heracross** (+ Mega), **Mightyena**, **Salamence** (+ Mega), **Sandile / Krokorok / Krookodile**,
-  **Scraggy / Scrafty**, **Litleo / Pyroar**, and **Quaxly / Quaxwell / Quaquaval** lines.
-- **Berserk (canon only so far).** Only **Drampa** — its non-Berserk slots (Sap Sipper / Cloud Nine) leave the innate
-  **observable**. **Sole-Berserk species are OMITTED as redundant** (the Mega Lopunny / Scrappy precedent): **Galarian
-  Moltres** (a frontier set that keeps its now-redundant chosen Berserk) and **Drampa-Mega** (a sole-Berserk Mega, so
-  its pure-boon mirror could never be observed). One flavor pick: **base Necrozma** (Bulbapedia Biology: "extremely
-  violent behavior due to the constant, maddening pain it suffers in its incomplete state"); its formes don't take it.
-- **Soul-Heart (flavor-only — the Bad Dreams / Darkrai precedent).** Its sole canon user **Magearna** (all four forms:
-  base / Original / the fork's two Megas) is **sole-Soul-Heart**, so an innate could never be observed on it — it is
-  **OMITTED as redundant** (its frontier sets keep the now-redundant chosen Soul-Heart). Instead a tight
-  soul-collector flavor set carries an **observable** innate Soul-Heart: the **Duskull / Dusclops / Dusknoir**
-  grim-reaper line (Dusknoir ferries spirits) and **Spiritomb** (its 108 bound souls), each merged onto the species'
-  existing innate row.
-
-**Step 3.5**: the frontier sets that hardcoded chosen Moxie (Pinsir, Gyarados, Salamence, Krookodile, Scrafty, …),
-Berserk (Galarian Moltres, Drampa), and Soul-Heart (Magearna) already resolve to the species' real slot, so they keep
-their now-redundant chosen ability — still correct (the chosen runs it; the innate is redundant-but-skipped) — with the
-complementary-slot re-pointing **deferred** as a focused follow-up, like the earlier sub-groups.
+**Species:** Moxie and Berserk are canon only (snowballing boosts are potent); Soul-Heart is flavor-only, following the Bad Dreams / Darkrai precedent.
 
 ### ABILITY_BATTERY / ABILITY_POWER_SPOT / ABILITY_TELEPATHY / ABILITY_AROMA_VEIL / ABILITY_FLOWER_VEIL
 
@@ -3318,20 +2839,6 @@ suppression-safe via `IsInnateActive()` and none is `breakable`, so Mold Breaker
   all credit an innate via `AI_IsInnateOnSide`. Canon: the **Flabébé / Floette / Florges** (all color forms) and
   **Comfey** lines.
 
-**Step 3.5**: six frontier sets freed — **Musharna / Rabsca** (Telepathy now innate) → chosen **Synchronize**,
-**Oranguru / Florges** (Telepathy / Flower Veil) → chosen **Symbiosis** (both `:x:`, stable, complementary real
-slots), and **Stonjourner** (sole Power Spot, doubles-only) takes a fork-owned **Solid Rock** override
-(`species_ability_overrides.c`, an implemented `:white_check_mark:` innate, stable) on its empty slot 1, like
-Ogerpon-Cornerstone. The seven **Dialga / Palkia / Giratina / Orbeetle / Aromatisse** sets whose real abilities are
-**all** now innate were **deferred** as a focused follow-up, and are **now resolved via fork-owned overrides:** a fork-owned override
-(`species_ability_overrides.c`) gives each species an observable chosen slot — **Dialga (+Origin)** → chosen
-**Bulletproof** (`:x:` stable, Steel-legend deflect Focus Blast, like Skarmory/Registeel/Corviknight), **Palkia
-(+Origin)** → chosen **Water Absorb** (`:x:` stable, the Water-legend pick), **Giratina-Altered** and **Orbeetle** →
-chosen **Unaware** (implemented `:white_check_mark:`, stable — the bulky-wall / Calm-Mind pick; Orbeetle has no empty
-slot so it repurposes its unpinned slot-2 Telepathy, the rest fill an empty slot 1), and **Aromatisse** → chosen
-**Misty Surge** (`:x:` stable, the Fairy cleric's terrain support). Giratina-Origin already had a stable Dragon's Maw
-override (an implemented `:white_check_mark:` innate it does not itself carry) and keeps it.
-
 ### ABILITY_CHILLING_NEIGH / ABILITY_GRIM_NEIGH / ABILITY_ELECTROMORPHOSIS
 
 The **promoted-from-rejected clones** — each a **1:1 clean-upside copy** of an
@@ -3375,22 +2882,7 @@ charge-on-any-hit clone, and the Charge volatile itself is not a state the AI do
 **Suppression parity** holds via `IsInnateActive()` for all three (feature flag, Gastro Acid, Neutralizing Gas,
 not-on-field); none is `breakable`, so Mold Breaker never touches them.
 
-**Species (canon only so far — the neighs are potent snowballing on-KO boosts like Moxie, the charge is
-signature-specific).**
-- **Chilling Neigh → Glastrier** and **Grim Neigh → Spectrier**, each the ability's **sole** canon user (the
-  As One combo abilities on the Calyrex forms are `:x:` identity abilities, never innates). Both are
-  **sole-ability genderless legends with a frontier set**, so — like **Landorus-Therian / Ogerpon-Cornerstone**
-  — each takes the innate **plus a fork-owned chosen override** in its empty slot 1
-  (`src/fork/species_ability_overrides.c`) so the innate is **observable**: **Glastrier → Snow Warning** (`:x:`,
-  the ice-legend standard — its snow boosts its own Ice-type Defense for the Body Press set), **Spectrier →
-  Infiltrator** (an implemented `:white_check_mark:` innate it does not carry — its Nasty Plot / Substitute
-  sweeper ignores the foe's screens and Substitute).
-- **Electromorphosis → Bellibolt** (canon slot 0); its **Static / Damp** slots leave the innate observable
-  without an override.
-
-**Step 3.5**: five frontier sets freed. Glastrier ×2 → chosen **Snow Warning** and Spectrier ×2 → chosen
-**Infiltrator** (both via the new override rows), and Bellibolt's singles set → its complementary real
-slot-1 **Static** (its doubles set already runs Static). Each now runs the chosen ability **and** the innate.
+**Species:** the sole canon carriers, Glastrier and Spectrier — the neighs are potent snowballing boosts.
 
 ### ABILITY_TRANSISTOR / ABILITY_DRAGONS_MAW
 
@@ -3422,18 +2914,7 @@ entries in `src/data/abilities.h`), and the boost lives in the shared damage cal
 real battler, so on-field damage prediction is innate-aware automatically. **Suppression parity** holds via
 `IsInnateActive()`; neither is `breakable`, so Mold Breaker never touches them.
 
-**Species (canon users, plus one flavor pick: Transistor → Zapdos, which "has the ability to control electricity").** **Transistor → Regieleki** (added beside its existing
-innate Levitate) and **Dragon's Maw → Regidrago**, each the ability's **sole** canon user. Both are
-**sole-ability genderless Regi legends with a frontier set**, so — like Glastrier / Spectrier — each takes
-the innate **plus a fork-owned chosen override** in its empty slot 1 (`src/fork/species_ability_overrides.c`) so
-the innate is **observable**: **Regieleki → Lightning Rod** (`:x:`, the Raichu-Alola precedent — the Electron
-Pokémon draws in Electric moves for immunity + a Sp. Atk boost), **Regidrago → Adaptability** (an implemented
-`:white_check_mark:` innate it does not carry — self-synergistic with innate Dragon's Maw for a devastating
-Choice Dragon breaker: 2x STAB on top of the 1.5x boost).
-
-**Step 3.5**: four frontier sets freed. Regieleki ×2 → chosen **Lightning Rod** and Regidrago ×2 → chosen
-**Adaptability** (both via the new override rows). Each now runs the chosen ability **and** the innate type-power
-boost.
+**Species:** the sole canon carriers, Regieleki and Regidrago, plus one flavor pick: Transistor → Zapdos.
 
 ### ABILITY_PRISM_ARMOR / ABILITY_SHADOW_SHIELD / ABILITY_NEUROFORCE / ABILITY_SUPREME_OVERLORD
 
@@ -3500,20 +2981,7 @@ on-field damage prediction is innate-aware automatically. The **only** dedicated
 beside the existing Multiscale disjunct. The AI switch-in sim's `SUPREME_OVERLORD` case is a no-op (it sets no
 stat), so it needs no innate wiring. **Suppression parity** holds via `IsInnateActive()`.
 
-**Species (canon only so far).** The sole-ability legends **Prism Armor → Necrozma / Necrozma-Dusk-Mane /
-Necrozma-Dawn-Wings** and **Shadow Shield → Lunala** (all frontier sets) take the innate **plus a fork-owned
-chosen `ADAPTABILITY` override** in their empty slot 1 (`src/fork/species_ability_overrides.c`) — an
-implemented `:white_check_mark:` innate they do not carry, self-synergistic 2x STAB for their Photon Geyser /
-Moongeist-Beam sweeper sets — so the innate is **observable** and the frontier set is freed. **Neuroforce →
-Necrozma-Ultra** is a transform-only Ultra Burst form and **not** a frontier set, so it takes the innate for
-effect + test coverage but **no override** (its sole chosen Neuroforce already grants it; the innate is
-observed via a test's forced chosen ability). **Supreme Overlord → Kingambit** joins its existing innate
-**Defiant / Pressure** (making all three of its real abilities innate); its two frontier sets are freed from
-the now-innate chosen Supreme Overlord to chosen **Defiant** (its slot-0 signature), keeping the innate
-Supreme Overlord observable via its switch-in pop-up.
-
-**Step 3.5**: seven frontier sets freed — Lunala ×2 + Necrozma-Dusk-Mane / Dawn-Wings / base → chosen
-**Adaptability** (via the new override rows), Kingambit ×2 → chosen **Defiant**.
+**Species:** canon only (sole-ability legends, plus transform-only Necrozma-Ultra for Neuroforce).
 
 ### ABILITY_FULL_METAL_BODY / ABILITY_MINDS_EYE
 
@@ -3553,15 +3021,7 @@ Scrappy (contrast test asserts it). Its only canon user is **Ursaluna-Bloodmoon*
 `DETERMINISTIC_ACCURACY_EVASION` (the PP-tax mirror), like Keen Eye; the stat-drop protection routes through the
 same `IsAbilityBlocked` that needs no additional-effects/hold-effect mirror (the stat-drop-protector note).
 
-**Species (canon only so far, no flavor picks yet).** Both are sole-ability legends **and** frontier sets, so — like the other sole-ability legends — each takes the innate **plus a fork-owned chosen override** in its empty slot 1
-(`src/fork/species_ability_overrides.c`): **Solgaleo → Tough Claws** (an implemented `:white_check_mark:` innate it
-does not carry, powering its Sunsteel Strike / Close Combat / Flare Blitz contact STAB on top of the innate stat-drop
-lock — the Metagross precedent), **Ursaluna-Bloodmoon → Unaware** (an implemented `:white_check_mark:` innate,
-stable — ignoring the foe's boosts on its Calm Mind special tank, alongside the innate evasion-ignore + Ghost
-coverage). So the innate is **observable** and the frontier set is freed.
-
-**Step 3.5**: three frontier sets freed — Solgaleo ×2 → chosen **Tough Claws**, Ursaluna-Bloodmoon → chosen
-**Unaware** (via the new override rows).
+**Species:** canon only (Solgaleo, Ursaluna-Bloodmoon).
 
 ### ABILITY_PURIFYING_SALT / ABILITY_GOOD_AS_GOLD
 
@@ -3608,21 +3068,7 @@ allowlist comment + `FORK.md`.
 **No `DETERMINISTIC_*` surface** — a full status immunity / status-move immunity is checked before any chance
 roll, so neither ability touches the accuracy/effect-chance/hold-effect reroutes.
 
-**Species (canon only so far, no flavor picks yet).** Purifying Salt → the **Nacli / Naclstack / Garganacl** salt line
-(merged onto their existing Clear Body / Sturdy rows). Good as Gold → **Gholdengo** (its sole ability). Gholdengo
-is a sole-ability frontier set, so — like the other sole-ability legends — it takes the innate **plus a fork-owned chosen
-override** in its empty slot 1 (`src/fork/species_ability_overrides.c`): **Gholdengo → Sticky Hold** (an
-implemented `:white_check_mark:` innate it does not itself carry, stable like Carnivine's Chlorophyll; thematic +
-low-impact — the coin hoard won't be robbed), so the innate Good as Gold is **observable** and its three frontier
-sets are freed (chosen Good as Gold → chosen Sticky Hold; the innate still blocks status moves).
-
-**Step 3.5**: Gholdengo's three frontier sets freed → chosen **Sticky Hold** (via the new override row). The
-salt line was a deferral — all three of Garganacl's real abilities (Purifying Salt / Sturdy / Clear
-Body) are now innate with no free complementary slot — and is now **resolved**: a fork override
-repurposes Garganacl's innate-redundant slot-1 Sturdy to chosen **Solid Rock** (an implemented
-`:white_check_mark:` innate, stable, the Regirock/Carbink/Stakataka rock-golem pick), and its three frontier
-sets repoint from chosen Purifying Salt to Solid Rock, so a distinct chosen ability stays observable on top of
-the innate Purifying Salt.
+**Species:** canon only.
 
 ### ABILITY_INTREPID_SWORD / ABILITY_DAUNTLESS_SHIELD
 
@@ -3653,20 +3099,7 @@ double-counted), right beside the existing innate Intimidate / Download / Supers
 real-ability `case`s in the same function, it does **not** model the once-per-battle latch — it estimates the
 boost.
 
-**Species (canon only so far, no flavor picks yet).** Intrepid Sword → **Zacian / Zacian-Crowned**; Dauntless Shield →
-**Zamazenta / Zamazenta-Crowned**. All four are **sole-ability frontier sets**, so — like the other sole-ability legends
-— each takes the innate **plus a fork-owned chosen override** in its empty slot 1
-(`src/fork/species_ability_overrides.c`): **Zacian → Tough Claws** (an implemented `:white_check_mark:` innate it
-does not itself carry, stable; powers its entirely-contact kit — Behemoth Blade / Play Rough / Close Combat /
-Crunch / Wild Charge — like Solgaleo / Zarude) and **Zamazenta → Filter** (implemented `:white_check_mark:`,
-stable, thematic for the "Shield" defender — blunts the supereffective hits its Body Press / Iron Defense wall
-fears, like Melmetal / Stonjourner). The **same** chosen ability is given to both formes of each so the ability
-stays consistent across the in-battle Hero ↔ Crowned form change. This makes the innate **observable** and frees
-the frontier slot (chosen Intrepid Sword / Dauntless Shield → chosen Tough Claws / Filter; the innate still fires
-at switch-in).
-
-**Step 3.5**: all four frontier sets freed → chosen **Tough Claws** (Zacian ×2) / **Filter** (Zamazenta ×2) via
-the new override rows + the `.ability` change in `src/fork/frontier_extended_mons.c`.
+**Species:** canon only.
 
 ### ABILITY_BEAST_BOOST
 
@@ -3692,23 +3125,7 @@ self-faint check and the sacrifice-the-ally spread scoring) that pair `IsMoxieTy
 `IsMoxieTypeInnateActive(b)` already reach it — Beast Boost was **added to `IsMoxieTypeInnateActive`**
 (`src/battle_ai_util.c`) so an innate holder is credited. No other AI site reads Beast Boost.
 
-**Species.** One flavor pick: **base Necrozma**, from Ultra Space, code-named "UB Black" and feared as a "pillager
-of light" (Bulbapedia Biology, which calls its Ultra Beast status unclear); its formes don't take it. Every canon Beast Boost user is an **Ultra Beast whose sole ability is
-Beast Boost**, so the ten evolved/frontier UBs take the innate **plus a fork-owned chosen override** in their empty
-slot 1 (`src/fork/species_ability_overrides.c`), each a stable `:x:` never-an-innate pick or an implemented
-`:white_check_mark:` innate the species does not itself carry: **Nihilego → Merciless** (auto-crits its poisoned
-targets), **Buzzwole → Iron Fist** (its punch kit), **Pheromosa → Tough Claws** (contact STAB), **Xurkitree →
-Lightning Rod** (Electric immunity + Sp. Atk, the Regieleki precedent), **Celesteela / Guzzlord → Filter** (blunts
-supereffective — Guzzlord's 4× Fairy), **Kartana → Sharpness** (its slicing Leaf Blade / Sacred Sword), **Naganadel
-→ Sheer Force** (its Nasty Plot sweeper), **Stakataka → Solid Rock** (blunts supereffective on its Trick Room wall),
-**Blacephalon → Infiltrator** (ignores screens / Substitute). This makes the innate **observable** and frees the
-frontier slot. Merged into the existing innate **Levitate** rows where present (Nihilego / Xurkitree / Kartana /
-Blacephalon float). The pre-evolution **Poipole** is **omitted as redundant** — sole Beast Boost, **not** a frontier
-set, so its chosen ability already grants it and an innate could never be observed (the Calyrex / Mega Lopunny
-precedent) — keeping only its existing innate Levitate row.
-
-**Step 3.5**: all twenty frontier sets (two per UB) freed → their chosen override via the `.ability` change in
-`src/fork/frontier_extended_mons.c`.
+**Species:** canon Ultra Beasts, plus one flavor pick: base Necrozma (code-named "UB Black").
 
 ### ABILITY_TERAVOLT / ABILITY_TURBOBLAZE
 
@@ -3737,21 +3154,9 @@ innate announces itself on entry ("<mon> is radiating a bursting / blazing aura!
 ability, so an innate Teravolt / Turboblaze is never self-broken — but it *is* suppressed by Gastro Acid /
 Neutralizing Gas via `IsInnateActive`, and is a no-op with the feature off.
 
-**Species (Step 1) — canon only so far** (ability-ignoring is strong offensive utility, kept tight, matching Mold Breaker /
-the Purifying Salt decisions). Every canon carrier is a **sole-ability frontier legend**, so — like the Regi legends / Necrozma / Solgaleo / Zacian-Zamazenta — each takes the innate **plus a fork chosen override** in its
-empty slot 1 so the innate is observable *and* the frontier set is freed:
-
-- **Turboblaze → Reshiram** (new row) + its fusion **Kyurem-White** (new row), both chosen **Flash Fire** — thematic
-  (the Vast White dragon / Fusion Flare wields fire), `:x:` (never an innate → stable), a clean special-attacker boon.
-- **Teravolt → Zekrom** (new row) + its fusion **Kyurem-Black** (new row), both chosen **Motor Drive** — thematic
-  (the Deep Black dragon / Fusion Bolt wields lightning), `:x:`, snowballs their Dragon Dance sweeper (same pick as
-  Klinklang / Vikavolt).
+**Species:** canon only — ignoring abilities is strong offensive utility.
 
 Base **Kyurem** keeps its existing innate Pressure + chosen Snow Warning override (unchanged).
-
-**Step 3.5.** All seven affected frontier sets (Reshiram ×2, Zekrom ×2, Kyurem-Black ×2, Kyurem-White ×1) are freed
-by pointing `.ability` at the new override slot (`src/fork/frontier_extended_mons.c`) — no all-abilities-innate
-deferral needed, since each species' now-innate Turboblaze/Teravolt was its only real ability.
 
 ### ABILITY_MEGA_SOL
 
@@ -3788,17 +3193,7 @@ thing?" — yes).
 **Suppression.** Suppressible by Gastro Acid / Neutralizing Gas and **not** breakable by Mold Breaker (the ability
 uses default flags), all handled by `IsInnateActive`.
 
-**Species.** The **sole canon carrier** is **Mega Meganium** (`SPECIES_MEGANIUM_MEGA`), whose only ability *is* Mega
-Sol — its innate row (already present for the base creature's Leaf Guard / Natural Cure / Overgrow, per the Mega
-pure-boon convention) gains Mega Sol so the trait is documented as an innate. Because that innate is redundant with
-Mega Meganium's chosen ability, the **observable** carrier is **base Meganium**, which takes Mega Sol as a **tight
-flavor pick** (the Solar Beam-cannon flower's base form; its chosen Overgrow differs, so the innate is visible and
-testable). No wider flavor set.
-
-**Step 3.5**: no-op — no frontier set hardcoded `ABILITY_MEGA_SOL` (the base-Meganium sets already run a Grassy
-Surge chosen override for the now-innate Leaf Guard, and simply gain innate Mega Sol on top). **Not** in the
-progress-doc 133 count. This is **Tier 5.1**; Tier 5.2
-(Quick Draw) is done — see the next block.
+**Species:** Mega Meganium (its sole canon carrier), plus base Meganium as a flavor pick so the innate is observable.
 
 ### ABILITY_QUICK_DRAW
 
@@ -3839,20 +3234,12 @@ else to wire (the rest of turn order rides the shared speed calc keyed off the r
 (turn order is computed before any attacker's move resolves, so Mold Breaker never applies) — all handled by
 `IsInnateActive`.
 
-**Species.** The **sole carrier** is **Galarian Slowbro** (`SPECIES_SLOWBRO_GALAR`), whose primary ability
-*is* Quick Draw; its existing innate row (Own Tempo / Regenerator) gains it so the trait persists no matter which
-slot a build picks. It stays observable there because a build that picks Own Tempo or Regenerator still shows the
-innate. Grep of `src/data/pokemon/species_info/` confirms G-Slowbro is the only species carrying
-`ABILITY_QUICK_DRAW`.
+**Species:** the sole canon carrier, Galarian Slowbro.
 
 The **Galarian Farfetch'd → Sirfetch'd** line originally took Quick Draw as a flavor pick (knights quick to draw
 their leek-lance). The Farfetch'd line review removed it: with one canon user, Quick Draw is a **signature** welded
 to G-Slowbro's Shellder-cannon design, and the line-review rubric rejects 1-user abilities on unrelated species.
 Do not re-add it.
-
-**Step 3.5**: no-op — no frontier set hardcoded `ABILITY_QUICK_DRAW`. The two G-Slowbro frontier sets (chosen Own
-Tempo) simply **gain** innate Quick Draw on top, which is the observable win. This is **Tier 5.2**; Tier 5.3
-(Comatose) is next.
 
 ### ABILITY_COMATOSE
 
@@ -3921,14 +3308,7 @@ Neutralizing Gas / Mold Breaker never touch the innate** either: `IsInnateActive
 `cantBeSuppressed` ability regardless of Mold Breaker / Gastro Acid / Neutralizing Gas. This is the distinctive
 contrast with the breakable Purifying Salt (Mold Breaker pierces *that* innate). Tests assert both.
 
-**Species (canon only so far, no flavor picks yet — full status immunity is a strong defensive boon, matching the Purifying Salt / Good as Gold decision).** The sole carrier is **Komala** (`SPECIES_KOMALA`), whose only real
-ability is Comatose. Its existing innate row (flavor Unaware) gains Comatose, and — as a sole-ability frontier set,
-like the sole-ability legends / Gholdengo — it takes a **fork-owned chosen Sticky Hold override**
-(`src/fork/species_ability_overrides.c`, its empty slot 1): thematic (the Drowsing Pokémon clings to its log and
-never lets go) and a stable already-implemented `:white_check_mark:` innate it does not itself carry (the same pick
-as Gholdengo). **Step 3.5**: Komala's one frontier set (was chosen Comatose) is freed to **chosen Sticky Hold**, so
-both innates (Comatose + Unaware) are observable and the set keeps its Choice Band un-Knock-Off-able. This is
-**Tier 5.3**; Tier 5.4 (Magic Guard) is next.
+**Species:** canon only (Komala) — full status immunity is a strong defensive boon.
 
 ### ABILITY_MAGIC_GUARD
 
@@ -3998,27 +3378,7 @@ The only bare `ABILITY_MAGIC_GUARD` reads left chosen-only are pure **identity**
 damage (end-turn poison, hazards) happens with no attacker move in play, where Mold Breaker never applies. Gastro
 Acid / Neutralizing Gas suppress the innate generally (tested via Neutralizing Gas restoring poison chip).
 
-**Species (canon only so far — total indirect-damage immunity is a strong defensive boon, matching the Purifying
-Salt / Good as Gold and Comatose decisions).** Every canon Magic Guard user, each **merged into its existing
-innate row** (so `GetSpeciesInnateList` still returns one row): the **Clefairy line** (Cleffa / Clefairy /
-Clefable, + the fork Mega Clefable, mirroring the base creature's boon), the **Abra line** (Abra / Kadabra /
-Alakazam, + Mega Alakazam), **Sigilyph**, and the **Solosis line** (Solosis / Duosion / Reuniclus). No flavor
-picks.
-
-**Step 3.5.** The 4 species hold 10 hardcoded frontier sets (`src/fork/frontier_extended_mons.c`). The **3
-Alakazam** sets are freed: with Magic Guard now innate, they repoint from the now-redundant chosen Magic Guard to
-Alakazam's real, **non-innate Synchronize** (`:x:` stable), so a chosen ability stays observable on top of the
-innate. The **3 Clefable / 2 Sigilyph / 2 Reuniclus** sets have **all** their real abilities now innate (Clefable:
-Cute Charm / Magic Guard / Unaware; Sigilyph: Wonder Skin / Magic Guard / Tinted Lens; Reuniclus: Overcoat / Magic
-Guard / Regenerator), so they were **deferred** rather than a game-wide override sweep — **now resolved**: Sigilyph's innate-redundant slot-2 Tinted Lens takes chosen **Simple** (`:x:` stable — doubles its
-Cosmic Power / Stored Power stallbreaker) and Reuniclus's slot-2 Regenerator takes chosen **No Guard** (`:x:`
-stable — sure-hit Focus Blast on both sets), each observable atop the still-active innate Magic Guard (both slot-2
-picks were audited: no test selects those slots). **Clefable is a permanent exclusion**: all three of its
-slots are test-pinned — Cute Charm is the chosen-not-innate exemplar in `test/fork/innate_abilities.c`, Magic Guard
-is the Magic Guard exemplar in `test/battle/ability/magic_guard.c` (+ pledge/retaliate/salt_cure/poison_heal/
-innards_out), and Unaware is the `chosen = ABILITY_UNAWARE` PARAMETRIZE in the innate divergence tests — so its 3
-sets keep their now-redundant chosen Magic Guard (still correct: the chosen runs it; the innate is
-redundant-but-skipped there), like the test-pinned Dugtrio-Alola. This is **Tier 5.4**; Tier 5.5 (Mold Breaker) is next.
+**Species:** canon only — total indirect-damage immunity is a strong defensive boon.
 
 ### ABILITY_MOLD_BREAKER
 
@@ -4059,32 +3419,7 @@ exact path — Teravolt / Turboblaze just add their species data + two more `IsI
 heuristics), each passing a matching `(battler, aiData->abilities[battler])` pair — so the one clause makes them
 all innate-aware for free, keyed off the real battler. No dedicated AI edits.
 
-**Species (Step 1) — canon plus one flavor pick** (ability-ignoring is a strong offensive utility, kept tight, matching the Purifying Salt /
-Comatose / Magic Guard canon only so far decisions). Every canon Mold Breaker user in **any** slot, merged into existing
-innate rows where present: **Pinsir** (+ Mega, pure-boon), the **Cranidos / Rampardos** line (new rows), the
-**Drilbur / Excadrill** (+ Mega) line, **Throh**, **Sawk**, the **Basculin** (all three stripes) / **Basculegion**
-(M/F) line, the **Axew / Fraxure / Haxorus** line, **Druddigon**, the **Pancham / Pangoro** line, **Hawlucha**
-(+ Mega), the **Tinkatink / Tinkatuff / Tinkaton** line, **Veluza**, and **Ogerpon-Hearthflame** (new row). One
-flavor pick: **Palkia** (+ Origin), which rends "its targets along with the space around it", so the target's ability
-offers no protection. The
-**all-Mold-Breaker Mega forms** (Emboar / Gyarados / Ampharos Mega, whose own ability data is Mold Breaker in
-every slot) are **omitted as redundant** — their chosen ability is always Mold Breaker, so an innate could never
-be observed (the Calyrex / Mega Lopunny omission precedent).
-
-**Step 3.5.** Nineteen hardcoded frontier sets held Mold Breaker (`src/fork/frontier_extended_mons.c`). Only
-**Rampardos** has a clean complementary real slot — it is freed from chosen Mold Breaker to its **`:x:` Sheer
-Force** HA (a real slot, no override needed), so a chosen ability stays observable atop the innate. Every other
-Mold Breaker set is on a species whose remaining real slots are **themselves now innate** (Excadrill ×3, Sawk ×2,
-Haxorus ×2 — its only non-innate slot Rivalry is a drawback — Pangoro ×2, Hawlucha ×2, Basculegion ×2, Tinkaton
-×2, Veluza ×2, Ogerpon-Hearthflame), so they kept their now-redundant chosen Mold Breaker (still correct: the
-chosen runs it; the innate is redundant-but-skipped there) and were **deferred** — the same all-abilities-innate case. **Resolved via fork overrides:**
-Haxorus repointed to its real slot-0 **Rivalry** (`:x:`, no override); **Sawk** (slot-1 → Sheer Force), **Pangoro**
-(slot-0 → Tough Claws), **Hawlucha** (slot-1 → Tough Claws; now No Guard, matching its Mega), **Basculegion M/F** (slot-1 → Water Absorb), **Veluza**
-(empty slot-1 → Water Absorb) and **Ogerpon-Hearthflame** (empty slot-1 → Flash Fire) took fork chosen overrides
-(`src/fork/species_ability_overrides.c`). **Excadrill and Tinkaton are excluded** (all three slots test-pinned —
-Excadrill's Sand Rush + Sand Force + Mold Breaker are each selected in test/, Tinkaton's Mold Breaker + Own Tempo in
-`levitate.c` and Pickpocket in `hit_escape.c`), so they stay chosen Mold Breaker (redundant-but-correct), the same
-exclusion as Clefable.
+**Species:** canon, plus one flavor pick — ignoring abilities is strong offensive utility.
 
 ### ABILITY_OPPORTUNIST
 
@@ -4139,21 +3474,7 @@ two sites the real ability already uses.
 clause. (There is no shared-calc path here — copying a boost isn't part of damage/turn-order calc — so these two
 reads are the whole AI surface.)
 
-**Species (Step 1) — canon, plus one legendary buff** (free stat-mirroring off any foe boost is strong utility, kept tight, matching
-the Purifying Salt / Comatose / Magic Guard / Mold Breaker canon only so far decisions). The **sole** carrier is **Espathra**
-(`SPECIES_ESPATHRA`, its primary ability), which already carried innate **Frisk / Speed Boost** — Opportunist is
-added to that row. Because Opportunist is Espathra's natural slot-0 ability, it stays **observable as the chosen
-slot** with no override needed (unlike the sole-ability carriers whose innate would otherwise be invisible).
-
-**Step 3.5 (frontier roster).** Both Espathra frontier sets (`src/fork/frontier_extended_mons.c`) chose
-Opportunist (one had already been repointed there when Speed Boost went innate). With **all three** of Espathra's
-abilities now innate **and no free slot**, freeing the redundant chosen slot needed a game-wide override that
-*replaces a real ability* (plus the `test/battle` audit) — the slot-repurpose class rather than the Gholdengo /
-Komala / Reshiram empty-slot fills. The override did exactly that: a fork override repurposes Espathra's
-innate-redundant slot-1 Frisk (slot-0 Opportunist is test-pinned by `opportunist.c`) to chosen **Competitive** (an
-implemented `:white_check_mark:` innate it does not carry, self-synergistic with its Calm Mind / Stored Power
-sweeper), and both sets repoint from chosen Opportunist to Competitive, so a distinct chosen ability stays
-observable on top of the innate Opportunist.
+**Species:** canon (Espathra), plus one legendary buff — free stat-mirroring is strong utility.
 
 ### ABILITY_MIRROR_ARMOR
 
@@ -4210,19 +3531,7 @@ ability already uses.
 both the active-foe and doubles-partner branches. Everything else is automatic: the AI's "will this stat drop land"
 prediction routes through the same `IsMirrorArmorReflected` (with `onlyChecking`), so it sees the innate for free.
 
-**Species (Step 1) — canon only so far** (free stat-drop reflection is strong defensive utility, kept tight, matching the
-Opportunist / Mold Breaker / Purifying Salt decisions). The **sole** carrier is **Corviknight** (`SPECIES_CORVIKNIGHT` +
-`SPECIES_CORVIKNIGHT_GMAX`, its hidden ability), which already carried innate **Pressure / Unnerve** — Mirror Armor
-is added to those rows.
-
-**Step 3.5 (frontier roster).** All three Corviknight frontier sets (`src/fork/frontier_extended_mons.c`) chose
-Mirror Armor. With **all three** of Corviknight's abilities now innate **and no free slot**, freeing the redundant
-chosen slot needed a game-wide override that *replaces a real ability* (plus the `test/battle` audit). The override did
-that: a fork override repurposes Corviknight's innate-redundant slot-1 Unnerve (slot-2 Mirror Armor is heavily
-test-pinned — `mirror_armor.c` / `pursuit.c` / `sticky_web.c` / …) to chosen **Bulletproof** (`:x:` stable, the
-Skarmory/Registeel Steel-wall pick — deflects Focus Blast / Sludge Bomb / Energy Ball), and its three sets repoint
-from chosen Mirror Armor to Bulletproof, so a distinct chosen ability stays observable on top of the innate Mirror
-Armor.
+**Species:** the sole canon carrier, Corviknight.
 
 ### ABILITY_MAGIC_BOUNCE
 
@@ -4284,24 +3593,7 @@ foe" heuristics, none inside the shared damage calc:
   (`abilityDef != ABILITY_MAGIC_BOUNCE && IsInnateActive(...)`, and the partner analogue guarded on `hasTwoOpponents`),
   so an innate-only holder / partner is avoided just like the chosen-ability holder.
 
-**Species (Step 1) — canon only so far** (free status-move reflection is strong utility, kept tight like Mirror Armor /
-Opportunist / Mold Breaker / Purifying Salt). The non-Mega canon carriers — **Espeon** (new row), the **Natu / Xatu** line
-(merged with innate Early Bird), and the **Hatenna / Hattrem / Hatterene / Hatterene-Gmax** line (merged with innate
-Anticipation / Healer) — take it, and it is *observable* there (their chosen slot can be Synchronize / Early Bird /
-Healer / Anticipation). The Mega carriers whose real ability **is** Magic Bounce — **Sableye / Absol (+ Mega-Z) /
-Diancie / Clefable** Megas — get it as a pure-boon Mega row on top of the base creature's inherited innates. The one
-non-canon picks are **Cresselia**, a legendary buff for her stay-in Calm Mind set, whose usual answers are Taunt and Toxic,
-and **Galarian Articuno**, a Psychic bird like Xatu that also runs Calm Mind and Roost.
-
-**Step 3.5 — partial free, partial defer.** `grep -n ABILITY_MAGIC_BOUNCE src/fork/frontier_extended_mons.c` hit six
-sets. The **Xatu** set and **both Espeon** sets have a real, non-innate complementary slot (Synchronize, `:x:`
-stable), so they repoint `.ability` from the now-redundant chosen Magic Bounce to `ABILITY_SYNCHRONIZE` (the innate
-still bounces; Synchronize is now the observable chosen slot). The **three Hatterene** sets are all-abilities-innate
-(Healer + Anticipation + Magic Bounce, no free slot), so — exactly like Corviknight (Mirror Armor) and Espathra
-(Opportunist) — freeing needs a slot-repurpose override. **Resolved**: a fork override repurposes
-Hatterene's innate-redundant slot-1 Anticipation to chosen **Unaware** (an implemented `:white_check_mark:` innate,
-the Calm Mind-wall pick, stable) and the three sets repoint from chosen Magic Bounce to Unaware (slot-2 Magic Bounce
-stays a real slot — its identity), keeping a distinct chosen ability observable on top of the innate Magic Bounce.
+**Species:** canon only — free status-move reflection is strong utility.
 
 ### ABILITY_DANCER
 
@@ -4351,20 +3643,7 @@ only the *queue* site (which reads the chosen slot) needed the innate clause, pl
 reactive mid-turn copy the AI does not pre-plan around), and the copied move itself runs through the shared move
 machinery, so no AI wiring is needed.
 
-**Species (Step 1) — canon + a tight flavor set.** *Canon:* the four **Oricorio** forms (Baile / Pom-Pom / Pa'u /
-Sensu), for whom Dancer is their **sole** ability — so the innate is redundant-but-correct there (added for
-convention/consistency). *Flavor* (species that *lack* the real ability but are strongly dance-themed, where the
-innate is the **observable** one): **Ludicolo** (the iconic carefree dancer), **Bellossom** (its swaying flower
-dance), the **Lilligant** lines (Kanto's graceful Petal/Teeter Dance + Hisui's whirling martial dance),
-**Meloetta** (both formes — the melody/dance mythical with its Pirouette dance forme) and **Maractus** (dances
-rhythmically to scare off bird Pokémon). Each flavor pick is merged into the species' existing innate row.
-
-**Step 3.5 (frontier roster).** `grep -n ABILITY_DANCER src/fork/frontier_extended_mons.c` hit the two
-**Oricorio** sets (base + Pa'u). Dancer is Oricorio's **only** real ability, so — like the sole-ability legends —
-a fork override fills each form's **empty slot 1** with chosen **Tinted Lens** (an implemented `:white_check_mark:`
-innate it does not carry, stable; its Hurricane / Revelation Dance punch through resists for full), and both sets
-repoint from chosen Dancer to Tinted Lens, so a distinct chosen ability stays observable on top of the innate
-Dancer.
+**Species:** canon (the Oricorio forms), plus a tight flavor set of strongly dance-themed species.
 
 ### Script `jumpifability` innate-awareness
 
@@ -4446,28 +3725,9 @@ flag **off** an innate Effect Spore reverts to the vanilla 30% 3-way status roll
 `TRUE` and is never turned off in this fork, so this is a documented dormant edge, not a live one. If the flag
 is ever made switchable, narrow the innate in the flag-off case before relying on it.
 
-**Species — the conversions (wiring PR).** The four species that already had Effect Spore as a *chosen*
-ability had to be converted in the same edit, because CI gate (6) ("no ability override or frontier set names
-an innate-capable ability") fires the moment the ability joins `sImplementedInnates[]`: **Vileplume, Jumpluff,
-Vivillon, Ribombee**. Step 3.5 freed all eight of their frontier sets and three override rows for
-never-an-innate picks: Vileplume -> its **existing** Poison Point override slot (no new row needed),
-Jumpluff -> **Cotton Down** (it is made of cotton spores), Vivillon -> **Wind Rider** (a butterfly riding the
-Tailwind), Ribombee -> **Fluffy** (replacing the no-op Honey Gather in slot 0).
+**Species:** every canon carrier — the test `every canon Effect Spore carrier has it as an innate` enforces this both ways.
 
-**Species — canon carriers.** Every species whose vanilla slots grant Effect Spore now carries it innately:
-the **Paras**, **Shroomish/Breloom**, **Foongus/Amoonguss**, **Morelull/Shiinotic** and
-**Gossifleur/Eldegoss** lines, plus Vileplume above. A test enforces this both ways round
-(`every canon Effect Spore carrier has it as an innate`), so a future species that ships with the ability
-fails CI until it gets a row. None of their frontier sets or override rows needed freeing — every one already
-named a never-an-innate pick (Dry Skin, Hustle, Water Absorb, Mycelium Might, Cotton Down, Psychic Affinity).
-
-**Species — flavor picks.** A deliberately tight set, all spore/powder/fungus identities:
-- **Line-mates of a canon carrier**, so a line is not half-spored: **Oddish / Gloom** (-> Vileplume),
-  **Hoppip / Skiploom** (-> Jumpluff), **Scatterbug / Spewpa** (-> Vivillon), **Cutiefly** (-> Ribombee).
-- **Powder identities with no canon carrier in the line**: **Butterfree** (+ its G-Max — *G-Max Befuddle
-  literally applies `MOVE_EFFECT_EFFECT_SPORE_SIDE`*, so this is closer to canon than flavor), **Venonat /
-  Venomoth** (the powder trio plus poisonous scales), and **Toedscool / Toedscruel** (mushroom Pokémon whose
-  only real ability, Mycelium Might, is a never-an-innate drawback).
+**Species:** plus a tight flavor set of spore/powder/fungus identities, including the line-mates of canon carriers so no line is half-spored.
 
 Deliberately **not** given it, though a wider net would have caught them: **Bellossom** (a dancer, not a
 spore-scatterer), the **Victreebel** line (a carnivorous pitcher plant), the **Roselia** line (thorns and
@@ -4546,23 +3806,10 @@ picked the ones whose fire burns with their spirit or vitality: it flares in bat
 dims when they tire, or is fed by what they defeat. Fire used only as a weapon or as heat did
 not qualify. Megas and Gmax forms mirror their base.
 
-- **Starter lines:** Charmander, Charmeleon, Charizard (+ Mega X, Mega Y, Gmax); Cyndaquil,
-  Quilava, Typhlosion (+ Hisuian); Torchic, Combusken, Blaziken (+ Mega); Chimchar, Monferno,
-  Infernape; Tepig, Pignite, Emboar (+ Mega); Litten, Torracat, Incineroar; Scorbunny, Raboot,
-  Cinderace (+ Gmax); Fuecoco, Crocalor, Skeledirge.
-- **Fighting spirit:** Charcadet, Armarouge, Ceruledge ("a fiery fighting spirit"); Darumaka,
-  Darmanitan (Standard + Zen); Magby, Magmar, Magmortar (the flame is its health); Ponyta,
-  Rapidash; Fletchinder, Talonflame; Growlithe, Arcanine (+ Hisuian forms); Pansear, Simisear;
-  Litleo, Pyroar (+ Mega).
-- **Fed by the defeated:** Litwick, Lampent, Chandelure (+ Mega), which burn the life force they
-  absorb; Heatmor, which consumes the Durant it burns through.
-- **Legends:** Moltres ("burns and heals itself" in magma), Ho-Oh, Entei, Victini.
-
 Moltres and Ho-Oh also have Regenerator, Skeledirge has Healer, and Litleo and Pyroar have
 Moxie; each pairing is deliberate. Galarian Ponyta, Rapidash, Moltres and Darmanitan are left
 out (not Fire-type). Under a chosen Sheer Force (Darmanitan), the KO step is still reached
-through `RedirectSheerForceSkipToInnates()`, so the innate fires. No frontier set gave any of
-these a chosen Rekindle, so there is no Step 3.5 work.
+through `RedirectSheerForceSkipToInnates()`, so the innate fires.
 
 
 ### ABILITY_WILLPOWER
@@ -4580,23 +3827,10 @@ innate equal to the chosen ability is skipped, so it never fires twice.
 **No `DETERMINISTIC_*` surface and no AI wiring.** It fires at 100% on a hit. Not breakable;
 suppressed by Gastro Acid and Neutralizing Gas through `IsInnateActive()`.
 
-**Species: a "strong will" flavor set,** picked by reading every Pokédex entry for mental
-resilience:
-
-- **Azelf**, whose official category is the "Willpower Pokémon".
-- **Meditite, Medicham** (+ Mega), the "Meditate Pokémon"; Mega Medicham's entry says it "uses
-  its amped-up willpower" to create extra arms.
-- **Hitmonchan**, whose "indomitable spirit means that it will never give up".
-- **Mew** and **Celebi**, as a legendary buff for the two Psychic Mythicals of Kanto and Johto,
-  whose power is framed as mental (Mew "is capable of making itself invisible at will").
-- **Landorus** (both formes), a maintainer's pick outside the Pokédex criterion: its entries are
-  about crops, but it is the steady one of the Forces of Nature, the one who stops and subdues
-  Tornadus and Thundurus (anime *Stopping the Rage of Legends! Part 2*; Pokémon Adventures, *A Stormy
-  Time in the Battle Subway*). It also shores up a physical attacker's weak special side.
+**Species:** a "strong will" flavor set, picked by reading every Pokédex entry for mental resilience.
 
 Species with no such flavor were left out on purpose, whether special walls (Mantine, Goodra) or
-Sylveon, which it was first proposed for: Sylveon's entry is about lowering the *foe's* guard. No frontier set
-gives any carrier a chosen Willpower, so there is no Step 3.5 work.
+Sylveon, which it was first proposed for: Sylveon's entry is about lowering the *foe's* guard.
 
 ### ABILITY_PACIFY
 
@@ -4613,19 +3847,10 @@ skipped, so it never fires twice.
 **No `DETERMINISTIC_*` surface and no AI wiring.** It fires at 100% on entry. Not breakable;
 suppressed by Gastro Acid and Neutralizing Gas through `IsInnateActive()`.
 
-**Species: a "calming" flavor set,** picked by reading every Pokédex entry for wording about
-weakening a foe's hostility or fighting spirit:
-
-- **Sylveon**, which it was made for: an aura "that weakens hostility in its prey".
-- **Chikorita, Bayleef, Meganium** (+ Mega): Chikorita's fragrance "becalms the battlers", and
-  Meganium gives off "its becalming scent to blunt the foe's fighting spirit".
-- **Mega Audino**: "a soothing pulse from its body that reduces hostility in others". Base Audino's
-  entry is about sensing feelings, not calming them, so it is left out.
-- **Galarian Moltres**: its aura "will consume the spirit of any creature it hits. Victims become
-  burned-out shadows of themselves."
+**Species:** a "calming" flavor set, picked by reading every Pokédex entry for wording about weakening a foe's hostility or fighting spirit.
 
 Entries that soothe *people* or allies rather than foes (Venusaur, Oinkologne, Skeledirge) were
-left out on purpose. No frontier set gives any carrier a chosen Pacify, so there is no Step 3.5 work.
+left out on purpose.
 
 ### ABILITY_MYTHICAL
 
@@ -4675,12 +3900,7 @@ Neutralizing Gas through `IsInnateActive()`. The AI needs no extra wiring: the P
 with the AI's PP mirror, and the one AI case (`BattlerBenefitsFromAbilityScore`) is ability-transfer
 scoring, which innates never take part in.
 
-**Species: Victini only.** It is the sole canon carrier, and the ability reads as Victini's signature,
-so it gets no flavor picks. Victini's slot 0 is overridden to **Flash Fire**, and all four of its
-frontier sets run it.
-
-**Step 3.5.** Ledian used to carry a chosen Victory Star through an override. Wiring the innate made
-that pick illegal, so Ledian's override and both of its sets moved to **Soundproof**.
+**Species:** Victini only — the ability reads as its signature.
 
 ### ABILITY_TOXIC_CHAIN
 
@@ -4710,10 +3930,5 @@ Suppressed by Gastro Acid and Neutralizing Gas through `IsInnateActive()`; block
 Covert Cloak like the real ability. AI: `AI_DeterministicAbilityGuaranteesStatus`
 (`src/fork/deterministic_moves.c`) credits the innate, so the AI knows its hits guarantee bad poison.
 
-**Species: the Loyal Three only.** Their slot 0 is overridden: Okidogi → **Sheer Force**,
-Munkidori → **Psychic Surge**, Fezandipiti → **Lingering Aroma** (its lore pheromones that captivate
-whoever touches it). All six of their frontier sets run the new pick.
+**Species:** the Loyal Three only.
 
-**Step 3.5.** Gliscor's override was a borrowed Toxic Chain. Wiring the innate made that illegal, so
-the override and both Gliscor sets moved to **Sand Stream**, which sets up the sand its innate Sand
-Veil exploits.
