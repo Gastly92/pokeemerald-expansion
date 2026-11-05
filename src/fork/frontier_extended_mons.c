@@ -37324,7 +37324,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_DRAGON_DANCE,
-            MOVE_HEAT_CRASH,
+            MOVE_FLARE_BLITZ,
             MOVE_DRAGON_CLAW,
             MOVE_HIGH_HORSEPOWER
         },
