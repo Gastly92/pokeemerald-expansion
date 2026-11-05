@@ -28,6 +28,7 @@
 #include "fork/damage_preview.h"
 #include "fork/deterministic_moves.h"
 #include "fork/innate_abilities.h"
+#include "fork/status_preview.h"
 #include "constants/battle.h"
 #include "constants/battle_frontier.h"
 #include "constants/characters.h"
@@ -56,14 +57,14 @@ static u32 CalcStatBound(u32 base, u32 level, u32 iv, u32 ev, u32 nature)
 // (see fork-docs/BATTLE_INFO.md, "Reveal gating"); they are set for every battle, not only in
 // the Frontier. A foe under an active Illusion has revealed nothing of its own: the bits belong
 // to the real mon's party slot, and using them would leak what is behind the disguise.
-static bool32 IsFoeAbilityKnown(enum BattlerId battler)
+bool32 IsPreviewFoeAbilityKnown(enum BattlerId battler)
 {
     if (GetIllusionMonSpecies(battler) != SPECIES_NONE)
         return FALSE;
     return (gBattleStruct->infoAbilityRevealed[GetBattlerSide(battler)] >> gBattlerPartyIndexes[battler]) & 1;
 }
 
-static bool32 IsFoeItemKnown(enum BattlerId battler)
+bool32 IsPreviewFoeItemKnown(enum BattlerId battler)
 {
     if (GetIllusionMonSpecies(battler) != SPECIES_NONE)
         return FALSE;
@@ -431,8 +432,8 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
     // calc that read the battler directly rather than the context.
     for (enum BattlerId b = 0; b < gBattlersCount; b++)
     {
-        bool32 abilityKnown = IsOnPlayerSide(b) || IsFoeAbilityKnown(b);
-        bool32 itemKnown = IsOnPlayerSide(b) || IsFoeItemKnown(b);
+        bool32 abilityKnown = IsOnPlayerSide(b) || IsPreviewFoeAbilityKnown(b);
+        bool32 itemKnown = IsOnPlayerSide(b) || IsPreviewFoeItemKnown(b);
 
         gAiLogicData->abilities[b] = abilityKnown ? GetBattlerAbility(b) : ABILITY_NONE;
         gAiLogicData->items[b] = itemKnown ? gBattleMons[b].item : ITEM_NONE;
@@ -555,7 +556,7 @@ bool32 GetDamagePreviewRange(enum BattlerId battlerAtk, enum BattlerId battlerDe
 
 // The foe the readout is about: the one opposite, or its partner once that one is down. The
 // same choice the stock effectiveness icon makes for its single readout.
-static enum BattlerId GetPreviewTarget(enum BattlerId battler)
+enum BattlerId GetDamagePreviewTarget(enum BattlerId battler)
 {
     enum BattlerId target = GetOppositeBattler(battler);
 
@@ -598,7 +599,7 @@ u8 *FormatDamagePreviewAmount(u8 *dst, u32 lo, u32 hi, enum DamagePreviewKO ko)
 
 static bool32 PrintDamagePreview(enum BattlerId battler, enum Move move, enum Gimmick gimmick, enum Type type)
 {
-    enum BattlerId target = GetPreviewTarget(battler);
+    enum BattlerId target = GetDamagePreviewTarget(battler);
     enum DamagePreviewKO ko;
     u32 lo, hi;
     u8 *end;
@@ -621,7 +622,10 @@ static bool32 PrintDamagePreview(enum BattlerId battler, enum Move move, enum Gi
 
 bool32 TryPrintMoveDamagePreview(enum BattlerId battler, enum Move move, enum Type type)
 {
-    return PrintDamagePreview(battler, move, GetArmedGimmick(battler), type);
+    if (PrintDamagePreview(battler, move, GetArmedGimmick(battler), type))
+        return TRUE;
+    // A status move has no range; B_MOVE_STATUS_PREVIEW may still know it will fail.
+    return TryPrintStatusMovePreview(battler, move, type);
 }
 
 bool32 TryPrintZMoveDamagePreview(enum BattlerId battler, enum Move zMove, enum Type zMoveType)
