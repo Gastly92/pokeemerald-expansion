@@ -305,10 +305,13 @@ Healer always cures the ally's status, Harvest always recovers a used berry and,
 in sun, also heals 1/16 max HP (`BattleScript_HarvestActivatesSunHeal` + new
 `STRINGID_HARVESTHPGAIN`). **Quick Draw** only activates on the user's first turn
 out (`IsBattlersFirstTurn`, `src/battle_main.c`) — the attacker-ability mirror of
-Quick Claw. **Moody** compares the *raw* current values of the five battle stats
-(acc/evasion **always** excluded, ignoring `B_MOODY_ACC_EVASION`), raises the
-lowest-valued by +2 and lowers the highest-valued by −1, ties affecting every tied
-stat (`GetMoodyStatValue`). **Pickup** recovers the first valid used item in a
+Quick Claw. **Moody** *sets* all seven stat stages (acc/evasion **included**, ignoring
+`B_MOODY_ACC_EVASION`) each end of turn to the next step of a fixed swing —
++1, −1, +2, −2, +3, −3, +6, −6, then alternating +6/−6 — with one pop-up and one
+"…increased/decreased all its stats!" message (`src/fork/deterministic_moody.c`).
+It is a direct set like Haze, so Contrary/Simple and stat-change reactions don't
+apply, and the step (the `moodyPhase` volatile) restarts on switch-in. The holder
+gets alternating windows of strength and weakness that both sides can plan around. **Pickup** recovers the first valid used item in a
 fixed order — self → partner → directly-opposing foe → across foe — instead of a
 random battler. **Trace** (doubles) copies the directly-opposing foe (same flank)
 when traceable, else the other. **Forewarn** tie-breaks equal-power moves by

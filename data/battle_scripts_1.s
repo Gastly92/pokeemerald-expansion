@@ -4717,6 +4717,15 @@ BattleScript_HarvestActivatesSunHeal::
 BattleScript_HarvestActivatesSunHealEnd:
 	return
 
+@ FORK: DETERMINISTIC_ABILITIES — Moody sets every stat stage to the next step of
+@ its swing (src/fork/deterministic_moody.c); one pop-up, one animation, one message.
+BattleScript_DeterministicMoody::
+	call BattleScript_AbilityPopUp
+	playanimation BS_EFFECT_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gMoodyOscillationStringIds
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_SolarPowerActivates::
 	call BattleScript_AbilityPopUp
 	healthbarupdate BS_ATTACKER

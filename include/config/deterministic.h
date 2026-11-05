@@ -279,12 +279,12 @@
 //     (IsBattlersFirstTurn), but then always moves it first in its bracket — the
 //     attacker-ability mirror of DETERMINISTIC_HOLD_EFFECTS' Quick Claw. See
 //     src/battle_main.c.
-//   - Moody compares the *raw* current values of the five battle stats (Atk/Def/
-//     SpA/SpD/Spe — accuracy/evasion are ALWAYS excluded under this flag, ignoring
-//     B_MOODY_ACC_EVASION), raises the lowest-valued stat by +2 and lowers the
-//     highest-valued by -1; on a tie every tied stat on that side is raised/lowered.
-//     Raw values differ from turn 1 (base stats + nature), so there is no degenerate
-//     all-equal case.
+//   - Moody *sets* all seven stat stages (accuracy and evasion included, ignoring
+//     B_MOODY_ACC_EVASION) at each end of turn, stepping through a fixed swing:
+//     +1, -1, +2, -2, +3, -3, +6, -6, then alternating +6/-6. One pop-up and one
+//     message per turn. It is a direct set (like Haze), so Contrary/Simple and
+//     stat-change reactions don't apply. The step restarts when the holder switches
+//     in. See src/fork/deterministic_moody.c.
 //   - Pickup recovers the first valid used item in a fixed preference order rather
 //     than a random battler's: self, then partner, then the directly-opposing foe,
 //     then the across foe (each gated by CantPickupItem).
