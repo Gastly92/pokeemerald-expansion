@@ -110,3 +110,37 @@ player can know and then restored byte-for-byte:
   type it names and the effectiveness icon follow the same form, so a Mega Gardevoir-to-be's
   Hyper Voice reads `Fairy`. The form is borrowed for the calc and restored; nothing on screen
   changes until it really Mega Evolves.
+
+## Status moves (`B_MOVE_STATUS_PREVIEW`)
+
+A status move has no range, but the same row says when the player can already tell it will fail:
+
+```
+PP ◎   16/16
+Grass Fails
+```
+
+- **Flag:** `B_MOVE_STATUS_PREVIEW` (`include/config/fork.h`, compile-time)
+- **Code:** `src/fork/status_preview.c` (`IsStatusMoveKnownToFail`, `TryPrintStatusMovePreview`), called
+  from `TryPrintMoveDamagePreview` once the damage readout declines, so it needs no upstream hook of its own
+- **Test:** `test/fork/status_preview.c`
+
+It asks the engine's own checks, the ones the move runs when it is used, with the foe rewritten the
+same way the damage range rewrites it: an **unrevealed ability or held item counts as absent**, and a foe
+under Illusion is read as its disguise. Innates are species data and always count. So it flags:
+
+- **Before the effect**, for any status move aimed at a foe: Thunder Wave's type matchup (the only status
+  move that reads the type chart), an absorbing or blocking ability (Volt Absorb, Sap Sipper, Soundproof,
+  Good as Gold...), a powder immunity (Grass type, Overcoat, Safety Goggles), Magic Bounce, a chosen
+  Prankster into a Dark type, Dazzling and co. or Psychic Terrain against a priority move.
+- **The effect itself**: sleep / poison / paralysis / burn moves and Yawn (through `CanSetNonVolatileStatus`:
+  types, Corrosion, an existing status, Safeguard, terrain, Leaf Guard, Sweet / Flower / Pastel Veil, sleep
+  clause...), confusion moves, Leech Seed into a Grass type, and a Substitute for all of these.
+
+Under `BUFF_REBURN` / `BUFF_REPOISON` / `BUFF_REPARALYZE` an already-statused foe is not a failure, since the
+move does something; the same goes for re-seeding under `BUFF_LEECH_SEED`. Mold Breaker and co. are applied
+as the move would apply them. It does not flag anything that hinges on turn order or accuracy, and it is
+off while a Dynamax (Max Guard) or Z-Move is armed.
+
+A hidden item shows itself the moment it acts: a Safety Goggles block records the item, so a second Sleep
+Powder reads `Grass Fails` once the first has been stopped.

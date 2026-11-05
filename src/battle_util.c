@@ -2356,6 +2356,10 @@ bool32 IsPowderMoveBlocked(struct DamageContext *ctx)
     {
         gLastUsedAbility = ctx->abilities[ctx->battlerDef];
         gBattlerAbility = ctx->battlerDef;
+        // FORK: the "protected by Safety Goggles" message shows the item, so record it: the INFO
+        // viewer and B_MOVE_STATUS_PREVIEW then know it (test/fork/status_preview.c).
+        if (ctx->holdEffects[ctx->battlerDef] == HOLD_EFFECT_SAFETY_GOGGLES)
+            RecordItemEffectBattle(ctx->battlerDef, HOLD_EFFECT_SAFETY_GOGGLES);
         BattleScriptCall(BattleScript_PowderMoveNoEffect);
     }
 

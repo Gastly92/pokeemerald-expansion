@@ -61,6 +61,13 @@ enum Type GetDamagePreviewMoveType(enum BattlerId battler, enum Move move, enum 
 // matchup quirks -- Freeze-Dry's Subzero Slammer / Max Hailstorm is resisted by Water.
 enum Move GetDamagePreviewExecutedMove(enum BattlerId battler, enum Move move);
 
+// What the player has seen of a foe: the INFO viewer's reveal bits, and nothing at all of a foe
+// under an active Illusion. Shared with src/fork/status_preview.c.
+bool32 IsPreviewFoeAbilityKnown(enum BattlerId battler);
+bool32 IsPreviewFoeItemKnown(enum BattlerId battler);
+// The foe the readout is about: the one opposite, or its partner once that one is down.
+enum BattlerId GetDamagePreviewTarget(enum BattlerId battler);
+
 struct DamageContext;
 
 // CalcTypeEffectivenessMultiplier against the disguise a defender under Illusion shows: its
