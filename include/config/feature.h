@@ -95,4 +95,15 @@
 // as they are always known. See src/fork/silent_ability_popup.c for the full list.
 #define FEATURE_ANNOUNCE_SILENT_ABILITIES TRUE
 
+// When TRUE, a damaging move's status side effect (Body Slam's paralysis, Scald's burn, Tri
+// Attack's pick, ...) that an ability or item stopped is announced: the ability pop-up
+// (abilities only) and "<mon>'s <ability/item> prevents paralysis!" (or poisoning, burns, sleep,
+// freezing, frostbite). Stock play blocks these silently; status moves like Thunder Wave
+// already announce. Covers Shield Dust and Covert Cloak plus every status-immunity ability
+// (Limber, Immunity, Water Veil, Insomnia, Magma Armor, Leaf Guard, Comatose, the Veils, ...),
+// chosen ability or innate. Only a status that would actually have landed is announced, so a
+// failed chance roll, an existing status, a type immunity, Safeguard or a terrain stay quiet.
+// See src/fork/status_prevention.c.
+#define FEATURE_ANNOUNCE_STATUS_PREVENTION TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
