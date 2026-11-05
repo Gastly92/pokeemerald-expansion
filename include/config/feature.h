@@ -106,4 +106,11 @@
 // See src/fork/status_prevention.c.
 #define FEATURE_ANNOUNCE_STATUS_PREVENTION TRUE
 
+// When TRUE, Guard Dog (chosen ability or innate) announces itself when it stops a forced switch:
+// the Guard Dog pop-up and "<mon> refuses to be forced out!". Stock play says only "But it
+// failed!" for Roar / Whirlwind and nothing at all for Dragon Tail / Circle Throw; Suction Cups
+// already announces itself in both. Roar / Whirlwind still count as failed (Stomping Tantrum).
+// See src/fork/guard_dog_phasing.c.
+#define FEATURE_ANNOUNCE_GUARD_DOG TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
