@@ -106,4 +106,13 @@
 // See src/fork/status_prevention.c.
 #define FEATURE_ANNOUNCE_STATUS_PREVENTION TRUE
 
+// When TRUE, a move that fails because of an ability shows that ability's pop-up before the usual
+// "But it failed!", so the player can see why: Roar / Whirlwind into Guard Dog, Psycho Shift into a
+// status-blocking ability (Limber, Immunity, Insomnia, Comatose, Purifying Salt, the Veils, ...),
+// and Rest blocked by Leaf Guard in sun, Shields Down or Sweet Veil. Dragon Tail / Circle Throw
+// into Guard Dog, which hit but stay silent about the blocked switch, show the pop-up too. Chosen
+// ability or innate. Rule failures (Skill Swap on Wonder Guard, Soak on Multitype, ...) stay plain,
+// as nothing is protecting the target there. See src/fork/ability_failure_popup.c.
+#define FEATURE_ANNOUNCE_ABILITY_FAILURES TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H

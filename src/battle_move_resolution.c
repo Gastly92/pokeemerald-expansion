@@ -23,6 +23,7 @@
 #include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
 #include "fork/buff_confusion.h" // FORK: BUFF_CONFUSION_SELF_DAMAGE
 #include "fork/silent_ability_popup.h" // FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES
+#include "fork/ability_failure_popup.h" // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES
 
 static void ValidateBattlers(void);
 static enum Move GetOriginallyUsedMove(enum Move chosenMove);
@@ -4726,6 +4727,13 @@ static enum MoveEndResult MoveEndMoveBlock(struct BattleCalcValues *cv)
                 // FORK: innate-aware Guard Dog / Suction Cups block forced switch-out (FEATURE_INNATE_ABILITIES)
                 if (cv->abilities[battlerDef] == ABILITY_GUARD_DOG || IsInnateActive(battlerDef, ABILITY_GUARD_DOG))
                 {
+                    if (TryPrepareAbilityFailurePopUp(battlerDef, ABILITY_GUARD_DOG)) // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES (src/fork/ability_failure_popup.c)
+                    {
+                        BattleScriptCall(BattleScript_AbilityPopUp);
+                        gBattleStruct->eventState.moveEndBattler = 0;
+                        gBattleScripting.moveendState++;
+                        return MOVEEND_RESULT_RUN_SCRIPT;
+                    }
                     gBattleStruct->eventState.moveEndBattler = 0;
                     gBattleScripting.moveendState++;
                     return MOVEEND_RESULT_CONTINUE;

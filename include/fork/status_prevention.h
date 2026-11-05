@@ -17,6 +17,9 @@ extern const u16 gStatusPreventedStringIds[];
 // is ABILITY_NONE when nothing ability-related blocked it.
 void NoteNonVolatileStatusBlocker(enum BattlerId battler, enum Ability ability);
 
+// The blocker the last NoteNonVolatileStatusBlocker call recorded (ABILITY_NONE if no ability).
+enum Ability GetNonVolatileStatusBlocker(enum BattlerId *battler);
+
 // Shield Dust / Covert Cloak: called from SetMoveEffect just before its blocked-effect branch
 // drops the effect. Redirects se->script through the announcement when it fires.
 void TryAnnounceBlockedStatusEffect(struct BattleCalcValues *cv, struct SetEffect *se, bool32 affectsUser);
