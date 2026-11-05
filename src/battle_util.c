@@ -10,6 +10,7 @@
 #include "fork/free_gimmicks.h" // FORK: FindMegaStoneForStats, the item-free Mega pick
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
+#include "fork/status_prevention.h" // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
 #include "fork/halo.h" // FORK: Halo (field-wide per-hit damage cap)
 #include "fork/rekindle.h" // FORK: Rekindle (heal on KO)
 #include "fork/willpower.h" // FORK: Willpower (Sp. Def twin of Stamina)
@@ -6108,6 +6109,8 @@ static bool32 IsNonVolatileStatusBlocked(enum BattlerId battlerDef, enum Ability
 {
     if (battleScript != NULL)
     {
+        // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION reads which ability (if any) blocked the status.
+        NoteNonVolatileStatusBlocker(battlerDef, abilityAffected ? abilityDef : ABILITY_NONE);
         if (option == RUN_SCRIPT)
         {
             if (battleScript != BattleScript_NotAffected)

@@ -5181,6 +5181,14 @@ BattleScript_FlinchPreventedByItem::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION (src/fork/status_prevention.c)
+BattleScript_StatusPreventedByAbility::
+	call BattleScript_AbilityPopUp
+BattleScript_StatusPreventedByItem::
+	printfromtable gStatusPreventedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 @ FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES (src/fork/silent_ability_popup.c)
 BattleScript_SilentAbilityRevealed::
 	copybyte gBattlerAbility, sBATTLER
