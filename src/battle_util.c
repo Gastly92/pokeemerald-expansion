@@ -4727,6 +4727,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         case ABILITY_WIND_POWER:
             if (!IsWindMove(gCurrentMove))
                 break;
+            if (GetConfig(FEATURE_NO_DUPLICATE_CHARGE) && BattlerHasAbility(battler, ABILITY_ELECTROMORPHOSIS))
+                break; // FORK: Electromorphosis (chosen or innate) charges on this same hit; don't announce it twice
             // fall through
         case ABILITY_ELECTROMORPHOSIS:
             if (!gBattleStruct->unableToUseMove && IsBattlerTurnDamaged(battler, EXCLUDING_SUBSTITUTES)

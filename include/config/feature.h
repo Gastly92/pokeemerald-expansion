@@ -122,4 +122,11 @@
 // ABILITY_WIND_POWER / ABILITY_ELECTROMORPHOSIS case of src/battle_util.c.
 #define FEATURE_NO_CHARGE_ON_FAINT TRUE
 
+// When TRUE, Wind Power's on-hit trigger stays silent when the holder also has Electromorphosis
+// (chosen ability or innate). Electromorphosis fires on every damaging hit, so a damaging wind move
+// would otherwise show both pop-ups and "charged with power!" twice for one Charge. Only reachable
+// with innates. Wind Power's Tailwind trigger is unaffected. The hook is one condition in the
+// ABILITY_WIND_POWER case of src/battle_util.c.
+#define FEATURE_NO_DUPLICATE_CHARGE TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
