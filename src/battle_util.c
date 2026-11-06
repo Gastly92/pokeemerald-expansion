@@ -4729,7 +4729,8 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 break;
             // fall through
         case ABILITY_ELECTROMORPHOSIS:
-            if (!gBattleStruct->unableToUseMove && IsBattlerTurnDamaged(battler, EXCLUDING_SUBSTITUTES))
+            if (!gBattleStruct->unableToUseMove && IsBattlerTurnDamaged(battler, EXCLUDING_SUBSTITUTES)
+             && !(GetConfig(FEATURE_NO_CHARGE_ON_FAINT) && !IsBattlerAlive(battler))) // FORK: no pop-up for a Charge the faint discards
             {
                 gBattlerAbility = battler;
                 // FORK: innate Wind Power / Electromorphosis — show the innate in the pop-up, not the chosen

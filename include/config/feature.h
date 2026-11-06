@@ -115,4 +115,11 @@
 // as nothing is protecting the target there. See src/fork/ability_failure_popup.c.
 #define FEATURE_ANNOUNCE_ABILITY_FAILURES TRUE
 
+// When TRUE, Electromorphosis and Wind Power (chosen ability or innate) stay silent when the hit
+// that would trigger them knocks the holder out. Stock play, like Scarlet/Violet, still shows the
+// pop-up and "Being hit by <move> charged <mon> with power!" before "<mon> fainted!", although the
+// Charge is lost with the faint and can never be used. The hook is one condition in the shared
+// ABILITY_WIND_POWER / ABILITY_ELECTROMORPHOSIS case of src/battle_util.c.
+#define FEATURE_NO_CHARGE_ON_FAINT TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
