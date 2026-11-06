@@ -8027,48 +8027,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_NORMAL,
     },
 
-    // 0217
-    {
-        .species = SPECIES_URSARING,
-        .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_FLAME_ORB,
-        .moves =
-        {
-            MOVE_FACADE,
-            MOVE_CLOSE_COMBAT,
-            MOVE_CRUNCH,
-            MOVE_EARTHQUAKE
-        },
-        .ability = ABILITY_HUSTLE,
-        .nature = NATURE(ATK_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .def = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_NORMAL,
-    },
-    {
-        .species = SPECIES_URSARING,
-        .tags = FORMAT_BOTH,
-        .heldItem = ITEM_CHOICE_BAND,
-        .moves =
-        {
-            MOVE_DOUBLE_EDGE,
-            MOVE_CLOSE_COMBAT,
-            MOVE_CRUNCH,
-            MOVE_HEADLONG_RUSH
-        },
-        .ability = ABILITY_HUSTLE,
-        .nature = NATURE(ATK_UP, SPA_DOWN),
-        .ev = EVS(
-            .atk = 252,
-            .def = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FIGHTING,
-    },
-
     // 0219
     {
         .species = SPECIES_MAGCARGO,

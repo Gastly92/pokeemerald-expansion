@@ -126,9 +126,9 @@ something, so dead rows can't accumulate and hide the next real gap.
 ### Roster rules
 
 - **Only fully-evolved Pokémon appear**, except NFEs with a genuine niche their
-  evolution doesn't dominate — currently Eviolite Chansey, Ursaring, Porygon2 and
-  Dusclops, plus Light Ball Pikachu (the item doubles both of its attacking stats, which
-  lifts them past Raichu's). That list (`sNicheNfes[]` in the roster test) is enforced
+  evolution doesn't dominate — currently Eviolite Chansey, Porygon2 and Dusclops,
+  plus Light Ball Pikachu (the item doubles both of its attacking stats, which lifts
+  them past Raichu's). That list (`sNicheNfes[]` in the roster test) is enforced
   exactly in both directions, so an unlisted NFE in the roster fails: it's almost always
   a pre-evolution typed in place of its evolution.
 - **Cross-gen evolutions replace their pre-evos** — Magnezone / Electivire / Magmortar /

@@ -334,8 +334,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RATTATA,
         INNATES(
             ABILITY_ANTICIPATION,
-            ABILITY_GUTS,
-            ABILITY_QUICK_FEET
+            ABILITY_GUTS
         )
     },
     { // 0019
@@ -353,7 +352,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_ANTICIPATION,
             ABILITY_GUTS,
-            ABILITY_QUICK_FEET,
             ABILITY_STRONG_JAW
         )
     },
@@ -4227,7 +4225,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_ZANGOOSE,
         INNATES(
             ABILITY_HYPER_CUTTER,
-            ABILITY_QUICK_FEET,
             ABILITY_SCRAPPY,
             ABILITY_TOXIC_BOOST
         )
@@ -11408,7 +11405,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_GUTS,
             ABILITY_INTIMIDATE,
             ABILITY_PICKUP,
-            ABILITY_QUICK_FEET,
             ABILITY_RECKLESS
         )
     },
