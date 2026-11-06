@@ -5875,7 +5875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEW,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LEFTOVERS,
+        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
@@ -5911,26 +5911,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spe = 252
         ),
         .teraType = TYPE_NORMAL,
-    },
-    {
-        .species = SPECIES_MEW,
-        .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_SITRUS_BERRY,
-        .moves =
-        {
-            MOVE_FAKE_OUT,
-            MOVE_TAILWIND,
-            MOVE_WILL_O_WISP,
-            MOVE_PSYCHIC
-        },
-        .ability = ABILITY_SYNCHRONIZE,
-        .nature = NATURE(SPE_UP, ATK_DOWN),
-        .ev = EVS(
-            .hp = 252,
-            .spd = 4,
-            .spe = 252
-        ),
-        .teraType = TYPE_FAIRY,
     },
 
     // ====================================
