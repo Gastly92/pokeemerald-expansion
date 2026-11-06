@@ -626,7 +626,6 @@ TEST("Frontier extended roster: Factory party rebuild keeps the fork's facility-
 static const u16 sNicheNfes[] =
 {
     SPECIES_CHANSEY,   // Eviolite wall; Blissey trades that bulk for raw HP.
-    SPECIES_URSARING,  // Eviolite Guts attacker; Ursaluna is slower and Peat-Block-locked.
     SPECIES_PORYGON2,  // Eviolite Trace/Download tank; Porygon-Z is the frail nuke instead.
     SPECIES_DUSCLOPS,  // Eviolite Ghost wall; Dusknoir gains offense but loses the item.
     SPECIES_PIKACHU,   // Light Ball doubles both attacking stats, putting it above Raichu's.
