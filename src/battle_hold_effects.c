@@ -1043,6 +1043,10 @@ static enum ItemEffect CriticalHitRatioUp(enum BattlerId battler, enum Item item
 
     if (!gBattleMons[battler].volatiles.focusEnergy
      && !gBattleMons[battler].volatiles.dragonCheer
+     // FORK: DETERMINISTIC_HOLD_EFFECTS arms Laser Focus below instead of Focus Energy, so a
+     // second Lansat (e.g. regrown by Harvest) must not fire while that crit is still pending
+     // -- it would be wasted. Test: test/fork/deterministic_hold_effects.c ("Harvested Lansat").
+     && !(GetConfig(DETERMINISTIC_HOLD_EFFECTS) && gBattleMons[battler].volatiles.laserFocusTimer > 0)
      && HasEnoughHpToEatBerry(battler, GetBattlerAbility(battler), GetItemHoldEffectParam(itemId), itemId))
     {
         // FORK: DETERMINISTIC_HOLD_EFFECTS — once the (deterministic) HP threshold is

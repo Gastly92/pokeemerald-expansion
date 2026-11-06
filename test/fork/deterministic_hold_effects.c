@@ -257,6 +257,27 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: Lansat Berry makes the holder's 
     }
 }
 
+SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a Harvested Lansat Berry is not re-eaten while its crit is still armed")
+{
+    // Harvest in sun regrows the berry while the holder is still under the HP threshold. The
+    // first berry's guaranteed crit hasn't been spent yet, so eating the second one would
+    // re-arm the same crit and waste it; it must stay held until the first crit expires.
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_HOLD_EFFECTS, TRUE);
+        WITH_CONFIG(DETERMINISTIC_CRITICAL_HITS, TRUE);
+        ASSUME(gItemsInfo[ITEM_LANSAT_BERRY].holdEffect == HOLD_EFFECT_CRITICAL_UP);
+        PLAYER(SPECIES_EXEGGUTOR) { Ability(ABILITY_HARVEST); Item(ITEM_LANSAT_BERRY); HP(101); MaxHP(400); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SUNNY_DAY); MOVE(opponent, MOVE_SCRATCH); }
+    } SCENE {
+        MESSAGE("Exeggutor used Sunny Day!");
+        ABILITY_POPUP(player, ABILITY_HARVEST);
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_LANSAT_BERRY);
+    }
+}
+
 SINGLE_BATTLE_TEST("DETERMINISTIC_HOLD_EFFECTS: a super-effective/STAB high-crit does not consume Scope Lens")
 {
     // A high-crit move that already crits via the deterministic super-effective/STAB gate
