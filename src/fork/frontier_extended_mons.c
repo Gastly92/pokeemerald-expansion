@@ -5620,6 +5620,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_GROUND,
     },
+    {
+        .species = SPECIES_ZAPDOS,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_SITRUS_BERRY,
+        .moves =
+        {
+            MOVE_TAILWIND,
+            MOVE_THUNDERBOLT,
+            MOVE_HEAT_WAVE,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_STATIC,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_ELECTRIC,
+    },
 
     // 0145
     {

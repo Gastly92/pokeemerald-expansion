@@ -2348,7 +2348,8 @@ takes effect on its side. All three `canon only so far` (no flavor picks).
 Suppression parity holds via `IsInnateActive()` for all three (Gastro Acid / Neutralizing Gas / not-on-field);
 only Thermal Exchange is `breakable`.
 
-**Species:** canon users, plus Thundurus for Wind Power.
+**Species:** canon users, plus Thundurus and Zapdos for Wind Power. Zapdos also carries Electromorphosis, so
+`FEATURE_NO_DUPLICATE_CHARGE` keeps a damaging wind move from announcing its Charge twice.
 
 ### ABILITY_CURSED_BODY
 

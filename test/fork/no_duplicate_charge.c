@@ -81,3 +81,44 @@ SINGLE_BATTLE_TEST("FEATURE_NO_DUPLICATE_CHARGE: Wind Power still charges on Tai
         ABILITY_POPUP(player, ABILITY_WIND_POWER); // Tailwind is Wind Power's own trigger; Electromorphosis has none
     }
 }
+
+SINGLE_BATTLE_TEST("FEATURE_NO_DUPLICATE_CHARGE: Zapdos with both innates shows one Charge pop-up for a wind move")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_NO_DUPLICATE_CHARGE, TRUE);
+        ASSUME(SpeciesHasInnate(SPECIES_ZAPDOS, ABILITY_WIND_POWER));
+        ASSUME(SpeciesHasInnate(SPECIES_ZAPDOS, ABILITY_ELECTROMORPHOSIS));
+        ASSUME(IsWindMove(MOVE_AIR_CUTTER));
+        PLAYER(SPECIES_ZAPDOS) { Ability(ABILITY_STATIC); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_AIR_CUTTER); }
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_AIR_CUTTER); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_AIR_CUTTER, opponent);
+        HP_BAR(player);
+        NONE_OF { ABILITY_POPUP(player, ABILITY_WIND_POWER); }
+        ABILITY_POPUP(player, ABILITY_ELECTROMORPHOSIS);
+        MESSAGE("Being hit by Air Cutter charged Zapdos with power!");
+        NONE_OF {
+            ABILITY_POPUP(player, ABILITY_WIND_POWER);
+            MESSAGE("Being hit by Air Cutter charged Zapdos with power!");
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("FEATURE_NO_DUPLICATE_CHARGE: Zapdos's innate Wind Power charges it on Tailwind")
+{
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        WITH_CONFIG(FEATURE_NO_DUPLICATE_CHARGE, TRUE);
+        ASSUME(SpeciesHasInnate(SPECIES_ZAPDOS, ABILITY_WIND_POWER));
+        PLAYER(SPECIES_ZAPDOS) { Ability(ABILITY_STATIC); Moves(MOVE_TAILWIND); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_TAILWIND); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TAILWIND, player);
+        ABILITY_POPUP(player, ABILITY_WIND_POWER);
+    }
+}
