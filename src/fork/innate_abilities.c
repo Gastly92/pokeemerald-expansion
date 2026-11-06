@@ -2118,10 +2118,14 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0151
         SPECIES_MEW,
         INNATES(
+            ABILITY_ADAPTABILITY,
             ABILITY_INFILTRATOR,
             ABILITY_LEGENDARY,
             ABILITY_LEVITATE,
+            ABILITY_MAGIC_GUARD,
+            ABILITY_PRANKSTER,
             ABILITY_PRESSURE,
+            ABILITY_REGENERATOR,
             ABILITY_WILLPOWER
         )
     },
