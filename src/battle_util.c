@@ -4727,6 +4727,11 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
         case ABILITY_WIND_POWER:
             if (!IsWindMove(gCurrentMove))
                 break;
+            // FORK: FEATURE_NO_DUPLICATE_CHARGE. Relies on this case falling through into the shared Electromorphosis
+            // case below: a holder with both (innates) would announce one Charge twice. If upstream splits the
+            // cases, keep this skip on Wind Power's on-hit path. Test: test/fork/no_duplicate_charge.c
+            if (GetConfig(FEATURE_NO_DUPLICATE_CHARGE) && BattlerHasAbility(battler, ABILITY_ELECTROMORPHOSIS))
+                break;
             // fall through
         case ABILITY_ELECTROMORPHOSIS:
             if (!gBattleStruct->unableToUseMove && IsBattlerTurnDamaged(battler, EXCLUDING_SUBSTITUTES)
