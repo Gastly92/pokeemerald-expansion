@@ -40,6 +40,11 @@
 //          stats that change, the rest defaulting to 31 — for an intentional
 //          spread (e.g. 0 Speed for Trick Room). Omit .ball for BALL_POKE; set it
 //          only for a non-Poke look.
+//  - Substitute HP: Substitute costs maxHP/4 and fails at HP <= that cost, so a max
+//          HP divisible by 4 gets only 3 Substitutes from full; anything else gets 4.
+//          Substitute sets with no recovery should avoid a multiple of 4 (e.g. 248 HP
+//          EVs instead of 252). Pinch-berry sets (Salac, Apicot...) want the opposite:
+//          a multiple of 4, so 3 Substitutes land exactly on the 1/4 threshold.
 //  - .teraType sets the set's Terastallization type (Tera is active in this fork).
 //
 // Design intent — sets are tuned around this fork's DETERMINISTIC_* changes (no
@@ -392,8 +397,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_PSYCHIC_AFFINITY,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .spa = 4,
+            .hp = 248,
+            .spa = 8,
             .spe = 252
         ),
         .teraType = TYPE_PSYCHIC,
@@ -5505,9 +5510,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
+            .hp = 248,
             .spd = 252,
-            .spe = 4
+            .spe = 8
         ),
         .teraType = TYPE_WATER,
     },
@@ -10191,9 +10196,9 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_HUSTLE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 252,
+            .hp = 248,
             .atk = 252,
-            .spd = 4
+            .spd = 8
         ),
         .teraType = TYPE_GRASS,
     },
@@ -23445,7 +23450,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 4,
+            .def = 4,
             .spa = 252,
             .spe = 252
         ),
@@ -31726,8 +31731,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .spa = 156,
+            .hp = 248,
+            .spa = 160,
             .spe = 100
         ),
         .teraType = TYPE_ICE,
@@ -34022,8 +34027,8 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_SEED_SOWER,
         .nature = NATURE(SPD_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 252,
-            .def = 4,
+            .hp = 248,
+            .def = 8,
             .spd = 252
         ),
         .teraType = TYPE_FAIRY,
@@ -34589,7 +34594,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_MOODY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
-            .hp = 4,
+            .def = 4,
             .spa = 252,
             .spe = 252
         ),
@@ -34609,7 +34614,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .ability = ABILITY_MOODY,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
-            .hp = 4,
+            .def = 4,
             .atk = 252,
             .spe = 252
         ),
