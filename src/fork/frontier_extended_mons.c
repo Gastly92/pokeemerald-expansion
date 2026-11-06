@@ -5875,7 +5875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_MEW,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+        .heldItem = ITEM_LEFTOVERS,
         .moves =
         {
             MOVE_STEALTH_ROCK,
