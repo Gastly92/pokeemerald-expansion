@@ -2619,7 +2619,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SUNNY_DAY,
             MOVE_GROWTH,
             MOVE_POWER_WHIP,
-            MOVE_POISON_JAB
+            MOVE_GUNK_SHOT
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -21957,7 +21957,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_OUTRAGE,
             MOVE_EARTHQUAKE,
-            MOVE_POISON_JAB
+            MOVE_GUNK_SHOT
         },
         .ability = ABILITY_ANGER_SHELL,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -21976,7 +21976,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRAGON_DANCE,
             MOVE_DRAGON_CLAW,
-            MOVE_POISON_JAB,
+            MOVE_GUNK_SHOT,
             MOVE_PROTECT
         },
         .ability = ABILITY_ANGER_SHELL,

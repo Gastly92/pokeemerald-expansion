@@ -1151,6 +1151,13 @@ that used to be a percentage, the first question is whether it now rides this ga
    (every hit flinches, still capped at every other turn), Sharpness (it is a slicing
    move), and Rotom-Fan, whose form move it is.
 
+   **Gunk Shot is the default over Poison Jab: 120 / 6 vs 80 / 32.** The gap is 50%
+   and 6 PP is enough even for bulky sets. Here flavor decides most sets: Gunk Shot
+   is hurling filth, Poison Jab is a stinger, horn or arm, so stingers, horned
+   beasts and martial artists keep Poison Jab. So does Tough Claws, which makes it
+   104 / 32. Poison Jab also makes contact, which costs it against contact
+   abilities and Rocky Helmet.
+
    **Run every pair in both directions.** Look at the sets on the short move as well
    as the ones on the reliable move; each side has sets in the wrong place.
 
