@@ -10,6 +10,7 @@
 #include "fork/free_gimmicks.h" // FORK: FindMegaStoneForStats, the item-free Mega pick
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
+#include "fork/mind_over_matter.h" // FORK: Mind Over Matter (entry-turn endure)
 #include "fork/status_prevention.h" // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
 #include "fork/halo.h" // FORK: Halo (field-wide per-hit damage cap)
 #include "fork/rekindle.h" // FORK: Rekindle (heal on KO)
@@ -9332,6 +9333,14 @@ s32 GetAdjustedDamage(struct DamageContext *ctx, s32 damage)
         if (ctx->abilities[ctx->battlerDef] != ABILITY_STURDY)
             gBattleScripting.abilityPopupOverwrite = ABILITY_STURDY;
         gBattleStruct->moveResultFlags[ctx->battlerDef] |= MOVE_RESULT_STURDIED;
+    }
+    // FORK: Mind Over Matter endures a lethal hit on the holder's entry turn from any HP (once per
+    // entry; it closes the IsBattlersEntryTurn window). Sits above Focus Band so the ability is
+    // spent first and the band is kept. Logic in src/fork/mind_over_matter.c.
+    else if (HasMindOverMatterProtection(ctx->battlerDef, ctx->abilities[ctx->battlerDef]))
+    {
+        enduredHit = TRUE;
+        ActivateMindOverMatter(ctx->battlerDef, ctx->abilities[ctx->battlerDef], ctx->updateFlags);
     }
     // FORK: DETERMINISTIC_HOLD_EFFECTS turns Focus Band into a Focus Sash that works
     // from ANY HP but only on the holder's entry turn: it always survives one lethal

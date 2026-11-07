@@ -2663,4 +2663,15 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .cantBeSuppressed = TRUE,
         .cantBeOverwritten = TRUE,
     },
+
+    // FORK: designed as an innate (a pure boon, no downside). Survives one lethal hit at 1 HP on the
+    // holder's entry turn, from ANY HP -- Focus Band's deterministic entry-turn window crossed with
+    // Sturdy's endure. Breakable, like Sturdy. See src/fork/mind_over_matter.c.
+    [ABILITY_MIND_OVER_MATTER] =
+    {
+        .name = _("Mind Over Matter"),
+        .description = COMPOUND_STRING("Endures a KO hit on entry."),
+        .aiRating = 7,
+        .breakable = TRUE,
+    },
 };
