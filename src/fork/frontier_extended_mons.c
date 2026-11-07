@@ -8369,7 +8369,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_DARK_PULSE,
             MOVE_SLUDGE_BOMB,
-            MOVE_FIRE_BLAST
+            MOVE_INFERNAL_PARADE
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -13670,7 +13670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_HURRICANE,
             MOVE_ORIGIN_PULSE,
             MOVE_ICE_BEAM,
             MOVE_THUNDER
@@ -14670,7 +14670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK_ROOM,
             MOVE_HEAD_SMASH,
             MOVE_HEADLONG_RUSH,
-            MOVE_ROCK_SLIDE
+            MOVE_ZEN_HEADBUTT
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPE_DOWN),
