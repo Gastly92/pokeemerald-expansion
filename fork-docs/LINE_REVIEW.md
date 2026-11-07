@@ -1117,6 +1117,66 @@ that used to be a percentage, the first question is whether it now rides this ga
    70% one, which is exactly what accuracy always bought — just paid in a
    different currency.
 
+   **Picking between the strong-but-short move and the reliable one** (in-battle PP:
+   Thunder 110 BP / 11 PP vs Thunderbolt 90 / 24; Fire Blast 110 / **6** vs
+   Flamethrower 90 / 24; Hydro Pump 110 / **6** vs Surf 90 / 24, or Muddy Water
+   90 / 12 on a doubles-capable set, since Surf hits the ally): take the short one on offence-first sets (Choice, Life
+   Orb, Magnet, gems, Sash, Booster) and wherever the move is coverage, which rarely
+   runs out of PP anyway. Keep the reliable one on sets built to last (Leftovers,
+   Assault Vest, Sitrus, healing berries, Black Sludge, recovery, Substitute) and on
+   support sets. Pressure, a common innate, doubles the cost per use, so depth
+   matters most for a set that stays in.
+
+   **Blizzard is the exception: 110 / 4 vs Ice Beam 90 / 16.** Four shots (two
+   into Pressure) is too few for coverage, and Ice coverage mostly hits Dragon,
+   Flying and Ground types, where many legendaries carry Pressure. So Blizzard goes
+   only on an Ice-type offence set, preferably one that also carries Freeze-Dry as
+   its reliable Ice move. Coverage Ice Beam stays, and so does Ice Beam on a setup
+   sweeper whose only Ice move it is.
+
+   **Focus Blast stays by default: 120 / 4 vs Aura Sphere 80 / 32.** The power gap
+   is 50%, not 22%, and Fighting coverage is there to break a wall in one or two
+   hits. Every super-effective Focus Blast also drops the target's Sp. Def, and
+   Sheer Force boosts it (Aura Sphere has no secondary, so it gets no boost). Take
+   Aura Sphere only where the set has to fire its Fighting move repeatedly: a bulky
+   Fighting-type's STAB (Virizion's Assault Vest set), or a slow-win set whose only
+   answer to a matchup it is (Reuniclus's Calm Mind + Recover set against Dark types).
+   Mega Launcher, as an innate or through the species' Mega (Blastoise), makes Aura
+   Sphere 120 power with 32 PP, strictly better, so those sets keep it. Lucario keeps
+   it as its signature move.
+
+   **Hurricane is the default over Air Slash: 110 / 11 vs 75 / 22.** The gap is 47%,
+   like Focus Blast's, but 11 PP is not thin, so bulky sets take Hurricane too.
+   Air Slash stays only where its flinch or a boost changes the sum: Serene Grace
+   (every hit flinches, still capped at every other turn), Sharpness (it is a slicing
+   move), and Rotom-Fan, whose form move it is.
+
+   **Gunk Shot is the default over Poison Jab: 120 / 6 vs 80 / 32.** The gap is 50%
+   and 6 PP is enough even for bulky sets. Here flavor decides most sets: Gunk Shot
+   is hurling filth, Poison Jab is a stinger, horn or arm, so stingers, horned
+   beasts and martial artists keep Poison Jab. So does Tough Claws, which makes it
+   104 / 32. Poison Jab also makes contact, which costs it against contact
+   abilities and Rocky Helmet.
+
+   **Physical pairs.** A high-crit move always crits on a super-effective hit, which
+   closes most of the gap there: Stone Edge (100 / 6) hits super-effective targets
+   for 150, and Leaf Blade (90 / 24) beats Power Whip (120 / 12) on Grass's
+   super-effective targets, so Leaf Blade stays. Rock Slide is a spread move, so it
+   stays on doubles-capable sets, but a singles-only set takes Stone Edge.
+   Megahorn, Power Whip and Poltergeist (110 / 6, fails if the target holds no item)
+   are mostly gated by flavor: a horn, vines, a ghost. Sharpness turns X-Scissor into
+   120 / 24, which beats Megahorn.
+
+   **Rock Head turns recoil moves into straight upgrades.** Head Smash (150 / 6)
+   beats Stone Edge (100 / 6) on every neutral hit and ties it on a super-effective
+   one, and Brave Bird (120 / 24) beats Dual Wingbeat (80 / 14), so a Rock Head
+   species takes the recoil move where it reads right (not Marowak's bone club).
+   Without Rock Head, Dual Wingbeat stays on non-birds and on Defeatist Archeops,
+   which recoil would push under its HP threshold.
+
+   **Run every pair in both directions.** Look at the sets on the short move as well
+   as the ones on the reliable move; each side has sets in the wrong place.
+
    The corollary is what gets missed: **everything keyed on accuracy is still
    live.** No Guard pierces semi-invulnerability and zeroes the evasion tax. Keen
    Eye, Compound Eyes and Illuminate make the holder ignore an evasive foe's tax.
