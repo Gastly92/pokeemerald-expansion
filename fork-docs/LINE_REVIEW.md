@@ -1117,12 +1117,15 @@ that used to be a percentage, the first question is whether it now rides this ga
    70% one, which is exactly what accuracy always bought — just paid in a
    different currency.
 
-   **Picking between the strong-but-short move and the reliable one** (Thunder vs
-   Thunderbolt: 110 BP / 11 PP vs 90 BP / 24 PP in battle): take the short one on
-   offence-first sets (Choice, Life Orb, Magnet, gems, Sash, Booster) and wherever
-   the move is coverage, which never runs out of PP anyway. Keep the reliable one on
-   sets built to last (Leftovers, Assault Vest, Sitrus, healing berries, recovery,
-   Substitute) and on support sets. Pressure, a common innate, doubles the cost per
+   **Picking between the strong-but-short move and the reliable one** (in-battle PP:
+   Thunder 110 BP / 11 PP vs Thunderbolt 90 / 24; Fire Blast 110 / **6** vs
+   Flamethrower 90 / 24): take the short one on offence-first sets (Choice, Life
+   Orb, Magnet, gems, Sash, Booster) and wherever the move is coverage, which rarely
+   runs out of PP anyway. Keep the reliable one on sets built to last (Leftovers,
+   Assault Vest, Sitrus, healing berries, Black Sludge, recovery, Substitute) and on
+   support sets. A set that already pairs a short move of that type with the reliable
+   one as its backup (Reshiram's Blue Flare + Flamethrower, Chi-Yu's Fire Blast +
+   Flamethrower) keeps the pair. Pressure, a common innate, doubles the cost per
    use, so depth matters most for a set that stays in.
 
    The corollary is what gets missed: **everything keyed on accuracy is still
