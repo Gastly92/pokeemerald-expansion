@@ -506,7 +506,7 @@ crossing Sturdy with Focus Band.
 > On the turn the holder enters the field, it survives **one** lethal hit with 1 HP, **from any HP**.
 
 **Flavor.** A psychic bubble that shields the holder as it arrives and pops after one hit. Any
-species whose design or Pokédex text fits that image can carry it; the first is **Mew**, which is
+species whose design or Pokédex text fits that image can carry it, starting with **Mew**, which is
 often shown floating inside a bubble. The name follows the games' "Psy-"
 compounds (Psybeam, Psyshock).
 
