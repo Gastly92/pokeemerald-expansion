@@ -1158,6 +1158,15 @@ that used to be a percentage, the first question is whether it now rides this ga
    104 / 32. Poison Jab also makes contact, which costs it against contact
    abilities and Rocky Helmet.
 
+   **Physical pairs.** A high-crit move always crits on a super-effective hit, which
+   closes most of the gap there: Stone Edge (100 / 6) hits super-effective targets
+   for 150, and Leaf Blade (90 / 24) beats Power Whip (120 / 12) on Grass's
+   super-effective targets, so Leaf Blade stays. Rock Slide is a spread move, so it
+   stays on doubles-capable sets, but a singles-only set takes Stone Edge.
+   Megahorn, Power Whip and Poltergeist (110 / 6, fails if the target holds no item)
+   are mostly gated by flavor: a horn, vines, a ghost. Sharpness turns X-Scissor into
+   120 / 24, which beats Megahorn.
+
    **Run every pair in both directions.** Look at the sets on the short move as well
    as the ones on the reliable move; each side has sets in the wrong place.
 

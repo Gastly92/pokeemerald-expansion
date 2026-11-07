@@ -4790,7 +4790,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SCARF,
         .moves =
         {
-            MOVE_X_SCISSOR,
+            MOVE_MEGAHORN,
             MOVE_CLOSE_COMBAT,
             MOVE_DOUBLE_EDGE,
             MOVE_STONE_EDGE
@@ -12320,7 +12320,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_CURSE,
-            MOVE_SEED_BOMB,
+            MOVE_POWER_WHIP,
             MOVE_STONE_EDGE,
             MOVE_RECOVER
         },
@@ -16506,7 +16506,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_POWER_WHIP,
             MOVE_KNOCK_OFF,
             MOVE_EARTHQUAKE,
-            MOVE_ROCK_SLIDE
+            MOVE_STONE_EDGE
         },
         .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -19683,7 +19683,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_EARTHQUAKE,
             MOVE_IRON_HEAD,
-            MOVE_ROCK_SLIDE,
+            MOVE_STONE_EDGE,
             MOVE_RAPID_SPIN
         },
         .ability = ABILITY_EARTH_EATER,
@@ -19974,7 +19974,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_KNOCK_OFF,
-            MOVE_ROCK_SLIDE,
+            MOVE_STONE_EDGE,
             MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -27625,7 +27625,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CLOSE_COMBAT,
             MOVE_EARTHQUAKE,
-            MOVE_ROCK_SLIDE,
+            MOVE_STONE_EDGE,
             MOVE_KNOCK_OFF
         },
         .ability = ABILITY_RECEIVER,
@@ -28195,7 +28195,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SHELL_SMASH,
             MOVE_ACROBATICS,
-            MOVE_ROCK_SLIDE,
+            MOVE_STONE_EDGE,
             MOVE_EARTHQUAKE
         },
         .ability = ABILITY_SHIELDS_DOWN,
@@ -28383,7 +28383,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SWORDS_DANCE,
             MOVE_PLAY_ROUGH,
-            MOVE_SHADOW_CLAW,
+            MOVE_POLTERGEIST,
             MOVE_SHADOW_SNEAK
         },
         .ability = ABILITY_DISGUISE,
@@ -28402,7 +28402,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_PLAY_ROUGH,
-            MOVE_SHADOW_CLAW,
+            MOVE_POLTERGEIST,
             MOVE_SHADOW_SNEAK,
             MOVE_DRAIN_PUNCH
         },
@@ -28530,7 +28530,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ANCHOR_SHOT,
             MOVE_POWER_WHIP,
             MOVE_EARTHQUAKE,
-            MOVE_SHADOW_CLAW
+            MOVE_POLTERGEIST
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(ATK_UP, SPE_DOWN),
@@ -32078,7 +32078,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_BOLT_BEAK,
             MOVE_OUTRAGE,
             MOVE_EARTHQUAKE,
-            MOVE_ROCK_SLIDE
+            MOVE_STONE_EDGE
         },
         .ability = ABILITY_VOLT_ABSORB,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -33169,7 +33169,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_GUNK_SHOT,
             MOVE_CLOSE_COMBAT,
             MOVE_ACROBATICS,
-            MOVE_ROCK_SLIDE
+            MOVE_STONE_EDGE
         },
         .ability = ABILITY_POISON_TOUCH,
         .nature = NATURE(SPE_UP, SPA_DOWN),
@@ -34546,7 +34546,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SWORDS_DANCE,
             MOVE_FIRE_LASH,
-            MOVE_SEED_BOMB,
+            MOVE_POWER_WHIP,
             MOVE_SUCKER_PUNCH
         },
         .ability = ABILITY_MOODY,
@@ -36764,7 +36764,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_LEAF_BLADE,
             MOVE_PSYBLADE,
             MOVE_CLOSE_COMBAT,
-            MOVE_MEGAHORN
+            MOVE_X_SCISSOR
         },
         .ability = ABILITY_SAP_SIPPER,
         .nature = NATURE(SPE_UP, SPA_DOWN),
