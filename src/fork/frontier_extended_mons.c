@@ -5565,7 +5565,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FREEZING_GLARE,
-            MOVE_PSYCHIC,
+            MOVE_EXPANDING_FORCE,
             MOVE_HURRICANE,
             MOVE_RECOVER
         },
@@ -6111,7 +6111,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SHADOW_BALL,
             MOVE_FIRE_BLAST,
             MOVE_FOCUS_BLAST,
-            MOVE_INFERNAL_PARADE
+            MOVE_ERUPTION
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -8369,7 +8369,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HEAT_WAVE,
             MOVE_DARK_PULSE,
             MOVE_SLUDGE_BOMB,
-            MOVE_FIRE_BLAST
+            MOVE_INFERNAL_PARADE
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -13670,7 +13670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_HURRICANE,
             MOVE_ORIGIN_PULSE,
             MOVE_ICE_BEAM,
             MOVE_THUNDER
@@ -14670,7 +14670,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK_ROOM,
             MOVE_HEAD_SMASH,
             MOVE_HEADLONG_RUSH,
-            MOVE_ROCK_SLIDE
+            MOVE_ZEN_HEADBUTT
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPE_DOWN),
@@ -23108,7 +23108,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_BLUE_FLARE,
             MOVE_DRACO_METEOR,
-            MOVE_FLAMETHROWER,
+            MOVE_DRAGON_PULSE,
             MOVE_EARTH_POWER
         },
         .ability = ABILITY_FLASH_FIRE,
@@ -23212,7 +23212,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ROCK_POLISH,
             MOVE_SANDSEAR_STORM,
-            MOVE_EARTH_POWER,
+            MOVE_SLUDGE_BOMB,
             MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -36512,7 +36512,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_DARK_PULSE,
             MOVE_PSYCHIC,
-            MOVE_FLAMETHROWER
+            MOVE_OVERHEAT
         },
         .ability = ABILITY_BEADS_OF_RUIN,
         .nature = NATURE(SPE_UP, ATK_DOWN),
