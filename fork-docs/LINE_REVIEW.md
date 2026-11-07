@@ -1145,6 +1145,12 @@ that used to be a percentage, the first question is whether it now rides this ga
    Sphere 120 power with 32 PP, strictly better, so those sets keep it. Lucario keeps
    it as its signature move.
 
+   **Hurricane is the default over Air Slash: 110 / 11 vs 75 / 22.** The gap is 47%,
+   like Focus Blast's, but 11 PP is not thin, so bulky sets take Hurricane too.
+   Air Slash stays only where its flinch or a boost changes the sum: Serene Grace
+   (every hit flinches, still capped at every other turn), Sharpness (it is a slicing
+   move), and Rotom-Fan, whose form move it is.
+
    **Run every pair in both directions.** Look at the sets on the short move as well
    as the ones on the reliable move; each side has sets in the wrong place.
 
