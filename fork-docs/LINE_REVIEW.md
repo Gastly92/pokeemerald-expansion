@@ -1167,6 +1167,13 @@ that used to be a percentage, the first question is whether it now rides this ga
    are mostly gated by flavor: a horn, vines, a ghost. Sharpness turns X-Scissor into
    120 / 24, which beats Megahorn.
 
+   **Rock Head turns recoil moves into straight upgrades.** Head Smash (150 / 6)
+   beats Stone Edge (100 / 6) on every neutral hit and ties it on a super-effective
+   one, and Brave Bird (120 / 24) beats Dual Wingbeat (80 / 14), so a Rock Head
+   species takes the recoil move where it reads right (not Marowak's bone club).
+   Without Rock Head, Dual Wingbeat stays on non-birds and on Defeatist Archeops,
+   which recoil would push under its HP threshold.
+
    **Run every pair in both directions.** Look at the sets on the short move as well
    as the ones on the reliable move; each side has sets in the wrong place.
 
