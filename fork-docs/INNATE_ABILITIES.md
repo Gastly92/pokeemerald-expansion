@@ -2377,7 +2377,9 @@ When the holder takes damage from a move, **Cursed Body** has a 30% chance (alwa
 Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); Cursed Body is not
 `breakable`, so Mold Breaker never touches it, same as the real ability.
 
-**Species:** canon users only.
+**Species:** canon users, plus the Ghost lines that lacked it: Sableye (and Mega Sableye), the Duskull line,
+and Greavard / Houndstone. It is not a type-wide rule: Ghosts that already have a full kit without it (e.g. Gholdengo,
+Lunala, Giratina) go without.
 
 ### ABILITY_PICKPOCKET / ABILITY_MAGICIAN / ABILITY_LIQUID_OOZE
 
