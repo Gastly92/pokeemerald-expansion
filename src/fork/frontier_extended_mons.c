@@ -7725,7 +7725,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_HEAVY_SLAM,
             MOVE_HEAD_SMASH,
-            MOVE_ICE_PUNCH
+            MOVE_ICICLE_CRASH
         },
         .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
@@ -7808,7 +7808,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_LIQUIDATION,
             MOVE_GUNK_SHOT,
-            MOVE_ICE_PUNCH,
+            MOVE_ICICLE_CRASH,
             MOVE_AQUA_JET
         },
         .ability = ABILITY_POISON_POINT,
@@ -8431,7 +8431,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRAGON_DANCE,
             MOVE_WATERFALL,
             MOVE_OUTRAGE,
-            MOVE_ICE_PUNCH
+            MOVE_ICICLE_CRASH
         },
         .ability = ABILITY_DAMP,
         .nature = NATURE(ATK_UP, SPA_DOWN),
