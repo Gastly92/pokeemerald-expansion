@@ -47,7 +47,8 @@ STATIC_ASSERT(ABILITY_WILLPOWER == ABILITY_REKINDLE + 1, ForkAbilityBlockNotCont
 STATIC_ASSERT(ABILITY_PACIFY == ABILITY_WILLPOWER + 1, ForkAbilityBlockNotContiguous5);
 STATIC_ASSERT(ABILITY_MYTHICAL == ABILITY_PACIFY + 1, ForkAbilityBlockNotContiguous6);
 STATIC_ASSERT(ABILITY_LEGENDARY == ABILITY_MYTHICAL + 1, ForkAbilityBlockNotContiguous7);
-STATIC_ASSERT(ABILITY_LEGENDARY < ABILITIES_COUNT, ForkAbilityIdOutOfRange);
+STATIC_ASSERT(ABILITY_PSYBUBBLE == ABILITY_LEGENDARY + 1, ForkAbilityBlockNotContiguous8);
+STATIC_ASSERT(ABILITY_PSYBUBBLE < ABILITIES_COUNT, ForkAbilityIdOutOfRange);
 
 // gAbilitiesInfo[] is now sparse between upstream's run and the fork block. Anything
 // that ITERATES the ability space (rather than indexing a known ability) has to skip

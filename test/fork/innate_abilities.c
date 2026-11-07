@@ -5839,6 +5839,7 @@ static const enum Ability sImplementedInnates[] =
         ABILITY_VICTORY_STAR,
         ABILITY_MYTHICAL,
         ABILITY_LEGENDARY,
+        ABILITY_PSYBUBBLE,
         // Reserved as well as innate: only their canon Paradox carriers may declare them (gate (7)).
         ABILITY_PROTOSYNTHESIS, ABILITY_QUARK_DRIVE,
 };

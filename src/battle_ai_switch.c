@@ -8,6 +8,7 @@
 #include "battle_util.h"
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES — innate-aware switch evaluation
 #include "fork/mythical.h" // FORK: a benched Mythical enters with doubled HP
+#include "fork/psybubble.h" // FORK: a switch-in with Psybubble endures its first lethal hit
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_main.h"
@@ -2071,6 +2072,9 @@ static u32 GetSwitchinHitsToKO(s32 damageTaken, enum BattlerId battler, const st
 
         // One shot prevention effects
         if (damageTaken >= maxHP && startingHP == maxHP && (heldItemEffect == HOLD_EFFECT_FOCUS_SASH || (!opponentCanBreakMold && GetConfig(B_STURDY) >= GEN_5 && (ability == ABILITY_STURDY || (GetConfig(FEATURE_INNATE_ABILITIES) && SpeciesHasInnate(gBattleMons[battler].species, ABILITY_STURDY))))) && hitsToKO < 1) // FORK: innate-aware, config-gated (feature off must not credit — or scan for — innates)
+            currentHP = 1;
+        // FORK: Psybubble endures the switch-in's first lethal hit from any HP (its entry turn).
+        if (currentHP <= 0 && hitsToKO < 1 && !opponentCanBreakMold && SwitchinHasPsybubble(battler, ability))
             currentHP = 1;
 
         // If mon is still alive, apply weather impact first, as it might KO the mon before it can heal with its item (order is weather -> item -> status)

@@ -12,7 +12,7 @@ follow the **→** link for the exact semantics, wiring and species picks in
   (see [the design principle](INNATE_ABILITIES.md#the-design-principle-an-innate-is-a-pure-boon)).
 - **Reserved** abilities may only be declared by their canon carriers
   ([details](INNATE_ABILITIES.md#reserved-abilities-welded-to-one-line-banned-everywhere-else)).
-- **Fork abilities** (Rekindle, Willpower, Pacify, Mythical, Legendary) are defined in
+- **Fork abilities** (Rekindle, Willpower, Pacify, Mythical, Legendary, Psybubble) are defined in
   [`NEW_ABILITIES.md`](NEW_ABILITIES.md).
 - The fork ships with `DETERMINISTIC_ABILITIES` on, so chance-based effects below
   note their deterministic behaviour where it differs.
@@ -54,6 +54,7 @@ When you wire a new innate, add its row here in the same PR (Step 5 of
 | Shield Dust | Blocks the additional effects of moves used against it. | [→](INNATE_ABILITIES.md#ability_shield_dust--ability_tinted_lens--ability_scrappy--ability_wonder_skin--ability_tangled_feet) |
 | Sticky Hold | Its held item can't be stolen or removed. | [→](INNATE_ABILITIES.md#ability_sticky_hold) |
 | Sturdy | Survives a lethal hit from full HP; immune to OHKO moves. | [→](INNATE_ABILITIES.md#ability_sturdy) |
+| Psybubble | Fork ability: survives one lethal hit at 1 HP on its entry turn, from any HP. | [→](INNATE_ABILITIES.md#ability_psybubble) |
 | Suction Cups | Can't be forced out (Roar, Whirlwind, Dragon Tail, Red Card). | [→](INNATE_ABILITIES.md#ability_suction_cups--ability_guard_dog) |
 | Sweet Veil ◆ | Its whole side can't be put to sleep or made drowsy; the holder can still use Rest. | [→](INNATE_ABILITIES.md#ability_insomnia--ability_vital_spirit--ability_sweet_veil) |
 | Vital Spirit ◆ | Can't be put to sleep or made drowsy, but can still use Rest. | [→](INNATE_ABILITIES.md#ability_insomnia--ability_vital_spirit--ability_sweet_veil) |

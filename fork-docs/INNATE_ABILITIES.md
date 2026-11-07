@@ -2377,7 +2377,9 @@ When the holder takes damage from a move, **Cursed Body** has a 30% chance (alwa
 Suppression parity holds via `IsInnateActive()` (Gastro Acid / Neutralizing Gas / not-on-field); Cursed Body is not
 `breakable`, so Mold Breaker never touches it, same as the real ability.
 
-**Species:** canon users only.
+**Species:** canon users, plus the Ghost lines that lacked it: Sableye (and Mega Sableye), the Duskull line,
+and Greavard / Houndstone. It is not a type-wide rule: Ghosts that already have a full kit without it (e.g. Gholdengo,
+Lunala, Giratina) go without.
 
 ### ABILITY_PICKPOCKET / ABILITY_MAGICIAN / ABILITY_LIQUID_OOZE
 
@@ -3876,6 +3878,40 @@ by 50% while it is on the field instead of doubling it. Wired exactly like Mythi
 
 **Species: every `TIER_LEGENDARY` species** (gated by `test/fork/legendary.c`), plus the Mega, Pirouette,
 Gigantamax and Tera forms they take in battle.
+
+### ABILITY_PSYBUBBLE
+
+**The fork's own ability, designed as an innate** (its definition and rationale are in
+[`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-psybubble)). Survives one lethal hit at 1 HP
+on the holder's entry turn, from any HP.
+
+**Wiring.** No driver line: it hooks `GetAdjustedDamage()` directly, beside Sturdy, and checks the
+innate through `IsInnateActive()`. The pop-up is overwritten to the innate when the chosen ability
+differs (the innate Sturdy precedent). Breakable, so Mold Breaker gets through it, and suppressed by
+Gastro Acid and Neutralizing Gas.
+
+**`DETERMINISTIC_*`.** None of its own. It shares the entry-turn window with the deterministic
+Focus Band and closes it when it fires, so the two never both save on the same entry.
+
+**AI.** `CanEndureHit`, `ShouldTryOHKO` and the switch-in hits-to-KO simulation count it.
+
+**Species:** a "psychic bubble" flavor set (no canon carriers): species whose design or Pokédex text
+has them shielded by a bubble, shell or psychic barrier. Keep the set tight: on a frail sweeper it is
+a guaranteed free turn.
+
+- **Mew**: often shown floating inside a bubble.
+- **Solosis, Duosion, Reuniclus**: psychic cells "enveloped in a special liquid".
+- **Mr. Mime** (the "Barrier Pokémon", whose mimed walls "become real") and **Mime Jr.**, for the line.
+- **Jirachi**: "a tough crystalline shell envelops the body to protect it from enemies".
+- **Wyrdeer**: its orbs shine "when it is erecting invisible barriers".
+- **Rellor, Rabsca**: a ball made "with psychic energy", with Rabsca's "true body" inside it.
+- **Dottler**: "hiding in its shell … seems to have awakened its psychic powers". Blipbug and
+  Orbeetle have no shell hook.
+- **Cosmoem**: a Psychic "Protostar" sealed in a hard shell. Cosmog has no shell.
+
+Left out on purpose: Galarian Mr. Mime (its barrier is ice, not psychic), Dewpider and Araquanid (a
+real bubble, but Water, with canon Water Bubble), and Gardevoir (it protects its Trainer, not itself).
+Watch the Regenerator carriers (Mew, the Solosis line): each switch-in brings a fresh save.
 
 ### ABILITY_VICTORY_STAR
 
