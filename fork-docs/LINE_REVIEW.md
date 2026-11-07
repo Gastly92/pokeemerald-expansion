@@ -1119,7 +1119,8 @@ that used to be a percentage, the first question is whether it now rides this ga
 
    **Picking between the strong-but-short move and the reliable one** (in-battle PP:
    Thunder 110 BP / 11 PP vs Thunderbolt 90 / 24; Fire Blast 110 / **6** vs
-   Flamethrower 90 / 24): take the short one on offence-first sets (Choice, Life
+   Flamethrower 90 / 24; Hydro Pump 110 / **6** vs Surf 90 / 24, or Muddy Water
+   90 / 12 on a doubles-capable set, since Surf hits the ally): take the short one on offence-first sets (Choice, Life
    Orb, Magnet, gems, Sash, Booster) and wherever the move is coverage, which rarely
    runs out of PP anyway. Keep the reliable one on sets built to last (Leftovers,
    Assault Vest, Sitrus, healing berries, Black Sludge, recovery, Substitute) and on

@@ -873,7 +873,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_THUNDER,
-            MOVE_SURF,
+            MOVE_HYDRO_PUMP,
             MOVE_FOCUS_BLAST,
             MOVE_NASTY_PLOT
         },
@@ -5148,7 +5148,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_MUDDY_WATER,
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN,
             MOVE_SHADOW_BALL
@@ -7327,7 +7327,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_MUDDY_WATER,
             MOVE_PSYSHOCK,
             MOVE_ICE_BEAM,
             MOVE_FLAMETHROWER
@@ -9132,7 +9132,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CALM_MIND,
             MOVE_AEROBLAST,
-            MOVE_HYDRO_PUMP,
+            MOVE_MUDDY_WATER,
             MOVE_ROOST
         },
         .ability = ABILITY_WATER_AFFINITY,
@@ -9941,7 +9941,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_HURRICANE,
-            MOVE_HYDRO_PUMP,
+            MOVE_MUDDY_WATER,
             MOVE_U_TURN,
             MOVE_ROOST
         },
@@ -19034,7 +19034,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_MUDDY_WATER,
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN,
             MOVE_GRASS_KNOT
@@ -19868,7 +19868,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_MUDDY_WATER,
             MOVE_EARTH_POWER,
             MOVE_SLUDGE_BOMB,
             MOVE_ICE_BEAM
@@ -21201,7 +21201,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_HURRICANE,
-            MOVE_HYDRO_PUMP,
+            MOVE_MUDDY_WATER,
             MOVE_ICE_BEAM,
             MOVE_ROOST
         },
@@ -23777,7 +23777,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_SPIKES,
             MOVE_TOXIC_SPIKES,
-            MOVE_HYDRO_PUMP,
+            MOVE_SURF,
             MOVE_DARK_PULSE
         },
         .ability = ABILITY_PROTEAN,
@@ -24875,7 +24875,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_WATER_PULSE,
             MOVE_DARK_PULSE,
             MOVE_ICE_BEAM,
             MOVE_AURA_SPHERE
@@ -26959,7 +26959,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ASSAULT_VEST,
         .moves =
         {
-            MOVE_HYDRO_PUMP,
+            MOVE_MUDDY_WATER,
             MOVE_ICE_BEAM,
             MOVE_FLIP_TURN,
             MOVE_EARTH_POWER
