@@ -9336,7 +9336,9 @@ s32 GetAdjustedDamage(struct DamageContext *ctx, s32 damage)
     }
     // FORK: Psybubble endures a lethal hit on the holder's entry turn from any HP (once per
     // entry; it closes the IsBattlersEntryTurn window). Sits above Focus Band so the ability is
-    // spent first and the band is kept. Logic in src/fork/psybubble.c.
+    // spent first and the band is kept. Logic in src/fork/psybubble.c. Depends on this endure
+    // chain and on MOVE_RESULT_STURDIED -> BattleScript_SturdiedMsg for its message; if upstream
+    // moves either, re-hook here (test/fork/psybubble.c will go red).
     else if (HasPsybubbleProtection(ctx->battlerDef, ctx->abilities[ctx->battlerDef]))
     {
         enduredHit = TRUE;

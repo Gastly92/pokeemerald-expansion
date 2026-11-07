@@ -299,7 +299,8 @@
 //   PSYBUBBLE (the fork's own ability, designed as an innate): survives one lethal hit at 1 HP on the
 //   holder's entry turn (IsBattlersEntryTurn), from any HP. Hooked straight into GetAdjustedDamage beside
 //   Sturdy, so no driver line is needed; logic and AI helpers live in src/fork/psybubble.c.
-//   Breakable, like Sturdy. Carriers: Mew (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
+//   Breakable, like Sturdy. Carriers: a "psychic bubble" flavor set (the list and rationale are in
+//   fork-docs/INNATE_ABILITIES.md).
 //   VICTORY_STAR: x1.1 accuracy for the holder and a living partner in GetTotalAccuracy
 //   (src/battle_util.c), and the repurposed evasion-ignore for both in GetAccEvasionStageDelta
 //   (src/fork/deterministic_moves.c). A 1:1 copy, guarded against a chosen Victory Star so it never

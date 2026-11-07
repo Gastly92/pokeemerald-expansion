@@ -3893,8 +3893,9 @@ Focus Band and closes it when it fires, so the two never both save on the same e
 
 **AI.** `CanEndureHit`, `ShouldTryOHKO` and the switch-in hits-to-KO simulation count it.
 
-**Species:** Mew, a flavor pick (no canon carriers). Keep the set small: on a frail sweeper it is a
-guaranteed free turn.
+**Species:** a "psychic bubble" flavor set (no canon carriers): species whose design or Pokédex text
+has them shielded by a bubble or psychic barrier. The first pick is Mew. Keep the set tight: on a
+frail sweeper it is a guaranteed free turn.
 
 ### ABILITY_VICTORY_STAR
 

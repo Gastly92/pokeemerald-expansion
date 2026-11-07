@@ -103,27 +103,43 @@ SINGLE_BATTLE_TEST("Psybubble fires before a held Focus Band, which is kept")
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mew's innate Psybubble endures a lethal hit on entry")
+// The innate test uses whichever species carries Psybubble first, so it tests the wiring rather
+// than any one species row. The carrier list itself lives in src/fork/innate_abilities.c. Ghost
+// types are skipped because they are immune to the Seismic Toss used below.
+static enum Species FindPsybubbleCarrier(void)
+{
+    enum Species species;
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_PSYBUBBLE)
+         && gSpeciesInfo[species].types[0] != TYPE_GHOST
+         && gSpeciesInfo[species].types[1] != TYPE_GHOST)
+            return species;
+    }
+    return SPECIES_NONE;
+}
+
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Psybubble endures a lethal hit on entry")
 {
     bool32 enabled;
+    enum Species species = FindPsybubbleCarrier();
     PARAMETRIZE { enabled = TRUE; }
     PARAMETRIZE { enabled = FALSE; }
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_MEW, ABILITY_PSYBUBBLE));
+        ASSUME(species != SPECIES_NONE);
+        ASSUME(gSpeciesInfo[species].abilities[0] != ABILITY_PSYBUBBLE);
         ASSUME(GetMoveEffect(MOVE_SEISMIC_TOSS) == EFFECT_LEVEL_DAMAGE);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
         PLAYER(SPECIES_WOBBUFFET);
-        OPPONENT(SPECIES_MEW) { HP(1); }
+        OPPONENT(species) { Ability(gSpeciesInfo[species].abilities[0]); HP(1); } // Psybubble only as innate
     } WHEN {
         TURN { MOVE(player, MOVE_SEISMIC_TOSS); }
     } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_SEISMIC_TOSS, player);
-        if (enabled) {
-            ABILITY_POPUP(opponent, ABILITY_PSYBUBBLE); // the innate, not the chosen Synchronize
-            MESSAGE("The opposing Mew endured the hit!");
-        } else {
-            MESSAGE("The opposing Mew fainted!");
-        }
+        if (enabled)
+            ABILITY_POPUP(opponent, ABILITY_PSYBUBBLE); // pop-up shows the innate, not the chosen ability
+        else
+            NONE_OF { ABILITY_POPUP(opponent, ABILITY_PSYBUBBLE); }
     } THEN {
         EXPECT_EQ(opponent->hp, enabled ? 1 : 0);
     }
