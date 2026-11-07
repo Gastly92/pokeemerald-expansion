@@ -16629,7 +16629,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_FIRE_BLAST,
             MOVE_AURA_SPHERE,
-            MOVE_THUNDERBOLT,
+            MOVE_THUNDER,
             MOVE_SOLAR_BEAM
         },
         .ability = ABILITY_FLAME_BODY,
@@ -16649,7 +16649,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_FIRE_BLAST,
             MOVE_AURA_SPHERE,
-            MOVE_THUNDERBOLT,
+            MOVE_THUNDER,
             MOVE_PSYCHIC
         },
         .ability = ABILITY_FLAME_BODY,
@@ -21830,7 +21830,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK_ROOM,
             MOVE_PSYCHIC,
             MOVE_SHADOW_BALL,
-            MOVE_THUNDERBOLT
+            MOVE_THUNDER
         },
         .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
@@ -21851,7 +21851,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NASTY_PLOT,
             MOVE_PSYCHIC,
             MOVE_SHADOW_BALL,
-            MOVE_THUNDERBOLT
+            MOVE_THUNDER
         },
         .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -29464,7 +29464,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_TRICK_ROOM,
             MOVE_FLEUR_CANNON,
             MOVE_FLASH_CANNON,
-            MOVE_THUNDERBOLT
+            MOVE_THUNDER
         },
         .ability = ABILITY_MISTY_SURGE,
         .nature = NATURE(SPA_UP, SPE_DOWN),
@@ -32641,7 +32641,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRACO_METEOR,
             MOVE_DRAGON_ENERGY,
-            MOVE_THUNDERBOLT,
+            MOVE_THUNDER,
             MOVE_EARTH_POWER
         },
         .ability = ABILITY_SHEER_FORCE,
@@ -36118,7 +36118,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIERY_DANCE,
             MOVE_SLUDGE_BOMB,
             MOVE_ENERGY_BALL,
-            MOVE_THUNDERBOLT
+            MOVE_THUNDER
         },
         .ability = ABILITY_TOXIC_DEBRIS,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -36596,7 +36596,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_MOONBLAST,
             MOVE_AURA_SPHERE,
-            MOVE_THUNDERBOLT
+            MOVE_THUNDER
         },
         .ability = ABILITY_TRACE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
