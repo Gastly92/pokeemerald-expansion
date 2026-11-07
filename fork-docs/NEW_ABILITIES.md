@@ -498,15 +498,16 @@ come back in at x2.
 
 Covered by `test/fork/legendary.c`.
 
-## Case study: Mind Over Matter
+## Case study: Psybubble
 
-**`Mind Over Matter`** (`ABILITY_MIND_OVER_MATTER`) is a fork ability designed to be an **innate**,
+**`Psybubble`** (`ABILITY_PSYBUBBLE`) is a fork ability designed to be an **innate**,
 crossing Sturdy with Focus Band.
 
 > On the turn the holder enters the field, it survives **one** lethal hit with 1 HP, **from any HP**.
 
-**Flavor.** The body gives out, but the mind holds on for one more moment. It was made for **Mew**,
-whose psychic power lets it defy physical limits.
+**Flavor.** A psychic bubble that shields the holder as it arrives and pops after one hit. It was
+made for **Mew**, which is often shown floating inside a bubble. The name follows the games' "Psy-"
+compounds (Psybeam, Psyshock).
 
 **The window.** It uses `IsBattlersEntryTurn()`, the window `DETERMINISTIC_HOLD_EFFECTS` already
 gives Focus Band. For a lead it is turn 1. For a chosen switch it is the switch turn itself, and for a
@@ -520,12 +521,12 @@ spent on the same entry, since the ability triggers first and closes the band's 
 moves and confusion self-hits go through the same endure, so it survives those as well.
 
 **Wiring.** One `else if` in `GetAdjustedDamage()` (`src/battle_util.c`), right after Sturdy, calls
-`HasMindOverMatterProtection()` / `ActivateMindOverMatter()` in `src/fork/mind_over_matter.c`. It
+`HasPsybubbleProtection()` / `ActivatePsybubble()` in `src/fork/psybubble.c`. It
 sets Sturdy's `MOVE_RESULT_STURDIED`, so the pop-up and "endured the hit!" message come for free. It
 is **breakable**, like Sturdy: Mold Breaker gets through it. Gastro Acid and Neutralizing Gas suppress it.
 
 **AI.** `CanEndureHit()` and `ShouldTryOHKO()` (`src/battle_ai_util.c`) and the switch-in hits-to-KO
 simulation (`src/battle_ai_switch.c`) count it, through the helpers in the same fork file.
 
-Covered by `test/fork/mind_over_matter.c`. Its carriers are listed in
-[`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_mind_over_matter).
+Covered by `test/fork/psybubble.c`. Its carriers are listed in
+[`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_psybubble).

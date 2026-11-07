@@ -6,7 +6,7 @@
 #include "battle_ai_field_statuses.h"
 #include "battle_ai_util.h"
 #include "battle_ai_main.h"
-#include "fork/mind_over_matter.h" // FORK: Mind Over Matter (entry-turn endure)
+#include "fork/psybubble.h" // FORK: Psybubble (entry-turn endure)
 #include "fork/deterministic_moves.h" // FORK: extracted deterministic move predicates
 #include "fork/innate_abilities.h" // FORK: IsInnateOnSide
 #include "fork/mythical.h" // FORK: ClearSimulatedMythicalSwitchIns
@@ -1640,8 +1640,8 @@ static bool32 DragonDartsHitsBothTargets(u32 battlerAtk, u32 battlerDef, u32 mov
 
 bool32 CanEndureHit(enum BattlerId battler, enum BattlerId battlerTarget, enum Move move)
 {
-    // FORK: Mind Over Matter works from any HP, so it is checked ahead of the max-HP gate below.
-    if (AI_MindOverMatterEndures(battler, battlerTarget, move))
+    // FORK: Psybubble works from any HP, so it is checked ahead of the max-HP gate below.
+    if (AI_PsybubbleEndures(battler, battlerTarget, move))
         return TRUE;
     if (!AI_BattlerAtMaxHp(battlerTarget) || IsMultiHitMove(move))
         return FALSE;
@@ -2330,7 +2330,7 @@ bool32 ShouldTryOHKO(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum 
         return FALSE;   //probabilistically speaking, focus band should activate so dont OHKO
     else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && AI_BattlerAtMaxHp(battlerDef))
         return FALSE;
-    if (AI_MindOverMatterEndures(battlerAtk, battlerDef, move)) // FORK: Mind Over Matter endures an OHKO on entry
+    if (AI_PsybubbleEndures(battlerAtk, battlerDef, move)) // FORK: Psybubble endures an OHKO on entry
         return FALSE;
 
     if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, atkAbility, move) && BattlerHasAbility(battlerDef, ABILITY_STURDY)) // FORK: innate-aware

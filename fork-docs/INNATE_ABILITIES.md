@@ -3877,10 +3877,10 @@ by 50% while it is on the field instead of doubling it. Wired exactly like Mythi
 **Species: every `TIER_LEGENDARY` species** (gated by `test/fork/legendary.c`), plus the Mega, Pirouette,
 Gigantamax and Tera forms they take in battle.
 
-### ABILITY_MIND_OVER_MATTER
+### ABILITY_PSYBUBBLE
 
 **The fork's own ability, designed as an innate** (its definition and rationale are in
-[`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-mind-over-matter)). Survives one lethal hit at 1 HP
+[`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-psybubble)). Survives one lethal hit at 1 HP
 on the holder's entry turn, from any HP.
 
 **Wiring.** No driver line: it hooks `GetAdjustedDamage()` directly, beside Sturdy, and checks the

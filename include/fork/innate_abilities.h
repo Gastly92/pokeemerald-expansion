@@ -296,9 +296,9 @@
 //   LEGENDARY (the fork's own ability, innate-only): Mythical's twin at x1.5 max HP instead of x2, on the same
 //   SwitchInInnateAbilityEffect line and src/fork/mythical.c logic. Carriers: every TIER_LEGENDARY species plus
 //   the forms they take in battle, gated by test/fork/legendary.c.
-//   MIND_OVER_MATTER (the fork's own ability, designed as an innate): survives one lethal hit at 1 HP on the
+//   PSYBUBBLE (the fork's own ability, designed as an innate): survives one lethal hit at 1 HP on the
 //   holder's entry turn (IsBattlersEntryTurn), from any HP. Hooked straight into GetAdjustedDamage beside
-//   Sturdy, so no driver line is needed; logic and AI helpers live in src/fork/mind_over_matter.c.
+//   Sturdy, so no driver line is needed; logic and AI helpers live in src/fork/psybubble.c.
 //   Breakable, like Sturdy. Carriers: Mew (the list and rationale are in fork-docs/INNATE_ABILITIES.md).
 //   VICTORY_STAR: x1.1 accuracy for the holder and a living partner in GetTotalAccuracy
 //   (src/battle_util.c), and the repurposed evasion-ignore for both in GetAccEvasionStageDelta
