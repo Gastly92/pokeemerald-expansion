@@ -21159,7 +21159,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CALM_MIND,
             MOVE_PSYSHOCK,
-            MOVE_FOCUS_BLAST,
+            MOVE_AURA_SPHERE,
             MOVE_RECOVER
         },
         .ability = ABILITY_NO_GUARD,
@@ -22917,7 +22917,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_GIGA_DRAIN,
-            MOVE_FOCUS_BLAST,
+            MOVE_AURA_SPHERE,
             MOVE_AIR_SLASH,
             MOVE_VACUUM_WAVE
         },

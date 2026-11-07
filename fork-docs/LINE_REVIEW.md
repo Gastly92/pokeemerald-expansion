@@ -1134,6 +1134,14 @@ that used to be a percentage, the first question is whether it now rides this ga
    its reliable Ice move. Coverage Ice Beam stays, and so does Ice Beam on a setup
    sweeper whose only Ice move it is.
 
+   **Focus Blast stays by default: 120 / 4 vs Aura Sphere 80 / 32.** The power gap
+   is 50%, not 22%, and Fighting coverage is there to break a wall in one or two
+   hits. Every super-effective Focus Blast also drops the target's Sp. Def, and
+   Sheer Force boosts it (Aura Sphere has no secondary, so it gets no boost). Take
+   Aura Sphere only where the set has to fire its Fighting move repeatedly: a bulky
+   Fighting-type's STAB (Virizion's Assault Vest set), or a slow-win set whose only
+   answer to a matchup it is (Reuniclus's Calm Mind + Recover set against Dark types).
+
    The corollary is what gets missed: **everything keyed on accuracy is still
    live.** No Guard pierces semi-invulnerability and zeroes the evasion tax. Keen
    Eye, Compound Eyes and Illuminate make the holder ignore an evasive foe's tax.
