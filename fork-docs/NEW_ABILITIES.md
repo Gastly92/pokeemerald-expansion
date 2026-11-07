@@ -497,3 +497,37 @@ changes shape. A 10% Power Construct would keep x1.5 through its first stay as C
 come back in at x2.
 
 Covered by `test/fork/legendary.c`.
+
+## Case study: Psybubble
+
+**`Psybubble`** (`ABILITY_PSYBUBBLE`) is a fork ability designed to be an **innate**,
+crossing Sturdy with Focus Band.
+
+> On the turn the holder enters the field, it survives **one** lethal hit with 1 HP, **from any HP**.
+
+**Flavor.** A psychic bubble that shields the holder as it arrives and pops after one hit. Any
+species whose design or Pokédex text fits that image can carry it; the first is **Mew**, which is
+often shown floating inside a bubble. The name follows the games' "Psy-"
+compounds (Psybeam, Psyshock).
+
+**The window.** It uses `IsBattlersEntryTurn()`, the window `DETERMINISTIC_HOLD_EFFECTS` already
+gives Focus Band. For a lead it is turn 1. For a chosen switch it is the switch turn itself, and for a
+faint replacement it is the next turn. The window closes once any foe has acted while the holder is on
+the field, so a faster foe hitting the holder's partner in doubles also closes it. The window is
+tracked even when that config is off, so the ability works either way.
+
+**Once per entry.** Enduring closes the window straight away. A multi-hit move's next strike, a
+Parental Bond second hit, or a second attacker the same turn still KOs. A held Focus Band is never
+spent on the same entry, since the ability triggers first and closes the band's window too. OHKO
+moves and confusion self-hits go through the same endure, so it survives those as well.
+
+**Wiring.** One `else if` in `GetAdjustedDamage()` (`src/battle_util.c`), right after Sturdy, calls
+`HasPsybubbleProtection()` / `ActivatePsybubble()` in `src/fork/psybubble.c`. It
+sets Sturdy's `MOVE_RESULT_STURDIED`, so the pop-up and "endured the hit!" message come for free. It
+is **breakable**, like Sturdy: Mold Breaker gets through it. Gastro Acid and Neutralizing Gas suppress it.
+
+**AI.** `CanEndureHit()` and `ShouldTryOHKO()` (`src/battle_ai_util.c`) and the switch-in hits-to-KO
+simulation (`src/battle_ai_switch.c`) count it, through the helpers in the same fork file.
+
+Covered by `test/fork/psybubble.c`. Its carriers are listed in
+[`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_psybubble).

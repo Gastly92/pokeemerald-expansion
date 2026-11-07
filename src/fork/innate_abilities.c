@@ -2124,6 +2124,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_MAGIC_GUARD,
             ABILITY_PRANKSTER,
             ABILITY_PRESSURE,
+            ABILITY_PSYBUBBLE,
             ABILITY_REGENERATOR,
             ABILITY_WILLPOWER
         )
