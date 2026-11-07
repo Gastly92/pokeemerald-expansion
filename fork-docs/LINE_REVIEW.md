@@ -1141,6 +1141,12 @@ that used to be a percentage, the first question is whether it now rides this ga
    Aura Sphere only where the set has to fire its Fighting move repeatedly: a bulky
    Fighting-type's STAB (Virizion's Assault Vest set), or a slow-win set whose only
    answer to a matchup it is (Reuniclus's Calm Mind + Recover set against Dark types).
+   Mega Launcher, as an innate or through the species' Mega (Blastoise), makes Aura
+   Sphere 120 power with 32 PP, strictly better, so those sets keep it. Lucario keeps
+   it as its signature move.
+
+   **Run every pair in both directions.** Look at the sets on the short move as well
+   as the ones on the reliable move; each side has sets in the wrong place.
 
    The corollary is what gets missed: **everything keyed on accuracy is still
    live.** No Guard pierces semi-invulnerability and zeroes the evasion tax. Keen

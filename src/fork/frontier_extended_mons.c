@@ -5817,7 +5817,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_PSYSTRIKE,
-            MOVE_AURA_SPHERE,
+            MOVE_FOCUS_BLAST,
             MOVE_ICE_BEAM,
             MOVE_NASTY_PLOT
         },
@@ -5880,7 +5880,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_NASTY_PLOT,
             MOVE_PSYCHIC,
-            MOVE_AURA_SPHERE,
+            MOVE_FOCUS_BLAST,
             MOVE_FIRE_BLAST
         },
         .ability = ABILITY_SYNCHRONIZE,
@@ -8844,7 +8844,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CALM_MIND,
             MOVE_THUNDER,
-            MOVE_AURA_SPHERE,
+            MOVE_FOCUS_BLAST,
             MOVE_SHADOW_BALL
         },
         .ability = ABILITY_LIGHTNING_ROD,
@@ -8864,7 +8864,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_THUNDER,
             MOVE_VOLT_SWITCH,
-            MOVE_AURA_SPHERE,
+            MOVE_FOCUS_BLAST,
             MOVE_SHADOW_BALL
         },
         .ability = ABILITY_LIGHTNING_ROD,
@@ -13630,7 +13630,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_DRACO_METEOR,
             MOVE_PSYCHIC,
-            MOVE_AURA_SPHERE,
+            MOVE_FOCUS_BLAST,
             MOVE_TRICK
         },
         .ability = ABILITY_SYNCHRONIZE,
@@ -14231,7 +14231,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_OVERHEAT,
-            MOVE_AURA_SPHERE,
+            MOVE_FOCUS_BLAST,
             MOVE_U_TURN,
             MOVE_GRASS_KNOT
         },
@@ -18028,7 +18028,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_DRACO_METEOR,
             MOVE_SHADOW_BALL,
             MOVE_EARTH_POWER,
-            MOVE_AURA_SPHERE
+            MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_CONTRARY,
         .nature = NATURE(SPA_UP, ATK_DOWN),
@@ -21658,7 +21658,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_STICKY_WEB,
-            MOVE_THUNDER,
+            MOVE_THUNDERBOLT,
             MOVE_BUG_BUZZ,
             MOVE_VOLT_SWITCH
         },
@@ -29341,7 +29341,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_MOONGEIST_BEAM,
             MOVE_PHOTON_GEYSER,
-            MOVE_AURA_SPHERE
+            MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_PSYCHIC_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -36595,7 +36595,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_CALM_MIND,
             MOVE_MOONBLAST,
-            MOVE_AURA_SPHERE,
+            MOVE_FOCUS_BLAST,
             MOVE_THUNDER
         },
         .ability = ABILITY_TRACE,
