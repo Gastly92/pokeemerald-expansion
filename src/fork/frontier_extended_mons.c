@@ -4709,7 +4709,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_LOVELY_KISS,
-            MOVE_ICE_BEAM,
+            MOVE_BLIZZARD,
             MOVE_PSYCHIC,
             MOVE_NASTY_PLOT
         },
@@ -4729,7 +4729,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_NASTY_PLOT,
-            MOVE_ICE_BEAM,
+            MOVE_BLIZZARD,
             MOVE_PSYCHIC,
             MOVE_FOCUS_BLAST
         },
@@ -17230,7 +17230,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_ICE_BEAM,
+            MOVE_BLIZZARD,
             MOVE_SHADOW_BALL,
             MOVE_THUNDER,
             MOVE_TAUNT
@@ -23274,7 +23274,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
-            MOVE_ICE_BEAM,
+            MOVE_BLIZZARD,
             MOVE_DRACO_METEOR,
             MOVE_FREEZE_DRY,
             MOVE_EARTH_POWER
@@ -23358,7 +23358,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_CHOICE_SPECS,
         .moves =
         {
-            MOVE_ICE_BEAM,
+            MOVE_BLIZZARD,
             MOVE_FUSION_FLARE,
             MOVE_DRACO_METEOR,
             MOVE_EARTH_POWER
@@ -31428,7 +31428,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .moves =
         {
             MOVE_FREEZE_DRY,
-            MOVE_ICE_BEAM,
+            MOVE_BLIZZARD,
             MOVE_PSYCHIC,
             MOVE_NASTY_PLOT
         },
@@ -35972,7 +35972,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_HYDRO_PUMP,
             MOVE_FREEZE_DRY,
             MOVE_ENCORE,
-            MOVE_ICE_BEAM
+            MOVE_BLIZZARD
         },
         .ability = ABILITY_SNOW_WARNING,
         .nature = NATURE(SPE_UP, ATK_DOWN),

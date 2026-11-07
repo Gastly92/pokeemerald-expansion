@@ -1127,6 +1127,13 @@ that used to be a percentage, the first question is whether it now rides this ga
    support sets. Pressure, a common innate, doubles the cost per use, so depth
    matters most for a set that stays in.
 
+   **Blizzard is the exception: 110 / 4 vs Ice Beam 90 / 16.** Four shots (two
+   into Pressure) is too few for coverage, and Ice coverage mostly hits Dragon,
+   Flying and Ground types, where many legendaries carry Pressure. So Blizzard goes
+   only on an Ice-type offence set, preferably one that also carries Freeze-Dry as
+   its reliable Ice move. Coverage Ice Beam stays, and so does Ice Beam on a setup
+   sweeper whose only Ice move it is.
+
    The corollary is what gets missed: **everything keyed on accuracy is still
    live.** No Guard pierces semi-invulnerability and zeroes the evasion tax. Keen
    Eye, Compound Eyes and Illuminate make the holder ignore an evasive foe's tax.
