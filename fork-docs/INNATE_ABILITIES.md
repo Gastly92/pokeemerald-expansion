@@ -3896,8 +3896,22 @@ Focus Band and closes it when it fires, so the two never both save on the same e
 **AI.** `CanEndureHit`, `ShouldTryOHKO` and the switch-in hits-to-KO simulation count it.
 
 **Species:** a "psychic bubble" flavor set (no canon carriers): species whose design or Pokédex text
-has them shielded by a bubble or psychic barrier. The first pick is Mew. Keep the set tight: on a
-frail sweeper it is a guaranteed free turn.
+has them shielded by a bubble, shell or psychic barrier. Keep the set tight: on a frail sweeper it is
+a guaranteed free turn.
+
+- **Mew**: often shown floating inside a bubble.
+- **Solosis, Duosion, Reuniclus**: psychic cells "enveloped in a special liquid".
+- **Mr. Mime** (the "Barrier Pokémon", whose mimed walls "become real") and **Mime Jr.**, for the line.
+- **Jirachi**: "a tough crystalline shell envelops the body to protect it from enemies".
+- **Wyrdeer**: its orbs shine "when it is erecting invisible barriers".
+- **Rellor, Rabsca**: a ball made "with psychic energy", with Rabsca's "true body" inside it.
+- **Dottler**: "hiding in its shell … seems to have awakened its psychic powers". Blipbug and
+  Orbeetle have no shell hook.
+- **Cosmoem**: a Psychic "Protostar" sealed in a hard shell. Cosmog has no shell.
+
+Left out on purpose: Galarian Mr. Mime (its barrier is ice, not psychic), Dewpider and Araquanid (a
+real bubble, but Water, with canon Water Bubble), and Gardevoir (it protects its Trainer, not itself).
+Watch the Regenerator carriers (Mew, the Solosis line): each switch-in brings a fresh save.
 
 ### ABILITY_VICTORY_STAR
 

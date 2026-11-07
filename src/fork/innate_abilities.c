@@ -1713,6 +1713,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_DANCER,
             ABILITY_FILTER,
             ABILITY_MAGIC_BOUNCE,
+            ABILITY_PSYBUBBLE,
             ABILITY_TECHNICIAN
         )
     },
@@ -4854,6 +4855,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEGENDARY,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
+            ABILITY_PSYBUBBLE,
             ABILITY_SERENE_GRACE
         )
     },
@@ -5435,6 +5437,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_DANCER,
             ABILITY_FILTER,
             ABILITY_MAGIC_BOUNCE,
+            ABILITY_PSYBUBBLE,
             ABILITY_TECHNICIAN
         )
     },
@@ -7122,6 +7125,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
             ABILITY_OVERCOAT,
+            ABILITY_PSYBUBBLE,
             ABILITY_REGENERATOR,
             ABILITY_TELEPATHY
         )
@@ -7132,6 +7136,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
             ABILITY_OVERCOAT,
+            ABILITY_PSYBUBBLE,
             ABILITY_REGENERATOR,
             ABILITY_TELEPATHY
         )
@@ -7142,6 +7147,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEVITATE,
             ABILITY_MAGIC_GUARD,
             ABILITY_OVERCOAT,
+            ABILITY_PSYBUBBLE,
             ABILITY_REGENERATOR,
             ABILITY_TELEPATHY
         )
@@ -10528,6 +10534,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_COSMOEM,
         INNATES(
             ABILITY_LEVITATE,
+            ABILITY_PSYBUBBLE,
             ABILITY_STURDY,
             ABILITY_UNAWARE
         )
@@ -10961,6 +10968,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         INNATES(
             ABILITY_COMPOUND_EYES,
             ABILITY_FOREWARN,
+            ABILITY_PSYBUBBLE,
             ABILITY_SWARM,
             ABILITY_TELEPATHY
         )
@@ -11867,6 +11875,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FILTER,
             ABILITY_FRISK,
             ABILITY_INTIMIDATE,
+            ABILITY_PSYBUBBLE,
             ABILITY_THICK_FAT
         )
     },
@@ -12426,6 +12435,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RELLOR,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_PSYBUBBLE,
             ABILITY_SHED_SKIN,
             ABILITY_STICKY_HOLD
         )
@@ -12434,6 +12444,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_RABSCA,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_PSYBUBBLE,
             ABILITY_SHED_SKIN,
             ABILITY_STICKY_HOLD,
             ABILITY_TELEPATHY
