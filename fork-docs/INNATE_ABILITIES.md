@@ -3877,6 +3877,25 @@ by 50% while it is on the field instead of doubling it. Wired exactly like Mythi
 **Species: every `TIER_LEGENDARY` species** (gated by `test/fork/legendary.c`), plus the Mega, Pirouette,
 Gigantamax and Tera forms they take in battle.
 
+### ABILITY_MIND_OVER_MATTER
+
+**The fork's own ability, designed as an innate** (its definition and rationale are in
+[`NEW_ABILITIES.md`](NEW_ABILITIES.md#case-study-mind-over-matter)). Survives one lethal hit at 1 HP
+on the holder's entry turn, from any HP.
+
+**Wiring.** No driver line: it hooks `GetAdjustedDamage()` directly, beside Sturdy, and checks the
+innate through `IsInnateActive()`. The pop-up is overwritten to the innate when the chosen ability
+differs (the innate Sturdy precedent). Breakable, so Mold Breaker gets through it, and suppressed by
+Gastro Acid and Neutralizing Gas.
+
+**`DETERMINISTIC_*`.** None of its own. It shares the entry-turn window with the deterministic
+Focus Band and closes it when it fires, so the two never both save on the same entry.
+
+**AI.** `CanEndureHit`, `ShouldTryOHKO` and the switch-in hits-to-KO simulation count it.
+
+**Species:** Mew, a flavor pick (no canon carriers). Keep the set small: on a frail sweeper it is a
+guaranteed free turn.
+
 ### ABILITY_VICTORY_STAR
 
 Boosts the accuracy of the holder and its partner by 10%. Wired as an innate so Victini, whose
