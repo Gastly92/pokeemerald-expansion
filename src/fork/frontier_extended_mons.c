@@ -23212,7 +23212,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_ROCK_POLISH,
             MOVE_SANDSEAR_STORM,
-            MOVE_EARTH_POWER,
+            MOVE_SLUDGE_BOMB,
             MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_SHEER_FORCE,
