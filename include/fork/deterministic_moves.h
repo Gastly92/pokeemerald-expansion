@@ -95,4 +95,12 @@ bool32 AI_DeterministicAbilityGuaranteesStatus(enum BattlerId battlerAtk, enum B
 bool32 AI_DeterministicContactAbilityPunishes(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move);
 bool32 StatusWillBeCuredDeterministically(enum BattlerId battlerDef, enum Ability defAbility);
 
+// TRUE when the battler's next Protect / Endure would continue a consecutive-use streak,
+// reading consecutiveMoveUses the way the engine will after its lazy reset.
+bool32 AI_IsProtectStreakActive(enum BattlerId battler);
+
+// DETERMINISTIC_MOVE_RESULTS: TRUE when `move` is a Protect-family move or Endure that
+// the engine will fail because it continues a consecutive-use streak.
+bool32 AI_DeterministicProtectWillFail(enum BattlerId battler, enum Move move);
+
 #endif // GUARD_FORK_DETERMINISTIC_MOVES_H

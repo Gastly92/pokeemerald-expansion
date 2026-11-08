@@ -2501,6 +2501,8 @@ s32 ProtectChecks(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Mov
 
     // TODO more sophisticated logic
     u32 uses = gBattleMons[battlerAtk].volatiles.consecutiveMoveUses;
+    if (!AI_IsProtectStreakActive(battlerAtk)) // UPSTREAM: the counter is stale after an attack until the next Protect resets it
+        uses = 0;
 
     if (predictedMove != MOVE_NONE && predictedMove != MOVE_UNAVAILABLE)
     {
@@ -2515,6 +2517,9 @@ s32 ProtectChecks(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Mov
     }
 
     if (ShouldAvoidProtectingAgainstPartnerMove(battlerAtk, move))
+        return WORST_EFFECT;
+
+    if (AI_DeterministicProtectWillFail(battlerAtk, move)) // FORK: DETERMINISTIC_MOVE_RESULTS, a repeat Protect always fails
         return WORST_EFFECT;
 
     /*if (GetMoveResultFlags(predictedMove) & (MOVE_RESULT_NO_EFFECT | MOVE_RESULT_MISSED))

@@ -419,7 +419,8 @@ makes every strike hit, so it is toned down to `DETERMINISTIC_POPULATION_BOMB_CO
 `DETERMINISTIC_POPULATION_BOMB_LOADED_DICE_COUNT` (10). The other fixed-count moves
 (Triple Kick, Beat Up, Dragon Darts) are untouched
 (`SetRandomMultiHitCounter`/`CancelerMultihitMoves`). **Protect**-family moves used
-on consecutive turns always fail (`CanUseMoveConsecutively`, `src/battle_util.c`).
+on consecutive turns always fail (`CanUseMoveConsecutively`, `src/battle_util.c`), and the AI
+scores a repeat Protect or Endure as a certain failure (`AI_DeterministicProtectWillFail`).
 **Rampage** (Thrash/Outrage/Petal Dance) always lasts `DETERMINISTIC_RAMPAGE_TURNS`
 (2). **Speed ties** are broken by a fixed ladder — higher raw base Speed → lighter
 weight → higher remaining-HP% → (only then) the random permutation, inverted under

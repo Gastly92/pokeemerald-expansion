@@ -640,3 +640,49 @@ bool32 StatusWillBeCuredDeterministically(enum BattlerId battlerDef, enum Abilit
         return FALSE;
     }
 }
+
+// TRUE when `battler`'s next Protect / Endure (/ Gen 9 Ally Switch) would continue a
+// consecutive-use streak. consecutiveMoveUses cannot be read raw for this: the engine
+// only resets it inside the Protect/Endure canceler (TryResetConsecutiveUseCounter), so
+// at decision time it still holds the count from the battler's LAST streak even if it
+// attacked in between. This mirrors that reset without mutating anything. Not gated by
+// any flag: the stale read is an upstream AI bug in vanilla play too.
+bool32 AI_IsProtectStreakActive(enum BattlerId battler)
+{
+    if (gBattleMons[battler].volatiles.consecutiveMoveUses == 0)
+        return FALSE;
+
+    enum Move lastMove = gLastResultingMoves[battler];
+    if (lastMove == MOVE_UNAVAILABLE)
+        return FALSE;
+    enum BattleMoveEffects lastEffect = GetMoveEffect(lastMove);
+    if (!gBattleMoveEffects[lastEffect].usesProtectCounter
+     && (GetConfig(B_ALLY_SWITCH_FAIL_CHANCE) < GEN_9 || lastEffect != EFFECT_ALLY_SWITCH))
+        return FALSE;
+
+    return TRUE;
+}
+
+// DETERMINISTIC_MOVE_RESULTS makes CanUseMoveConsecutively return FALSE for any
+// Protect-family move (and Endure) past the first in a row, so the AI must price the
+// second one as a guaranteed failure rather than upstream's 1-in-3 gamble. The
+// exemptions mirror the canceler in battle_move_resolution.c (Gen 6+ Wide/Quick Guard,
+// Crafty Shield). The last-to-move failure is not a consecutive-use matter and
+// upstream's AI already handles it, so it is left alone.
+bool32 AI_DeterministicProtectWillFail(enum BattlerId battler, enum Move move)
+{
+    if (!GetConfig(DETERMINISTIC_MOVE_RESULTS))
+        return FALSE;
+
+    enum BattleMoveEffects effect = GetMoveEffect(move);
+    if (effect != EFFECT_PROTECT && effect != EFFECT_ENDURE)
+        return FALSE;
+
+    enum ProtectMethod protectMethod = GetMoveProtectMethod(move);
+    if (protectMethod == PROTECT_CRAFTY_SHIELD
+     || (protectMethod == PROTECT_WIDE_GUARD && GetConfig(B_WIDE_GUARD) >= GEN_6)
+     || (protectMethod == PROTECT_QUICK_GUARD && GetConfig(B_QUICK_GUARD) >= GEN_6))
+        return FALSE;
+
+    return AI_IsProtectStreakActive(battler);
+}
