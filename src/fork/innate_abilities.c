@@ -10519,6 +10519,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0788
         SPECIES_TAPU_FINI,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_LEGENDARY,
             ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE,
