@@ -27628,7 +27628,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_RECEIVER,
+        .ability = ABILITY_GORILLA_TACTICS,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
@@ -29769,6 +29769,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
+        .ev = EVS(
+            .atk = 252,
+            .spd = 4,
+            .spe = 252
+        ),
+        .teraType = TYPE_GRASS,
+    },
+    {
+        .species = SPECIES_RILLABOOM,
+        .tags = FORMAT_SINGLES,
+        .heldItem = ITEM_CHOICE_SCARF,
+        .moves =
+        {
+            MOVE_WOOD_HAMMER,
+            MOVE_HIGH_HORSEPOWER,
+            MOVE_KNOCK_OFF,
+            MOVE_U_TURN
+        },
+        .ability = ABILITY_GORILLA_TACTICS,
+        .nature = NATURE(SPE_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,
             .spd = 4,
@@ -34299,7 +34319,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PSYCHIC_FANGS,
             MOVE_FIRE_FANG
         },
-        .ability = ABILITY_GORILLA_TACTICS,
+        .ability = ABILITY_MOXIE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 4,
@@ -34319,7 +34339,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_PLAY_ROUGH,
             MOVE_WILD_CHARGE
         },
-        .ability = ABILITY_GORILLA_TACTICS,
+        .ability = ABILITY_MOXIE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,

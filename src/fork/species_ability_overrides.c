@@ -1961,6 +1961,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_COMFEY, 2,
         ABILITY_GRASSY_SURGE
     },
+    { // 0766
+        SPECIES_PASSIMIAN, 1,
+        ABILITY_GORILLA_TACTICS
+    },
     { // 0768
         SPECIES_GOLISOPOD_MEGA, 0,
         ABILITY_EMERGENCY_EXIT
@@ -2116,6 +2120,14 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     {
         SPECIES_MELMETAL_GMAX, 1,
         ABILITY_WELL_BAKED_BODY
+    },
+    { // 0812
+        SPECIES_RILLABOOM, 1,
+        ABILITY_GORILLA_TACTICS
+    },
+    {
+        SPECIES_RILLABOOM_GMAX, 1,
+        ABILITY_GORILLA_TACTICS
     },
     { // 0818
         SPECIES_INTELEON, 1,
@@ -2367,7 +2379,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0943
         SPECIES_MABOSSTIFF, 2,
-        ABILITY_GORILLA_TACTICS
+        ABILITY_MOXIE
     },
     { // 0956
         SPECIES_ESPATHRA, 1,
