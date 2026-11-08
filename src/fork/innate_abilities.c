@@ -10482,6 +10482,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0785
         SPECIES_TAPU_KOKO,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_COMPETITIVE,
             ABILITY_DEFIANT,
             ABILITY_LEGENDARY,
