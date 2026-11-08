@@ -136,7 +136,8 @@ something, so dead rows can't accumulate and hide the next real gap.
 - **Movesets are not restricted to the species' learnset.** Flavorful and powerful
   coverage is allowed; see `LINE_REVIEW.md`.
 - **Innate abilities are respected.** A species with an innate Levitate
-  (`src/fork/innate_abilities.c`) is never given a redundant Air Balloon, and a set's
+  (`src/fork/innate_abilities.c`) is never given a redundant Air Balloon, nor a Skill Link
+  one (innate or chosen) a Loaded Dice (roster-tested), and a set's
   `.ability` carries a **complementary** ability that runs alongside the innate — e.g.
   Slowbro `OWN_TEMPO` + innate Regenerator, Rotom `LIGHTNING_ROD` + innate Levitate,
   Clefable `MAGIC_GUARD` + innate Unaware.

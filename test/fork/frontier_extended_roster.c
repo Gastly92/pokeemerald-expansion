@@ -287,6 +287,36 @@ TEST("Frontier extended roster: no set holds an accuracy item its ability alread
     EXPECT_EQ(wasted, 0);
 }
 
+// Loaded Dice does two things: a 2-5 hit move hits 4-5 times (10 for Population Bomb), and a
+// multi-hit move only rolls accuracy on its first hit. Skill Link does both of those already
+// (5 hits, and ShouldSkipAccuracyCalcPastFirstHit treats the two identically), so on a Skill
+// Link mon -- chosen ability or innate -- the item does nothing. Ambipom (innate Skill Link)
+// shipped holding one; this keeps it from coming back.
+TEST("Frontier extended roster: no Skill Link set holds Loaded Dice")
+{
+    u32 i;
+    u32 wasted = 0;
+
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+
+        if (gItemsInfo[set->heldItem].holdEffect != HOLD_EFFECT_LOADED_DICE)
+            continue;
+        if (set->ability != ABILITY_SKILL_LINK && !SpeciesHasInnate(set->species, ABILITY_SKILL_LINK))
+            continue;
+
+        wasted++;
+        Test_MgbaPrintf("roster[%d] %S: Loaded Dice does nothing next to Skill Link -- pick another item",
+                        i,
+                        gSpeciesInfo[set->species].speciesName);
+    }
+
+    EXPECT_EQ(wasted, 0);
+}
+
 // A Choice item locks the holder into its first move. A move that only works on the
 // holder's first turn out (First Impression, Fake Out, Mat Block) then fails every turn
 // after, and the holder is stuck clicking it until it switches. Golisopod's banded set
