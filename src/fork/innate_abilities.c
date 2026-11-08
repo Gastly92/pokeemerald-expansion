@@ -10513,7 +10513,8 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_LEGENDARY,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_THICK_FAT
         )
     },
     { // 0788
