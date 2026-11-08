@@ -10482,6 +10482,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0785
         SPECIES_TAPU_KOKO,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_COMPETITIVE,
             ABILITY_DEFIANT,
             ABILITY_LEGENDARY,
@@ -10506,16 +10507,20 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0787
         SPECIES_TAPU_BULU,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_GRASS_PELT,
+            ABILITY_HARVEST,
             ABILITY_LEGENDARY,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
-            ABILITY_TELEPATHY
+            ABILITY_TELEPATHY,
+            ABILITY_THICK_FAT
         )
     },
     { // 0788
         SPECIES_TAPU_FINI,
         INNATES(
+            ABILITY_JUSTIFIED,
             ABILITY_LEGENDARY,
             ABILITY_LEVITATE,
             ABILITY_NATURAL_CURE,
