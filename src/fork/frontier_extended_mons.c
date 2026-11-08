@@ -8649,7 +8649,6 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .teraType = TYPE_GHOST,
     },
     {
-        // Innate Prankster makes Revival Blessing, Tailwind and Taunt all +1 priority.
         .species = SPECIES_SMEARGLE,
         .tags = FORMAT_BOTH,
         .heldItem = ITEM_FOCUS_SASH,
