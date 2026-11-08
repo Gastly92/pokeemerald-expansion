@@ -6029,7 +6029,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_FIRE_BLAST,
             MOVE_FOCUS_BLAST,
             MOVE_EARTH_POWER,
-            MOVE_SOLAR_BEAM
+            MOVE_ENERGY_BALL
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -6066,10 +6066,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_HEAT_ROCK,
         .moves =
         {
+            MOVE_SUNNY_DAY,
             MOVE_ERUPTION,
             MOVE_FIRE_BLAST,
-            MOVE_SOLAR_BEAM,
-            MOVE_EARTH_POWER
+            MOVE_SOLAR_BEAM
         },
         .ability = ABILITY_FLASH_FIRE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
