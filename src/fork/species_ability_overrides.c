@@ -1584,7 +1584,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0589
         SPECIES_ESCAVALIER, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     { // 0591
         SPECIES_AMOONGUSS, 1,
@@ -1775,7 +1775,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0675
         SPECIES_PANGORO, 0,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     { // 0676
         SPECIES_FURFROU, 1,
@@ -2375,7 +2375,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0959
         SPECIES_TINKATON, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_NO_GUARD
     },
     { // 0961
         SPECIES_WUGTRIO, 0,
