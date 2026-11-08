@@ -26550,7 +26550,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_EARTHQUAKE,
             MOVE_U_TURN
         },
-        .ability = ABILITY_GORILLA_TACTICS,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -26570,7 +26570,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_ICE_FANG,
             MOVE_PSYCHIC_FANGS
         },
-        .ability = ABILITY_GORILLA_TACTICS,
+        .ability = ABILITY_SHEER_FORCE,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .hp = 252,
@@ -27628,7 +27628,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_STONE_EDGE,
             MOVE_KNOCK_OFF
         },
-        .ability = ABILITY_GORILLA_TACTICS,
+        .ability = ABILITY_RECEIVER,
         .nature = NATURE(ATK_UP, SPA_DOWN),
         .ev = EVS(
             .atk = 252,

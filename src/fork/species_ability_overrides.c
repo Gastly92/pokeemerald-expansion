@@ -1907,7 +1907,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0735
         SPECIES_GUMSHOOS, 1,
-        ABILITY_GORILLA_TACTICS
+        ABILITY_SHEER_FORCE
     },
     { // 0738
         SPECIES_VIKAVOLT, 1,
@@ -1960,10 +1960,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     { // 0764
         SPECIES_COMFEY, 2,
         ABILITY_GRASSY_SURGE
-    },
-    { // 0766
-        SPECIES_PASSIMIAN, 1,
-        ABILITY_GORILLA_TACTICS
     },
     { // 0768
         SPECIES_GOLISOPOD_MEGA, 0,
