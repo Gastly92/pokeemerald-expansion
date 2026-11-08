@@ -972,10 +972,13 @@ static void BuildConditionLine(u8 *dst, enum BattlerId battler)
 
     *p = EOS;
     // Sleep: the counter is decremented on each move attempt and the battler wakes
-    // and acts on the attempt that zeroes it, so counter - 1 is the actions it still
-    // loses. Early Bird (which halves that) is not reflected, so as not to reveal it.
+    // and acts on the attempt that zeroes it, so the counter is the turn it wakes on,
+    // in the same convention as every other timer here ((1) = wakes and acts this
+    // turn). Showing counter - 1 (actions still lost) instead dropped the count on the
+    // last sleeping turn, which read as a missing count. Early Bird (which halves the
+    // counter's drain) is not reflected, so as not to reveal it.
     if (status != NULL && (gBattleMons[battler].status1 & STATUS1_SLEEP) && fixedStatus)
-        p = AppendTimedEntry(p, status, (gBattleMons[battler].status1 & STATUS1_SLEEP) - 1);
+        p = AppendTimedEntry(p, status, gBattleMons[battler].status1 & STATUS1_SLEEP);
     else if (status != NULL)
         p = AppendEntry(p, status, 1);
     if (v->confusionTimer)
