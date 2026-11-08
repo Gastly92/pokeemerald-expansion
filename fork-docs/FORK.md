@@ -117,6 +117,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Pinch berries buff | `BUFF_PINCH_BERRIES` (+ `…_STAGES`) | ✅ | Liechi, Ganlon, Salac, Petaya, Apicot and Starf raise their stat +3 instead of +1 (+2 for Starf), and +6 with Ripen. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
 | Retaliation berries buff | `BUFF_RETALIATION_BERRIES` (+ `…_DENOMINATOR`) | ✅ | Jaboca and Rowap Berry cost the attacker 1/4 of its max HP instead of 1/8 (1/2 instead of 1/4 with Ripen). [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
 | Kee / Maranga berries buff | `BUFF_DAMAGED_STAT_BERRIES` (+ `…_STAGES`) | ✅ | Kee and Maranga Berry raise Defense / Sp. Def +2 instead of +1 when hit (+4 instead of +2 with Ripen). [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
+| Adrenaline Orb buff | `BUFF_ADRENALINE_ORB` (+ `…_STAGES`) | ✅ | Adrenaline Orb fires on the first stat drop an opponent lands on the holder (not only Intimidate) and raises Speed +2 instead of +1; a blocked drop doesn't trigger or use it up. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_adrenaline_orb.c` |
 
 ## Abilities, types & gimmicks
 
