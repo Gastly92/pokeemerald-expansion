@@ -4797,18 +4797,22 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_KYOGRE,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_ILLUMINATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
-            ABILITY_RAIN_DISH
+            ABILITY_RAIN_DISH,
+            ABILITY_WATER_VEIL
         )
     },
     { // 0382
         SPECIES_KYOGRE_PRIMAL,
         INNATES(
             ABILITY_HYDRATION,
+            ABILITY_ILLUMINATE,
             ABILITY_MYTHICAL,
             ABILITY_PRESSURE,
-            ABILITY_RAIN_DISH
+            ABILITY_RAIN_DISH,
+            ABILITY_WATER_VEIL
         )
     },
     { // 0383
