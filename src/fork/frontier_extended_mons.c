@@ -15309,7 +15309,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_AMBIPOM,
         .tags = FORMAT_SINGLES,
-        .heldItem = ITEM_LOADED_DICE,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
             MOVE_TAIL_SLAP,
