@@ -80,6 +80,7 @@
 #include "load_save.h"
 #include "fork/buff_leech_seed.h" // FORK: BUFF_LEECH_SEED
 #include "fork/buff_status_reapply.h" // FORK: BUFF_REBURN
+#include "fork/buff_adrenaline_orb.h" // FORK: BUFF_ADRENALINE_ORB
 #include "fork/mythical.h" // FORK: Mythical HP boost undone on switch-out
 #include "fork/ability_failure_popup.h" // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES
 
@@ -12466,6 +12467,25 @@ void BS_TryAdrenalineOrb(void)
 
     enum BattlerId battler = gBattleScripting.battler;
     enum HoldEffect holdEffect = GetBattlerHoldEffect(battler);
+
+    // FORK: BUFF_ADRENALINE_ORB replaces the Intimidate-only trigger below with "an opponent's drop
+    // landed on the holder" (marked in DecreaseStat(), src/battle_stat_change.c) and raises Speed
+    // by GetAdrenalineOrbStages(). Upstream's block is left untouched for the flag-off path; on
+    // conflict, port upstream's change into both. Tests: test/fork/buff_adrenaline_orb.c.
+    if (GetConfig(BUFF_ADRENALINE_ORB))
+    {
+        if (ConsumeAdrenalineOrbDrop(battler) && holdEffect == HOLD_EFFECT_ADRENALINE_ORB)
+        {
+            SetStatChange2(battler, STAT_SPEED, GetAdrenalineOrbStages());
+            BattleScriptPush(cmd->nextInstr);
+            gBattlescriptCurrInstr = BattleScript_AdrenalineOrbActivates;
+        }
+        else
+        {
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        }
+        return;
+    }
 
     if (gBattleStruct->intimidateActivated
      && !gBattleStruct->adrenalineOrbActivated // there might be a better way to solve this

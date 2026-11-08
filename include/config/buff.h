@@ -483,6 +483,33 @@
 // still applies). Stock behavior (flag off) is 1. Ignored when BUFF_DAMAGED_STAT_BERRIES is FALSE.
 #define BUFF_DAMAGED_STAT_BERRY_STAGES 2
 
+// When TRUE, Adrenaline Orb fires the first time an opponent actually lowers any of the holder's
+// stats -- Intimidate, Pacify, Icy Wind, Snarl, Parting Shot, a foe's Sticky Web, and so on -- and
+// raises Speed by BUFF_ADRENALINE_ORB_STAGES (+2 by default) instead of the stock +1. It is still
+// consumed when it fires.
+//
+// It fires only on a drop that lands. A drop that is blocked (Clear Body, Clear Amulet, Mist,
+// Flower Veil, a stat already at -6), turned into a raise by Contrary, or bounced by Mirror Armor
+// does not trigger the orb and does not use it up. That reverses stock, where the orb fires on
+// any Intimidate, even one that didn't lower anything. Self-inflicted drops (Close Combat, Draco
+// Meteor) and drops caused by a partner don't count either.
+//
+// Why: in stock the orb only triggers on Intimidate. In the Frontier no set chooses Intimidate,
+// so it only shows up as an innate, and a 3-mon opposing team carries it about a fifth of the
+// time. Widening the trigger makes the orb fire in most battles. The +2 makes it worth the slot
+// against White Herb, Eject Pack and Clear Amulet, which answer the same drops, and it matches
+// BUFF_DAMAGED_STAT_BERRIES: a one-shot reaction that usually fires early with turns left to use it.
+//
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the magnitude
+// lives in the plain constant below. See include/fork/buff_adrenaline_orb.h, its marker in
+// DecreaseStat() (src/battle_stat_change.c) and its check in BS_TryAdrenalineOrb()
+// (src/battle_script_commands.c).
+#define BUFF_ADRENALINE_ORB TRUE
+
+// Speed stages Adrenaline Orb raises when BUFF_ADRENALINE_ORB is on (the stat stage cap still
+// applies). Stock behavior (flag off) is 1. Ignored when BUFF_ADRENALINE_ORB is FALSE.
+#define BUFF_ADRENALINE_ORB_STAGES 2
+
 // When TRUE, Z-Moves and Max Moves ignore the target's positive Defense / Sp. Def stat stages
 // when dealing damage, exactly as a critical hit does. Drops still count, and nothing else about
 // a crit carries over (no 1.5x, screens still apply, the attacker's own stages are untouched).

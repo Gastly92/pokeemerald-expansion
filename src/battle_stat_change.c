@@ -10,6 +10,7 @@
 #include "item.h"
 #include "move.h"
 #include "fork/innate_abilities.h" // FORK: innate ability predicates
+#include "fork/buff_adrenaline_orb.h" // FORK: BUFF_ADRENALINE_ORB
 
 // Stat change
 static enum StatChangeResult CanDecreaseStat(struct BattleCalcValues *cv, struct StatChange *st);
@@ -352,6 +353,7 @@ static enum StatChangeResult DecreaseStat(struct BattleCalcValues *cv, struct St
     {
         gBattleMons[cv->battlerDef].volatiles.tryEjectPack = TRUE;
         gProtectStructs[cv->battlerDef].lashOutAffected = TRUE;
+        MarkAdrenalineOrbDrop(cv->battlerAtk, cv->battlerDef, st->stickyWeb); // FORK: BUFF_ADRENALINE_ORB -- a drop that landed (blocked drops never reach here)
     }
 
     if (!st->onlyChecking)

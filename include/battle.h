@@ -798,6 +798,10 @@ struct BattleStruct
     u8 mythicalHPBoosted[MAX_BATTLE_TRAINERS];
     // FORK: the subset of mythicalHPBoosted whose boost came from Legendary (x1.5 rather than x2).
     u8 legendaryHPBoosted[MAX_BATTLE_TRAINERS];
+    // FORK: BUFF_ADRENALINE_ORB -- per-battler bitmask of "an opponent's stat drop just landed on
+    // this battler". Set in DecreaseStat(), consumed by BS_TryAdrenalineOrb() right after the drop's
+    // message. See include/fork/buff_adrenaline_orb.h.
+    u8 adrenalineOrbDropLanded;
 };
 
 struct AiBattleData
