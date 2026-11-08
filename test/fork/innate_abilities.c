@@ -3795,9 +3795,10 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Early Bird wakes from sleep
 }
 
 // ----- Immunity (poison immunity) -----
-// A canon Immunity user (Snorlax: Immunity/Thick Fat/Gluttony) whose *chosen* ability is Gluttony still
+// A canon Immunity user (Gligar: Hyper Cutter/Sand Veil/Immunity) whose *chosen* ability is Sand Veil still
 // carries Immunity as an innate, so Toxic cannot poison it, and the pop-up shows Immunity. (Zangoose, the
 // other canon Immunity user, instead carries innate Toxic Boost — Immunity would contradict it.)
+// (Not Snorlax: its innate Comatose also blocks poison and would mask Immunity in these tests.)
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Immunity prevents poison")
 {
     bool32 enabled;
@@ -3806,16 +3807,16 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Immunity prevents poison")
     GIVEN {
         ASSUME(GetMoveEffect(MOVE_TOXIC) == EFFECT_NON_VOLATILE_STATUS);
         ASSUME(GetMoveNonVolatileStatus(MOVE_TOXIC) == MOVE_EFFECT_TOXIC);
-        ASSUME(SpeciesHasInnate(SPECIES_SNORLAX, ABILITY_IMMUNITY));
+        ASSUME(SpeciesHasInnate(SPECIES_GLIGAR, ABILITY_IMMUNITY));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
-        PLAYER(SPECIES_SNORLAX) { Ability(ABILITY_GLUTTONY); } // chosen ability differs from the innate
+        PLAYER(SPECIES_GLIGAR) { Ability(ABILITY_SAND_VEIL); } // chosen ability differs from the innate
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
         TURN { MOVE(opponent, MOVE_TOXIC); }
     } SCENE {
         if (enabled) {
-            ABILITY_POPUP(player, ABILITY_IMMUNITY); // pop-up shows Immunity, not the chosen Gluttony
-            MESSAGE("It doesn't affect Snorlax…");
+            ABILITY_POPUP(player, ABILITY_IMMUNITY); // pop-up shows Immunity, not the chosen Sand Veil
+            MESSAGE("It doesn't affect Gligar…");
             NONE_OF { STATUS_ICON(player, badPoison: TRUE); }
         } else {
             STATUS_ICON(player, badPoison: TRUE); // no innate -> Toxic poisons
@@ -3830,7 +3831,7 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mold Breaker pierces an innate Imm
     GIVEN {
         ASSUME(gAbilitiesInfo[ABILITY_IMMUNITY].breakable);
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_SNORLAX) { Ability(ABILITY_GLUTTONY); } // innate Immunity
+        PLAYER(SPECIES_GLIGAR) { Ability(ABILITY_SAND_VEIL); } // innate Immunity
         OPPONENT(SPECIES_WOBBUFFET) { Ability(ABILITY_MOLD_BREAKER); }
     } WHEN {
         TURN { MOVE(opponent, MOVE_TOXIC); }
@@ -3844,13 +3845,13 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate I
 {
     GIVEN {
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_SNORLAX) { Ability(ABILITY_GLUTTONY); Moves(MOVE_CELEBRATE); } // innate Immunity
+        PLAYER(SPECIES_GLIGAR) { Ability(ABILITY_SAND_VEIL); Moves(MOVE_CELEBRATE); } // innate Immunity
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_TOXIC); }
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppresses the innate
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TOXIC); }
     } SCENE {
-        MESSAGE("Snorlax's Ability was suppressed!");
+        MESSAGE("Gligar's Ability was suppressed!");
         STATUS_ICON(player, badPoison: TRUE); // suppressed -> Toxic poisons
     }
 }
@@ -3862,17 +3863,17 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Immunity cures pre-existing
 {
     GIVEN {
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_SNORLAX) { Ability(ABILITY_GLUTTONY); Moves(MOVE_CELEBRATE); } // innate Immunity
+        PLAYER(SPECIES_GLIGAR) { Ability(ABILITY_SAND_VEIL); Moves(MOVE_CELEBRATE); } // innate Immunity
         PLAYER(SPECIES_WOBBUFFET);
         OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_GASTRO_ACID, MOVE_TOXIC, MOVE_CELEBRATE); }
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_GASTRO_ACID); } // suppress the innate
-        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TOXIC); }       // Snorlax poisoned
-        TURN { SWITCH(player, 1); MOVE(opponent, MOVE_CELEBRATE); }             // Snorlax out -> Gastro clears
-        TURN { SWITCH(player, 0); MOVE(opponent, MOVE_CELEBRATE); }             // Snorlax back in -> innate cures
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_TOXIC); }       // Gligar poisoned
+        TURN { SWITCH(player, 1); MOVE(opponent, MOVE_CELEBRATE); }             // Gligar out -> Gastro clears
+        TURN { SWITCH(player, 0); MOVE(opponent, MOVE_CELEBRATE); }             // Gligar back in -> innate cures
     } SCENE {
         ABILITY_POPUP(player, ABILITY_IMMUNITY);
-        MESSAGE("Snorlax was cured of its poisoning!");
+        MESSAGE("Gligar was cured of its poisoning!");
     } THEN {
         EXPECT_EQ(player->status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON), 0);
     }

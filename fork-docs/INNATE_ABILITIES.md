@@ -1573,8 +1573,8 @@ ability data is Immunity (slot 0) / Toxic Boost (HA), and it was earlier given i
 **contradictory** (Immunity blocks the poison Toxic Boost needs), so a Zangoose can't usefully carry both as
 always-on innates. Toxic Boost is Zangoose's actual competitive/frontier identity (its sets run Toxic Orb + Facade),
 which innate Immunity silently neuters, so Zangoose's innate is **reassigned** from Immunity → Toxic Boost.
-Innate Immunity still lives on its other canon users, Gligar and Snorlax (the Immunity tests were repointed to
-Snorlax). This is the one place where a species' canon slot-0 ability is *not* its innate — the general rule when a
+Innate Immunity still lives on its other canon users, Gligar and Snorlax (the Immunity tests use
+Gligar, since Snorlax's innate Comatose also blocks poison). This is the one place where a species' canon slot-0 ability is *not* its innate — the general rule when a
 species has two contradictory candidate innates (a status-immunity vs a same-status-requiring boost) is to keep the
 one that matches how the species is actually used; Zangoose is currently the only such case (every other
 toxic-themed species is a Poison-type, type-immune to poison, so none competes for Toxic Boost).
