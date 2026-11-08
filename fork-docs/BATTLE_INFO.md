@@ -61,8 +61,8 @@ The Conditions row (`BuildConditionLine`) shows a duration only where the game m
 knowable: fixed timers (Taunt/Encore/Disable at Gen 5+, Heal Block, Embargo, Magnet Rise,
 Telekinesis, Torment, Yawn, the Perish count) always; sleep, infatuation and binding only
 when `DETERMINISTIC_STATUS` / `DETERMINISTIC_MOVE_RESULTS` fix them, since a random roll
-would leak hidden information. Sleep counts the actions still lost, ignoring Early Bird so
-it does not reveal the ability; confusion never shows one.
+would leak hidden information. Sleep shows the turn it wakes and acts on (`Asleep(1)` = wakes
+this turn), ignoring Early Bird so it does not reveal the ability; confusion never shows one.
 
 Under `DETERMINISTIC_DAMAGE` the Field page also prints the current turn and that
 turn's fixed damage multiplier, so the player can read the exact roll
