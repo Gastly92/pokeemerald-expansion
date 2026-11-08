@@ -10506,7 +10506,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0787
         SPECIES_TAPU_BULU,
         INNATES(
+            ABILITY_ANGER_POINT,
             ABILITY_GRASS_PELT,
+            ABILITY_HARVEST,
             ABILITY_LEGENDARY,
             ABILITY_LEVITATE,
             ABILITY_PRESSURE,
