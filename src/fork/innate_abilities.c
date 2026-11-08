@@ -1981,8 +1981,10 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0143
         SPECIES_SNORLAX,
         INNATES(
+            ABILITY_COMATOSE,
             ABILITY_GLUTTONY,
             ABILITY_IMMUNITY,
+            ABILITY_OBLIVIOUS,
             ABILITY_PICKUP,
             ABILITY_THICK_FAT,
             ABILITY_UNAWARE
@@ -1991,9 +1993,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0143
         SPECIES_SNORLAX_GMAX,
         INNATES(
+            ABILITY_COMATOSE,
             ABILITY_GLUTTONY,
             ABILITY_IMMUNITY,
+            ABILITY_OBLIVIOUS,
             ABILITY_PICKUP,
+            ABILITY_RIPEN,
             ABILITY_THICK_FAT,
             ABILITY_UNAWARE
         )
