@@ -2459,10 +2459,19 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
     case EFFECT_ENDURE:
         if (gBattleMons[battlerAtk].hp == 1 || GetBattlerSecondaryDamage(battlerAtk)) //Don't use Endure if you'll die after using it
             ADJUST_SCORE(-10);
+        else if (AI_DeterministicProtectWillFail(battlerAtk, move)) // FORK: DETERMINISTIC_MOVE_RESULTS, a repeat Endure always fails
+            ADJUST_SCORE(-10);
         break;
     case EFFECT_PROTECT:
         {
             bool32 decreased = FALSE;
+            // FORK: DETERMINISTIC_MOVE_RESULTS makes a repeat Protect always fail (CanUseMoveConsecutively),
+            // so upstream's 50%-chance -6 below would undersell it. Test: test/fork/deterministic_move_results.c.
+            if (AI_DeterministicProtectWillFail(battlerAtk, move))
+            {
+                ADJUST_SCORE(-10);
+                break;
+            }
             enum ProtectMethod protectMethod = GetMoveProtectMethod(move);
             switch (protectMethod)
             {
@@ -2532,14 +2541,16 @@ static s32 AI_CheckBadMove(enum BattlerId battlerAtk, enum BattlerId battlerDef,
                 {
                     ADJUST_SCORE(-10); //Don't protect if you're going to faint after protecting
                 }
-                else if (gBattleMons[battlerAtk].volatiles.consecutiveMoveUses == 1 && Random() % 100 < 50)
+                // UPSTREAM: consecutiveMoveUses is only reset when the next Protect runs, so it is stale
+                // after an attack; AI_IsProtectStreakActive reads it the way the engine will.
+                else if (gBattleMons[battlerAtk].volatiles.consecutiveMoveUses == 1 && AI_IsProtectStreakActive(battlerAtk) && Random() % 100 < 50)
                 {
                     if (isBattle1v1)
                         ADJUST_SCORE(-6);
                     else
                         ADJUST_SCORE(-10); //Don't try double protecting in doubles
                 }
-                else if (gBattleMons[battlerAtk].volatiles.consecutiveMoveUses >= 2)
+                else if (gBattleMons[battlerAtk].volatiles.consecutiveMoveUses >= 2 && AI_IsProtectStreakActive(battlerAtk)) // UPSTREAM: stale counter, as above
                 {
                     ADJUST_SCORE(-10);
                 }

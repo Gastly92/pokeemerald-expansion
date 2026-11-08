@@ -243,3 +243,36 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: Roar drags out the next party me
         MESSAGE("The opposing Bulbasaur was dragged out!");
     }
 }
+
+// The AI must know the deterministic rule above: a second Protect in a row is a
+// guaranteed failure, not upstream's 1-in-3 gamble. A badly poisoned foe makes Protect
+// the AI's best move on a fresh streak, so these isolate the consecutive-use penalty.
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: AI does not use Protect twice in a row")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(999); HP(999); Status1(STATUS1_TOXIC_POISON); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_SKUNTANK) { Moves(MOVE_PROTECT, MOVE_CRUNCH); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); EXPECT_MOVE(opponent, MOVE_PROTECT); }
+        TURN { MOVE(player, MOVE_TACKLE); EXPECT_MOVE(opponent, MOVE_CRUNCH); SCORE_LT(opponent, MOVE_PROTECT, MOVE_CRUNCH); }
+    }
+}
+
+// The engine only resets the streak counter when the next Protect is attempted, so the
+// AI's view of it is stale after an attack. A Protect that would succeed must not be
+// written off.
+AI_SINGLE_BATTLE_TEST("DETERMINISTIC_MOVE_RESULTS: AI still uses Protect again after an attack breaks the streak")
+{
+    GIVEN {
+        WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE);
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_OMNISCIENT);
+        PLAYER(SPECIES_WOBBUFFET) { MaxHP(999); HP(999); Status1(STATUS1_TOXIC_POISON); Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_SKUNTANK) { Moves(MOVE_PROTECT, MOVE_CRUNCH); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); EXPECT_MOVE(opponent, MOVE_PROTECT); }
+        TURN { MOVE(player, MOVE_TACKLE); EXPECT_MOVE(opponent, MOVE_CRUNCH); }
+        TURN { MOVE(player, MOVE_TACKLE); EXPECT_MOVE(opponent, MOVE_PROTECT); }
+    }
+}

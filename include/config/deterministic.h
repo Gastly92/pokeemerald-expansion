@@ -360,7 +360,7 @@
 //     src/battle_move_resolution.c.
 //   - Protect-family moves used on consecutive turns always fail instead of
 //     keeping a shrinking success chance. See CanUseMoveConsecutively in
-//     src/battle_util.c.
+//     src/battle_util.c; the AI side is AI_DeterministicProtectWillFail.
 //   - Rampage moves (Thrash/Outrage/Petal Dance) always last
 //     DETERMINISTIC_RAMPAGE_TURNS turns (default 2). See MOVE_EFFECT_THRASH.
 //   - Speed ties are broken by a fixed ladder instead of a coin flip: higher raw
