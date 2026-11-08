@@ -2121,14 +2121,6 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_MELMETAL_GMAX, 1,
         ABILITY_WELL_BAKED_BODY
     },
-    { // 0812
-        SPECIES_RILLABOOM, 1,
-        ABILITY_GORILLA_TACTICS
-    },
-    {
-        SPECIES_RILLABOOM_GMAX, 1,
-        ABILITY_GORILLA_TACTICS
-    },
     { // 0818
         SPECIES_INTELEON, 1,
         ABILITY_WATER_ABSORB
@@ -2379,7 +2371,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0943
         SPECIES_MABOSSTIFF, 2,
-        ABILITY_MOXIE
+        ABILITY_SHEER_FORCE
     },
     { // 0956
         SPECIES_ESPATHRA, 1,

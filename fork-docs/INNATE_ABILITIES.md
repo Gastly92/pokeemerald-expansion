@@ -2065,8 +2065,8 @@ innate-Guard-Dog foe; the soft incoming-ability *value* scorer in `battle_ai_uti
 keyed to the chosen slot, consistent with how the Intimidate driver left its softest heuristics. AI: the
 Roar-scoring reads in `src/battle_ai_main.c` (`EFFECT_ROAR` + Suction Cups, both the score-penalty and
 the doubles no-op) credit an innate Suction Cups. Canon only so far (no flavor picks yet). Guard Dog's canon users
-(Mabosstiff, Okidogi) are frontier sets whose slot is freed via a fork-owned override (Moxie /
-Sheer Force).
+(Mabosstiff, Okidogi) are frontier sets whose slot is freed via a fork-owned override (Sheer Force for
+both).
 
 ### ABILITY_ROCK_HEAD
 

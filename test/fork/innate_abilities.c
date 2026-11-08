@@ -11503,6 +11503,7 @@ static const enum Ability sLowValueAbilities[] =
     ABILITY_PLUS,         // needs a Plus/Minus partner the draft never guarantees
     ABILITY_MINUS,
     ABILITY_COSTAR,       // copies an ally's boosts, so doubles-only and partner-dependent
+    ABILITY_RECEIVER,     // copies a fainted ally's ability, so doubles-only and partner-dependent
     ABILITY_DAMP,         // only blocks Explosion, Self-Destruct, Misty Explosion and Aftermath
     ABILITY_SCREEN_CLEANER, // only clears screens on entry
     ABILITY_KLUTZ,        // a drawback: disables the holder's own item
