@@ -392,25 +392,13 @@ static void PrintFooter(u8 windowId, const u8 *str)
     PrintLineEx(windowId, str, 0, (INFO_WIN_HEIGHT * 8) - 14, TEXT_COLOR_BLUE, TEXT_COLOR_LIGHT_BLUE);
 }
 
-// right-aligned "TRICK ROOM" marker on the Overview title row. The speed
-// glyphs stay a pure number comparison (see AppendSpeedGlyph), so under Trick Room
-// the faster mon is the one that moves LAST - this flags that inversion without
-// costing a body line (the page can already fill its height with 2 player rows and
-// 6 foe rows). The title is 108px wide and the marker 47px in FONT_NARROW, so in a
-// 224px window the two never collide.
-// Right-aligned on the title row, in the title's own colour. Used for a page-level note
-// that must not cost a body row - the Overview page's TRICK ROOM, the Base Stats page's player
-// cursor. Every title is short enough to leave the right edge free.
+// Right-aligned on the title row. Used for a page-level note that must not cost a body row -
+// the Foe page's tab counter, the Base Stats page's player cursor. Every title is short enough
+// to leave the right edge free.
 static void PrintTitleMarker(u8 windowId, const u8 *str)
 {
     PrintLineEx(windowId, str, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, str, 0), 0,
                 TEXT_COLOR_RED, TEXT_COLOR_LIGHT_RED);
-}
-
-static void PrintTrickRoomMarker(u8 windowId)
-{
-    if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
-        PrintTitleMarker(windowId, COMPOUND_STRING("TRICK ROOM"));
 }
 
 // Compact "n/N" page counter, right-aligned on the footer row, so the
@@ -1315,7 +1303,7 @@ STATIC_ASSERT(2 + 1 + INFO_MAX_DISPLAYED_ALT_FORMS <= BST_ENTITY_ROWS, BaseStatP
 // which puts Speed fourth.
 static const u8 sBaseStatOrder[NUM_STATS] = { STAT_HP, STAT_ATK, STAT_DEF, STAT_SPATK, STAT_SPDEF, STAT_SPEED };
 
-// Right-align a cell against its column's right edge, the way PrintTrickRoomMarker
+// Right-align a cell against its column's right edge, the way PrintTitleMarker
 // right-aligns against the window's.
 static void PrintStatCell(u8 windowId, const u8 *str, u32 colRight, u32 y)
 {
@@ -1819,9 +1807,9 @@ static void ApplyKnownSpeedModifiers(struct Pokemon *foeParty, u32 foeIndex, enu
 
     // DETERMINISTIC_MOVE_RESULTS settles a Speed tie by a fixed ladder of public facts (base
     // Speed, weight, HP%), so a tie is no coin flip. Asked of this same view so a hidden Light
-    // Metal or Float Stone never decides it. The ladder flips under Trick Room to follow turn
-    // order; flipped back here, since the glyphs stay on the number axis (TRICK ROOM marker).
-    // You win if any of your fastest mons wins; the foe only if it beats all of them.
+    // Metal or Float Stone never decides it. The ladder already follows turn order under Trick
+    // Room, and so does the Overview page, so its answer is used as-is.
+    // You win if any of the mons in refMask wins; the foe only if it beats all of them.
     *tie = 0;
     if (GetConfig(DETERMINISTIC_MOVE_RESULTS) && refMask != 0)
     {
@@ -1834,8 +1822,6 @@ static void ApplyKnownSpeedModifiers(struct Pokemon *foeParty, u32 foeIndex, enu
             if (!(refMask & (1u << b)))
                 continue;
             r = DeterministicSpeedTieWins(b, battler);
-            if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
-                r = -r;
             if (r > 0)
                 anyWin = TRUE;
             if (r >= 0)
@@ -1872,9 +1858,8 @@ static u32 GetPlayerSpeedRef(u32 *refMask)
     return ref;
 }
 
-void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi, s32 *tie)
+static void GetFoeSpeedRangeVs(u32 foeIndex, u32 refMask, u32 *lo, u32 *hi, s32 *tie)
 {
-    u32 refMask;
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
     // The display mon, so an active Illusion reports the disguise's Speed tier
     // (what the player believes they face), not the real mon's.
@@ -1885,48 +1870,30 @@ void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi, s32 *tie)
 
     *lo = CalcSpeedBound(baseSpeed, level, 0, 0, 90);
     *hi = CalcSpeedBound(baseSpeed, level, MAX_PER_STAT_IVS, MAX_PER_STAT_EVS, 110);
-    GetPlayerSpeedRef(&refMask);
     ApplyKnownSpeedModifiers(foeParty, foeIndex, displaySpecies, refMask, lo, hi, tie);
 }
 
-u32 GetFoeSpeedGlyph(u32 foeIndex)
+void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi, s32 *tie)
 {
-    u32 refMask, ref = GetPlayerSpeedRef(&refMask);
+    u32 refMask;
+
+    GetPlayerSpeedRef(&refMask);
+    GetFoeSpeedRangeVs(foeIndex, refMask, lo, hi, tie);
+}
+
+// The Overview page is ordered by turn order, so "above your row" means "can act before you".
+// The foe's best case is the top of its range, or the bottom under Trick Room. A tie at that
+// edge goes the way the tie ladder settles it, and an unsettled one counts as "can".
+bool32 FoeMayActBefore(u32 foeIndex, u32 playerBattler)
+{
+    u32 spe = GetBattlerTotalSpeedStat(playerBattler, GetBattlerAbility(playerBattler), GetBattlerHoldEffect(playerBattler));
     u32 lo, hi;
     s32 tie;
 
-    if (refMask == 0)
-        return 0;
-    GetFoeSpeedRange(foeIndex, &lo, &hi, &tie);
-    // A tie at the edge of the range counts the way the tie ladder settles it.
-    if (hi < ref || (hi == ref && tie > 0))
-        return CHAR_DOWN_ARROW;
-    if (lo > ref || (lo == ref && tie < 0))
-        return CHAR_UP_ARROW;
-    return 0;
-}
-
-// Append a speed-comparison glyph to a foe row. The reference is the
-// player's fastest active mon's *effective* Speed (GetBattlerTotalSpeedStat,
-// which already folds in the player's own Choice Scarf, Tailwind, paralysis and
-// stat stages - all known to the player about their own side). The foe range is
-// the base-stat span scaled by what the player knows (ApplyKnownSpeedModifiers);
-// a hidden item or ability is left out, so this is a number comparison (your
-// known Speed vs the foe's *possible* Speed), NOT a guarantee of turn order. A
-// down arrow means your Speed already exceeds the foe's best case; an up arrow
-// that even the foe's worst case exceeds yours; no arrow that it depends on the
-// foe's unseen investment. A tie exactly at the edge goes the way the
-// DETERMINISTIC_MOVE_RESULTS tie ladder settles it (GetFoeSpeedGlyph).
-// Colour-free on purpose (the arrows read for everyone).
-static u8 *AppendSpeedGlyph(u8 *p, u32 glyph)
-{
-    if (glyph != 0)
-    {
-        *p++ = CHAR_SPACE;
-        *p++ = glyph;
-    }
-    *p = EOS;
-    return p;
+    GetFoeSpeedRangeVs(foeIndex, 1u << playerBattler, &lo, &hi, &tie);
+    if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+        return lo < spe || (lo == spe && tie <= 0);
+    return hi > spe || (hi == spe && tie <= 0);
 }
 
 // Type icon sprites. The window sits one tile in from the screen edge, and a sprite is
@@ -1976,54 +1943,80 @@ static void DestroyTypeIcons(void)
     FreeSpriteTilesByTag(gSpriteSheet_MoveTypes.tag);
 }
 
+// One of your active mons, in its turn-order place on the Overview page: its actual *effective*
+// Speed, with everything you already know about your own side (Choice Scarf, Tailwind, paralysis,
+// stat stages) folded in. Current HP is right-aligned like the foe rows, so a Substitute / Belly
+// Drum call can be made from this page ("You: " + a 12-letter nickname + "  Spe 9999" is well
+// under ~150px).
+static void DrawOverviewPlayerRow(u8 windowId, u8 *line, enum BattlerId battler, u32 y)
+{
+    u32 spe = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
+    u8 *p = StringCopy(line, COMPOUND_STRING("You: "));
+
+    p = StringCopy(p, gBattleMons[battler].nickname);
+    p = StringCopy(p, COMPOUND_STRING("  Spe "));
+    ConvertIntToDecimalStringN(p, spe, STR_CONV_MODE_LEFT_ALIGN, 4);
+    PrintLine(windowId, line, 0, y);
+    FormatHpPercent(line, GetBattlerHpPercent(battler));
+    PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
+}
+
+// A seen foe: its type icons (GetFoeOverviewTypes, which replace the old "Foe N:" party-slot
+// label - worth far more at a glance), species, possible Speed range and HP. The range reads
+// worst case to best case for acting first: low-high normally, high-low under Trick Room, where
+// the slower end is the one that moves first.
+static void DrawOverviewFoeRow(u8 windowId, u8 *line, u32 foeIndex, u32 iconSlot, u32 lo, u32 hi, u32 y)
+{
+    struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+    struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
+    bool32 trickRoom = (gFieldStatuses & STATUS_FIELD_TRICK_ROOM) != 0;
+    enum Type types[2];
+    u32 typeCount = GetFoeOverviewTypes(foeIndex, types);
+    u8 *p;
+
+    for (u32 t = 0; t < typeCount; t++)
+        ShowTypeIcon(iconSlot * 2 + t, types[t], t * TYPE_ICON_W, y);
+
+    p = StringCopy(line, GetSpeciesName(GetMonData(displayMon, MON_DATA_SPECIES, NULL)));
+    *p++ = CHAR_SPACE;
+    // 4 digits: Tailwind, a Scarf and +6 stack well past 999.
+    p = ConvertIntToDecimalStringN(p, trickRoom ? hi : lo, STR_CONV_MODE_LEFT_ALIGN, 4);
+    *p++ = CHAR_HYPHEN;
+    ConvertIntToDecimalStringN(p, trickRoom ? lo : hi, STR_CONV_MODE_LEFT_ALIGN, 4);
+    // The name column starts after two icon slots even for a mono-type, so the
+    // names and ranges line up down the list.
+    PrintLine(windowId, line, 2 * TYPE_ICON_W + 2, y);
+    // Current HP, right-aligned: the row is ~180px at its longest (two icons + the widest name,
+    // "Brambleghast" at 59px + " 9999-9999"), so "HP 100%" (34px) still clears it in 224px.
+    FormatHpPercent(line, GetFoeHpPercent(foeIndex));
+    PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
+}
+
+// The page lists your active mons and every seen foe in one column, in turn order: a foe above
+// one of your rows can act before that mon (FoeMayActBefore), a foe below it cannot. Trick Room
+// reverses the order and the ranges, so there is no marker and no arrow to learn.
 static void DrawOverviewPage(u8 windowId)
 {
     u8 line[64];
-    u8 *p;
     u32 y = 0;
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
+    bool32 trickRoom = (gFieldStatuses & STATUS_FIELD_TRICK_ROOM) != 0;
     u32 slots[PARTY_SIZE];
     u32 los[PARTY_SIZE];
     u32 his[PARTY_SIZE];
     u32 n = 0;
+    enum BattlerId players[MAX_BATTLERS_COUNT];
+    u32 speeds[MAX_BATTLERS_COUNT];
+    u32 insertAt[MAX_BATTLERS_COUNT];
+    u32 nPlayers = 0;
+    u32 next = 0;
 
     PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  OVERVIEW"));
-    PrintTrickRoomMarker(windowId);
     y += LINE_H;
-
-    // The player's active mons: their actual *effective* Speed - everything the
-    // player already knows about their own side (Choice Scarf, Tailwind,
-    // paralysis, stat stages) is folded in, so the foe ranges read against a
-    // concrete reference. The fastest such mon anchors the comparison arrows
-    // (GetPlayerSpeedRef).
-    for (u32 battler = 0; battler < gBattlersCount; battler++)
-    {
-        u32 spe;
-
-        if (!IsOnPlayerSide(battler) || !IsBattlerAlive(battler))
-            continue;
-
-        spe = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
-
-        p = StringCopy(line, COMPOUND_STRING("You: "));
-        p = StringCopy(p, gBattleMons[battler].nickname);
-        p = StringCopy(p, COMPOUND_STRING("  Spe "));
-        ConvertIntToDecimalStringN(p, spe, STR_CONV_MODE_LEFT_ALIGN, 4);
-        PrintLine(windowId, line, 0, y);
-        // Current HP, right-aligned like the foe rows, so a Substitute / Belly Drum call can be
-        // made from this page ("You: " + a 12-letter nickname + "  Spe 9999" is well under ~150px).
-        FormatHpPercent(line, GetBattlerHpPercent(battler));
-        PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
-        y += LINE_H;
-    }
 
     // Collect only the foe slots the player has actually seen sent out (same
     // reveal gate as the Foe page; unseen slots are omitted entirely, so the
-    // report never leaks an unrevealed mon - or even the foe's party size), then
-    // sort by the top of each possible Speed range so the list reads as a speed
-    // tier (fastest first). Each row leads with the foe's type icons (GetFoeOverviewTypes),
-    // which replace the old "Foe N:" party-slot label: the icons are worth far more at a
-    // glance, and the slot only ever mattered for finding the mon's Foe page tab.
+    // report never leaks an unrevealed mon - or even the foe's party size).
     for (u32 i = 0; i < PARTY_SIZE; i++)
     {
         enum Species species = GetMonData(&foeParty[i], MON_DATA_SPECIES, NULL);
@@ -2039,14 +2032,15 @@ static void DrawOverviewPage(u8 windowId)
         n++;
     }
 
-    // Selection sort by descending high bound (n <= PARTY_SIZE, so trivial).
+    // Sort the foes by their best case for acting first (n <= PARTY_SIZE, so a selection sort):
+    // the top of the range, highest first; under Trick Room the bottom, lowest first.
     for (u32 a = 0; a < n; a++)
     {
         u32 best = a;
 
         for (u32 b = a + 1; b < n; b++)
         {
-            if (his[b] > his[best])
+            if (trickRoom ? (los[b] < los[best]) : (his[b] > his[best]))
                 best = b;
         }
         if (best != a)
@@ -2059,39 +2053,53 @@ static void DrawOverviewPage(u8 windowId)
         }
     }
 
-    if (n == 0)
+    // Your active mons, in turn order among themselves.
+    for (enum BattlerId battler = 0; battler < gBattlersCount; battler++)
     {
-        PrintLine(windowId, COMPOUND_STRING("No foes seen yet."), 0, y);
+        if (!IsOnPlayerSide(battler) || !IsBattlerAlive(battler))
+            continue;
+        players[nPlayers] = battler;
+        speeds[nPlayers] = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
+        nPlayers++;
     }
-    else
+    for (u32 a = 0; a < nPlayers; a++)
     {
-        for (u32 k = 0; k < n; k++)
+        for (u32 b = a + 1; b < nPlayers; b++)
         {
-            struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, slots[k]);
-            enum Type types[2];
-            u32 typeCount = GetFoeOverviewTypes(slots[k], types);
+            if (trickRoom ? (speeds[b] < speeds[a]) : (speeds[b] > speeds[a]))
+            {
+                u32 t = speeds[a]; speeds[a] = speeds[b]; speeds[b] = t;
+                enum BattlerId tb = players[a]; players[a] = players[b]; players[b] = tb;
+            }
+        }
+    }
 
-            for (u32 t = 0; t < typeCount; t++)
-                ShowTypeIcon(k * 2 + t, types[t], t * TYPE_ICON_W, y);
+    // Each of your rows goes below every foe that can act before it. The foes are sorted by
+    // the same edge FoeMayActBefore reads, so those foes are a run at the top of what is left.
+    for (u32 a = 0; a < nPlayers; a++)
+    {
+        while (next < n && FoeMayActBefore(slots[next], players[a]))
+            next++;
+        insertAt[a] = next;
+    }
 
-            p = StringCopy(line, GetSpeciesName(GetMonData(displayMon, MON_DATA_SPECIES, NULL)));
-            *p++ = CHAR_SPACE;
-            // 4 digits: Tailwind, a Scarf and +6 stack well past 999.
-            p = ConvertIntToDecimalStringN(p, los[k], STR_CONV_MODE_LEFT_ALIGN, 4);
-            *p++ = CHAR_HYPHEN;
-            p = ConvertIntToDecimalStringN(p, his[k], STR_CONV_MODE_LEFT_ALIGN, 4);
-            AppendSpeedGlyph(p, GetFoeSpeedGlyph(slots[k]));
-            // The name column starts after two icon slots even for a mono-type, so the
-            // names and ranges line up down the list.
-            PrintLine(windowId, line, 2 * TYPE_ICON_W + 2, y);
-            // Current HP, right-aligned: the row is ~186px at its longest (two icons + the
-            // widest name, "Brambleghast" at 59px + " 9999-9999 ^"), so "HP 100%" (34px)
-            // still clears it in 224px.
-            FormatHpPercent(line, GetFoeHpPercent(slots[k]));
-            PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
+    for (u32 k = 0, a = 0; k <= n; k++)
+    {
+        while (a < nPlayers && insertAt[a] == k)
+        {
+            DrawOverviewPlayerRow(windowId, line, players[a], y);
+            y += LINE_H;
+            a++;
+        }
+        if (k < n)
+        {
+            DrawOverviewFoeRow(windowId, line, slots[k], k, los[k], his[k], y);
             y += LINE_H;
         }
     }
+
+    if (n == 0)
+        PrintLine(windowId, COMPOUND_STRING("No foes seen yet."), 0, y);
 
     PrintFooter(windowId, COMPOUND_STRING("L/R: Page    B: Close"));
 }

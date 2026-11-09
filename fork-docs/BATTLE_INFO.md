@@ -92,6 +92,33 @@ used to be called *Speed Tiers*, and speed is still what orders it. The point of
 half is to let the player place a foe on the speed tier **without knowing its exact spread**,
 using only what is derivable from public data.
 
+**The page is one column in turn order**, your active mons and every seen foe together. A foe
+**above** one of your rows can act before that mon; a foe **below** it cannot. There are no
+arrows and no `TRICK ROOM` marker: Trick Room reverses the order and the ranges, so the column
+still reads top to bottom as "who can move first". Example, singles:
+
+```
+BATTLE INFO  -  OVERVIEW
+[Drk][Ice] Weavile 350-400                HP 72%
+[Drg][Gho] Dragapult 280-320              HP 100%
+You: Dragapult  Spe 300                  HP 100%
+[Drg][Gnd] Garchomp 220-270               HP 45%
+```
+
+The same battle under Trick Room - the slowest end now moves first, so the ranges flip to read
+worst case to best case, and Dragapult (bottom 280, below your 300) can still act before you:
+
+```
+[Drg][Gnd] Garchomp 270-220               HP 45%
+[Drg][Gho] Dragapult 320-280              HP 100%
+You: Dragapult  Spe 300                  HP 100%
+[Drk][Ice] Weavile 400-350                HP 72%
+```
+
+The list includes **benched and fainted** foes, priced as if they came in now, so the page
+doubles as the speed tier for switching (and a fainted foe can come back through Revival
+Blessing).
+
 **Each foe row leads with the foe's type icons** (the summary screen's 32x16 sprites, two
 slots wide even for a mono-type so the names line up). They show the displayed species'
 types, which is what the Foe page's type line says, so a disguised Zoroark shows its
@@ -105,7 +132,7 @@ Your own rows carry no icons, since you know your own types.
 level: min = 0 IVs / 0 EVs / hindering nature ×0.9, max = 31 IVs / 252 EVs / boosting
 nature ×1.1. Only *seen* slots are listed — unseen ones are omitted entirely, so
 neither an unrevealed mon **nor the foe's party size** leaks. Rows sort fastest-first
-by the top of their range, so the list reads as a true tier. Each foe row also carries
+by the edge of their range that acts first (see below), so the list reads as a true tier. Each foe row also carries
 its current `HP n%` (or `FNT`) right-aligned, the same rounded-up figure as the Foe page.
 
 **Both ends are then scaled by everything the player knows about that foe**, the same
@@ -134,40 +161,33 @@ stat stages, Speed abilities. Each also carries its own current `HP n%`, rounded
 same way as the foe rows - which makes it exact for HP-cost moves: Substitute (1/4 max HP)
 works iff it reads **26%** or more, Belly Drum (1/2) iff **51%** or more.
 
-The fastest of your active mons anchors a per-foe comparison **glyph**:
+**Where your row goes** (`FoeMayActBefore`): a foe sits above your mon when its best case for
+acting first beats that mon's effective Speed - the top of its range normally, the bottom under
+Trick Room. Foes are sorted by that same edge, so each of your rows drops in below a run of foes
+at the top. In doubles each of your mons is placed at its own Speed, so a foe can sit above your
+slower mon and below your faster one.
 
-| Glyph | Meaning |
-|---|---|
-| `▼` (`CHAR_DOWN_ARROW`) | your effective Speed already exceeds the top of that foe's range |
-| `▲` (`CHAR_UP_ARROW`) | even the bottom of the foe's range exceeds yours |
-| blank | the ranges overlap |
+**It is cautious on purpose.** "Above you" means the foe *can* move first given what you know,
+not that it will: a foe whose range straddles your Speed sits above you, and the range itself
+shows the overlap. "Below you" is the promise - it cannot outspeed you from anything the player
+has seen. The foe's range still ignores a hidden Choice Scarf or Speed ability, because the
+player has not seen those, and priority is not modelled.
 
 **A Speed tie is not a coin flip here.** Under `DETERMINISTIC_MOVE_RESULTS` a tie is settled by
 a fixed ladder of public facts (higher base Speed, then lighter, then higher HP%;
-`DeterministicSpeedTieWins`), so a tie exactly at the edge of a foe's range gets the arrow it
-resolves to: your 329 against a foe topping out at 329 reads `▼` when you win the tie, and a foe
-whose *floor* is your 329 reads `▲` when it wins. The ladder is asked of the same
-known-information view of the foe, so a hidden Light Metal or Float Stone never decides it.
-Only a tie on every rung falls back to the random roll, which in practice means the same
-species at the same HP% (a mirror match at full HP), so an edge tie almost always gets an
-arrow. With the flag off, or in that mirror case, it stays blank.
+`DeterministicSpeedTieWins`), so a tie exactly at the edge of a foe's range goes the way it
+resolves: your 329 against a foe topping out at 329 puts the foe below you when you win the tie.
+The ladder already follows turn order under Trick Room. It is asked of the same known-information
+view of the foe, so a hidden Light Metal or Float Stone never decides it. With the flag off, or a
+tie on every rung (in practice a mirror match at the same HP%), the foe counts as able to move
+first.
 
-Two deliberate choices here:
+**Why turn order, not a number comparison.** The page used to compare raw Speed with `▲`/`▼`
+glyphs and printed a `TRICK ROOM` title marker, because under Trick Room `▼` silently meant "you
+move last". Ordering the rows by turn order removes both: nothing on the page changes meaning
+with the field, and the same column answers the question asked every turn.
 
-- **A glyph, not a colour** — legible for colour-blind players (cf. the `COLOR_BLIND`
-  HP bar flag).
-- **It is a number comparison, not a turn-order guarantee.** Your *known* Speed vs. the
-  foe's *possible* Speed. The foe's range still ignores a hidden Choice Scarf or Speed
-  ability, because the player has not seen those, and priority is not modelled.
-
-Because it stays a number comparison, **Trick Room inverts what the glyphs imply** -
-the faster mon moves last. Rather than flipping the glyphs (which would make `▼` mean
-two different things depending on hidden-ish field state), the page prints a
-right-aligned **`TRICK ROOM`** marker on its title row while the room is up
-(`PrintTrickRoomMarker`). It costs no body line, which matters: with two player rows
-and six revealed foes the page is already full. The Field page carries the turn count.
-
-Code: `DrawOverviewPage` / `GetFoeOverviewTypes` / `GetFoeSpeedRange` / `ApplyKnownSpeedModifiers` / `GetFoeSpeedGlyph`,
+Code: `DrawOverviewPage` / `GetFoeOverviewTypes` / `GetFoeSpeedRange` / `ApplyKnownSpeedModifiers` / `FoeMayActBefore`,
 with `CalcSpeedBound` mirroring `CalculateMonStats`. Tests: `test/fork/frontier_battle_info_speed.c`, `test/fork/frontier_battle_info_types.c`.
 
 ## Reveal gating — the part that keeps breaking
@@ -332,7 +352,7 @@ The page is the only one with two axes, because it answers two questions at once
 
 A right-aligned marker on the **title row** — `You 2/4` or `Bench 4/6` — says which of
 your mons is shown and whether it is on the field. It rides the title so it costs no body
-row, the same trick the Speed page's `TRICK ROOM` marker uses. The on-field/benched word
+row, the same trick the Foe page's tab counter uses. The on-field/benched word
 is what keeps a benched spread from being misread as the matchup you are currently in,
 and it earns its place most in doubles.
 
