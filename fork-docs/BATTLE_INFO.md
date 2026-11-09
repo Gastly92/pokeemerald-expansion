@@ -40,7 +40,7 @@ path.
 
 | Page | Shows |
 |---|---|
-| **Speed Tiers** | Your active mons and every revealed foe in one column, in the order they could act: type icons, *possible* Speed ranges (scaled by everything known), your effective Speed, HP. Foes not on the field are dimmed; the title carries the battle's intensity (see below) |
+| **Speed Tiers** | Your active mons and every revealed foe in one column, in the order they could act: type icons, *possible* Speed ranges (scaled by everything known), your effective Speed, HP. The foes on the field are marked with `▶` (see below) |
 | **Battle Log** | Every move used this battle, newest first, with the damage it dealt as a % of the target's max HP (see below) |
 | **Field** | Weather, terrain, whole-field effects (Trick Room, Gravity, Magic/Wonder Room, the Sports, Fairy Lock, Ion Deluge) with turns left, plus entry hazards and side screens for both sides |
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides, with turns left where the duration is knowable (see below) |
@@ -100,28 +100,29 @@ arrows and no `TRICK ROOM` marker: Trick Room reverses the order and the ranges,
 still reads top to bottom as "who can move first". Example, singles:
 
 ```
-BATTLE INFO  -  SPEED TIERS       Intensity 96%
-[Drk][Ice] Weavile 350-400                HP 72%
-[Drg][Gho] Dragapult 280-320              HP 100%
-You: Dragapult  Spe 300                  HP 100%
-[Drg][Gnd] Garchomp 220-270               HP 45%
+BATTLE INFO  -  SPEED TIERS
+[Drk][Ice] ▶Weavile 350-400               HP 72%
+[Drg][Gho]  Dragapult 280-320             HP 100%
+You: Dragapult  300                      HP 100%
+[Drg][Gnd]  Garchomp 220-270              HP 45%
 ```
 
 The same battle under Trick Room - the slowest end now moves first, so the ranges flip to read
 worst case to best case, and Dragapult (bottom 280, below your 300) can still act before you:
 
 ```
-[Drg][Gnd] Garchomp 270-220               HP 45%
-[Drg][Gho] Dragapult 320-280              HP 100%
-You: Dragapult  Spe 300                  HP 100%
-[Drk][Ice] Weavile 400-350                HP 72%
+[Drg][Gnd]  Garchomp 270-220              HP 45%
+[Drg][Gho]  Dragapult 320-280             HP 100%
+You: Dragapult  300                      HP 100%
+[Drk][Ice] ▶Weavile 400-350               HP 72%
 ```
 
 The list includes **benched and fainted** foes, priced as if they came in now, so the page
 doubles as the speed tier for switching (and a fainted foe can come back through Revival
-Blessing). They are **dimmed** (flat light grey text with no shadow; the type icons stay), so the foes actually on
-the field stand out even after a lot of switching. Brightness rather than hue, so it reads for
-colour-blind players too.
+Blessing). The foes **on the field** get a `▶` before their name (every row reserves its
+width, so names stay aligned), so the ones you are actually facing stand out even after a lot of
+switching. A glyph, not a colour, so it reads for colour-blind players too. Dimming the other
+rows was tried first and read badly on the lavender backdrop, with or without a text shadow.
 
 **Opened from the party menu (SELECT), the cursor's mon gets a `Switch:` row**, placed in the
 column the same way as your active rows, so you can see who could move before it without going
@@ -132,10 +133,6 @@ Room, weather), with fresh stat stages and volatiles (`GetSwitchCandidateSpeed`)
 borrowed for the comparison too, so the tie ladder reads the candidate's species, weight and HP.
 A mon already on the field, fainted or an egg gets no row. To compare another mon, close the
 page, move the cursor and press SELECT again.
-
-**The title row carries the battle's intensity** (`Intensity 96%`, the `DETERMINISTIC_DAMAGE`
-multiplier including Escalate's bonus) whenever that flag is on - the same figure as the Field
-page, kept here because this is the page opened every turn.
 
 **Each foe row leads with the foe's type icons** (the summary screen's 32x16 sprites, two
 slots wide even for a mono-type so the names line up). They show the displayed species'

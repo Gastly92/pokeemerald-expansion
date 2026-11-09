@@ -2003,13 +2003,14 @@ static void DestroyTypeIcons(void)
 // One of your rows on the Speed Tiers page: an active mon ("You:") or the party-menu cursor's mon
 // ("Switch:"), with its effective Speed (everything you know about your own side folded in) and
 // its HP right-aligned like the foe rows, so a Substitute / Belly Drum call can be made from here.
-// "Switch: " + a 12-letter nickname + "  Spe 9999" is still under ~160px.
+// The page title says the numbers are Speed, so the row carries no "Spe" label, like the foe rows.
+// "Switch: " + a 12-letter nickname + "  9999" is well under ~150px.
 static void DrawSpeedTiersPlayerRow(u8 windowId, u8 *line, const u8 *label, const u8 *nickname, u32 spe, u32 hpPercent, u32 y)
 {
     u8 *p = StringCopy(line, label);
 
     p = StringCopy(p, nickname);
-    p = StringCopy(p, COMPOUND_STRING("  Spe "));
+    p = StringCopy(p, COMPOUND_STRING("  "));
     ConvertIntToDecimalStringN(p, spe, STR_CONV_MODE_LEFT_ALIGN, 4);
     PrintLine(windowId, line, 0, y);
     FormatHpPercent(line, hpPercent);
@@ -2019,17 +2020,18 @@ static void DrawSpeedTiersPlayerRow(u8 windowId, u8 *line, const u8 *label, cons
 // A seen foe: its type icons (GetFoeOverviewTypes, which replace the old "Foe N:" party-slot
 // label - worth far more at a glance), species, possible Speed range and HP. The range reads
 // worst case to best case for acting first: low-high normally, high-low under Trick Room, where
-// the slower end is the one that moves first. A foe that is not on the field (benched or
-// fainted) is dimmed to flat light grey with no shadow, so the ones you are actually facing stand
-// out. (A white shadow under light grey read as embossed on the lavender backdrop, not faded.)
+// the slower end is the one that moves first. A foe on the field gets a pointer before its name,
+// so the ones you are actually facing stand out among benched and fainted ones. (Dimming the
+// others was tried and read badly on the lavender backdrop, with or without a shadow.)
 static void DrawSpeedTiersFoeRow(u8 windowId, u8 *line, u32 foeIndex, u32 iconSlot, u32 lo, u32 hi, u32 y)
 {
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
     struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
     bool32 trickRoom = (gFieldStatuses & STATUS_FIELD_TRICK_ROOM) != 0;
     bool32 onField = GetFoeBattlerForSlot(foeIndex) != MAX_BATTLERS_COUNT;
-    u8 fg = onField ? TEXT_COLOR_DARK_GRAY : TEXT_COLOR_LIGHT_GRAY;
-    u8 shadow = onField ? TEXT_COLOR_LIGHT_GRAY : TEXT_COLOR_TRANSPARENT;
+    const u8 *pointer = COMPOUND_STRING("▶");
+    // Every row reserves the pointer's width, so the names stay aligned down the list.
+    u32 nameX = 2 * TYPE_ICON_W + 2 + GetStringWidth(FONT_NARROW, pointer, 0) + 1;
     enum Type types[2];
     u32 typeCount = GetFoeOverviewTypes(foeIndex, types);
     u8 *p;
@@ -2045,11 +2047,14 @@ static void DrawSpeedTiersFoeRow(u8 windowId, u8 *line, u32 foeIndex, u32 iconSl
     ConvertIntToDecimalStringN(p, trickRoom ? lo : hi, STR_CONV_MODE_LEFT_ALIGN, 4);
     // The name column starts after two icon slots even for a mono-type, so the
     // names and ranges line up down the list.
-    PrintLineEx(windowId, line, 2 * TYPE_ICON_W + 2, y, fg, shadow);
-    // Current HP, right-aligned: the row is ~180px at its longest (two icons + the widest name,
-    // "Brambleghast" at 59px + " 9999-9999"), so "HP 100%" (34px) still clears it in 224px.
+    if (onField)
+        PrintLine(windowId, pointer, 2 * TYPE_ICON_W + 2, y);
+    PrintLine(windowId, line, nameX, y);
+    // Current HP, right-aligned: the row is ~186px at its longest (two icons, the pointer slot,
+    // the widest name "Brambleghast" at 59px + " 9999-9999"), so "HP 100%" (34px) still clears
+    // it in 224px.
     FormatHpPercent(line, GetFoeHpPercent(foeIndex));
-    PrintLineEx(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y, fg, shadow);
+    PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
 }
 
 struct SpeedTiersPlayerRow
@@ -2064,7 +2069,7 @@ struct SpeedTiersPlayerRow
 // column, in the order they could act: a foe above one of your rows can act before that mon
 // (FoeMayActBefore), a foe below it cannot. Trick Room reverses the order and the ranges, so
 // there is no marker and no arrow to learn. Opened from the party menu, the cursor's mon is
-// placed too, as a "Switch:" row. The title row carries the battle's intensity.
+// placed too, as a "Switch:" row.
 static void DrawOverviewPage(u8 windowId)
 {
     u8 line[64];
@@ -2079,14 +2084,6 @@ static void DrawOverviewPage(u8 windowId)
     u32 nRows = 0;
 
     PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"));
-    if (GetConfig(DETERMINISTIC_DAMAGE))
-    {
-        u8 *p = StringCopy(line, COMPOUND_STRING("Intensity "));
-        p = ConvertIntToDecimalStringN(p, DETERMINISTIC_DAMAGE_PERCENT, STR_CONV_MODE_LEFT_ALIGN, 3);
-        *p++ = CHAR_PERCENT;
-        *p = EOS;
-        PrintTitleMarker(windowId, line);
-    }
     y += LINE_H;
 
     // Collect only the foe slots the player has actually seen sent out (same
