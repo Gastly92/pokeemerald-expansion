@@ -119,7 +119,7 @@ You: Dragapult  Spe 300                  HP 100%
 
 The list includes **benched and fainted** foes, priced as if they came in now, so the page
 doubles as the speed tier for switching (and a fainted foe can come back through Revival
-Blessing). They are **dimmed** (light grey text; the type icons stay), so the foes actually on
+Blessing). They are **dimmed** (flat light grey text with no shadow; the type icons stay), so the foes actually on
 the field stand out even after a lot of switching. Brightness rather than hue, so it reads for
 colour-blind players too.
 
