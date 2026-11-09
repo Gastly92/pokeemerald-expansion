@@ -65,7 +65,7 @@ would leak hidden information. Sleep shows the turn it wakes and acts on (`Aslee
 this turn), ignoring Early Bird so it does not reveal the ability; confusion never shows one.
 
 Under `DETERMINISTIC_DAMAGE` the Field page also prints the current turn and that
-turn's fixed damage multiplier, so the player can read the exact roll
+turn's fixed damage multiplier, labelled the battle's **Intensity** (`Turn 5  Intensity 96%`), so the player can read the exact roll
 (`DrawDeterministicDamageLine`). With that line on, the page is at its full nine
 rows and has no room for a tenth - check the arithmetic against `LINE_H` and the
 footer's `y` before adding one.

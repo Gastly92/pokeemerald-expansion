@@ -456,7 +456,7 @@ static void DrawDeterministicDamageLine(u8 windowId, u8 *line, u32 y)
     u8 *p = StringCopy(line, COMPOUND_STRING("Turn "));
     // gBattleTurnCounter is 0 on the first turn; show it 1-based.
     p = ConvertIntToDecimalStringN(p, gBattleTurnCounter + 1, STR_CONV_MODE_LEFT_ALIGN, 3);
-    p = StringCopy(p, COMPOUND_STRING("  Damage "));
+    p = StringCopy(p, COMPOUND_STRING("  Intensity "));
     p = ConvertIntToDecimalStringN(p, DETERMINISTIC_DAMAGE_PERCENT, STR_CONV_MODE_LEFT_ALIGN, 3);
     StringCopy(p, COMPOUND_STRING("%"));
     PrintLine(windowId, line, 0, y);

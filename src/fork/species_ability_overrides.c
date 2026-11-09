@@ -860,7 +860,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     {
         SPECIES_CAMERUPT, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_ESCALATE
     },
     { // 0326
         SPECIES_GRUMPIG, 1,
@@ -892,7 +892,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0342
         SPECIES_CRAWDAUNT, 1,
-        ABILITY_SHEER_FORCE
+        ABILITY_ESCALATE
     },
     { // 0344
         SPECIES_CLAYDOL, 1,
@@ -2259,7 +2259,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0887
         SPECIES_DRAGAPULT, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_ESCALATE
     },
     { // 0888
         SPECIES_ZACIAN, 1,
@@ -2427,7 +2427,7 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
     },
     { // 0983
         SPECIES_KINGAMBIT, 2,
-        ABILITY_SHEER_FORCE
+        ABILITY_ESCALATE
     },
     { // 0984
         SPECIES_GREAT_TUSK, 1,

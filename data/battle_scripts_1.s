@@ -5191,6 +5191,13 @@ BattleScript_LegendaryActivates::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+@ FORK: Escalate ability (src/fork/escalate.c). The damage bonus is raised in C before this runs.
+BattleScript_EscalateActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_ESCALATEDBATTLE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 @ FORK: FEATURE_ANNOUNCE_FLINCH_PREVENTION (src/fork/flinch_prevention.c)
 BattleScript_FlinchPreventedByAbility::
 	call BattleScript_AbilityPopUp

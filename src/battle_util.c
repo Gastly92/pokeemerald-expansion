@@ -10,6 +10,7 @@
 #include "fork/free_gimmicks.h" // FORK: FindMegaStoneForStats, the item-free Mega pick
 #include "fork/innate_abilities.h" // FORK: FEATURE_INNATE_ABILITIES
 #include "fork/type_affinity.h" // FORK: "Affinity" ability family (latent third type)
+#include "fork/escalate.h" // FORK: Escalate ability
 #include "fork/psybubble.h" // FORK: Psybubble (entry-turn endure)
 #include "fork/status_prevention.h" // FORK: FEATURE_ANNOUNCE_STATUS_PREVENTION
 #include "fork/halo.h" // FORK: Halo (field-wide per-hit damage cap)
@@ -3992,6 +3993,10 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                     BattleScriptCall(BattleScript_AbilityStatChange);
                     effect++;
                 }
+                break;
+            case ABILITY_ESCALATE: // FORK: Escalate ability; logic in src/fork/escalate.c, keep this case on conflict.
+                if (TryActivateEscalate(battler))
+                    effect++;
                 break;
             case ABILITY_MOODY:
                 if (GetConfig(DETERMINISTIC_ABILITIES))

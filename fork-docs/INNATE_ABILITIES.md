@@ -114,7 +114,7 @@ ability sits in exactly one):
   not a personal boon (big AI + power swing). Drizzle, Sand Stream, Drought, Snow
   Warning, Electric/Psychic/Misty/Grassy Surge, Primordial Sea, Desolate Land, Delta
   Stream, Orichalcum Pulse, Hadron Engine, Cloud Nine, Air Lock, Dark Aura, Fairy
-  Aura, Vessel/Sword/Tablets/Beads of Ruin. **Aura Break** sits here
+  Aura, Vessel/Sword/Tablets/Beads of Ruin, and the fork's own Escalate. **Aura Break** sits here
   too, but for a downstream reason: it only *reverses* Dark Aura / Fairy Aura, and
   both of those are themselves `:x:` (never wired as innates), so an innate Aura
   Break clause would be **dead code** — there is nothing on the innate side to
