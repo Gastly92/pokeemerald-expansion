@@ -2069,7 +2069,7 @@ struct SpeedTiersPlayerRow
 // column, in the order they could act: a foe above one of your rows can act before that mon
 // (FoeMayActBefore), a foe below it cannot. Trick Room reverses the order and the ranges, so
 // there is no marker and no arrow to learn. Opened from the party menu, the cursor's mon is
-// placed too, as a "Switch:" row. The title row carries the battle's intensity.
+// placed too, as a "Switch:" row.
 static void DrawOverviewPage(u8 windowId)
 {
     u8 line[64];
@@ -2084,14 +2084,6 @@ static void DrawOverviewPage(u8 windowId)
     u32 nRows = 0;
 
     PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"));
-    if (GetConfig(DETERMINISTIC_DAMAGE))
-    {
-        u8 *p = StringCopy(line, COMPOUND_STRING("Intensity "));
-        p = ConvertIntToDecimalStringN(p, DETERMINISTIC_DAMAGE_PERCENT, STR_CONV_MODE_LEFT_ALIGN, 3);
-        *p++ = CHAR_PERCENT;
-        *p = EOS;
-        PrintTitleMarker(windowId, line);
-    }
     y += LINE_H;
 
     // Collect only the foe slots the player has actually seen sent out (same

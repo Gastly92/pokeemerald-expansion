@@ -40,7 +40,7 @@ path.
 
 | Page | Shows |
 |---|---|
-| **Speed Tiers** | Your active mons and every revealed foe in one column, in the order they could act: type icons, *possible* Speed ranges (scaled by everything known), your effective Speed, HP. Foes not on the field are dimmed; the title carries the battle's intensity (see below) |
+| **Speed Tiers** | Your active mons and every revealed foe in one column, in the order they could act: type icons, *possible* Speed ranges (scaled by everything known), your effective Speed, HP. The foes on the field are marked with `▶` (see below) |
 | **Battle Log** | Every move used this battle, newest first, with the damage it dealt as a % of the target's max HP (see below) |
 | **Field** | Weather, terrain, whole-field effects (Trick Room, Gravity, Magic/Wonder Room, the Sports, Fairy Lock, Ion Deluge) with turns left, plus entry hazards and side screens for both sides |
 | **Conditions** | Each on-field battler's primary status + notable volatiles (confusion, leech seed, taunt…), both sides, with turns left where the duration is knowable (see below) |
@@ -100,7 +100,7 @@ arrows and no `TRICK ROOM` marker: Trick Room reverses the order and the ranges,
 still reads top to bottom as "who can move first". Example, singles:
 
 ```
-BATTLE INFO  -  SPEED TIERS       Intensity 96%
+BATTLE INFO  -  SPEED TIERS
 [Drk][Ice] ▶Weavile 350-400               HP 72%
 [Drg][Gho]  Dragapult 280-320             HP 100%
 You: Dragapult  300                      HP 100%
@@ -133,10 +133,6 @@ Room, weather), with fresh stat stages and volatiles (`GetSwitchCandidateSpeed`)
 borrowed for the comparison too, so the tie ladder reads the candidate's species, weight and HP.
 A mon already on the field, fainted or an egg gets no row. To compare another mon, close the
 page, move the cursor and press SELECT again.
-
-**The title row carries the battle's intensity** (`Intensity 96%`, the `DETERMINISTIC_DAMAGE`
-multiplier including Escalate's bonus) whenever that flag is on - the same figure as the Field
-page, kept here because this is the page opened every turn.
 
 **Each foe row leads with the foe's type icons** (the summary screen's 32x16 sprites, two
 slots wide even for a mono-type so the names line up). They show the displayed species'
