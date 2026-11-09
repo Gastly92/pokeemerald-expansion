@@ -29,6 +29,10 @@ The return target is a parameter (`OpenFrontierBattleInfo(returnCallback)`): the
 action-menu path returns to the battle screen, the party-menu path re-opens the party
 menu (`CB2_OpenBattleInfoFromPartyMenu` / `CB2_ReturnToPartyMenuFromBattleInfo` in
 `src/party_menu.c`, gated on `ShouldReplaceBagWithInfo()`).
+While the viewer is open from the party menu, the party stays in **field order** (the order
+`gBattlerPartyIndexes` indexes); it goes back into the menu's own order only when the menu
+reopens. The menu's order drifts from field order as you switch, so reading the party in menu
+order showed the wrong mon in the `Switch:` row and on the Base Stats bench.
 
 Opening it **does not consume the turn** — it reuses the `B_ACTION_DEBUG` controller
 path.

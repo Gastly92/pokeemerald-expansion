@@ -3193,26 +3193,29 @@ void CB2_ReturnToPartyMenuFromSummaryScreen(void)
 // FORK: B_FRONTIER_BATTLE_INFO. exitCallback set when SELECT is pressed in the
 // in-battle party menu; the menu has finished closing, so hand off to the battle
 // info viewer (which returns to CB2_ReturnToPartyMenuFromBattleInfo).
-// UpdatePartyToBattleOrder() undoes the field-order swap Task_ClosePartyMenuAndSetCB2
-// applies on close, so the menu is rebuilt in battle order on return (mirrors
-// CB2_ShowPokemonSummaryScreen's handling).
+// Task_ClosePartyMenuAndSetCB2 has already put the party back in field order (the order
+// gBattlerPartyIndexes indexes), and the viewer reads it that way, so it is left there
+// while the viewer is open. Converting to the menu's order here, as the summary screen does,
+// made the viewer read the wrong mon once switching had reordered the party.
 static void CB2_OpenBattleInfoFromPartyMenu(void)
 {
-    // The cursor's slot, mapped to battle order before the party is put back in it, so the
-    // Speed Tiers page can show that mon as a switch-in.
+    // The cursor's menu slot as a field-order party index, so the Speed Tiers page can show
+    // that mon as a switch-in.
     u32 partyIndex = GetPartyIdFromBattleSlot(gPartyMenu.slotId);
 
-    UpdatePartyToBattleOrder();
     OpenFrontierBattleInfoForSwitch(CB2_ReturnToPartyMenuFromBattleInfo, partyIndex, gBattlerInMenuId);
 }
 
 // FORK: B_FRONTIER_BATTLE_INFO. Re-open the in-battle "choose a Pokémon" menu after
 // the viewer closes, keeping the cursor position and the real exit callback (the
-// path back to the battle screen).
+// path back to the battle screen). The party goes back into the menu's order here,
+// the way the battle opens the menu in the first place (InitPartyMenu, then
+// UpdatePartyToBattleOrder).
 static void CB2_ReturnToPartyMenuFromBattleInfo(void)
 {
     gPaletteFade.bufferTransferDisabled = TRUE;
     InitPartyMenu(gPartyMenu.menuType, KEEP_PARTY_LAYOUT, gPartyMenu.action, TRUE, PARTY_MSG_CHOOSE_MON, Task_HandleChooseMonInput, gPartyMenu.exitCallback);
+    UpdatePartyToBattleOrder();
 }
 
 static void CursorCb_Switch(u8 taskId)
