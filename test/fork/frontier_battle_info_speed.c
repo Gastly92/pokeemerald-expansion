@@ -261,3 +261,31 @@ DOUBLE_BATTLE_TEST("Frontier INFO speed: each of your mons is compared at its ow
         EXPECT_EQ(FoeMayActBefore(0, B_POSITION_PLAYER_RIGHT), TRUE);
     }
 }
+
+// Opened from the party menu, the Speed Tiers page places the cursor's mon as a "Switch:" row,
+// priced as if it replaced the active mon now: its own item and the current field count, the
+// active mon's stat stages do not.
+SINGLE_BATTLE_TEST("Frontier INFO speed: a switch-in is priced with its own item, fresh stages and the current field")
+{
+    u32 move;
+    u16 item;
+    u32 expected;
+
+    PARAMETRIZE { move = MOVE_CELEBRATE; item = ITEM_NONE;         expected = 100; }
+    PARAMETRIZE { move = MOVE_CELEBRATE; item = ITEM_CHOICE_SCARF; expected = 150; }
+    PARAMETRIZE { move = MOVE_AGILITY;   item = ITEM_NONE;         expected = 100; } // the active mon's +2 stays with it
+    PARAMETRIZE { move = MOVE_TAILWIND;  item = ITEM_NONE;         expected = 200; }
+
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TAILWIND) == EFFECT_TAILWIND);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_CELEBRATE, MOVE_AGILITY, MOVE_TAILWIND); }
+        PLAYER(SPECIES_WYNAUT) { Speed(100); Item(item); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(10); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, move); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(GetSwitchCandidateSpeed(1, B_POSITION_PLAYER_LEFT), expected);
+        // and the battler it borrowed is left untouched
+        EXPECT_EQ(gBattleMons[B_POSITION_PLAYER_LEFT].species, SPECIES_WOBBUFFET);
+    }
+}

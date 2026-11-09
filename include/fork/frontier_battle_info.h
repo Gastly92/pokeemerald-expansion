@@ -35,6 +35,10 @@ void CB2_FrontierBattleInfo(void);
 // Opens the viewer and returns to returnCallback when closed. Used from the
 // in-battle action menu (INFO slot) and the in-battle party menu (SELECT).
 void OpenFrontierBattleInfo(void (*returnCallback)(void));
+// The party-menu path: also passes the party slot under the cursor (in battle order) and the
+// battler choosing, so the Speed Tiers page can show that mon as a "Switch:" row. A slot that is
+// already on the field, fainted or an egg shows no row.
+void OpenFrontierBattleInfoForSwitch(void (*returnCallback)(void), u32 partyIndex, u32 battler);
 
 // BUFF_ACCURACY_ITEMS_REVEAL -- writes the reveal bits the player's held Wide Lens
 // (every seen foe's item) and Zoom Lens (the ability and full moveset of a foe that has used
@@ -68,6 +72,10 @@ void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi, s32 *tie);
 // Speed, or ties it without the tie ladder settling it your way. The Overview page puts that
 // foe above your row. Priority is not modelled.
 bool32 FoeMayActBefore(u32 foeIndex, u32 playerBattler);
+// The effective Speed your benched mon `partyIndex` would have if it replaced `battler` now: its
+// own stat, item, ability and status under the current field, with fresh stat stages and
+// volatiles. Exposed for test/fork/frontier_battle_info_speed.c.
+u32 GetSwitchCandidateSpeed(u32 partyIndex, u32 battler);
 // The type icons on a seen foe's Overview row, written to `types`; returns how many (1 or 2).
 // The displayed (Illusion-aware) species' types, or the Tera type alone once the mon has
 // Terastallized (Stellar keeps the species' types). Exposed for test/fork/frontier_battle_info_types.c.

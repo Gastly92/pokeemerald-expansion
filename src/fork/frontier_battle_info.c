@@ -14,7 +14,7 @@
 #include "bg.h"
 #include "config_changes.h" // GetConfig(FEATURE_INNATE_ABILITIES)
 #include "decompress.h" // LoadCompressedSpriteSheet for the Overview page's type icons
-#include "fork/deterministic_moves.h" // DeterministicSpeedTieWins for the Overview page's tie glyphs
+#include "fork/deterministic_moves.h" // DeterministicSpeedTieWins for the Speed Tiers page's tie edge
 #include "fork/free_gimmicks.h" // FindMegaStoneForStats, shared with the live form change
 #include "fork/innate_abilities.h" // FEATURE_INNATE_ABILITIES
 #include "fork/frontier_battle_info.h"
@@ -54,6 +54,11 @@ bool8 gFrontierBattleInfoActive = FALSE;
 // via OpenFrontierBattleInfo() before CB2_FrontierBattleInfo runs; defaults to the
 // battle screen so a stray open can never strand the player.
 static MainCallback sInfoExitCallback = NULL;
+// The Speed Tiers page's "Switch:" row: the party slot under the party-menu cursor (battle order)
+// and the battler choosing. Stored as slot + 1, so 0 (the zero-initialised default) means the
+// viewer was not opened from the party menu.
+static u8 sInfoSwitchSlotPlusOne;
+static u8 sInfoSwitchBattler;
 
 // Styling. The viewer used to be a flat full-screen white window of plain
 // text. We now dress it up purely by reusing existing assets/helpers (no new art):
@@ -1896,6 +1901,58 @@ bool32 FoeMayActBefore(u32 foeIndex, u32 playerBattler)
     return hi > spe || (hi == spe && tie <= 0);
 }
 
+// Borrow `battler` for your benched mon `partyIndex`, priced as if it switched in now: everything
+// about your own mon is known, but stat stages and volatiles start fresh. Restore with the saved copy.
+static void BorrowBattlerForSwitchCandidate(u32 partyIndex, enum BattlerId battler)
+{
+    struct Pokemon *mon = &GetTrainerParty(B_TRAINER_PLAYER)[partyIndex];
+
+    gBattlerPartyIndexes[battler] = partyIndex;
+    memset(&gBattleMons[battler].volatiles, 0, sizeof(gBattleMons[battler].volatiles));
+    for (u32 i = 0; i < NUM_BATTLE_STATS; i++)
+        gBattleMons[battler].statStages[i] = DEFAULT_STAT_STAGE;
+    gBattleMons[battler].species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    gBattleMons[battler].speed = GetMonData(mon, MON_DATA_SPEED, NULL);
+    gBattleMons[battler].ability = GetMonAbility(mon);
+    gBattleMons[battler].item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+    gBattleMons[battler].status1 = GetMonData(mon, MON_DATA_STATUS, NULL);
+    gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP, NULL);
+    gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+    gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+}
+
+u32 GetSwitchCandidateSpeed(u32 partyIndex, u32 battler)
+{
+    struct BattlePokemon saved = gBattleMons[battler];
+    u8 savedPartyIndex = gBattlerPartyIndexes[battler];
+    u32 spe;
+
+    BorrowBattlerForSwitchCandidate(partyIndex, battler);
+    spe = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
+    gBattleMons[battler] = saved;
+    gBattlerPartyIndexes[battler] = savedPartyIndex;
+    return spe;
+}
+
+// The party-menu cursor's mon, if it can be sent in: not on the field, not fainted, not an egg.
+static bool32 HasSwitchCandidate(void)
+{
+    struct Pokemon *mon;
+
+    if (sInfoSwitchSlotPlusOne == 0 || sInfoSwitchSlotPlusOne > PARTY_SIZE || sInfoSwitchBattler >= gBattlersCount)
+        return FALSE;
+    mon = &GetTrainerParty(B_TRAINER_PLAYER)[sInfoSwitchSlotPlusOne - 1];
+    if (GetMonData(mon, MON_DATA_SPECIES, NULL) == SPECIES_NONE || GetMonData(mon, MON_DATA_IS_EGG, NULL)
+        || GetMonData(mon, MON_DATA_HP, NULL) == 0)
+        return FALSE;
+    for (enum BattlerId b = 0; b < gBattlersCount; b++)
+    {
+        if (IsOnPlayerSide(b) && IsBattlerAlive(b) && gBattlerPartyIndexes[b] == sInfoSwitchSlotPlusOne - 1)
+            return FALSE;
+    }
+    return TRUE;
+}
+
 // Type icon sprites. The window sits one tile in from the screen edge, and a sprite is
 // positioned by its centre. The icon art is drawn on rows 1-14 of its 16, so lifting the
 // sprite 1px puts the art exactly on a LINE_H text row with nothing spilling into the next.
@@ -1943,33 +2000,35 @@ static void DestroyTypeIcons(void)
     FreeSpriteTilesByTag(gSpriteSheet_MoveTypes.tag);
 }
 
-// One of your active mons, in its turn-order place on the Overview page: its actual *effective*
-// Speed, with everything you already know about your own side (Choice Scarf, Tailwind, paralysis,
-// stat stages) folded in. Current HP is right-aligned like the foe rows, so a Substitute / Belly
-// Drum call can be made from this page ("You: " + a 12-letter nickname + "  Spe 9999" is well
-// under ~150px).
-static void DrawOverviewPlayerRow(u8 windowId, u8 *line, enum BattlerId battler, u32 y)
+// One of your rows on the Speed Tiers page: an active mon ("You:") or the party-menu cursor's mon
+// ("Switch:"), with its effective Speed (everything you know about your own side folded in) and
+// its HP right-aligned like the foe rows, so a Substitute / Belly Drum call can be made from here.
+// "Switch: " + a 12-letter nickname + "  Spe 9999" is still under ~160px.
+static void DrawSpeedTiersPlayerRow(u8 windowId, u8 *line, const u8 *label, const u8 *nickname, u32 spe, u32 hpPercent, u32 y)
 {
-    u32 spe = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
-    u8 *p = StringCopy(line, COMPOUND_STRING("You: "));
+    u8 *p = StringCopy(line, label);
 
-    p = StringCopy(p, gBattleMons[battler].nickname);
+    p = StringCopy(p, nickname);
     p = StringCopy(p, COMPOUND_STRING("  Spe "));
     ConvertIntToDecimalStringN(p, spe, STR_CONV_MODE_LEFT_ALIGN, 4);
     PrintLine(windowId, line, 0, y);
-    FormatHpPercent(line, GetBattlerHpPercent(battler));
+    FormatHpPercent(line, hpPercent);
     PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
 }
 
 // A seen foe: its type icons (GetFoeOverviewTypes, which replace the old "Foe N:" party-slot
 // label - worth far more at a glance), species, possible Speed range and HP. The range reads
 // worst case to best case for acting first: low-high normally, high-low under Trick Room, where
-// the slower end is the one that moves first.
-static void DrawOverviewFoeRow(u8 windowId, u8 *line, u32 foeIndex, u32 iconSlot, u32 lo, u32 hi, u32 y)
+// the slower end is the one that moves first. A foe that is not on the field (benched or
+// fainted) is dimmed, so the ones you are actually facing stand out.
+static void DrawSpeedTiersFoeRow(u8 windowId, u8 *line, u32 foeIndex, u32 iconSlot, u32 lo, u32 hi, u32 y)
 {
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
     struct Pokemon *displayMon = GetFoeDisplayMon(foeParty, foeIndex);
     bool32 trickRoom = (gFieldStatuses & STATUS_FIELD_TRICK_ROOM) != 0;
+    bool32 onField = GetFoeBattlerForSlot(foeIndex) != MAX_BATTLERS_COUNT;
+    u8 fg = onField ? TEXT_COLOR_DARK_GRAY : TEXT_COLOR_LIGHT_GRAY;
+    u8 shadow = onField ? TEXT_COLOR_LIGHT_GRAY : TEXT_COLOR_WHITE;
     enum Type types[2];
     u32 typeCount = GetFoeOverviewTypes(foeIndex, types);
     u8 *p;
@@ -1985,16 +2044,26 @@ static void DrawOverviewFoeRow(u8 windowId, u8 *line, u32 foeIndex, u32 iconSlot
     ConvertIntToDecimalStringN(p, trickRoom ? lo : hi, STR_CONV_MODE_LEFT_ALIGN, 4);
     // The name column starts after two icon slots even for a mono-type, so the
     // names and ranges line up down the list.
-    PrintLine(windowId, line, 2 * TYPE_ICON_W + 2, y);
+    PrintLineEx(windowId, line, 2 * TYPE_ICON_W + 2, y, fg, shadow);
     // Current HP, right-aligned: the row is ~180px at its longest (two icons + the widest name,
     // "Brambleghast" at 59px + " 9999-9999"), so "HP 100%" (34px) still clears it in 224px.
     FormatHpPercent(line, GetFoeHpPercent(foeIndex));
-    PrintLine(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y);
+    PrintLineEx(windowId, line, (INFO_WIN_WIDTH * 8) - GetStringWidth(FONT_NARROW, line, 0), y, fg, shadow);
 }
 
-// The page lists your active mons and every seen foe in one column, in turn order: a foe above
-// one of your rows can act before that mon (FoeMayActBefore), a foe below it cannot. Trick Room
-// reverses the order and the ranges, so there is no marker and no arrow to learn.
+struct SpeedTiersPlayerRow
+{
+    enum BattlerId battler; // an active battler, or the one choosing for the "Switch:" row
+    u32 speed;
+    u32 insertAt;           // how many of the sorted foes sit above this row
+    bool8 candidate;
+};
+
+// The Speed Tiers page (INFO_PAGE_OVERVIEW) lists your active mons and every seen foe in one
+// column, in the order they could act: a foe above one of your rows can act before that mon
+// (FoeMayActBefore), a foe below it cannot. Trick Room reverses the order and the ranges, so
+// there is no marker and no arrow to learn. Opened from the party menu, the cursor's mon is
+// placed too, as a "Switch:" row. The title row carries the battle's intensity.
 static void DrawOverviewPage(u8 windowId)
 {
     u8 line[64];
@@ -2005,13 +2074,18 @@ static void DrawOverviewPage(u8 windowId)
     u32 los[PARTY_SIZE];
     u32 his[PARTY_SIZE];
     u32 n = 0;
-    enum BattlerId players[MAX_BATTLERS_COUNT];
-    u32 speeds[MAX_BATTLERS_COUNT];
-    u32 insertAt[MAX_BATTLERS_COUNT];
-    u32 nPlayers = 0;
-    u32 next = 0;
+    struct SpeedTiersPlayerRow rows[MAX_BATTLERS_COUNT + 1];
+    u32 nRows = 0;
 
-    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  OVERVIEW"));
+    PrintTitle(windowId, COMPOUND_STRING("BATTLE INFO  -  SPEED TIERS"));
+    if (GetConfig(DETERMINISTIC_DAMAGE))
+    {
+        u8 *p = StringCopy(line, COMPOUND_STRING("Intensity "));
+        p = ConvertIntToDecimalStringN(p, DETERMINISTIC_DAMAGE_PERCENT, STR_CONV_MODE_LEFT_ALIGN, 3);
+        *p++ = CHAR_PERCENT;
+        *p = EOS;
+        PrintTitleMarker(windowId, line);
+    }
     y += LINE_H;
 
     // Collect only the foe slots the player has actually seen sent out (same
@@ -2053,47 +2127,81 @@ static void DrawOverviewPage(u8 windowId)
         }
     }
 
-    // Your active mons, in turn order among themselves.
+    // Your rows. Each goes below every foe that can act before it; the foes are sorted by the
+    // same edge FoeMayActBefore reads, so those foes are a run at the top.
     for (enum BattlerId battler = 0; battler < gBattlersCount; battler++)
     {
         if (!IsOnPlayerSide(battler) || !IsBattlerAlive(battler))
             continue;
-        players[nPlayers] = battler;
-        speeds[nPlayers] = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
-        nPlayers++;
+        rows[nRows].battler = battler;
+        rows[nRows].candidate = FALSE;
+        rows[nRows].speed = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
+        rows[nRows].insertAt = 0;
+        while (rows[nRows].insertAt < n && FoeMayActBefore(slots[rows[nRows].insertAt], battler))
+            rows[nRows].insertAt++;
+        nRows++;
     }
-    for (u32 a = 0; a < nPlayers; a++)
+    if (HasSwitchCandidate())
     {
-        for (u32 b = a + 1; b < nPlayers; b++)
+        // Priced on the battler it would replace, which is borrowed for the comparisons too, so
+        // the tie ladder reads the candidate's own species, weight and HP.
+        enum BattlerId battler = sInfoSwitchBattler;
+        struct BattlePokemon saved = gBattleMons[battler];
+        u8 savedPartyIndex = gBattlerPartyIndexes[battler];
+
+        rows[nRows].battler = battler;
+        rows[nRows].candidate = TRUE;
+        rows[nRows].speed = GetSwitchCandidateSpeed((sInfoSwitchSlotPlusOne - 1), battler);
+        BorrowBattlerForSwitchCandidate((sInfoSwitchSlotPlusOne - 1), battler);
+        rows[nRows].insertAt = 0;
+        while (rows[nRows].insertAt < n && FoeMayActBefore(slots[rows[nRows].insertAt], battler))
+            rows[nRows].insertAt++;
+        gBattleMons[battler] = saved;
+        gBattlerPartyIndexes[battler] = savedPartyIndex;
+        nRows++;
+    }
+
+    // Order your rows by where they go, then by Speed in turn order.
+    for (u32 a = 0; a < nRows; a++)
+    {
+        for (u32 b = a + 1; b < nRows; b++)
         {
-            if (trickRoom ? (speeds[b] < speeds[a]) : (speeds[b] > speeds[a]))
+            bool32 later = rows[b].insertAt < rows[a].insertAt
+                        || (rows[b].insertAt == rows[a].insertAt
+                            && (trickRoom ? rows[b].speed < rows[a].speed : rows[b].speed > rows[a].speed));
+            if (later)
             {
-                u32 t = speeds[a]; speeds[a] = speeds[b]; speeds[b] = t;
-                enum BattlerId tb = players[a]; players[a] = players[b]; players[b] = tb;
+                struct SpeedTiersPlayerRow tmp = rows[a];
+                rows[a] = rows[b];
+                rows[b] = tmp;
             }
         }
     }
 
-    // Each of your rows goes below every foe that can act before it. The foes are sorted by
-    // the same edge FoeMayActBefore reads, so those foes are a run at the top of what is left.
-    for (u32 a = 0; a < nPlayers; a++)
-    {
-        while (next < n && FoeMayActBefore(slots[next], players[a]))
-            next++;
-        insertAt[a] = next;
-    }
-
     for (u32 k = 0, a = 0; k <= n; k++)
     {
-        while (a < nPlayers && insertAt[a] == k)
+        while (a < nRows && rows[a].insertAt == k)
         {
-            DrawOverviewPlayerRow(windowId, line, players[a], y);
+            if (rows[a].candidate)
+            {
+                struct Pokemon *mon = &GetTrainerParty(B_TRAINER_PLAYER)[(sInfoSwitchSlotPlusOne - 1)];
+                u8 nickname[POKEMON_NAME_BUFFER_SIZE];
+
+                GetMonData(mon, MON_DATA_NICKNAME, nickname);
+                DrawSpeedTiersPlayerRow(windowId, line, COMPOUND_STRING("Switch: "), nickname, rows[a].speed,
+                                        HpPercentRoundedUp(GetMonData(mon, MON_DATA_HP, NULL), GetMonData(mon, MON_DATA_MAX_HP, NULL)), y);
+            }
+            else
+            {
+                DrawSpeedTiersPlayerRow(windowId, line, COMPOUND_STRING("You: "), gBattleMons[rows[a].battler].nickname,
+                                        rows[a].speed, GetBattlerHpPercent(rows[a].battler), y);
+            }
             y += LINE_H;
             a++;
         }
         if (k < n)
         {
-            DrawOverviewFoeRow(windowId, line, slots[k], k, los[k], his[k], y);
+            DrawSpeedTiersFoeRow(windowId, line, slots[k], k, los[k], his[k], y);
             y += LINE_H;
         }
     }
@@ -2356,8 +2464,16 @@ void ApplyAccuracyItemReveals(void)
 void OpenFrontierBattleInfo(MainCallback returnCallback)
 {
     sInfoExitCallback = returnCallback;
+    sInfoSwitchSlotPlusOne = 0;
     ApplyAccuracyItemReveals(); // BUFF_ACCURACY_ITEMS_REVEAL -- the lenses fill in what they can see
     SetMainCallback2(CB2_FrontierBattleInfo);
+}
+
+void OpenFrontierBattleInfoForSwitch(MainCallback returnCallback, u32 partyIndex, u32 battler)
+{
+    OpenFrontierBattleInfo(returnCallback);
+    sInfoSwitchSlotPlusOne = partyIndex + 1;
+    sInfoSwitchBattler = battler;
 }
 
 void CB2_FrontierBattleInfo(void)
