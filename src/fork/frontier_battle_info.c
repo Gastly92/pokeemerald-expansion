@@ -2020,7 +2020,8 @@ static void DrawSpeedTiersPlayerRow(u8 windowId, u8 *line, const u8 *label, cons
 // label - worth far more at a glance), species, possible Speed range and HP. The range reads
 // worst case to best case for acting first: low-high normally, high-low under Trick Room, where
 // the slower end is the one that moves first. A foe that is not on the field (benched or
-// fainted) is dimmed, so the ones you are actually facing stand out.
+// fainted) is dimmed to flat light grey with no shadow, so the ones you are actually facing stand
+// out. (A white shadow under light grey read as embossed on the lavender backdrop, not faded.)
 static void DrawSpeedTiersFoeRow(u8 windowId, u8 *line, u32 foeIndex, u32 iconSlot, u32 lo, u32 hi, u32 y)
 {
     struct Pokemon *foeParty = GetTrainerParty(B_TRAINER_OPPONENT_A);
@@ -2028,7 +2029,7 @@ static void DrawSpeedTiersFoeRow(u8 windowId, u8 *line, u32 foeIndex, u32 iconSl
     bool32 trickRoom = (gFieldStatuses & STATUS_FIELD_TRICK_ROOM) != 0;
     bool32 onField = GetFoeBattlerForSlot(foeIndex) != MAX_BATTLERS_COUNT;
     u8 fg = onField ? TEXT_COLOR_DARK_GRAY : TEXT_COLOR_LIGHT_GRAY;
-    u8 shadow = onField ? TEXT_COLOR_LIGHT_GRAY : TEXT_COLOR_WHITE;
+    u8 shadow = onField ? TEXT_COLOR_LIGHT_GRAY : TEXT_COLOR_TRANSPARENT;
     enum Type types[2];
     u32 typeCount = GetFoeOverviewTypes(foeIndex, types);
     u8 *p;
