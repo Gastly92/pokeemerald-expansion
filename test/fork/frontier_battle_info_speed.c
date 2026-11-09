@@ -289,3 +289,20 @@ SINGLE_BATTLE_TEST("Frontier INFO speed: a switch-in is priced with its own item
         EXPECT_EQ(gBattleMons[B_POSITION_PLAYER_LEFT].species, SPECIES_WOBBUFFET);
     }
 }
+
+// After a faint the replaced battler is flagged notOnField, which makes the engine ignore its item
+// and ability. The switch-in must still be priced with its own Choice Scarf (seen in play).
+SINGLE_BATTLE_TEST("Frontier INFO speed: a switch-in keeps its Choice Scarf when replacing a fainted mon")
+{
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_CELEBRATE); }
+        PLAYER(SPECIES_WYNAUT) { Speed(100); Item(ITEM_CHOICE_SCARF); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(10); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        gBattleStruct->battlerState[B_POSITION_PLAYER_LEFT].notOnField = TRUE; // as after a faint
+        EXPECT_EQ(GetSwitchCandidateSpeed(1, B_POSITION_PLAYER_LEFT), 150);
+        EXPECT(gBattleStruct->battlerState[B_POSITION_PLAYER_LEFT].notOnField); // restored
+    }
+}

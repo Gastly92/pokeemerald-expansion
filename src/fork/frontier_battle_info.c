@@ -1901,11 +1901,30 @@ bool32 FoeMayActBefore(u32 foeIndex, u32 playerBattler)
     return hi > spe || (hi == spe && tie <= 0);
 }
 
+// What BorrowBattlerForSwitchCandidate overwrites, so RestoreBattlerAfterSwitchCandidate can put it back.
+struct SwitchCandidateBorrow
+{
+    struct BattlePokemon mon;
+    u8 partyIndex;
+    bool8 notOnField;
+    bool8 attackerInParty;
+};
+
 // Borrow `battler` for your benched mon `partyIndex`, priced as if it switched in now: everything
-// about your own mon is known, but stat stages and volatiles start fresh. Restore with the saved copy.
-static void BorrowBattlerForSwitchCandidate(u32 partyIndex, enum BattlerId battler)
+// about your own mon is known, but stat stages and volatiles start fresh. After a faint the battler
+// is flagged notOnField, and GetBattlerHoldEffect / GetBattlerAbility return nothing for such a
+// battler, so the flags are cleared for the borrow too - else a Choice Scarf or a Speed ability
+// would be ignored exactly when you are picking a replacement.
+static void BorrowBattlerForSwitchCandidate(u32 partyIndex, enum BattlerId battler, struct SwitchCandidateBorrow *saved)
 {
     struct Pokemon *mon = &GetTrainerParty(B_TRAINER_PLAYER)[partyIndex];
+
+    saved->mon = gBattleMons[battler];
+    saved->partyIndex = gBattlerPartyIndexes[battler];
+    saved->notOnField = gBattleStruct->battlerState[battler].notOnField;
+    saved->attackerInParty = gSpecialStatuses[battler].attackerInParty;
+    gBattleStruct->battlerState[battler].notOnField = FALSE;
+    gSpecialStatuses[battler].attackerInParty = FALSE;
 
     gBattlerPartyIndexes[battler] = partyIndex;
     memset(&gBattleMons[battler].volatiles, 0, sizeof(gBattleMons[battler].volatiles));
@@ -1921,16 +1940,22 @@ static void BorrowBattlerForSwitchCandidate(u32 partyIndex, enum BattlerId battl
     gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL, NULL);
 }
 
+static void RestoreBattlerAfterSwitchCandidate(enum BattlerId battler, const struct SwitchCandidateBorrow *saved)
+{
+    gBattleMons[battler] = saved->mon;
+    gBattlerPartyIndexes[battler] = saved->partyIndex;
+    gBattleStruct->battlerState[battler].notOnField = saved->notOnField;
+    gSpecialStatuses[battler].attackerInParty = saved->attackerInParty;
+}
+
 u32 GetSwitchCandidateSpeed(u32 partyIndex, u32 battler)
 {
-    struct BattlePokemon saved = gBattleMons[battler];
-    u8 savedPartyIndex = gBattlerPartyIndexes[battler];
+    struct SwitchCandidateBorrow saved;
     u32 spe;
 
-    BorrowBattlerForSwitchCandidate(partyIndex, battler);
+    BorrowBattlerForSwitchCandidate(partyIndex, battler, &saved);
     spe = GetBattlerTotalSpeedStat(battler, GetBattlerAbility(battler), GetBattlerHoldEffect(battler));
-    gBattleMons[battler] = saved;
-    gBattlerPartyIndexes[battler] = savedPartyIndex;
+    RestoreBattlerAfterSwitchCandidate(battler, &saved);
     return spe;
 }
 
@@ -2144,18 +2169,16 @@ static void DrawOverviewPage(u8 windowId)
         // Priced on the battler it would replace, which is borrowed for the comparisons too, so
         // the tie ladder reads the candidate's own species, weight and HP.
         enum BattlerId battler = sInfoSwitchBattler;
-        struct BattlePokemon saved = gBattleMons[battler];
-        u8 savedPartyIndex = gBattlerPartyIndexes[battler];
+        struct SwitchCandidateBorrow saved;
 
         rows[nRows].battler = battler;
         rows[nRows].candidate = TRUE;
         rows[nRows].speed = GetSwitchCandidateSpeed((sInfoSwitchSlotPlusOne - 1), battler);
-        BorrowBattlerForSwitchCandidate((sInfoSwitchSlotPlusOne - 1), battler);
+        BorrowBattlerForSwitchCandidate((sInfoSwitchSlotPlusOne - 1), battler, &saved);
         rows[nRows].insertAt = 0;
         while (rows[nRows].insertAt < n && FoeMayActBefore(slots[rows[nRows].insertAt], battler))
             rows[nRows].insertAt++;
-        gBattleMons[battler] = saved;
-        gBattlerPartyIndexes[battler] = savedPartyIndex;
+        RestoreBattlerAfterSwitchCandidate(battler, &saved);
         nRows++;
     }
 
