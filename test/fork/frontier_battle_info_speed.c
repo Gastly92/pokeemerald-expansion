@@ -2,7 +2,6 @@
 #include "test/battle.h"
 #include "fork/frontier_battle_info.h"
 #include "fork/innate_abilities.h"
-#include "constants/characters.h"
 
 // B_FRONTIER_BATTLE_INFO. The Overview page's foe Speed range starts from base Speed alone (0 IV /
 // 0 EV / hindering nature up to 31 / 252 / boosting) and is then scaled by everything the player
@@ -158,18 +157,44 @@ SINGLE_BATTLE_TEST("Frontier INFO speed: an innate Swift Swim doubles the range 
     }
 }
 
+// The Overview page is in turn order: a foe sits above your row when it can act before you, read
+// from the edge of its range that acts first - the top normally, the bottom under Trick Room.
+// A level 100 Wobbuffet (base 33) spans 63-181.
+SINGLE_BATTLE_TEST("Frontier INFO speed: a foe can act before you when its best case beats your Speed")
+{
+    u32 speed;
+    bool32 trickRoom, expected;
+
+    PARAMETRIZE { trickRoom = FALSE; speed = 200; expected = FALSE; } // faster than its top
+    PARAMETRIZE { trickRoom = FALSE; speed = 100; expected = TRUE;  } // inside its range
+    PARAMETRIZE { trickRoom = FALSE; speed = 50;  expected = TRUE;  } // slower than its bottom
+    PARAMETRIZE { trickRoom = TRUE;  speed = 200; expected = TRUE;  }
+    PARAMETRIZE { trickRoom = TRUE;  speed = 100; expected = TRUE;  }
+    PARAMETRIZE { trickRoom = TRUE;  speed = 50;  expected = FALSE; } // slower than its bottom moves first
+
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TRICK_ROOM) == EFFECT_TRICK_ROOM);
+        PLAYER(SPECIES_PIKACHU) { Speed(speed); Moves(MOVE_TRICK_ROOM, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, trickRoom ? MOVE_TRICK_ROOM : MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(FoeMayActBefore(0, B_POSITION_PLAYER_LEFT), expected);
+    }
+}
+
 // DETERMINISTIC_MOVE_RESULTS settles Speed ties by a ladder of public facts (higher base Speed,
-// then lighter, then higher HP%), so a tie at the edge of a foe's range gets the arrow it
-// resolves to. Wobbuffet (base 33) spans 63-181; Wynaut is base 23, Pikachu base 90.
-SINGLE_BATTLE_TEST("Frontier INFO speed: a tie at the top of the range shows the arrow the tie ladder gives")
+// then lighter, then higher HP%), so a tie at the edge of a foe's range is settled, not a coin
+// flip. Wobbuffet is base 33; Wynaut is base 23, Pikachu base 90.
+SINGLE_BATTLE_TEST("Frontier INFO speed: a tie at the top of the range goes the way the tie ladder gives")
 {
     bool32 deterministic;
     enum Species species;
-    u32 expected;
+    bool32 expected;
 
-    PARAMETRIZE { deterministic = TRUE;  species = SPECIES_PIKACHU; expected = CHAR_DOWN_ARROW; }
-    PARAMETRIZE { deterministic = TRUE;  species = SPECIES_WYNAUT;  expected = 0; }
-    PARAMETRIZE { deterministic = FALSE; species = SPECIES_PIKACHU; expected = 0; } // a coin flip
+    PARAMETRIZE { deterministic = TRUE;  species = SPECIES_PIKACHU; expected = FALSE; } // you win the tie
+    PARAMETRIZE { deterministic = TRUE;  species = SPECIES_WYNAUT;  expected = TRUE;  }
+    PARAMETRIZE { deterministic = FALSE; species = SPECIES_PIKACHU; expected = TRUE;  } // a coin flip, so it can
 
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, deterministic);
@@ -178,26 +203,30 @@ SINGLE_BATTLE_TEST("Frontier INFO speed: a tie at the top of the range shows the
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
     } THEN {
-        EXPECT_EQ(GetFoeSpeedGlyph(0), expected);
+        EXPECT_EQ(FoeMayActBefore(0, B_POSITION_PLAYER_LEFT), expected);
     }
 }
 
-SINGLE_BATTLE_TEST("Frontier INFO speed: a tie at the bottom of the range shows the arrow the tie ladder gives")
+// Under Trick Room the bottom of the range is the edge that acts first, and the tie ladder is
+// reversed with turn order: the lower base Speed now wins it.
+SINGLE_BATTLE_TEST("Frontier INFO speed: under Trick Room a tie at the bottom of the range follows the reversed ladder")
 {
     enum Species species;
-    u32 expected;
+    bool32 expected;
 
-    PARAMETRIZE { species = SPECIES_WYNAUT;  expected = CHAR_UP_ARROW; }
-    PARAMETRIZE { species = SPECIES_PIKACHU; expected = 0; }
+    PARAMETRIZE { species = SPECIES_WYNAUT;  expected = FALSE; } // base 23 < 33: you act first
+    PARAMETRIZE { species = SPECIES_PIKACHU; expected = TRUE;  }
 
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE);
-        PLAYER(species) { Speed(63); Moves(MOVE_CELEBRATE); }
+        ASSUME(GetMoveEffect(MOVE_TRICK_ROOM) == EFFECT_TRICK_ROOM);
+        PLAYER(species) { Speed(63); Moves(MOVE_TRICK_ROOM); }
         OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_CELEBRATE); }
     } WHEN {
-        TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(player, MOVE_TRICK_ROOM); MOVE(opponent, MOVE_CELEBRATE); }
     } THEN {
-        EXPECT_EQ(GetFoeSpeedGlyph(0), expected);
+        EXPECT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM);
+        EXPECT_EQ(FoeMayActBefore(0, B_POSITION_PLAYER_LEFT), expected);
     }
 }
 
@@ -213,23 +242,50 @@ SINGLE_BATTLE_TEST("Frontier INFO speed: the tie ladder only uses what the playe
     } WHEN {
         TURN { MOVE(player, MOVE_CELEBRATE); MOVE(opponent, MOVE_CELEBRATE); }
     } THEN {
-        EXPECT_EQ(GetFoeSpeedGlyph(0), CHAR_DOWN_ARROW);
+        EXPECT_EQ(FoeMayActBefore(0, B_POSITION_PLAYER_LEFT), FALSE);
     }
 }
 
-// The glyphs stay on the number axis under Trick Room (the title's TRICK ROOM marker says to read
-// them reversed), so a tie you win still reads as outspeeding.
-SINGLE_BATTLE_TEST("Frontier INFO speed: a won tie still reads as a down arrow under Trick Room")
+// In doubles each of your rows is placed by its own Speed, so a foe can be above one and below the other.
+DOUBLE_BATTLE_TEST("Frontier INFO speed: each of your mons is compared at its own Speed")
 {
     GIVEN {
-        WITH_CONFIG(DETERMINISTIC_MOVE_RESULTS, TRUE);
-        ASSUME(GetMoveEffect(MOVE_TRICK_ROOM) == EFFECT_TRICK_ROOM);
-        PLAYER(SPECIES_PIKACHU) { Speed(181); Moves(MOVE_TRICK_ROOM); }
+        PLAYER(SPECIES_PIKACHU) { Speed(200); Moves(MOVE_CELEBRATE); }
+        PLAYER(SPECIES_WYNAUT) { Speed(50); Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_CELEBRATE); }
         OPPONENT(SPECIES_WOBBUFFET) { Speed(100); Moves(MOVE_CELEBRATE); }
     } WHEN {
-        TURN { MOVE(player, MOVE_TRICK_ROOM); MOVE(opponent, MOVE_CELEBRATE); }
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_CELEBRATE); MOVE(opponentLeft, MOVE_CELEBRATE); MOVE(opponentRight, MOVE_CELEBRATE); }
     } THEN {
-        EXPECT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM);
-        EXPECT_EQ(GetFoeSpeedGlyph(0), CHAR_DOWN_ARROW);
+        EXPECT_EQ(FoeMayActBefore(0, B_POSITION_PLAYER_LEFT), FALSE);
+        EXPECT_EQ(FoeMayActBefore(0, B_POSITION_PLAYER_RIGHT), TRUE);
+    }
+}
+
+// Opened from the party menu, the Speed Tiers page places the cursor's mon as a "Switch:" row,
+// priced as if it replaced the active mon now: its own item and the current field count, the
+// active mon's stat stages do not.
+SINGLE_BATTLE_TEST("Frontier INFO speed: a switch-in is priced with its own item, fresh stages and the current field")
+{
+    u32 move;
+    u16 item;
+    u32 expected;
+
+    PARAMETRIZE { move = MOVE_CELEBRATE; item = ITEM_NONE;         expected = 100; }
+    PARAMETRIZE { move = MOVE_CELEBRATE; item = ITEM_CHOICE_SCARF; expected = 150; }
+    PARAMETRIZE { move = MOVE_AGILITY;   item = ITEM_NONE;         expected = 100; } // the active mon's +2 stays with it
+    PARAMETRIZE { move = MOVE_TAILWIND;  item = ITEM_NONE;         expected = 200; }
+
+    GIVEN {
+        ASSUME(GetMoveEffect(MOVE_TAILWIND) == EFFECT_TAILWIND);
+        PLAYER(SPECIES_WOBBUFFET) { Speed(50); Moves(MOVE_CELEBRATE, MOVE_AGILITY, MOVE_TAILWIND); }
+        PLAYER(SPECIES_WYNAUT) { Speed(100); Item(item); }
+        OPPONENT(SPECIES_WOBBUFFET) { Speed(10); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, move); MOVE(opponent, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(GetSwitchCandidateSpeed(1, B_POSITION_PLAYER_LEFT), expected);
+        // and the battler it borrowed is left untouched
+        EXPECT_EQ(gBattleMons[B_POSITION_PLAYER_LEFT].species, SPECIES_WOBBUFFET);
     }
 }

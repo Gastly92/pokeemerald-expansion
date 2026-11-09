@@ -35,6 +35,10 @@ void CB2_FrontierBattleInfo(void);
 // Opens the viewer and returns to returnCallback when closed. Used from the
 // in-battle action menu (INFO slot) and the in-battle party menu (SELECT).
 void OpenFrontierBattleInfo(void (*returnCallback)(void));
+// The party-menu path: also passes the party slot under the cursor (in battle order) and the
+// battler choosing, so the Speed Tiers page can show that mon as a "Switch:" row. A slot that is
+// already on the field, fainted or an egg shows no row.
+void OpenFrontierBattleInfoForSwitch(void (*returnCallback)(void), u32 partyIndex, u32 battler);
 
 // BUFF_ACCURACY_ITEMS_REVEAL -- writes the reveal bits the player's held Wide Lens
 // (every seen foe's item) and Zoom Lens (the ability and full moveset of a foe that has used
@@ -59,14 +63,19 @@ u32 HpPercentRoundedUp(u32 hp, u32 maxHP);
 // 31 / 252 / boosting, then scaled by every modifier the player can see (stat stages, paralysis,
 // Tailwind, weather, revealed item and ability, innates). A benched foe is priced as if it
 // switched in now. `tie` is how a Speed tie with your fastest active mon would settle under
-// DETERMINISTIC_MOVE_RESULTS' tie ladder, read from the same view: 1 you win, -1 the foe wins,
-// 0 unsettled (config off, or every rung tied). On the number axis, i.e. not flipped by Trick Room.
-// Exposed for test/fork/frontier_battle_info_speed.c.
+// DETERMINISTIC_MOVE_RESULTS' tie ladder, read from the same view, in turn order (so already
+// reversed under Trick Room): 1 your mon acts first, -1 the foe does, 0 unsettled (config off,
+// or every rung tied). Exposed for test/fork/frontier_battle_info_speed.c.
 void GetFoeSpeedRange(u32 foeIndex, u32 *lo, u32 *hi, s32 *tie);
-// The foe row's glyph: CHAR_DOWN_ARROW when your fastest active mon outspeeds the whole range,
-// CHAR_UP_ARROW when the whole range outspeeds you, else 0. A tie at the edge of the range
-// counts the way the tie ladder settles it.
-u32 GetFoeSpeedGlyph(u32 foeIndex);
+// Whether a seen foe can act before your active mon `playerBattler`, from what the player knows:
+// its best case (the top of its range, or the bottom under Trick Room) beats that mon's effective
+// Speed, or ties it without the tie ladder settling it your way. The Overview page puts that
+// foe above your row. Priority is not modelled.
+bool32 FoeMayActBefore(u32 foeIndex, u32 playerBattler);
+// The effective Speed your benched mon `partyIndex` would have if it replaced `battler` now: its
+// own stat, item, ability and status under the current field, with fresh stat stages and
+// volatiles. Exposed for test/fork/frontier_battle_info_speed.c.
+u32 GetSwitchCandidateSpeed(u32 partyIndex, u32 battler);
 // The type icons on a seen foe's Overview row, written to `types`; returns how many (1 or 2).
 // The displayed (Illusion-aware) species' types, or the Tera type alone once the mon has
 // Terastallized (Stellar keeps the species' types). Exposed for test/fork/frontier_battle_info_types.c.

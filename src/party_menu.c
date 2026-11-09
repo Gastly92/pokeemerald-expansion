@@ -3198,8 +3198,12 @@ void CB2_ReturnToPartyMenuFromSummaryScreen(void)
 // CB2_ShowPokemonSummaryScreen's handling).
 static void CB2_OpenBattleInfoFromPartyMenu(void)
 {
+    // The cursor's slot, mapped to battle order before the party is put back in it, so the
+    // Speed Tiers page can show that mon as a switch-in.
+    u32 partyIndex = GetPartyIdFromBattleSlot(gPartyMenu.slotId);
+
     UpdatePartyToBattleOrder();
-    OpenFrontierBattleInfo(CB2_ReturnToPartyMenuFromBattleInfo);
+    OpenFrontierBattleInfoForSwitch(CB2_ReturnToPartyMenuFromBattleInfo, partyIndex, gBattlerInMenuId);
 }
 
 // FORK: B_FRONTIER_BATTLE_INFO. Re-open the in-battle "choose a Pokémon" menu after
