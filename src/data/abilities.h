@@ -2678,7 +2678,7 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_ESCALATE] =
     {
         .name = _("Escalate"),
-        .description = COMPOUND_STRING("Battle damage ramps up faster."),
+        .description = COMPOUND_STRING("Battle intensity rises faster."),
         .aiRating = 5,
     },
 };

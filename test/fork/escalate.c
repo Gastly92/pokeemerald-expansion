@@ -27,7 +27,7 @@ SINGLE_BATTLE_TEST("Escalate raises the damage multiplier by 2% at the end of ea
             ANIMATION(ANIM_TYPE_MOVE, MOVE_ICE_FANG, player);
             HP_BAR(opponent, captureDamage: &damage[i]);
             ABILITY_POPUP(player, ABILITY_ESCALATE);
-            MESSAGE("Glaceon escalated the battle!");
+            MESSAGE("Glaceon raised the battle's intensity!");
         }
     } THEN {
         EXPECT_EQ(damage[0], 180);
@@ -50,7 +50,7 @@ SINGLE_BATTLE_TEST("Escalate is field-wide: a foe's Escalate raises the holder's
         ANIMATION(ANIM_TYPE_MOVE, MOVE_ICE_FANG, player);
         HP_BAR(opponent, captureDamage: &damage[0]);
         ABILITY_POPUP(opponent, ABILITY_ESCALATE);
-        MESSAGE("The opposing Garchomp escalated the battle!");
+        MESSAGE("The opposing Garchomp raised the battle's intensity!");
         ANIMATION(ANIM_TYPE_MOVE, MOVE_ICE_FANG, player);
         HP_BAR(opponent, captureDamage: &damage[1]);
     } THEN {
@@ -94,7 +94,7 @@ SINGLE_BATTLE_TEST("Escalate does not activate on the turn the holder switched i
         NONE_OF { ABILITY_POPUP(opponent, ABILITY_ESCALATE); }
         MESSAGE("Wobbuffet used Celebrate!");
         ABILITY_POPUP(opponent, ABILITY_ESCALATE);
-        MESSAGE("The opposing Dragapult escalated the battle!");
+        MESSAGE("The opposing Dragapult raised the battle's intensity!");
     }
 }
 

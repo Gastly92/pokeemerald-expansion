@@ -537,7 +537,8 @@ Covered by `test/fork/psybubble.c`. Its carriers are listed in
 **`Escalate`** (`ABILITY_ESCALATE`) is a fork ability for the **override table**, built on the
 fork's [`DETERMINISTIC_DAMAGE`](DETERMINISM.md#deterministic_damage) ramp.
 
-> At the end of each turn, the battle's damage multiplier rises by an extra **2%**
+> At the end of each turn, the battle's damage multiplier, which players see as its
+> **intensity**, rises by an extra **2%**
 > (`ESCALATE_BONUS_PERCENT`) for each holder on the field, on top of the usual 1% a turn.
 
 **Flavor.** The battle heating up. It goes on species whose Bulbapedia Biology is about
@@ -561,7 +562,7 @@ it.
 **Timing.** It runs in the end-turn ability block beside Speed Boost (`src/battle_end_turn.c`,
 `ABILITYEFFECT_ENDTURN` in `src/battle_util.c`, logic in `src/fork/escalate.c`) and follows Speed
 Boost's rule: a holder knocked out during the turn, or one that switched in this turn, adds
-nothing. Two holders stack, each with its own pop-up and "{mon} escalated the battle!". Without
+nothing. Two holders stack, each with its own pop-up and "{mon} raised the battle's intensity!". Without
 `DETERMINISTIC_DAMAGE` there is no multiplier to raise, so it does nothing. Gastro Acid and
 Neutralizing Gas suppress it.
 

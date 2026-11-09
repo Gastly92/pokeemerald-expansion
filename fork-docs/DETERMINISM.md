@@ -61,6 +61,8 @@ Replaces the random 85%–100% damage roll with a fixed multiplier that scales w
 the battle's turn count: `BASE_PERCENT` on turn 1, `+TURN_INCREMENT` per elapsed
 turn (`DETERMINISTIC_DAMAGE_PERCENT` = `BASE_PERCENT + TURN_INCREMENT *
 gBattleTurnCounter`). Defaults 92% / +1% → 92% turn 1, 93% turn 2, …
+Player-facing text calls this multiplier the battle's **intensity** (the Battle
+Info Field page and the Escalate ability's message).
 **Intentionally uncapped** — from turn 9 on it exceeds 100%, so prolonged battles
 deal more than the stock maximum (set `TURN_INCREMENT` to 0 for a flat
 multiplier). The AI's damage prediction (`src/battle_ai_util.c` roll helpers) is
