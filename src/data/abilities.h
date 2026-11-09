@@ -2674,4 +2674,11 @@ const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
         .aiRating = 7,
         .breakable = TRUE,
     },
+
+    [ABILITY_ESCALATE] =
+    {
+        .name = _("Escalate"),
+        .description = COMPOUND_STRING("Battle damage ramps up faster."),
+        .aiRating = 5,
+    },
 };

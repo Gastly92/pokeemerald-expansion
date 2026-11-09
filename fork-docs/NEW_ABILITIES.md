@@ -531,3 +531,41 @@ simulation (`src/battle_ai_switch.c`) count it, through the helpers in the same 
 
 Covered by `test/fork/psybubble.c`. Its carriers are listed in
 [`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#ability_psybubble).
+
+## Case study: Escalate
+
+**`Escalate`** (`ABILITY_ESCALATE`) is a fork ability for the **override table**, built on the
+fork's [`DETERMINISTIC_DAMAGE`](DETERMINISM.md#deterministic_damage) ramp.
+
+> At the end of each turn, the battle's damage multiplier rises by an extra **2%**
+> (`ESCALATE_BONUS_PERCENT`) for each holder on the field, on top of the usual 1% a turn.
+
+**Flavor.** The battle heating up. It goes on species whose Bulbapedia Biology is about
+fights that keep escalating: Crawdaunt ("its constant challenges to battle"), Kingambit ("a
+battle-hungry disposition, and will not stop until it gets what it desires"), Camerupt ("releases
+a particularly strong eruption once its rage culminates"), and Dragapult, whose Mach-speed
+strikes turn the race to the first KO into the whole battle.
+
+**Why it needs no downside.** The multiplier is shared, so Escalate raises **every** battler's
+damage, foes' hits on the holder included. That puts it in the global-field bucket of
+[`INNATE_ABILITIES.md`](INNATE_ABILITIES.md#why-some-abilities-are-never-wired-the-x-set), like
+weather: override-only, never an innate. In practice it favours whoever hits first.
+
+**A running total.** The bonus lives in `gBattleStruct->escalateDamageBonus` and only grows. A
+holder that enters on turn 10 does not back-date it, and what a holder added stays after it
+leaves: the battle has already heated up. `DETERMINISTIC_DAMAGE_PERCENT`
+(`include/constants/battle_util.h`) adds it in, and that macro is the only way anything reads the
+multiplier, so the damage calc, the AI's damage prediction and the Battle Info Field page all see
+it.
+
+**Timing.** It runs in the end-turn ability block beside Speed Boost (`src/battle_end_turn.c`,
+`ABILITYEFFECT_ENDTURN` in `src/battle_util.c`, logic in `src/fork/escalate.c`) and follows Speed
+Boost's rule: a holder knocked out during the turn, or one that switched in this turn, adds
+nothing. Two holders stack, each with its own pop-up and "{mon} escalated the battle!". Without
+`DETERMINISTIC_DAMAGE` there is no multiplier to raise, so it does nothing. Gastro Acid and
+Neutralizing Gas suppress it.
+
+**AI.** No dedicated wiring. The AI predicts this turn's damage with the escalated multiplier,
+but it does not plan around the multiplier rising on later turns.
+
+Covered by `test/fork/escalate.c`.

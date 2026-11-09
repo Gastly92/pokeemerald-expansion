@@ -372,6 +372,7 @@ enum __attribute__((packed)) Ability
     ABILITY_MYTHICAL,                 // FORK: doubles max HP while on the field; innate-only, unsuppressable. See src/fork/mythical.c + fork-docs/NEW_ABILITIES.md.
     ABILITY_LEGENDARY,                // FORK: Mythical's x1.5 twin for TIER_LEGENDARY; innate-only, unsuppressable. See src/fork/mythical.c + fork-docs/NEW_ABILITIES.md.
     ABILITY_PSYBUBBLE,                // FORK: survives any lethal hit once on the holder's entry turn, from any HP; designed as an innate. See src/fork/psybubble.c + fork-docs/NEW_ABILITIES.md.
+    ABILITY_ESCALATE,                 // FORK: raises the field-wide DETERMINISTIC_DAMAGE multiplier faster each turn; override-only. See src/fork/escalate.c + fork-docs/NEW_ABILITIES.md.
 
     // FORK: was `= ABILITIES_COUNT_GEN9`; it now has to span the fork block above.
     // On conflict, keep this definition and re-apply upstream's change to

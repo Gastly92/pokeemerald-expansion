@@ -802,6 +802,9 @@ struct BattleStruct
     // this battler". Set in DecreaseStat(), consumed by BS_TryAdrenalineOrb() right after the drop's
     // message. See include/fork/buff_adrenaline_orb.h.
     u8 adrenalineOrbDropLanded;
+    // FORK: the Escalate ability's running bonus to DETERMINISTIC_DAMAGE_PERCENT, in percent.
+    // Only ever grows; zero-allocated per battle. See include/fork/escalate.h.
+    u16 escalateDamageBonus;
 };
 
 struct AiBattleData

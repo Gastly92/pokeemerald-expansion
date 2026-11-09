@@ -36,8 +36,11 @@
 // and the AI's damage prediction so the two agree.
 // Moved here from include/battle_util.h in the 1.17.0 sync, following the block
 // upstream relocated into this header.
+// The Escalate ability adds its running bonus on top (gBattleStruct->escalateDamageBonus,
+// include/fork/escalate.h); every reader of the multiplier goes through this macro.
 #define DETERMINISTIC_DAMAGE_PERCENT \
-    (DETERMINISTIC_DAMAGE_BASE_PERCENT + DETERMINISTIC_DAMAGE_TURN_INCREMENT * gBattleTurnCounter)
+    (DETERMINISTIC_DAMAGE_BASE_PERCENT + DETERMINISTIC_DAMAGE_TURN_INCREMENT * gBattleTurnCounter \
+     + gBattleStruct->escalateDamageBonus)
 
 // Crit chance exceptions
 #define CRITICAL_HIT_BLOCKED -1

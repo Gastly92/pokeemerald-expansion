@@ -65,7 +65,10 @@ gBattleTurnCounter`). Defaults 92% / +1% → 92% turn 1, 93% turn 2, …
 deal more than the stock maximum (set `TURN_INCREMENT` to 0 for a flat
 multiplier). The AI's damage prediction (`src/battle_ai_util.c` roll helpers) is
 fed the same figure, so its min/median/max/random rolls collapse to the
-deterministic value and it never mis-predicts. Test: `deterministic_damage.c`.
+deterministic value and it never mis-predicts. The **Escalate** ability adds a
+running bonus on top (`gBattleStruct->escalateDamageBonus`, +2% per holder per
+turn; see [NEW_ABILITIES.md](NEW_ABILITIES.md#case-study-escalate)). Test:
+`deterministic_damage.c`.
 
 ### `DETERMINISTIC_FLINCH`
 
