@@ -306,13 +306,14 @@ TEST("Frontier draft: each slot weighs every dex number it accepts equally")
 }
 
 // The Factory's pseudo rules: the player's initial rentals hold exactly one pseudo, and an
-// opponent fields none until the first boss battle (the last of the first set), after
-// which the usual at-most-one rule applies.
-TEST("Frontier draft: an opponent may field a pseudo from the first boss battle on")
+// opponent fields none up to and including the first boss battle (the last of the first
+// set); from the battle after it the usual at-most-one rule applies.
+TEST("Frontier draft: an opponent may field a pseudo only after the first boss battle")
 {
     EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(0), 1);
     EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE - 2), 1);
-    EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE - 1), 0);
+    EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE - 1), 1); // the boss
+    EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE), 0);
     EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE * 5), 0);
 }
 
@@ -335,7 +336,8 @@ TEST("Frontier draft: Factory rentals hold exactly one pseudo, early opponents n
 
     PARAMETRIZE { winStreak = 0; }
     PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE - 2; }
-    PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE - 1; }
+    PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE - 1; } // the first boss
+    PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE; }
     PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE + 3; }
 
     gSaveBlock2Ptr->frontier.lvlMode = FRONTIER_LVL_50;
@@ -358,7 +360,7 @@ TEST("Frontier draft: Factory rentals hold exactly one pseudo, early opponents n
         gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_GENERATE_OPPONENT_MONS;
         CallBattleFactoryFunction();
     #if B_FRONTIER_EXTENDED_MONS
-        if (winStreak < FRONTIER_STAGES_PER_CHALLENGE - 1)
+        if (winStreak < FRONTIER_STAGES_PER_CHALLENGE)
             EXPECT_EQ(CountPseudos(gFrontierTempParty, FRONTIER_PARTY_SIZE), 0);
         else
             EXPECT_LE(CountPseudos(gFrontierTempParty, FRONTIER_PARTY_SIZE), 1);
@@ -366,8 +368,8 @@ TEST("Frontier draft: Factory rentals hold exactly one pseudo, early opponents n
     #endif
     }
 #if B_FRONTIER_EXTENDED_MONS
-    // Control: once the first boss is reached, a pseudo does turn up on some opponent.
-    if (winStreak >= FRONTIER_STAGES_PER_CHALLENGE - 1)
+    // Control: once past the first boss, a pseudo does turn up on some opponent.
+    if (winStreak >= FRONTIER_STAGES_PER_CHALLENGE)
         EXPECT_EQ(maxPseudosAfterBoss, 1);
 #else
     (void)maxPseudosAfterBoss;

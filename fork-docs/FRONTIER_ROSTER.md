@@ -220,7 +220,7 @@ Via `TierRejectsCandidate`, using the tier map above:
 | Team | Rule |
 |---|---|
 | Player's initial Factory rentals | No legendaries or mythicals; **exactly one pseudo**, at a random slot |
-| Factory opponents before the first boss (battles 1 to `FRONTIER_STAGES_PER_CHALLENGE` - 1 of a run) | No legendaries or mythicals; **no pseudos** |
+| Factory opponents up to and including the first boss (battles 1 to `FRONTIER_STAGES_PER_CHALLENGE` of a run) | No pseudos; the boss still gets its one legendary, the rest no legendaries or mythicals |
 | Later ordinary opponents, Tower opponents | No legendaries or mythicals; **at most one pseudo** |
 | Every `FRONTIER_STAGES_PER_CHALLENGE`-th opponent (the last of each set) | **One guaranteed legendary** at a random slot; the rest drafted normally |
 | Frontier Brain | **One legendary + one mythical** at two random slots; the other four drafted normally |

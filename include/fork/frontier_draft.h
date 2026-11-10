@@ -26,8 +26,8 @@ void ReserveForcedTierSlot(enum SpeciesTier *slotTiers, enum SpeciesTier tier);
 void ReserveForcedTierSlotInParty(enum SpeciesTier *slotTiers, u32 partySize, enum SpeciesTier tier);
 // Battle Factory pseudo rules: the initial rentals hold exactly one pseudo (reserves a
 // TIER_PSEUDO slot in a PARTY_SIZE slotTiers[] and returns the draft's starting pseudo
-// count), and opponents field none before the first boss battle (returns the starting
-// pseudo count for an opponent at `winStreak`).
+// count), and opponents field none until after the first boss battle (returns the
+// starting pseudo count for an opponent at `winStreak`).
 u32 ReserveFactoryRentalPseudoSlot(enum SpeciesTier *slotTiers);
 u32 GetFactoryOpponentStartingPseudoCount(u32 winStreak);
 // Reject an Illusion-ability candidate from the team's last party slot (where the

@@ -127,14 +127,15 @@ u32 ReserveFactoryRentalPseudoSlot(enum SpeciesTier *slotTiers)
     return 1;
 }
 
-// The pseudo count a Battle Factory opponent's draft starts from. Before the first
-// boss battle (the last battle of the first set, which also brings the first seeded
-// legendary) the opponent may field no pseudo, so the count starts at the full quota
-// of one; from that boss on it starts at zero and the normal at-most-one rule applies.
-// Keyed on the win streak, so a lost challenge starts over pseudo-free.
+// The pseudo count a Battle Factory opponent's draft starts from. Up to and including
+// the first boss battle (the last battle of the first set, which also brings the first
+// seeded legendary) the opponent may field no pseudo, so the count starts at the full
+// quota of one; from the battle after that boss on it starts at zero and the normal
+// at-most-one rule applies. Keyed on the win streak, so a lost challenge starts over
+// pseudo-free.
 u32 GetFactoryOpponentStartingPseudoCount(u32 winStreak)
 {
-    return (winStreak < FRONTIER_STAGES_PER_CHALLENGE - 1) ? 1 : 0;
+    return (winStreak < FRONTIER_STAGES_PER_CHALLENGE) ? 1 : 0;
 }
 
 // Illusion (Zoroark, and this fork's Eon duo) disguises its holder as the team's

@@ -369,7 +369,7 @@ static void GenerateOpponentMons(void)
     // FillFactoryBrainParty, so this seeded team is discarded there.)
     if (battleNum == FRONTIER_STAGES_PER_CHALLENGE - 1)
         ReserveForcedTierSlot(slotTiers, TIER_LEGENDARY);
-    // FORK: no pseudo on an opponent before the first boss battle (see helper).
+    // FORK: no pseudo on an opponent until after the first boss battle (see helper).
     pseudoCount = GetFactoryOpponentStartingPseudoCount(winStreak);
 #endif
 
