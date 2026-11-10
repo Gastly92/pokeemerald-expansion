@@ -10,7 +10,7 @@
 #include "fork/multi_hit_pp.h"
 #include "constants/battle_move_effects.h"
 
-// FEATURE_MULTI_HIT_PP_PER_HIT: every strike of a multi-hit move costs PP.
+// NERF_MULTI_HIT_PP_PER_HIT: every strike of a multi-hit move costs PP.
 //
 // The first strike is paid by CancelerPPDeduction exactly as any move is, and that call
 // records what one use cost (MultiHitPP_RecordUse). Every later strike is paid for the moment
@@ -49,7 +49,7 @@ void MultiHitPP_Reset(void)
 void MultiHitPP_RecordUse(enum BattlerId battlerAtk, enum Move move, u32 movePosition, s32 cost, s32 refundPerHit)
 {
     sMultiHitPP.active = FALSE;
-    if (!GetConfig(FEATURE_MULTI_HIT_PP_PER_HIT) || !IsPerHitPPMove(move) || movePosition >= MAX_MON_MOVES)
+    if (!GetConfig(NERF_MULTI_HIT_PP_PER_HIT) || !IsPerHitPPMove(move) || movePosition >= MAX_MON_MOVES)
         return;
 
     sMultiHitPP.active = TRUE;
@@ -148,7 +148,7 @@ u32 GetMultiHitPPCappedHits(enum BattlerId battlerAtk, enum BattlerId battlerDef
     s32 cost, refund, oneTimeRefund;
     u32 pos, pp, maxPP, affordable;
 
-    if (hits <= 1 || !GetConfig(FEATURE_MULTI_HIT_PP_PER_HIT) || !IsPerHitPPMove(move))
+    if (hits <= 1 || !GetConfig(NERF_MULTI_HIT_PP_PER_HIT) || !IsPerHitPPMove(move))
         return hits;
 
     for (pos = 0; pos < MAX_MON_MOVES; pos++)
@@ -178,7 +178,7 @@ u32 GetMultiHitPPCappedHits(enum BattlerId battlerAtk, enum BattlerId battlerDef
 
 u32 GetProjectedMultiHitCount(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
 {
-    if (!GetConfig(FEATURE_MULTI_HIT_PP_PER_HIT) || !IsPerHitPPMove(move))
+    if (!GetConfig(NERF_MULTI_HIT_PP_PER_HIT) || !IsPerHitPPMove(move))
         return 1;
     return GetMultiHitPPCappedHits(battlerAtk, battlerDef, move, GetNominalStrikeCount(battlerAtk, move));
 }

@@ -129,17 +129,4 @@
 // ABILITY_WIND_POWER case of src/battle_util.c.
 #define FEATURE_NO_DUPLICATE_CHARGE TRUE
 
-// When TRUE, every hit of a multi-hit move costs PP, not just the first. A 2-5 hit move,
-// a fixed multi-strike move (Double Kick, Triple Axel, Dragon Darts), Population Bomb and
-// Beat Up each pay the move's full per-use cost again for every strike after the first, so
-// Pressure, the paralysis and Halo taxes and the DETERMINISTIC_ACCURACY_EVASION economy all
-// apply per hit (a one-off Micle Berry refund does not). Payment is per hit landed: a KO on
-// hit 3 of 5 pays for 3, and a hit Protect blocks ends the move after 1. A strike the move
-// can no longer afford is not thrown, so a 5-hit move with 2 PP left hits twice. A called or
-// copied move (Metronome, Sleep Talk, Dancer, ...) still pays only its caller's single PP.
-// Parental Bond is not a multi-hit move and is unaffected. The move menu, the damage preview
-// and the AI all project the hits that can be afforded. See src/fork/multi_hit_pp.c and
-// fork-docs/MULTI_HIT_PP.md.
-#define FEATURE_MULTI_HIT_PP_PER_HIT TRUE
-
 #endif // GUARD_CONFIG_FEATURE_H

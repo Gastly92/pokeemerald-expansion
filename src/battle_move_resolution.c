@@ -24,7 +24,7 @@
 #include "fork/buff_confusion.h" // FORK: BUFF_CONFUSION_SELF_DAMAGE
 #include "fork/silent_ability_popup.h" // FORK: FEATURE_ANNOUNCE_SILENT_ABILITIES
 #include "fork/ability_failure_popup.h" // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES
-#include "fork/multi_hit_pp.h" // FORK: FEATURE_MULTI_HIT_PP_PER_HIT
+#include "fork/multi_hit_pp.h" // FORK: NERF_MULTI_HIT_PP_PER_HIT
 
 static void ValidateBattlers(void);
 static enum Move GetOriginallyUsedMove(enum Move chosenMove);
@@ -1100,7 +1100,7 @@ static enum CancelerResult CancelerSetTargets(struct BattleCalcValues *cv)
 
 static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
 {
-    MultiHitPP_Reset(); // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- a use that pays nothing here pays nothing per strike either
+    MultiHitPP_Reset(); // FORK: NERF_MULTI_HIT_PP_PER_HIT -- a use that pays nothing here pays nothing per strike either
     if (gBattleMons[cv->battlerAtk].volatiles.multipleTurns
      || gSpecialStatuses[cv->battlerAtk].dancerUsedMove
      || gBattleStruct->bouncedMoveIsUsed
@@ -1160,7 +1160,7 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
     // PP, and spends its last PP if it can't pay in full); recovery is applied after the
     // deduction and clamped to max PP.
     s32 deterministicPpRefund = 0;
-    s32 micleRefund = 0; // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- the one-shot part of the refund, not repeated per strike
+    s32 micleRefund = 0; // FORK: NERF_MULTI_HIT_PP_PER_HIT -- the one-shot part of the refund, not repeated per strike
     if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
     {
         bool32 micleActive = gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry;
@@ -1202,7 +1202,7 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         {
             gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry = FALSE;
             deterministicPpRefund++;
-            micleRefund++; // FORK: FEATURE_MULTI_HIT_PP_PER_HIT
+            micleRefund++; // FORK: NERF_MULTI_HIT_PP_PER_HIT
         }
     }
 
@@ -1224,7 +1224,7 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         gBattleMons[cv->battlerAtk].pp[movePosition] = (newPP > maxPP) ? maxPP : newPP;
     }
 
-    // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- remember what this use cost, so MoveEndMultihitMove can
+    // FORK: NERF_MULTI_HIT_PP_PER_HIT -- remember what this use cost, so MoveEndMultihitMove can
     // charge it again for every further strike. A called move (Metronome, Sleep Talk, ...) spent
     // its caller's PP above and is not recorded, so its strikes stay free. See src/fork/multi_hit_pp.c.
     if (gBattleStruct->submoveAnnouncement == SUBMOVE_NO_EFFECT)
@@ -4395,7 +4395,7 @@ static enum MoveEndResult MoveEndMultihitMove(struct BattleCalcValues *cv)
              && gBattleMons[cv->battlerDef].hp
              && (IsUsableWhileAsleepEffect(chosenEffect) || !(gBattleMons[cv->battlerAtk].status1 & STATUS1_SLEEP))
              && !(gBattleMons[cv->battlerAtk].status1 & STATUS1_FREEZE)
-             // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- pays for the next strike. It must stay the LAST
+             // FORK: NERF_MULTI_HIT_PP_PER_HIT -- pays for the next strike. It must stay the LAST
              // condition, so a strike that never goes out is never charged. It relies on this branch
              // being the only place a further strike is started. If upstream moves the restart
              // (atkCanceler = CANCELER_ACCURACY_CHECK), re-hook there. On conflict, take upstream's
@@ -4424,7 +4424,7 @@ static enum MoveEndResult MoveEndMultihitMove(struct BattleCalcValues *cv)
     }
 
     gMultiHitCounter = 0;
-    MultiHitPP_Reset(); // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- the move is over
+    MultiHitPP_Reset(); // FORK: NERF_MULTI_HIT_PP_PER_HIT -- the move is over
     gSpecialStatuses[cv->battlerAtk].parentalBondState = PARENTAL_BOND_OFF;
     gSpecialStatuses[cv->battlerAtk].multiHitOn = 0;
     gBattleScripting.moveendState++;

@@ -4,7 +4,7 @@
 #include "fork/deterministic_moves.h"
 #include "fork/multi_hit_pp.h"
 
-// FEATURE_MULTI_HIT_PP_PER_HIT: every strike of a multi-hit move costs PP, paid per strike
+// NERF_MULTI_HIT_PP_PER_HIT: every strike of a multi-hit move costs PP, paid per strike
 // thrown, and a strike the move cannot pay for is not thrown. See src/fork/multi_hit_pp.c.
 
 ASSUMPTIONS
@@ -14,13 +14,13 @@ ASSUMPTIONS
     ASSUME(GetMoveStrikeCount(MOVE_DOUBLE_KICK) == 2);
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a 5-hit move costs 5 PP")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: a 5-hit move costs 5 PP")
 {
     bool32 feature;
     PARAMETRIZE { feature = FALSE; }
     PARAMETRIZE { feature = TRUE; }
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, feature);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, feature);
         PLAYER(SPECIES_CINCCINO) { Ability(ABILITY_SKILL_LINK); Moves(MOVE_BULLET_SEED); }
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
@@ -32,10 +32,10 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a 5-hit move costs 5 PP")
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: with 2 PP left a 5-hit move hits twice")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: with 2 PP left a 5-hit move hits twice")
 {
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         PLAYER(SPECIES_CINCCINO) { Ability(ABILITY_SKILL_LINK); MovesWithPP({MOVE_BULLET_SEED, 2}); }
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
@@ -47,10 +47,10 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: with 2 PP left a 5-hit move hi
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a fixed two-strike move with 1 PP left strikes once")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: a fixed two-strike move with 1 PP left strikes once")
 {
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         PLAYER(SPECIES_HITMONLEE) { MovesWithPP({MOVE_DOUBLE_KICK, 1}); }
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
@@ -62,10 +62,10 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a fixed two-strike move with 1
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a KO ends the move and only the strikes thrown are paid for")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: a KO ends the move and only the strikes thrown are paid for")
 {
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         PLAYER(SPECIES_CINCCINO) { Ability(ABILITY_SKILL_LINK); Moves(MOVE_BULLET_SEED); }
         OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
         OPPONENT(SPECIES_WOBBUFFET);
@@ -78,10 +78,10 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a KO ends the move and only th
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a strike Protect blocks costs only the first PP")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: a strike Protect blocks costs only the first PP")
 {
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         PLAYER(SPECIES_CINCCINO) { Ability(ABILITY_SKILL_LINK); Speed(10); Moves(MOVE_BULLET_SEED); }
         OPPONENT(SPECIES_WOBBUFFET) { Speed(20); Moves(MOVE_PROTECT); }
     } WHEN {
@@ -91,10 +91,10 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a strike Protect blocks costs 
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: Pressure taxes every strike")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: Pressure taxes every strike")
 {
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         PLAYER(SPECIES_CINCCINO) { Ability(ABILITY_SKILL_LINK); Moves(MOVE_BULLET_SEED); }
         OPPONENT(SPECIES_ABSOL) { Ability(ABILITY_PRESSURE); }
     } WHEN {
@@ -106,10 +106,10 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: Pressure taxes every strike")
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a move called by Sleep Talk spends only Sleep Talk's PP")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: a move called by Sleep Talk spends only Sleep Talk's PP")
 {
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         ASSUME(GetMovePP(MOVE_SLEEP_TALK) == 10);
         PLAYER(SPECIES_CINCCINO) { Ability(ABILITY_SKILL_LINK); Status1(STATUS1_SLEEP); Moves(MOVE_SLEEP_TALK, MOVE_BULLET_SEED); }
         OPPONENT(SPECIES_WOBBUFFET);
@@ -123,10 +123,10 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: a move called by Sleep Talk sp
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: Parental Bond's second hit is not a multi-hit move and stays free")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: Parental Bond's second hit is not a multi-hit move and stays free")
 {
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         ASSUME(GetMovePP(MOVE_TACKLE) == 35);
         PLAYER(SPECIES_KANGASKHAN_MEGA) { Ability(ABILITY_PARENTAL_BOND); Moves(MOVE_TACKLE); }
         OPPONENT(SPECIES_WOBBUFFET);
@@ -139,12 +139,12 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: Parental Bond's second hit is 
     }
 }
 
-SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: the move menu and damage preview project only the strikes it can pay for")
+SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: the move menu and damage preview project only the strikes it can pay for")
 {
     u32 loFull = 0, hiFull = 0, loLow = 0, hiLow = 0;
     enum DamagePreviewKO ko;
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         PLAYER(SPECIES_CINCCINO) { Ability(ABILITY_SKILL_LINK); Moves(MOVE_BULLET_SEED, MOVE_CELEBRATE); }
         OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
@@ -166,13 +166,13 @@ SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: the move menu and damage previ
     }
 }
 
-AI_SINGLE_BATTLE_TEST("FEATURE_MULTI_HIT_PP_PER_HIT: the AI prices a multi-hit move at the strikes it can pay for")
+AI_SINGLE_BATTLE_TEST("NERF_MULTI_HIT_PP_PER_HIT: the AI prices a multi-hit move at the strikes it can pay for")
 {
     u32 pp;
     PARAMETRIZE { pp = 30; }
     PARAMETRIZE { pp = 1; }
     GIVEN {
-        WITH_CONFIG(FEATURE_MULTI_HIT_PP_PER_HIT, TRUE);
+        WITH_CONFIG(NERF_MULTI_HIT_PP_PER_HIT, TRUE);
         ASSUME(GetMovePower(MOVE_BULLET_SEED) * 5 > GetMovePower(MOVE_SEED_BOMB));
         ASSUME(GetMovePower(MOVE_BULLET_SEED) < GetMovePower(MOVE_SEED_BOMB));
         AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT);

@@ -52,7 +52,7 @@
 #include "test/battle.h"
 #include "fork/deterministic_moves.h" // FORK: DETERMINISTIC_ACCURACY_EVASION helpers
 #include "fork/damage_preview.h" // FORK: B_MOVE_DAMAGE_PREVIEW on the move-type row
-#include "fork/multi_hit_pp.h" // FORK: FEATURE_MULTI_HIT_PP_PER_HIT strike count
+#include "fork/multi_hit_pp.h" // FORK: NERF_MULTI_HIT_PP_PER_HIT strike count
 
 static void PlayerHandleLoadMonSprite(enum BattlerId battler);
 static void PlayerHandleDrawTrainerPic(enum BattlerId battler);
@@ -1825,10 +1825,10 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
     // field is meaningless. Show the move's projected net PP cost this turn instead — the
     // taxes/refunds from evasion, accuracy stages, paralysis, BrightPowder, etc.
     bool32 showPpCost = GetConfig(DETERMINISTIC_ACCURACY_EVASION);
-    // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- a multi-hit move shows the strikes it can afford
+    // FORK: NERF_MULTI_HIT_PP_PER_HIT -- a multi-hit move shows the strikes it can afford
     // beside its power ("PWR: 25×5"), and the PP cost above covers every one of them. A
     // Z-Move or Max Move that replaced it (move != selectedMove) is a single strike.
-    bool32 showStrikes = move == selectedMove && GetConfig(FEATURE_MULTI_HIT_PP_PER_HIT) && IsPerHitPPMove(move);
+    bool32 showStrikes = move == selectedMove && GetConfig(NERF_MULTI_HIT_PP_PER_HIT) && IsPerHitPPMove(move);
     u32 strikes = showStrikes ? GetProjectedMultiHitCount(battler, GetProjectedMoveTarget(battler), move) : 1;
 
     u8 pwr_num[8], acc_num[8]; // FORK: pwr_num widened from 3 for the "×N" strike count
@@ -1845,7 +1845,7 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
         StringCopy(pwr_num, gText_BattleSwitchWhich5);
     else
         ConvertIntToDecimalStringN(pwr_num, pwr, STR_CONV_MODE_LEFT_ALIGN, 3);
-    if (showStrikes) // FORK: FEATURE_MULTI_HIT_PP_PER_HIT
+    if (showStrikes) // FORK: NERF_MULTI_HIT_PP_PER_HIT
     {
         u8 *p = pwr_num + StringLength(pwr_num);
         *p++ = CHAR_MULT_SIGN;
@@ -1853,7 +1853,7 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
     }
     if (showPpCost)
     {
-        s32 ppCost = GetProjectedMovePPCost(battler, selectedMove, strikes); // FORK: strikes = FEATURE_MULTI_HIT_PP_PER_HIT
+        s32 ppCost = GetProjectedMovePPCost(battler, selectedMove, strikes); // FORK: strikes = NERF_MULTI_HIT_PP_PER_HIT
         u8 *q = acc_num;
         if (ppCost < 0)
         {

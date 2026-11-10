@@ -1,7 +1,7 @@
-# Multi-hit moves pay per strike (`FEATURE_MULTI_HIT_PP_PER_HIT`)
+# Multi-hit moves pay per strike (`NERF_MULTI_HIT_PP_PER_HIT`)
 
 Every strike of a multi-hit move costs PP, not just the first. The flag lives in
-`include/config/feature.h`; the code is `src/fork/multi_hit_pp.c`, and the tests are
+`include/config/nerf.h`; the code is `src/fork/multi_hit_pp.c`, and the tests are
 `test/fork/multi_hit_pp.c`.
 
 ## Why

@@ -342,7 +342,7 @@ enum BattlerId GetProjectedMoveTarget(enum BattlerId battlerAtk)
 // PP tax, the Halo tax, the accuracy/evasion stage economy and the flat item/ability taxes
 // make up *cost*; the PP recovered from a net accuracy advantage is *refund*, and the
 // one-shot Micle Berry refund is *oneTimeRefund* (kept apart because
-// FEATURE_MULTI_HIT_PP_PER_HIT charges cost and refund again on every extra strike but
+// NERF_MULTI_HIT_PP_PER_HIT charges cost and refund again on every extra strike but
 // never repeats the Micle refund). Keep in sync with CancelerPPDeduction.
 void GetProjectedMovePPCostParts(enum BattlerId battlerAtk, enum BattlerId primaryDef, enum Move move, s32 *cost, s32 *refundPerHit, s32 *oneTimeRefund)
 {
@@ -423,7 +423,7 @@ void GetProjectedMovePPCostParts(enum BattlerId battlerAtk, enum BattlerId prima
 // Projected net PP the attacker's move will cost *this turn*, for the in-battle
 // move-info display under DETERMINISTIC_ACCURACY_EVASION (where the move always hits, so
 // accuracy is meaningless and the PP economy is what matters). Under
-// FEATURE_MULTI_HIT_PP_PER_HIT a multi-hit move pays per strike, so the caller passes the
+// NERF_MULTI_HIT_PP_PER_HIT a multi-hit move pays per strike, so the caller passes the
 // strikes it projects (GetProjectedMultiHitCount, or 1 when a Z-Move / Max Move replaces
 // the move) and this is the per-use cost times those. The signed result can be negative
 // when the move would net-recover PP.

@@ -340,7 +340,16 @@
     F(FEATURE_ANNOUNCE_ABILITY_FAILURES, featureAnnounceAbilityFailures, (u32, TRUE)) \
     F(FEATURE_NO_CHARGE_ON_FAINT, featureNoChargeOnFaint, (u32, TRUE)) \
     F(FEATURE_NO_DUPLICATE_CHARGE, featureNoDuplicateCharge, (u32, TRUE)) \
-    F(FEATURE_MULTI_HIT_PP_PER_HIT, featureMultiHitPpPerHit, (u32, TRUE)) \
+
+// FORK: the NERF_* flags (config/nerf.h) are the counterpart of BUFF_*: each one weakens a
+// single thing that was too strong, often a combination the fork's own changes created. They
+// ride the same runtime config system so battle tests can toggle them per-test with WITH_CONFIG.
+// Production defaults come from the NERF_* #defines (seeded into sConfigChanges); the test
+// baseline forces them off (see TestInitConfigData), and nerf tests opt in explicitly. Each is a
+// boolean, so its max value is TRUE. To add a new nerf flag: add its #define in config/nerf.h
+// and one line here.
+#define NERF_CONFIG_DEFINITIONS(F) \
+    F(NERF_MULTI_HIT_PP_PER_HIT, nerfMultiHitPpPerHit, (u32, TRUE)) \
 
 #define GET_CONFIG_MAXIMUM(_typeMaxValue, ...) INVOKE_WITH_B(GET_CONFIG_MAXIMUM_, _typeMaxValue)
 #define GET_CONFIG_MAXIMUM_(_type, ...) FIRST(__VA_OPT__(FIRST(__VA_ARGS__),) MAX_BITS((sizeof(_type) * 8)))
@@ -355,6 +364,7 @@ enum ConfigTag
     DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
     BUFF_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
     FEATURE_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
+    NERF_CONFIG_DEFINITIONS(UNPACK_CONFIG_ENUMS) // FORK
     CONFIG_COUNT
 };
 

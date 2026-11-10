@@ -1,7 +1,7 @@
 #ifndef GUARD_FORK_MULTI_HIT_PP_H
 #define GUARD_FORK_MULTI_HIT_PP_H
 
-// FEATURE_MULTI_HIT_PP_PER_HIT (include/config/feature.h): every strike of a multi-hit move
+// NERF_MULTI_HIT_PP_PER_HIT (include/config/nerf.h): every strike of a multi-hit move
 // costs PP. See src/fork/multi_hit_pp.c and fork-docs/MULTI_HIT_PP.md.
 
 // At least as many strikes as any move throws (Population Bomb's 10), for "cap whatever the count is".

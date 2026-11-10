@@ -76,7 +76,7 @@ Work all of these *after* the markers are gone. CLAUDE.md's "After the merge: wh
 git conflict does *not* tell you" lists the classes with worked examples; the checks:
 
 ```bash
-grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/   # the 3 fork groups must sit beside upstream's at EVERY hit
+grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/   # the 4 fork groups (DETERMINISTIC/BUFF/FEATURE/NERF) must sit beside upstream's at EVERY hit
 grep -rn "FORK:" src include | wc -l                  # compare against the pre-merge count
 ```
 

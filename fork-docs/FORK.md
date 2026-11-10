@@ -120,6 +120,16 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Kee / Maranga berries buff | `BUFF_DAMAGED_STAT_BERRIES` (+ `…_STAGES`) | ✅ | Kee and Maranga Berry raise Defense / Sp. Def +2 instead of +1 when hit (+4 instead of +2 with Ripen). [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
 | Adrenaline Orb buff | `BUFF_ADRENALINE_ORB` (+ `…_STAGES`) | ✅ | Adrenaline Orb fires on the first stat drop an opponent lands on the holder (not only Intimidate) and raises Speed +2 instead of +1; a blocked drop doesn't trigger or use it up. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_adrenaline_orb.c` |
 
+## Nerfs (`NERF_*`)
+
+The counterpart of `BUFF_*`: each flag weakens one thing that was too strong, often a
+combination the fork's own changes created. Each lives in `config/nerf.h` (`FALSE` =
+stock), with its full reasoning in the flag comment; all are enabled.
+
+| Feature | Flag(s) | Where | Status | Notes |
+|---|---|---|---|---|
+| Multi-hit moves pay per strike | `NERF_MULTI_HIT_PP_PER_HIT` | `config/nerf.h`, `src/fork/multi_hit_pp.c` | ✅ | Every strike of a multi-hit move costs PP, with every PP tax applied per strike, and a strike the move cannot afford is not thrown. [Details](MULTI_HIT_PP.md) · `test/fork/multi_hit_pp.c` |
+
 ## Abilities, types & gimmicks
 
 | Feature | Flag(s) | Where | Status | Notes |
@@ -144,7 +154,6 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Cursed Body ignores Z-Moves | `FEATURE_CURSED_BODY_IGNORES_Z_MOVES` | `config/feature.h`, `src/battle_util.c` | ✅ | Cursed Body no longer shows a pop-up and a "was disabled!" message for a damaging Z-Move, a disable that did nothing anyway. A status Z-Move's base move is still disabled. `test/fork/cursed_body_z_moves.c` |
 | No Charge on faint | `FEATURE_NO_CHARGE_ON_FAINT` | `config/feature.h`, `src/battle_util.c` | ✅ | Electromorphosis and Wind Power (chosen or innate) show no pop-up or "charged with power!" message when the triggering hit knocks the holder out, since the Charge would be lost anyway. `test/fork/no_charge_on_faint.c` |
 | No duplicate Charge | `FEATURE_NO_DUPLICATE_CHARGE` | `config/feature.h`, `src/battle_util.c` | ✅ | A Pokémon with both Wind Power and Electromorphosis (chosen or innate) shows one pop-up and one "charged with power!" message when hit by a damaging wind move, not two; Tailwind still triggers Wind Power. `test/fork/no_duplicate_charge.c` |
-| Multi-hit moves pay per strike | `FEATURE_MULTI_HIT_PP_PER_HIT` | `config/feature.h`, `src/fork/multi_hit_pp.c` | ✅ | Every strike of a multi-hit move costs PP, with every PP tax applied per strike, and a strike the move cannot afford is not thrown. [Details](MULTI_HIT_PP.md) · `test/fork/multi_hit_pp.c` |
 | Sand Spit weather animation fix | _(fix; no new flag)_ | `src/battle_util.c`, `src/battle_script_commands.c` | ✅ | Sand Spit no longer plays a garbage animation that could hang the battle. `test/fork/weather_ability_animation.c` |
 | Illusion survives a form-change gfx reload | _(fix; no new flag)_ | `src/battle_gfx_sfx_util.c` | ✅ | A disguised battler's sprite is no longer repainted as its true species when Dynamax ends. `test/fork/illusion_dynamax.c` |
 
@@ -171,11 +180,11 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 
 ## The fork-flag test harness
 
-The `DETERMINISTIC_*`, `BUFF_*` and `FEATURE_*` flags all ride one mechanism, and
+The `DETERMINISTIC_*`, `BUFF_*`, `NERF_*` and `FEATURE_*` flags all ride one mechanism, and
 this is the note the other docs point back to.
 
 Each flag is registered into the runtime config system (`DETERMINISTIC_CONFIG_DEFINITIONS`
-/ `BUFF_CONFIG_DEFINITIONS` / `FEATURE_CONFIG_DEFINITIONS` in
+/ `BUFF_CONFIG_DEFINITIONS` / `NERF_CONFIG_DEFINITIONS` / `FEATURE_CONFIG_DEFINITIONS` in
 `include/constants/config_changes.h`), so engine code reads it via `GetConfig(X)` and
 battle tests toggle it per-test with `WITH_CONFIG(X, TRUE)`. The `#define`s are the
 production defaults, while **the per-test baseline forces every flag off**
