@@ -171,11 +171,13 @@ Everything in "Do this" still applies **per line**, at the same depth.
   to *reject* a candidate is the tell that the honesty requirement has turned into an
   incentive to omit. The canon-user count is still the gate — media evidence picks
   *which* ability fits, and never licenses a 1-user signature.
-- **No override where the species already owns a usable pick.** If a vanilla slot
-  holds a never-an-innate ability the species doesn't carry innately, the frontier
-  sets run *that*, not a borrow, unless the ability is on `sLowValueAbilities[]`
-  (Run Away, Rivalry, Plus/Minus, Klutz, Stall, ...). An override is for species
-  whose every vanilla slot is innate-capable, already innate, or low-value.
+- **An override adds to a species' usable pick, never displaces it.** If a vanilla
+  slot holds a never-an-innate ability the species doesn't carry innately, that
+  slot stays, and at least one frontier set runs it, unless the ability is on
+  `sLowValueAbilities[]` (Run Away, Rivalry, Plus/Minus, Klutz, Stall, Damp, ...).
+  An override row may still go in a slot that is empty, already innate, or
+  low-value, and sets beyond that one can run it (Golduck keeps Cloud Nine and
+  adds Psychic Affinity in its innate Swift Swim slot). Both halves are CI-gated.
 - **Overrides and sets go where the drafting is** — the final stage, any
   regional/Mega form that is its own final stage, and the rare Eviolite pre-evo that
   beats its evolution at something. **Innates still cover the whole line**: an innate
