@@ -320,7 +320,8 @@ gets alternating windows of strength and weakness that both sides can plan aroun
 fixed order — self → partner → directly-opposing foe → across foe — instead of a
 random battler. **Trace** (doubles) copies the directly-opposing foe (same flank)
 when traceable, else the other. **Forewarn** tie-breaks equal-power moves by
-battler/move-slot order instead of randomly. **Rivalry** keys off shared type
+battler/move-slot order instead of randomly (under `FEATURE_FOREWARN_MATCHUP` the pick
+never draws RNG at all, whether or not `DETERMINISTIC_ABILITIES` is on). **Rivalry** keys off shared type
 instead of gender (+25% sharing a type, −25% sharing none). **AI awareness:** the
 Rivalry damage mod rides the shared `GetBattlerAbility` path so the AI's damage
 prediction tracks it for free; and `AI_DeterministicContactAbilityPunishes`

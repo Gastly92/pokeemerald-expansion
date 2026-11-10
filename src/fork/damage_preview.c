@@ -34,11 +34,9 @@
 #include "constants/characters.h"
 
 // The two ends of the defender's unknown spread, mirroring CalculateMonStats() (src/pokemon.c).
-// The Overview page of the INFO viewer bounds Speed the same way.
-#define NATURE_HINDERING 90
-#define NATURE_BOOSTING  110
-
-static u32 CalcHpBound(enum Species species, u32 level, u32 iv, u32 ev)
+// The Overview page of the INFO viewer bounds Speed the same way. Also used by Forewarn's
+// matchup pick (src/fork/forewarn.c), which bounds the attacker's spread the same way.
+u32 DamagePreviewHpBound(enum Species species, u32 level, u32 iv, u32 ev)
 {
     u32 base = GetSpeciesBaseHP(species);
 
@@ -47,7 +45,7 @@ static u32 CalcHpBound(enum Species species, u32 level, u32 iv, u32 ev)
     return (((2 * base + iv + ev / 4) * level) / 100) + level + 10;
 }
 
-static u32 CalcStatBound(u32 base, u32 level, u32 iv, u32 ev, u32 nature)
+u32 DamagePreviewStatBound(u32 base, u32 level, u32 iv, u32 ev, u32 nature)
 {
     u32 n = (((2 * base + iv + ev / 4) * level) / 100) + 5;
     return n * nature / 100;
@@ -145,7 +143,7 @@ static void ApplySpreadBound(struct BattlePokemon *mon, const struct BattlePokem
     u32 offEv = frail ? MAX_PER_STAT_EVS : 0;
     u32 offNature = frail ? NATURE_BOOSTING : NATURE_HINDERING;
     bool32 fast = (frail != slowFrail);
-    u32 maxHP = CalcHpBound(species, level, defIv, defEv) * hpScaleNum / hpScaleDen;
+    u32 maxHP = DamagePreviewHpBound(species, level, defIv, defEv) * hpScaleNum / hpScaleDen;
 
     if (maxHP == 0)
         maxHP = 1;
@@ -160,11 +158,11 @@ static void ApplySpreadBound(struct BattlePokemon *mon, const struct BattlePokem
     if (real->volatiles.transformed)
         return;
 
-    mon->defense   = CalcStatBound(GetSpeciesBaseDefense(species),   level, defIv, defEv, defNature);
-    mon->spDefense = CalcStatBound(GetSpeciesBaseSpDefense(species), level, defIv, defEv, defNature);
-    mon->attack    = CalcStatBound(GetSpeciesBaseAttack(species),    level, offIv, offEv, offNature);
-    mon->spAttack  = CalcStatBound(GetSpeciesBaseSpAttack(species),  level, offIv, offEv, offNature);
-    mon->speed     = CalcStatBound(GetSpeciesBaseSpeed(species),     level,
+    mon->defense   = DamagePreviewStatBound(GetSpeciesBaseDefense(species),   level, defIv, defEv, defNature);
+    mon->spDefense = DamagePreviewStatBound(GetSpeciesBaseSpDefense(species), level, defIv, defEv, defNature);
+    mon->attack    = DamagePreviewStatBound(GetSpeciesBaseAttack(species),    level, offIv, offEv, offNature);
+    mon->spAttack  = DamagePreviewStatBound(GetSpeciesBaseSpAttack(species),  level, offIv, offEv, offNature);
+    mon->speed     = DamagePreviewStatBound(GetSpeciesBaseSpeed(species),     level,
                                    fast ? MAX_PER_STAT_IVS : 0, fast ? MAX_PER_STAT_EVS : 0, fast ? NATURE_BOOSTING : NATURE_HINDERING);
 }
 

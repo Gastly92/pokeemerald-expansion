@@ -340,6 +340,7 @@
     F(FEATURE_ANNOUNCE_ABILITY_FAILURES, featureAnnounceAbilityFailures, (u32, TRUE)) \
     F(FEATURE_NO_CHARGE_ON_FAINT, featureNoChargeOnFaint, (u32, TRUE)) \
     F(FEATURE_NO_DUPLICATE_CHARGE, featureNoDuplicateCharge, (u32, TRUE)) \
+    F(FEATURE_FOREWARN_MATCHUP, featureForewarnMatchup, (u32, TRUE)) \
 
 #define GET_CONFIG_MAXIMUM(_typeMaxValue, ...) INVOKE_WITH_B(GET_CONFIG_MAXIMUM_, _typeMaxValue)
 #define GET_CONFIG_MAXIMUM_(_type, ...) FIRST(__VA_OPT__(FIRST(__VA_ARGS__),) MAX_BITS((sizeof(_type) * 8)))

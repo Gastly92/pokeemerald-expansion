@@ -219,7 +219,7 @@ instead:
 | Datum | Reveal source |
 |---|---|
 | Seen at all | `gBattleStruct->partyState[…].sentOut` (species/gender/level/fainted then read from the party) |
-| Moves | `gBattleStruct->infoUsedMoves`, set at the move-use site |
+| Moves | `gBattleStruct->infoUsedMoves`, set at the move-use site, plus `infoForewarnedMoves`, set when Forewarn reveals a move (kept apart so the Zoom Lens still waits for the foe to act) |
 | Ability | `gBattleStruct->infoAbilityRevealed`, set in `RecordAbilityBattle` |
 | Held item | `gBattleStruct->infoItemRevealed`, set in `RecordItemEffectBattle` + the visible-removal sites below |
 
