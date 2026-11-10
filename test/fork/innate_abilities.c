@@ -3225,13 +3225,75 @@ static bool32 IsSlotInheritingBattleForm(enum FormChanges method)
         || method == FORM_CHANGE_BATTLE_ULTRA_BURST;
 }
 
+// An ability that inverts stat changes applied to its holder. Contrary is the only one in the game
+// today; the array exists so a future addition is one line rather than a rewritten test.
+static const enum Ability sStatInvertingAbilities[] =
+{
+    ABILITY_CONTRARY,
+};
+
+// Implemented innates whose whole effect is raising the HOLDER'S OWN stat stages. An inverting
+// chosen ability turns each of these from the boon the innate row intended into a penalty, so the
+// two may never sit on the same species. Abilities that move a *foe's* stats (Intimidate) are not
+// listed: Contrary sits on the holder, so it never touches them.
+static const enum Ability sSelfStatRaisingInnates[] =
+{
+    ABILITY_MOXIE, ABILITY_BEAST_BOOST, ABILITY_SOUL_HEART,
+    ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_BERSERK,
+    ABILITY_DEFIANT, ABILITY_COMPETITIVE, ABILITY_ANGER_POINT,
+    ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION,
+    ABILITY_RATTLED, ABILITY_STEADFAST, ABILITY_STEAM_ENGINE,
+    ABILITY_THERMAL_EXCHANGE, ABILITY_DOWNLOAD,
+    ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
+};
+
+static bool32 IsStatInvertingAbility(enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sStatInvertingAbilities); i++)
+    {
+        if (ability == sStatInvertingAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static bool32 IsSelfStatRaisingInnate(enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sSelfStatRaisingInnates); i++)
+    {
+        if (ability == sSelfStatRaisingInnates[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// A Mega whose own vanilla ability inverts stat changes (Mega Staraptor's Contrary) keeps that
+// ability, so a self-boosting base innate would fire backwards on it and is dropped instead.
+static bool32 MegaHasStatInvertingAbility(u16 mega)
+{
+    u32 slot;
+
+    for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+    {
+        if (IsStatInvertingAbility(gSpeciesInfo[mega].abilities[slot]))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 // Megas are a pure boon: a Mega keeps every innate its base form carries. Rows are keyed by form
 // exactly, so a Mega row that does not mirror its base silently drops the trait the moment the
 // creature Mega Evolves (Mega Darkrai's Pressure, Mega Baxcalibur's Sharpness and Slush Rush,
 // Mega Glimmora's Clear Body, Mega Froslass' Shadow Tag, Mega Scovillain's Anger Point and
-// Harvest, the Mega Tatsugiris' Friend Guard). The one ability a Mega may drop is Levitate,
+// Harvest, the Mega Tatsugiris' Friend Guard). One ability a Mega may drop is Levitate,
 // because Mega Evolution can plant a floater on the ground (Mega Gengar, Mega Mewtwo X); which
 // Megas must not float is pinned by "grounded Megas do not gain innate Levitate" above.
+// The other is a self-boosting innate on a Mega whose own ability is stat-inverting: Mega Staraptor
+// keeps its vanilla Contrary, so it drops the line's Moxie rather than have it fire backwards.
 TEST("Innate abilities: every Mega carries its base form's innates")
 {
     u32 species, f, i;
@@ -3260,6 +3322,8 @@ TEST("Innate abilities: every Mega carries its base form's innates")
             for (i = 0; (innate = GetSpeciesInnate(species, i)) != ABILITY_NONE; i++)
             {
                 if (innate == ABILITY_LEVITATE || SpeciesHasInnate(mega, innate))
+                    continue;
+                if (IsSelfStatRaisingInnate(innate) && MegaHasStatInvertingAbility(mega))
                     continue;
                 offenders++;
                 // gSpeciesInfo names carry no "Mega" prefix, so print the species id too.
@@ -11614,8 +11678,6 @@ TEST("Innate abilities: no frontier set runs an override over its species' own u
 // would be wrong.
 static const struct InnateCoverageExemption sOverrideReplacementExemptions[] =
 {
-    // Contrary inverts the line's innate Moxie (the Mega Staraptor regression test above).
-    { SPECIES_STARAPTOR_MEGA, ABILITY_CONTRARY },
     // Aura Guard is unimplemented upstream; retire this entry once it does something.
     { SPECIES_LUCARIO_MEGA_Z, ABILITY_AURA_GUARD },
 };
@@ -11773,57 +11835,31 @@ TEST("Innate abilities: every species the roster drafts has a legal observable s
     EXPECT_EQ(offenders, 0);
 }
 
-// Mega Staraptor regression. Its upstream ability is CONTRARY, which inverts every stat
-// change applied to the holder -- so the innate Moxie the Starly line carries read as Attack -1 on
-// a KO instead of +1, and the transformation actively punished the trait the base form is built
-// around. Contrary is never-an-innate (double-edged, fork-docs/INNATE_ABILITIES.md), so it cannot be
-// re-homed on the innate row; the fix is the override half of the Venusaur pattern -- every real
-// slot of the Mega points at the base form's chosen Hustle (src/fork/species_ability_overrides.c).
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mega Staraptor's innate Moxie raises Attack on a KO")
+// Mega Staraptor keeps its vanilla Contrary. The Starly line's innate Moxie is dropped on the Mega
+// (it would fire backwards under Contrary), and no override row repoints its slots.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mega Staraptor keeps Contrary and drops the line's Moxie")
 {
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_STARAPTOR_MEGA, ABILITY_MOXIE));
+        ASSUME(SpeciesHasInnate(SPECIES_STARAPTOR, ABILITY_MOXIE));
+        ASSUME(!SpeciesHasInnate(SPECIES_STARAPTOR_MEGA, ABILITY_MOXIE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_STARAPTOR_MEGA) { Ability(ABILITY_HUSTLE); Moves(MOVE_TACKLE); } // chosen Hustle, Moxie only as innate
-        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
-        OPPONENT(SPECIES_ZIGZAGOON); // a second foe, so KOing the first doesn't end the battle
+        ASSUME(GetSpeciesAbility(SPECIES_STARAPTOR_MEGA, 0) == ABILITY_CONTRARY);
+        PLAYER(SPECIES_STARAPTOR_MEGA) { Ability(ABILITY_CONTRARY); Moves(MOVE_CLOSE_COMBAT); }
+        OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
-        TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); } // KOs the first foe; the second replaces it
-    } SCENE {
-        ABILITY_POPUP(player, ABILITY_MOXIE);
+        TURN { MOVE(player, MOVE_CLOSE_COMBAT); }
     } THEN {
-        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1); // +1, NOT the -1 a chosen Contrary would have made of it
+        EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE + 1);
+        EXPECT_EQ(player->statStages[STAT_SPDEF], DEFAULT_STAT_STAGE + 1);
     }
 }
-
-// An ability that inverts stat changes applied to its holder. Contrary is the only one in the game
-// today; the array exists so a future addition is one line rather than a rewritten test.
-static const enum Ability sStatInvertingAbilities[] =
-{
-    ABILITY_CONTRARY,
-};
-
-// Implemented innates whose whole effect is raising the HOLDER'S OWN stat stages. An inverting
-// chosen ability turns each of these from the boon the innate row intended into a penalty, so the
-// two may never sit on the same species. Abilities that move a *foe's* stats (Intimidate) are not
-// listed: Contrary sits on the holder, so it never touches them.
-static const enum Ability sSelfStatRaisingInnates[] =
-{
-    ABILITY_MOXIE, ABILITY_BEAST_BOOST, ABILITY_SOUL_HEART,
-    ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_BERSERK,
-    ABILITY_DEFIANT, ABILITY_COMPETITIVE, ABILITY_ANGER_POINT,
-    ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION,
-    ABILITY_RATTLED, ABILITY_STEADFAST, ABILITY_STEAM_ENGINE,
-    ABILITY_THERMAL_EXCHANGE, ABILITY_DOWNLOAD,
-    ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
-};
 
 // The gate the Mega Staraptor bug slipped through. Every other data check on this file asks
 // whether an innate is *wired*, *declared* or *selectable*; none asked whether the species' own
 // observable ability CONTRADICTS it. A stat-inverting chosen ability does exactly that, silently --
 // nothing is missing, nothing is duplicated, the innate simply fires backwards. Forms are covered
 // with everything else, which is what matters here: the conflict was introduced by a Mega whose
-// slots were left at upstream's value while the base form carried a clean override.
+// upstream Contrary met the line's innate Moxie (resolved by dropping Moxie from that Mega).
 TEST("Innate abilities: no species' chosen ability inverts its own stat-raising innates")
 {
     u32 species;

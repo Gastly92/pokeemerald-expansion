@@ -727,13 +727,14 @@ missing and nothing is duplicated, so neither of the gates above notices; the in
 simply fires backwards.
 
 **Mega Staraptor is the case that found it.** Upstream gives the Mega `CONTRARY` on
-all three slots while the Starly line's innate row carries `MOXIE`, so Mega Evolving
-converted the line's signature payoff into a penalty. Contrary is double-edged and
-therefore never-an-innate, so it cannot be re-homed onto the innate row the way
-Mega Venusaur's Thick Fat is — the fix is the override half of the Venusaur pattern
-on its own: every real slot of `SPECIES_STARAPTOR_MEGA` points at base Staraptor's
-chosen `HUSTLE`. See [`LINE_REVIEW.md`](LINE_REVIEW.md) Step 2, point 4, where this
-is the exception to "a never-an-innate Mega ability stays put".
+all three slots while the Starly line's innate row carries `MOXIE` (a fork innate; no
+member of the line has Moxie in vanilla), so Mega Evolving converted the line's payoff
+into a penalty. The resolution keeps the Mega's own vanilla ability: Mega Staraptor
+**drops `MOXIE` from its innate row** and keeps `CONTRARY` in every slot, with no
+override row. Contrary is what the Mega is built around (Close Combat's drops become
+boosts), and a fork innate should not erase a vanilla ability. "Every Mega carries its
+base form's innates" allows exactly this drop: a self-stat-raising base innate may be
+missing from a Mega whose own vanilla ability is stat-inverting.
 
 The gate sweeps every species whose post-override slots hold a stat-inverting ability
 and fails when that species also declares a self-stat-raising innate, naming each

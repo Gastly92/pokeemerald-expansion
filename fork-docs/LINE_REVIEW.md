@@ -653,10 +653,10 @@ line:
    observable trait would vanish on transformation. Override the form's slots to the
    base form's chosen ability — the Venusaur pattern: base Venusaur overrides to
    `GRASSY_SURGE`; Mega Venusaur adds `THICK_FAT` as an innate (Step 1) **and**
-   overrides slots 0/1/2 to `GRASSY_SURGE`. Do the same when a never-an-innate Mega
-   ability **contradicts** the line's innates: Mega Staraptor's upstream `CONTRARY`
-   turned its innate Moxie into Attack −1 on a KO, so its slots point at base
-   Staraptor's `HUSTLE`. Otherwise a Mega keeps its own never-an-innate ability
+   overrides slots 0/1/2 to `GRASSY_SURGE`. When a never-an-innate Mega ability
+   **contradicts** a fork innate, drop the innate from the Mega rather than override
+   the vanilla ability away: Mega Staraptor keeps its upstream `CONTRARY` and loses the
+   line's Moxie (which would read as Attack −1 on a KO). Otherwise a Mega keeps its own never-an-innate ability
    (Pixilate, Aerilate, Parental Bond).
 5. **Overrides go where sets are.** An override only exists to be selected by a
    set, so it belongs on the stages that get drafted (normally the final one, plus
