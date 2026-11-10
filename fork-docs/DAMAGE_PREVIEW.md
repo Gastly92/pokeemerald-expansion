@@ -131,11 +131,16 @@ under Illusion is read as its disguise. Innates are species data and always coun
 
 - **Before the effect**, for any status move aimed at a foe: Thunder Wave's type matchup (the only status
   move that reads the type chart), an absorbing or blocking ability (Volt Absorb, Sap Sipper, Soundproof,
-  Good as Gold...), a powder immunity (Grass type, Overcoat, Safety Goggles), Magic Bounce, a chosen
-  Prankster into a Dark type, Dazzling and co. or Psychic Terrain against a priority move.
+  Good as Gold...), a powder immunity (Grass type, Overcoat, Safety Goggles), a chosen Prankster into a
+  Dark type, Dazzling and co. or Psychic Terrain against a priority move.
 - **The effect itself**: sleep / poison / paralysis / burn moves and Yawn (through `CanSetNonVolatileStatus`:
   types, Corrosion, an existing status, Safeguard, terrain, Leaf Guard, Sweet / Flower / Pastel Veil, sleep
   clause...), confusion moves, Leech Seed into a Grass type, and a Substitute for all of these.
+
+A move a visible Magic Bounce (innate, or chosen and revealed) would reflect reads **`<Type> Bounces`**
+instead, since it does happen, just to you. That covers hazards too (Stealth Rock, Spikes, Toxic Spikes,
+Sticky Web): they land on the foes' side, so in doubles either foe's Magic Bounce sends them back, whichever
+foe the row is reading. A Mold Breaker attacker sees through it, as the move would.
 
 Under `BUFF_REBURN` / `BUFF_REPOISON` / `BUFF_REPARALYZE` an already-statused foe is not a failure, since the
 move does something; the same goes for re-seeding under `BUFF_LEECH_SEED`. Mold Breaker and co. are applied

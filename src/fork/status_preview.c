@@ -1,4 +1,4 @@
-// B_MOVE_STATUS_PREVIEW -- the move menu's "<Type> Fails" readout for status moves.
+// B_MOVE_STATUS_PREVIEW -- the move menu's "<Type> Fails" / "<Type> Bounces" readout for status moves.
 // See include/fork/status_preview.h and fork-docs/DAMAGE_PREVIEW.md ("Status moves").
 //
 // The damage preview's sister readout. A status move has no range to show, but the player can
@@ -141,10 +141,33 @@ static void EndStatusPreviewView(enum BattlerId battlerAtk, enum BattlerId battl
     gBattleStruct->dynamicMoveType = sSavedDynamicMoveType;
 }
 
+// A Magic Bounce the player can see (innate, or chosen and revealed) on `battlerDef`, the way
+// TryMagicBounce in CancelerTargetFailure decides it. Mold Breaker is already folded in: the view
+// blanks nothing for it, but GetBattlerAbility / IsInnateActive read moldBreakerActive.
+static bool32 IsBouncedBy(enum BattlerId battlerDef, enum Move move)
+{
+    if (!MoveCanBeBouncedBack(move) || !IsBattlerAlive(battlerDef) || IsSemiInvulnerable(battlerDef, CHECK_ALL))
+        return FALSE;
+    return GetBattlerAbility(battlerDef) == ABILITY_MAGIC_BOUNCE || IsInnateActive(battlerDef, ABILITY_MAGIC_BOUNCE);
+}
+
+// Hazards and other moves on the foes' side (Stealth Rock, Spikes, Sticky Web, Toxic Spikes):
+// CancelerTargetFailure's bounce step runs over every foe for these, so either foe's Magic Bounce
+// sends the whole move back. Nothing else in this readout applies to a field move.
+static bool32 IsFoeFieldMoveBounced(enum BattlerId battlerAtk, enum Move move)
+{
+    for (enum BattlerId b = 0; b < gBattlersCount; b++)
+    {
+        if (!IsBattlerAlly(battlerAtk, b) && IsBouncedBy(b, move))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 // Checks every foe-aimed status move goes through before its effect: the type chart (only
 // Thunder Wave reads it), an absorbing or blocking ability (Volt Absorb, Sap Sipper, Soundproof,
-// Good as Gold...), a powder immunity, a reflecting Magic Bounce, and priority blocks (a chosen
-// Prankster into a Dark type, Dazzling and co., Psychic Terrain).
+// Good as Gold...), a powder immunity, and priority blocks (a chosen Prankster into a Dark type,
+// Dazzling and co., Psychic Terrain). A reflecting Magic Bounce is judged first, by the caller.
 static bool32 IsBlockedBeforeEffect(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability abilityAtk, enum Ability abilityDef)
 {
     struct DamageContext ctx = {0};
@@ -167,9 +190,6 @@ static bool32 IsBlockedBeforeEffect(enum BattlerId battlerAtk, enum BattlerId ba
         return TRUE;
     if (CanAbilityAbsorbMove(&ctx) || IsPowderMoveBlocked(&ctx))
         return TRUE;
-    if (MoveCanBeBouncedBack(move) && (abilityDef == ABILITY_MAGIC_BOUNCE || IsInnateActive(battlerDef, ABILITY_MAGIC_BOUNCE)))
-        return TRUE;
-
     // GetBattleMovePriority is not asked: it records the attacker's ability for the AI and sets
     // the Prankster latch. Only a chosen Prankster makes the move fail on a Dark type (an innate
     // one is a pure boon, see GetBattleMovePriority); either kind lifts its priority.
@@ -230,30 +250,63 @@ static bool32 IsEffectBlocked(enum BattlerId battlerAtk, enum BattlerId battlerD
     }
 }
 
-bool32 IsStatusMoveKnownToFail(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
+enum StatusPreviewResult GetStatusMovePreviewResult(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
 {
     enum Ability abilityAtk, abilityDef;
-    bool32 fails;
+    enum StatusPreviewResult result = STATUS_PREVIEW_NONE;
+    s32 priority;
+    bool32 foeField;
 
     if (move == MOVE_NONE || !IsBattleMoveStatus(move) || !IsBattlerAlive(battlerDef)
-     || IsBattlerAlly(battlerAtk, battlerDef) || !IsFoeTargetingMove(battlerAtk, move))
-        return FALSE;
+     || IsBattlerAlly(battlerAtk, battlerDef))
+        return STATUS_PREVIEW_NONE;
+    foeField = (GetBattlerMoveTargetType(battlerAtk, move) == TARGET_OPPONENTS_FIELD);
+    if (!foeField && !IsFoeTargetingMove(battlerAtk, move))
+        return STATUS_PREVIEW_NONE;
     // A Dynamaxed mon's status moves are Max Guard.
     if (GetActiveGimmick(battlerAtk) == GIMMICK_DYNAMAX)
-        return FALSE;
+        return STATUS_PREVIEW_NONE;
 
     BeginStatusPreviewView(battlerAtk, battlerDef, move);
     abilityAtk = GetBattlerAbility(battlerAtk);
     abilityDef = GetBattlerAbility(battlerDef); // Mold Breaker already applied
-    fails = IsBlockedBeforeEffect(battlerAtk, battlerDef, move, abilityAtk, abilityDef)
-         || IsEffectBlocked(battlerAtk, battlerDef, move, abilityAtk, abilityDef);
+    priority = GetMovePriority(move);
+    if (abilityAtk == ABILITY_PRANKSTER || IsInnateActive(battlerAtk, ABILITY_PRANKSTER))
+        priority++;
+
+    if (foeField)
+    {
+        if (IsFoeFieldMoveBounced(battlerAtk, move))
+            result = STATUS_PREVIEW_BOUNCES;
+    }
+    // CancelerTargetFailure's order: Psychic Terrain stops a priority move before Magic Bounce
+    // sees it, and Magic Bounce acts before every ability block and the Dark-type Prankster check.
+    else if (priority > 0 && IsPsychicTerrainAffected(battlerDef, abilityDef, GetBattlerHoldEffect(battlerDef), gFieldTimers.terrain))
+    {
+        result = STATUS_PREVIEW_FAILS;
+    }
+    else if (IsBouncedBy(battlerDef, move))
+    {
+        result = STATUS_PREVIEW_BOUNCES;
+    }
+    else if (IsBlockedBeforeEffect(battlerAtk, battlerDef, move, abilityAtk, abilityDef)
+          || IsEffectBlocked(battlerAtk, battlerDef, move, abilityAtk, abilityDef))
+    {
+        result = STATUS_PREVIEW_FAILS;
+    }
     EndStatusPreviewView(battlerAtk, battlerDef);
-    return fails;
+    return result;
+}
+
+bool32 IsStatusMoveKnownToFail(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move)
+{
+    return GetStatusMovePreviewResult(battlerAtk, battlerDef, move) != STATUS_PREVIEW_NONE;
 }
 
 bool32 TryPrintStatusMovePreview(enum BattlerId battler, enum Move move, enum Type type)
 {
     u8 *end;
+    enum StatusPreviewResult result;
 
     if (!B_MOVE_STATUS_PREVIEW)
         return FALSE;
@@ -266,12 +319,13 @@ bool32 TryPrintStatusMovePreview(enum BattlerId battler, enum Move move, enum Ty
     default:
         break;
     }
-    if (!IsStatusMoveKnownToFail(battler, GetDamagePreviewTarget(battler), move))
+    result = GetStatusMovePreviewResult(battler, GetDamagePreviewTarget(battler), move);
+    if (result == STATUS_PREVIEW_NONE)
         return FALSE;
 
     end = StringCopy(gDisplayedStringBattle, gTypesInfo[type].name);
     *end++ = CHAR_SPACE;
-    end = StringCopy(end, COMPOUND_STRING("Fails"));
+    end = StringCopy(end, result == STATUS_PREVIEW_BOUNCES ? COMPOUND_STRING("Bounces") : COMPOUND_STRING("Fails"));
     PrependFontIdToFit(gDisplayedStringBattle, end, FONT_NARROW, WindowWidthPx(B_WIN_MOVE_TYPE));
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE);
     return TRUE;

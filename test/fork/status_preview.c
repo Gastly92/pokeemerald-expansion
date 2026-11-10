@@ -4,8 +4,8 @@
 #include "fork/innate_abilities.h"
 #include "fork/status_preview.h"
 
-// B_MOVE_STATUS_PREVIEW. The move menu says "<Type> Fails" for a status move the player can
-// already tell will fail on the foe -- and never for one that only fails because of something
+// B_MOVE_STATUS_PREVIEW. The move menu says "<Type> Fails" (or "<Type> Bounces", for a visible
+// Magic Bounce) for a status move the player can already tell will fail on the foe -- and never for one that only fails because of something
 // the player has not seen (a hidden held item or chosen ability). IsStatusMoveKnownToFail is
 // called directly; the menu just prints its answer.
 
@@ -196,6 +196,69 @@ SINGLE_BATTLE_TEST("Status preview: a revealed Sap Sipper or Magic Bounce is kno
         EXPECT(!IsStatusMoveKnownToFail(B_BATTLER_0, B_BATTLER_1, move));
         gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] |= 1u;
         EXPECT(IsStatusMoveKnownToFail(B_BATTLER_0, B_BATTLER_1, move));
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, move),
+                  ability == ABILITY_MAGIC_BOUNCE ? STATUS_PREVIEW_BOUNCES : STATUS_PREVIEW_FAILS);
         EXPECT_EQ(gBattleMons[B_BATTLER_1].ability, ability);
+    }
+}
+
+SINGLE_BATTLE_TEST("Status preview: hazards and status moves into an innate Magic Bounce read as bouncing")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_UMBREON, ABILITY_MAGIC_BOUNCE));
+        ASSUME(GetMoveTarget(MOVE_STEALTH_ROCK) == TARGET_OPPONENTS_FIELD);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_STEALTH_ROCK, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_UMBREON) { Ability(ABILITY_INNER_FOCUS); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] &= ~1u;
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_STEALTH_ROCK), STATUS_PREVIEW_BOUNCES);
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_SPIKES), STATUS_PREVIEW_BOUNCES);
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_STICKY_WEB), STATUS_PREVIEW_BOUNCES);
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_TOXIC_SPIKES), STATUS_PREVIEW_BOUNCES);
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_TOXIC), STATUS_PREVIEW_BOUNCES);
+        EXPECT(IsStatusMoveKnownToFail(B_BATTLER_0, B_BATTLER_1, MOVE_STEALTH_ROCK));
+        // Moves Magic Bounce cannot reflect are left alone.
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_SWORDS_DANCE), STATUS_PREVIEW_NONE);
+    }
+}
+
+SINGLE_BATTLE_TEST("Status preview: hazards into a foe without Magic Bounce, or past a Mold Breaker, are not flagged")
+{
+    enum Species species;
+    enum Ability abilityAtk;
+
+    PARAMETRIZE { species = SPECIES_WOBBUFFET; abilityAtk = ABILITY_SAND_RUSH; }
+    PARAMETRIZE { species = SPECIES_UMBREON;   abilityAtk = ABILITY_MOLD_BREAKER; }
+
+    GIVEN {
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_EXCADRILL) { Ability(abilityAtk); Moves(MOVE_STEALTH_ROCK, MOVE_CELEBRATE); }
+        OPPONENT(species) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_CELEBRATE); }
+    } THEN {
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_STEALTH_ROCK), STATUS_PREVIEW_NONE);
+    }
+}
+
+DOUBLE_BATTLE_TEST("Status preview: a hazard reads as bouncing when either foe has Magic Bounce")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_UMBREON, ABILITY_MAGIC_BOUNCE));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_STEALTH_ROCK, MOVE_CELEBRATE); }
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_UMBREON) { Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(playerLeft, MOVE_CELEBRATE); MOVE(playerRight, MOVE_CELEBRATE); }
+    } THEN {
+        // The readout's target is the Wobbuffet; its partner's Magic Bounce still sends the rocks back.
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_STEALTH_ROCK), STATUS_PREVIEW_BOUNCES);
+        // A targeted move only bounces off its own target.
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_TOXIC), STATUS_PREVIEW_NONE);
     }
 }
