@@ -19676,7 +19676,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_NIGHTMARE,
             MOVE_MOONLIGHT
         },
-        .ability = ABILITY_SYNCHRONIZE,
+        .ability = ABILITY_TRACE,
         .nature = NATURE(SPA_UP, ATK_DOWN),
         .ev = EVS(
             .hp = 252,
