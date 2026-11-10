@@ -1,6 +1,7 @@
 #include "global.h"
 #include "test/battle.h"
 #include "fork/innate_abilities.h"
+#include "fork/frontier_battle_info.h"
 #include "fork/species_tiers.h"
 
 // Legendary: Mythical's twin (src/fork/mythical.c), raising max HP by 50% instead of doubling it. The shared
@@ -71,6 +72,49 @@ SINGLE_BATTLE_TEST("Legendary rounds an odd max HP down, and a full-HP holder st
     } THEN {
         EXPECT_EQ(player->maxHP, 301);
         EXPECT_EQ(player->hp, 301);
+    }
+}
+
+// x1.5 of an odd value is a half, and flooring it moved the healthbox's rounded-up HP % by a point on entry
+// (seen in play: Celebi 68% -> 67%). The boost rounds HP or max HP up instead where that keeps the %, and either
+// rounding still undoes exactly on switch-out.
+SINGLE_BATTLE_TEST("Legendary keeps the holder's displayed HP % on entry, and still undoes exactly")
+{
+    u32 hp, maxHP;
+    PARAMETRIZE { hp = 137; maxHP = 204; }
+    PARAMETRIZE { hp = 36;  maxHP = 103; }
+    PARAMETRIZE { hp = 151; maxHP = 201; }
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_LEGENDARY); MaxHP(maxHP); HP(hp); }
+        PLAYER(SPECIES_WYNAUT);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { }
+        TURN { SWITCH(player, 1); }
+    } SCENE {
+        ABILITY_POPUP(player, ABILITY_LEGENDARY);
+        SWITCH_OUT_MESSAGE("Wobbuffet");
+    } THEN {
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_MAX_HP), maxHP);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), hp);
+    }
+}
+
+SINGLE_BATTLE_TEST("Legendary's boosted HP keeps the displayed HP %")
+{
+    u32 hp, maxHP, boostedHP, boostedMaxHP;
+    PARAMETRIZE { hp = 137; maxHP = 204; boostedHP = 206; boostedMaxHP = 306; } // 68%: 205/306 would read 67%
+    PARAMETRIZE { hp = 36;  maxHP = 103; boostedHP = 54;  boostedMaxHP = 155; } // 35%: 54/154 would read 36%
+    PARAMETRIZE { hp = 151; maxHP = 201; boostedHP = 226; boostedMaxHP = 301; } // already kept: plain floor
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_LEGENDARY); MaxHP(maxHP); HP(hp); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { }
+    } THEN {
+        EXPECT_EQ(player->hp, boostedHP);
+        EXPECT_EQ(player->maxHP, boostedMaxHP);
+        EXPECT_EQ(HpPercentRoundedUp(player->hp, player->maxHP), HpPercentRoundedUp(hp, maxHP));
     }
 }
 
