@@ -2271,10 +2271,6 @@ bool32 ChangeTypeBasedOnTerrain(enum BattlerId battler)
 
     enum Type battlerType = gBattleTerrainInfo[gFieldTimers.terrain].type;
 
-    // UPSTREAM: switch-in runs ABILITYEFFECT_ON_TERRAIN with no terrain up, and the table has no
-    // B_TERRAIN_NONE entry, so Mimicry turned the battler typeless (test/fork/mimicry_no_terrain.c).
-    if (gFieldTimers.terrain == B_TERRAIN_NONE)
-        return FALSE;
     SET_BATTLER_TYPE(battler, battlerType);
     PREPARE_TYPE_BUFFER(gBattleTextBuff1, battlerType);
     return TRUE;
