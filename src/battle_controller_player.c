@@ -1853,7 +1853,7 @@ static void MoveSelectionDisplayMoveDescription(enum BattlerId battler)
     }
     if (showPpCost)
     {
-        s32 ppCost = GetProjectedMovePPCost(battler, selectedMove, strikes);
+        s32 ppCost = GetProjectedMovePPCost(battler, selectedMove, strikes); // FORK: strikes = FEATURE_MULTI_HIT_PP_PER_HIT
         u8 *q = acc_num;
         if (ppCost < 0)
         {

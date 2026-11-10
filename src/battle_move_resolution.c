@@ -1202,7 +1202,7 @@ static enum CancelerResult CancelerPPDeduction(struct BattleCalcValues *cv)
         {
             gBattleStruct->battlerState[cv->battlerAtk].usedMicleBerry = FALSE;
             deterministicPpRefund++;
-            micleRefund++;
+            micleRefund++; // FORK: FEATURE_MULTI_HIT_PP_PER_HIT
         }
     }
 
@@ -4395,7 +4395,12 @@ static enum MoveEndResult MoveEndMultihitMove(struct BattleCalcValues *cv)
              && gBattleMons[cv->battlerDef].hp
              && (IsUsableWhileAsleepEffect(chosenEffect) || !(gBattleMons[cv->battlerAtk].status1 & STATUS1_SLEEP))
              && !(gBattleMons[cv->battlerAtk].status1 & STATUS1_FREEZE)
-             && MultiHitPP_TryChargeNextHit(cv->battlerAtk, cv->move)) // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- pays for this strike; keep it the LAST condition so a strike that never goes out is never charged
+             // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- pays for the next strike. It must stay the LAST
+             // condition, so a strike that never goes out is never charged. It relies on this branch
+             // being the only place a further strike is started. If upstream moves the restart
+             // (atkCanceler = CANCELER_ACCURACY_CHECK), re-hook there. On conflict, take upstream's
+             // conditions and re-append this one. Test: test/fork/multi_hit_pp.c.
+             && MultiHitPP_TryChargeNextHit(cv->battlerAtk, cv->move))
             {
                 if (gSpecialStatuses[cv->battlerAtk].parentalBondState)
                     gSpecialStatuses[cv->battlerAtk].parentalBondState--;
