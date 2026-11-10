@@ -190,6 +190,7 @@ static const u16 sPseudoSpecies[] =
     SPECIES_HYDREIGON,             // 0635
     SPECIES_GRENINJA_BATTLE_BOND,  // 0658
     SPECIES_KOMMO_O,               // 0784
+    SPECIES_CINDERACE,             // 0815
     SPECIES_DRACOZOLT,             // 0880
     SPECIES_ARCTOZOLT,             // 0881
     SPECIES_DRACOVISH,             // 0882
@@ -197,6 +198,9 @@ static const u16 sPseudoSpecies[] =
     SPECIES_DRAGAPULT,             // 0887
     SPECIES_URSALUNA,              // 0901
     SPECIES_SNEASLER,              // 0903
+    SPECIES_PALAFIN,               // 0964
+    SPECIES_ANNIHILAPE,            // 0979
+    SPECIES_KINGAMBIT,             // 0983
     SPECIES_GREAT_TUSK,            // 0984
     SPECIES_SCREAM_TAIL,           // 0985
     SPECIES_BRUTE_BONNET,          // 0986
