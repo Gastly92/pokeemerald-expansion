@@ -2489,10 +2489,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
     {
         .species = SPECIES_ALAKAZAM,
         .tags = FORMAT_DOUBLES,
-        .heldItem = ITEM_TERRAIN_EXTENDER,
+        .heldItem = ITEM_LIFE_ORB,
         .moves =
         {
-            MOVE_EXPANDING_FORCE,
+            MOVE_PSYCHIC,
             MOVE_SHADOW_BALL,
             MOVE_ALLY_SWITCH,
             MOVE_PROTECT
@@ -2514,7 +2514,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         {
             MOVE_LIGHT_SCREEN,
             MOVE_REFLECT,
-            MOVE_EXPANDING_FORCE,
+            MOVE_PSYCHIC,
             MOVE_HELPING_HAND
         },
         .ability = ABILITY_SYNCHRONIZE,
@@ -34603,7 +34603,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_ROOM_SERVICE,
         .moves =
         {
-            MOVE_EXPANDING_FORCE,
+            MOVE_PSYCHIC,
             MOVE_ARMOR_CANNON,
             MOVE_TRICK_ROOM,
             MOVE_DAZZLING_GLEAM
