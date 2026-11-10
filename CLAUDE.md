@@ -367,6 +367,16 @@ Two more from the Oct 2026 sync to upstream #10989 (17 commits, 1 conflicted fil
   `test/fork/innate_abilities.c` covers it. **Lesson: when upstream moves an ability's logic, grep
   the new site for `GetBattlerAbility(...) == ABILITY_X` and add the innate clause.**
 
+One from the Nov 2026 sync to upstream #11059 (12 commits, zero conflicts):
+
+- **An `UPSTREAM:` fix that upstream made independently, on a different line.** The fork's
+  Mimicry no-terrain guard (#756) and upstream's #11053 were the same early return in
+  `ChangeTypeBasedOnTerrain`, ours just below the table lookup and theirs just above it. The
+  hunks didn't touch, so git kept both and the function carried the check twice. It was
+  harmless, but it's dead code that would conflict later. **Lesson: after a sync, list the
+  `UPSTREAM:` tags in every file upstream touched and check whether upstream now has the same
+  fix. If it does, take upstream's version, drop ours and its tag, and keep the fork test.**
+
 The general shape: a clean merge proves nothing about behaviour. Budget for a full
 `make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
 the upstream commit behind any test that changed state.
