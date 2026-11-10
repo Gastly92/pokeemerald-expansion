@@ -11596,7 +11596,7 @@ static const enum Ability sLowValueAbilities[] =
 {
     ABILITY_RUN_AWAY,     // fleeing wild battles
     ABILITY_HONEY_GATHER, // overworld item pickup
-    ABILITY_RIVALRY,      // a gender coin flip: as often a nerf as a boost
+    ABILITY_RIVALRY,      // deterministic: +25% vs a shared-type foe, -25% otherwise -- usually a nerf
     ABILITY_PLUS,         // needs a Plus/Minus partner the draft never guarantees
     ABILITY_MINUS,
     ABILITY_COSTAR,       // copies an ally's boosts, so doubles-only and partner-dependent
