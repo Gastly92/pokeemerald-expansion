@@ -11584,11 +11584,10 @@ TEST("Innate abilities: every roster species carries its own innate-capable abil
 }
 
 // The never-an-innate half of the gate above. An override row hands a species an observable
-// ability it does not have in vanilla, which is the right tool when every vanilla slot is innate-
-// capable, already an innate, or worthless in a Factory battle. It is the WRONG tool when the
-// species already owns a usable never-an-innate ability: the borrow then displaces the species'
-// own canon pick. Seaking ran a borrowed Sheer Force over its own Lightning Rod, and Marowak ran a
-// borrowed Mummy over its own Lightning Rod, before this gate existed.
+// ability it does not have in vanilla. It must never displace the species' own usable
+// never-an-innate ability: Seaking ran a borrowed Sheer Force over its own Lightning Rod, and
+// Marowak ran a borrowed Mummy over its own Lightning Rod, before this gate existed. So the usable
+// ability keeps its slot and at least one set, and the override is an addition alongside it.
 //
 // "Usable" excludes sLowValueAbilities[] below: abilities that do nothing, or next to nothing, in a
 // Factory battle, so an override replacing one costs the species nothing.
@@ -11630,9 +11629,13 @@ static bool32 IsUsableVanillaAbility(u16 species, enum Ability ability)
         && !IsLowValueAbility(ability);
 }
 
-TEST("Innate abilities: no frontier set runs an override over its species' own usable ability")
+// A species that gets an override keeps its own usable vanilla abilities too: the override is an
+// addition, never a substitute. So every usable vanilla ability of a rostered species must be run
+// by at least one of that species' sets. (That the override row does not overwrite the slot it
+// lives in is checked separately, by "no ability override replaces a useful vanilla ability".)
+TEST("Innate abilities: every usable vanilla ability of a rostered species is run by one of its sets")
 {
-    u32 i, slot;
+    u32 i, j, slot;
     u32 overrideSets = 0;
     u32 offenders = 0;
 
@@ -11641,25 +11644,39 @@ TEST("Innate abilities: no frontier set runs an override over its species' own u
 
     for (i = 0; i < gFrontierExtendedMonsCount; i++)
     {
-        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        u16 species = gFrontierExtendedMons[i].species;
+        bool32 firstSet = TRUE;
 
-        // A chosen ability found in the vanilla slots is the species' own pick, so it is fine.
-        if (set->ability == ABILITY_NONE || SpeciesHasVanillaAbility(set->species, set->ability))
+        if (gFrontierExtendedMons[i].ability != ABILITY_NONE && !SpeciesHasVanillaAbility(species, gFrontierExtendedMons[i].ability))
+            overrideSets++;
+
+        // Check each species once, at its first set.
+        for (j = 0; j < i; j++)
+        {
+            if (gFrontierExtendedMons[j].species == species)
+                firstSet = FALSE;
+        }
+        if (!firstSet)
             continue;
 
-        overrideSets++;
         for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
         {
-            enum Ability vanilla = gSpeciesInfo[set->species].abilities[slot];
+            enum Ability vanilla = gSpeciesInfo[species].abilities[slot];
+            bool32 used = FALSE;
 
-            if (!IsUsableVanillaAbility(set->species, vanilla))
+            if (!IsUsableVanillaAbility(species, vanilla))
+                continue;
+            for (j = i; j < gFrontierExtendedMonsCount; j++)
+            {
+                if (gFrontierExtendedMons[j].species == species && gFrontierExtendedMons[j].ability == vanilla)
+                    used = TRUE;
+            }
+            if (used)
                 continue;
 
             offenders++;
-            Test_MgbaPrintf("roster[%d] %S: runs override %S, but vanilla slot %d already holds usable %S -- repoint the set at %S and drop the override, or add %S to sLowValueAbilities[] if it is worthless in the Factory",
-                            i, gSpeciesInfo[set->species].speciesName, gAbilitiesInfo[set->ability].name,
-                            slot, gAbilitiesInfo[vanilla].name, gAbilitiesInfo[vanilla].name, gAbilitiesInfo[vanilla].name);
-            break;
+            Test_MgbaPrintf("roster[%d] %S: vanilla slot %d holds usable %S, but no set runs it -- give a set %S, or add it to sLowValueAbilities[] if it is worthless in the Factory",
+                            i, gSpeciesInfo[species].speciesName, slot, gAbilitiesInfo[vanilla].name, gAbilitiesInfo[vanilla].name);
         }
     }
 
