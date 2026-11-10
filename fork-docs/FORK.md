@@ -29,6 +29,7 @@ doc below. A row records only what neither of those can — status, and the poin
 | [`BATTLE_INFO.md`](BATTLE_INFO.md) | The in-battle INFO viewer and its reveal-gating rules |
 | [`DAMAGE_PREVIEW.md`](DAMAGE_PREVIEW.md) | The move menu's damage-range readout (what the range spans and what it hides) and its status-move "Fails" readout |
 | [`HEALTHBOX_HP_PERCENT.md`](HEALTHBOX_HP_PERCENT.md) | The healthbox HP % that replaces the level: rounding, the empty full-HP slot, fitting beside gimmick icons |
+| [`MULTI_HIT_PP.md`](MULTI_HIT_PP.md) | Per-strike PP for multi-hit moves: what pays, when, and what the menu, preview and AI project |
 | [`LINE_REVIEW.md`](LINE_REVIEW.md) | The per-species-line review playbook (innates, overrides, Factory sets) |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
@@ -119,6 +120,16 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Kee / Maranga berries buff | `BUFF_DAMAGED_STAT_BERRIES` (+ `…_STAGES`) | ✅ | Kee and Maranga Berry raise Defense / Sp. Def +2 instead of +1 when hit (+4 instead of +2 with Ripen). [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_berries.c` |
 | Adrenaline Orb buff | `BUFF_ADRENALINE_ORB` (+ `…_STAGES`) | ✅ | Adrenaline Orb fires on the first stat drop an opponent lands on the holder (not only Intimidate) and raises Speed +2 instead of +1; a blocked drop doesn't trigger or use it up. [Reasoning](HELD_ITEMS.md#group-c--weak-in-stock-still-weak-here--shipped) · `test/fork/buff_adrenaline_orb.c` |
 
+## Nerfs (`NERF_*`)
+
+The counterpart of `BUFF_*`: each flag weakens one thing that was too strong, often a
+combination the fork's own changes created. Each lives in `config/nerf.h` (`FALSE` =
+stock), with its full reasoning in the flag comment; all are enabled.
+
+| Feature | Flag(s) | Where | Status | Notes |
+|---|---|---|---|---|
+| Multi-hit moves pay per strike | `NERF_MULTI_HIT_PP_PER_HIT` | `config/nerf.h`, `src/fork/multi_hit_pp.c` | ✅ | Every strike of a multi-hit move costs PP, with every PP tax applied per strike, and a strike the move cannot afford is not thrown. [Details](MULTI_HIT_PP.md) · `test/fork/multi_hit_pp.c` |
+
 ## Abilities, types & gimmicks
 
 | Feature | Flag(s) | Where | Status | Notes |
@@ -170,11 +181,11 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 
 ## The fork-flag test harness
 
-The `DETERMINISTIC_*`, `BUFF_*` and `FEATURE_*` flags all ride one mechanism, and
+The `DETERMINISTIC_*`, `BUFF_*`, `NERF_*` and `FEATURE_*` flags all ride one mechanism, and
 this is the note the other docs point back to.
 
 Each flag is registered into the runtime config system (`DETERMINISTIC_CONFIG_DEFINITIONS`
-/ `BUFF_CONFIG_DEFINITIONS` / `FEATURE_CONFIG_DEFINITIONS` in
+/ `BUFF_CONFIG_DEFINITIONS` / `NERF_CONFIG_DEFINITIONS` / `FEATURE_CONFIG_DEFINITIONS` in
 `include/constants/config_changes.h`), so engine code reads it via `GetConfig(X)` and
 battle tests toggle it per-test with `WITH_CONFIG(X, TRUE)`. The `#define`s are the
 production defaults, while **the per-test baseline forces every flag off**

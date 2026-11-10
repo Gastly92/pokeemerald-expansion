@@ -129,7 +129,7 @@
 // base 1 PP but never below it. Against a target with no evasion trick at all they do
 // nothing. See GetAccuracyItemRelief() in src/fork/deterministic_moves.c, and its two
 // consumers -- CancelerPPDeduction() in src/battle_move_resolution.c and the move-info
-// projection GetProjectedMovePPCost() in src/battle_util.c.
+// projection GetProjectedMovePPCost() in src/fork/deterministic_moves.c.
 #define BUFF_ACCURACY_ITEMS TRUE
 
 // When TRUE, Wide Lens and Zoom Lens additionally act as what a lens actually is -- an

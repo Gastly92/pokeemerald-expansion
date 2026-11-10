@@ -173,7 +173,7 @@ easily; rewrites of existing logic conflict the most.
   `config/battle.h`, etc., so a fork flag wedged into one of those blocks
   conflicts whenever upstream touches a nearby line (this is exactly what bit the
   new-game flags). The fork keeps its flags in headers we own:
-  `config/deterministic.h` and `config/feature.h` (runtime-registered via
+  `config/deterministic.h`, `config/buff.h`, `config/nerf.h` and `config/feature.h` (runtime-registered via
   `*_CONFIG_DEFINITIONS` for per-test `WITH_CONFIG` toggling) and `config/fork.h`
   (plain compile-time `#if` flags), each pulled in with a one-line additive
   `#include` (`config/fork.h` from `global.h`, right after `general.h`). The
@@ -287,13 +287,13 @@ have been caught by reading the diff:
 - **A clean merge that silently un-registered every fork config flag.** Upstream
   replaced the runtime `GetConfig(name)` dispatch (`GetConfigInternal(CONFIG_##name)`)
   with per-group *generated inline getters* in `include/config_changes.h`. The fork
-  registers `DETERMINISTIC_/BUFF_/FEATURE_CONFIG_DEFINITIONS` in the struct, and those
+  registers `DETERMINISTIC_/BUFF_/FEATURE_CONFIG_DEFINITIONS` (and now `NERF_`) in the struct, and those
   lines merged fine — but the new getter-generation block is upstream's, so it listed
   only upstream's three groups. Every `GetConfig(DETERMINISTIC_*)` became an implicit
   function declaration. **Lesson: when the fork hooks into an upstream macro pattern,
   it has to hook into every *instance* of that pattern.** After a sync, grep for each
   fork group macro and check it appears everywhere upstream's groups do:
-  `grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/` — the fork's three should sit
+  `grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/` — the fork's four should sit
   beside it at every hit.
 - **ID-space collisions, which the fork's own conflict-avoidance hides.** Upstream
   allocates ability IDs and AI-flag bits upward as it implements things. The fork had
@@ -404,7 +404,7 @@ Run these after every `git merge upstream/master`, before declaring the sync don
 (the `sync-upstream` skill sequences them in context):
 
 ```bash
-grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/   # each hit needs the 3 fork groups beside it
+grep -rn "BATTLE_CONFIG_DEFINITIONS(" include/ src/   # each hit needs the 4 fork groups beside it
 grep -c "FORK" <file>                                  # per conflicted file: compare against the pre-merge count
 UNUSED_ERROR=1 DEPRECATED_ERROR=1 make -j$(nproc) -O all
 make -j$(nproc) check
@@ -471,7 +471,7 @@ which are conflict-neutral.
 
 **Exceptions (deliberately *not* moved):**
 - **Config flag headers stay in `include/config/`** (`config/fork.h`,
-  `config/deterministic.h`, `config/buff.h`, `config/feature.h`,
+  `config/deterministic.h`, `config/buff.h`, `config/nerf.h`, `config/feature.h`,
   `config/frontier.h`, `config/accessibility.h`). They're fork-owned *files* but
   belong with upstream's config headers conceptually, and are wired in through
   upstream-owned files (`global.h`, `include/constants/global.h`,
@@ -672,7 +672,7 @@ We keep our human-facing docs in files we own (so they never conflict on sync).
 live under **`fork-docs/`**. New files in a fork-owned directory never conflict on
 sync. `FORK.md` carries the current doc index; as of now it is `DETERMINISM.md`,
 `INNATE_ABILITIES.md`, `INNATE_LIST.md`, `NEW_ABILITIES.md`, `NEW_TYPES.md`, `FRONTIER_ENDLESS.md`,
-`FRONTIER_ROSTER.md`, `HELD_ITEMS.md`, `FREE_GIMMICKS.md`, `BATTLE_INFO.md`, `DAMAGE_PREVIEW.md`, `HEALTHBOX_HP_PERCENT.md` and
+`FRONTIER_ROSTER.md`, `HELD_ITEMS.md`, `FREE_GIMMICKS.md`, `BATTLE_INFO.md`, `DAMAGE_PREVIEW.md`, `HEALTHBOX_HP_PERCENT.md`, `MULTI_HIT_PP.md` and
 `LINE_REVIEW.md`.
 The two top-level docs:
 

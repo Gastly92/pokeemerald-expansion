@@ -12,6 +12,7 @@
 #include "constants/battle_move_effects.h"
 #include "constants/pokemon.h"
 #include "fork/innate_abilities.h" // Innate ability predicates
+#include "fork/halo.h" // HALO_PP_TAX (projected PP cost)
 
 // self-contained deterministic move-resolution predicates, extracted from
 // src/battle_util.c to keep that upstream-owned file's divergence small. See
@@ -323,31 +324,33 @@ u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId ba
     return tax;
 }
 
-// Projected net PP the attacker's move will cost *this turn*, for the in-battle
-// move-info display under DETERMINISTIC_ACCURACY_EVASION (where the move always hits, so
-// accuracy is meaningless and the PP economy is what matters). Mirrors the deduction in
-// CancelerPPDeduction (src/battle_move_resolution.c): base 1 PP, Pressure, the paralysis
-// PP tax, the accuracy/evasion stage economy and the flat item/ability taxes, minus the
-// PP recovered from a net accuracy advantage / Micle Berry. Targets aren't chosen yet at
-// move-select time, so single-target moves project against the first live foe. The signed
-// result can be negative when the move would net-recover PP. Keep in sync with CancelerPPDeduction.
-s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
+// Representative single target for a move-select-time projection: targets aren't chosen
+// yet, so single-target moves project against the first live foe (the attacker itself when
+// there is none).
+enum BattlerId GetProjectedMoveTarget(enum BattlerId battlerAtk)
 {
-    s32 ppToDeduct = 1;
-    s32 refund = 0;
-    enum MoveTarget moveTarget = GetBattlerMoveTargetType(battlerAtk, move);
-    enum Ability atkAbility = GetBattlerAbility(battlerAtk);
-
-    // Representative single target: the first living opponent.
-    enum BattlerId primaryDef = battlerAtk;
     for (u32 t = 0; t < gBattlersCount; t++)
     {
         if (!IsBattlerAlly(t, battlerAtk) && IsBattlerAlive(t))
-        {
-            primaryDef = t;
-            break;
-        }
+            return t;
     }
+    return battlerAtk;
+}
+
+// The pieces of one use's PP cost against primaryDef. Mirrors the deduction in
+// CancelerPPDeduction (src/battle_move_resolution.c): base 1 PP, Pressure, the paralysis
+// PP tax, the Halo tax, the accuracy/evasion stage economy and the flat item/ability taxes
+// make up *cost*; the PP recovered from a net accuracy advantage is *refund*, and the
+// one-shot Micle Berry refund is *oneTimeRefund* (kept apart because
+// NERF_MULTI_HIT_PP_PER_HIT charges cost and refund again on every extra strike but
+// never repeats the Micle refund). Keep in sync with CancelerPPDeduction.
+void GetProjectedMovePPCostParts(enum BattlerId battlerAtk, enum BattlerId primaryDef, enum Move move, s32 *cost, s32 *refundPerHit, s32 *oneTimeRefund)
+{
+    s32 ppToDeduct = 1;
+    s32 refund = 0;
+    s32 micleRefund = 0;
+    enum MoveTarget moveTarget = GetBattlerMoveTargetType(battlerAtk, move);
+    enum Ability atkAbility = GetBattlerAbility(battlerAtk);
 
     // Pressure (matches CancelerPPDeduction).
     if (IsSpreadMove(moveTarget) || moveTarget == TARGET_ALL_BATTLERS
@@ -370,6 +373,10 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
         && !BattlerHasAbility(battlerAtk, ABILITY_QUICK_FEET) // Innate Quick Feet is exempt from the para PP tax, like the real ability
         && GetConfig(DETERMINISTIC_PARALYSIS))
         ppToDeduct += DETERMINISTIC_PARALYSIS_PP_TAX;
+
+    // Halo's upkeep (matches CancelerPPDeduction).
+    if (atkAbility == ABILITY_HALO)
+        ppToDeduct += HALO_PP_TAX;
 
     if (GetConfig(DETERMINISTIC_ACCURACY_EVASION))
     {
@@ -405,10 +412,27 @@ s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move)
                 ppToDeduct++;
         }
         if (micleActive)
-            refund++;
+            micleRefund++;
     }
 
-    return ppToDeduct - refund;
+    *cost = ppToDeduct;
+    *refundPerHit = refund;
+    *oneTimeRefund = micleRefund;
+}
+
+// Projected net PP the attacker's move will cost *this turn*, for the in-battle
+// move-info display under DETERMINISTIC_ACCURACY_EVASION (where the move always hits, so
+// accuracy is meaningless and the PP economy is what matters). Under
+// NERF_MULTI_HIT_PP_PER_HIT a multi-hit move pays per strike, so the caller passes the
+// strikes it projects (GetProjectedMultiHitCount, or 1 when a Z-Move / Max Move replaces
+// the move) and this is the per-use cost times those. The signed result can be negative
+// when the move would net-recover PP.
+s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move, u32 strikes)
+{
+    s32 cost, refund, oneTimeRefund;
+
+    GetProjectedMovePPCostParts(battlerAtk, GetProjectedMoveTarget(battlerAtk), move, &cost, &refund, &oneTimeRefund);
+    return (cost - refund) * (s32)strikes - oneTimeRefund;
 }
 
 // DETERMINISTIC_MOVE_RESULTS speed ties, moved out of src/battle_main.c.

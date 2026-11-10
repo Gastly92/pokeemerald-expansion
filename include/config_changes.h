@@ -8,6 +8,7 @@
 #include "config/deterministic.h" // FORK: DETERMINISTIC_* flags ride this system
 #include "config/buff.h" // FORK: BUFF_* flags ride this system
 #include "config/feature.h" // FORK: FEATURE_* flags ride this system
+#include "config/nerf.h" // FORK: NERF_* flags ride this system
 
 #define UNPACK_CONFIG_STRUCT(_name, _field, _typeMaxValue, ...) INVOKE_WITH_(UNPACK_CONFIG_STRUCT_, _field, UNPACK_B(_typeMaxValue));
 #define UNPACK_CONFIG_STRUCT_(_field, _type, ...) _type FIRST(__VA_OPT__(_field:BIT_SIZE(FIRST(__VA_ARGS__)),) _field)
@@ -20,6 +21,7 @@ struct ConfigChanges
     DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_CONFIG_STRUCT) // FORK
     BUFF_CONFIG_DEFINITIONS(UNPACK_CONFIG_STRUCT) // FORK
     FEATURE_CONFIG_DEFINITIONS(UNPACK_CONFIG_STRUCT) // FORK
+    NERF_CONFIG_DEFINITIONS(UNPACK_CONFIG_STRUCT) // FORK
     // Expands to:
     // u32 critChance:4;
     // u32 critMultiplier:4;
@@ -43,10 +45,11 @@ AI_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER)
 // the runtime `GetConfig(name) -> GetConfigInternal(CONFIG_##name)` dispatch with these generated
 // inline getters in the 1.17.0 sync; the change merged cleanly and silently left every fork tag
 // without an accessor. Their tag names double as their #define names (like the battle group), so
-// they use UNPACK_BATTLE_CONFIG_GETTER. On conflict, keep these three lines beside upstream's.
+// they use UNPACK_BATTLE_CONFIG_GETTER. On conflict, keep these four lines beside upstream's.
 DETERMINISTIC_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER) // FORK
 BUFF_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER) // FORK
 FEATURE_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER) // FORK
+NERF_CONFIG_DEFINITIONS(UNPACK_BATTLE_CONFIG_GETTER) // FORK
 
 #undef UNPACK_BATTLE_CONFIG_GETTER
 #undef UNPACK_POKEMON_CONFIG_GETTER
