@@ -1999,3 +1999,38 @@ TEST("Frontier extended roster: every Paradox species has at least one Booster E
     EXPECT_GT(paradoxCount, 0); // the sweep found the Paradox mons at all
     EXPECT_EQ(offenders, 0);
 }
+
+// A mon carries one non-volatile status at a time, so a set with two moves that only
+// inflict one (Spore + Toxic, Thunder Wave + Toxic) has a dead slot: once the target is
+// asleep or paralysed, the second status move just fails. Amoonguss and Furfrou both
+// shipped like that; this keeps it from coming back.
+TEST("Frontier extended roster: no set carries two non-volatile status moves")
+{
+    u32 i, j;
+    u32 bad = 0;
+
+    for (i = 0; i < gFrontierExtendedMonsCount; i++)
+    {
+        const struct TrainerMon *set = &gFrontierExtendedMons[i];
+        enum Move first = MOVE_NONE;
+
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            if (GetMoveEffect(set->moves[j]) != EFFECT_NON_VOLATILE_STATUS)
+                continue;
+            if (first == MOVE_NONE)
+            {
+                first = set->moves[j];
+                continue;
+            }
+            bad++;
+            Test_MgbaPrintf("roster[%d] %S: %S and %S both only inflict a non-volatile status -- one of them is a dead slot",
+                            i,
+                            gSpeciesInfo[set->species].speciesName,
+                            GetMoveName(first),
+                            GetMoveName(set->moves[j]));
+        }
+    }
+
+    EXPECT_EQ(bad, 0);
+}

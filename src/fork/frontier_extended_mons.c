@@ -21814,7 +21814,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_SPORE,
             MOVE_SLUDGE_BOMB,
             MOVE_GIGA_DRAIN,
-            MOVE_TOXIC
+            MOVE_FOUL_PLAY
         },
         .ability = ABILITY_WATER_ABSORB,
         .nature = NATURE(DEF_UP, ATK_DOWN),
@@ -24738,7 +24738,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_U_TURN,
             MOVE_THUNDER_WAVE,
             MOVE_RETURN,
-            MOVE_TOXIC
+            MOVE_CRUNCH
         },
         .ability = ABILITY_FLUFFY,
         .nature = NATURE(DEF_UP, SPA_DOWN),

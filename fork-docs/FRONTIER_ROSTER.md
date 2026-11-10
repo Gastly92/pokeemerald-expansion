@@ -141,6 +141,9 @@ something, so dead rows can't accumulate and hide the next real gap.
   `.ability` carries a **complementary** ability that runs alongside the innate — e.g.
   Slowbro `OWN_TEMPO` + innate Regenerator, Rotom `LIGHTNING_ROD` + innate Levitate,
   Clefable `MAGIC_GUARD` + innate Unaware.
+- **At most one non-volatile status move per set** (Spore, Toxic, Thunder Wave,
+  Will-O-Wisp, …) — a target holds only one status, so a second is a dead slot
+  (roster-tested).
 - **No set uses `ABILITY_NONE`** — banned by the roster test. For *ability-locked*
   species whose only real ability is now granted innately, the complementary ability is
   made selectable through the fork-owned **species ability overrides** table
