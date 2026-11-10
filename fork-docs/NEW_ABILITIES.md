@@ -482,8 +482,11 @@ undo on leaving the field, nothing can suppress it, Regenerator, the AI's switch
 
 **One engine.** Both run through `src/fork/mythical.c`: `TryActivateMythical()` picks the multiplier
 from the ability that fired, and `gBattleStruct->legendaryHPBoosted` marks which boosted party slots
-are x1.5. A boosted value is `floor(x * 3/2)`, and `ceil(boosted * 2/3)` gets `x` back exactly, so
-a switch-out returns the same HP and max HP the mon came in with, even when the value is odd.
+are x1.5. A boosted value is `floor(x * 3/2)` or `ceil(x * 3/2)`, and rounding `boosted * 2/3` to the
+nearest gets `x` back exactly from either, so a switch-out returns the same HP and max HP the mon came
+in with, even when the value is odd. On entry the boost uses that freedom to keep the healthbox's HP %:
+flooring both values of an odd x1.5 can shift the fraction by a point (68% read 67%), so it rounds the
+HP or max HP up instead where that keeps the %, and is the plain floor otherwise.
 
 **Carriers.** Every `TIER_LEGENDARY` species, enforced by `TEST("Legendary: every TIER_LEGENDARY
 species carries the Legendary innate")`, plus the forms they take in battle (Mega Latias/Latios,
