@@ -5940,6 +5940,38 @@ TEST("Innate abilities: no species lists the same innate twice")
     EXPECT_EQ(dups, 0);
 }
 
+// (3b) No species may end up with both Moxie and Speed Boost, counting innates AND its own
+// ability slots (an innate Moxie on a Speed Boost species stacks just the same). Speed Boost
+// alone already hands the holder a free +1 Speed every turn; adding +1 Attack per KO turns that
+// into a Dragon Dance every turn while it sweeps, which was the Sharpedo line's problem.
+TEST("Innate abilities: no species has both Moxie and Speed Boost")
+{
+    u32 row, slot, count = GetSpeciesInnatesEntryCount();
+    u32 offenders = 0;
+
+    for (row = 0; row < count; row++)
+    {
+        u16 species;
+        bool32 moxie, speedBoost;
+
+        GetSpeciesInnatesEntry(row, &species);
+        moxie = SpeciesHasInnate(species, ABILITY_MOXIE);
+        speedBoost = SpeciesHasInnate(species, ABILITY_SPEED_BOOST);
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            moxie |= (gSpeciesInfo[species].abilities[slot] == ABILITY_MOXIE);
+            speedBoost |= (gSpeciesInfo[species].abilities[slot] == ABILITY_SPEED_BOOST);
+        }
+        if (moxie && speedBoost)
+        {
+            offenders++;
+            Test_MgbaPrintf("%S has both Moxie and Speed Boost", gSpeciesInfo[species].speciesName);
+        }
+    }
+
+    EXPECT_EQ(offenders, 0);
+}
+
 // (4) The species-keyed lookups must agree with a raw linear walk of the table for every
 // row. GetSpeciesInnateList binary-searches a lazily built species-sorted row index
 // (src/fork/innate_abilities.c); a bug there (index unsorted, off-by-one bounds, stale

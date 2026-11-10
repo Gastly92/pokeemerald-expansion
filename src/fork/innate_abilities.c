@@ -4051,7 +4051,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0318
         SPECIES_CARVANHA,
         INNATES(
-            ABILITY_MOXIE,
             ABILITY_RATTLED,
             ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST,
@@ -4062,7 +4061,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0319
         SPECIES_SHARPEDO,
         INNATES(
-            ABILITY_MOXIE,
             ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST,
             ABILITY_STRONG_JAW,
@@ -4072,7 +4070,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0319
         SPECIES_SHARPEDO_MEGA,
         INNATES(
-            ABILITY_MOXIE,
             ABILITY_ROUGH_SKIN,
             ABILITY_SPEED_BOOST,
             ABILITY_STRONG_JAW,

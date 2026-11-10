@@ -2783,7 +2783,7 @@ Soul-Heart have **no** `battle_ai_*.c` read, so no AI wiring is needed):
 **Suppression parity** holds via `IsInnateActive()` for all three (feature flag, Gastro Acid, Neutralizing Gas,
 not-on-field); none is `breakable`, so Mold Breaker never touches them.
 
-**Species:** Moxie and Berserk are canon only (snowballing boosts are potent); Soul-Heart is flavor-only, following the Bad Dreams / Darkrai precedent.
+**Species:** Moxie and Berserk are canon only (snowballing boosts are potent), and Moxie never goes on a species that also has Speed Boost, innate or real, since the pair is a free Dragon Dance every KO — gated by "no species has both Moxie and Speed Boost" in `test/fork/innate_abilities.c`; Soul-Heart is flavor-only, following the Bad Dreams / Darkrai precedent.
 
 ### ABILITY_BATTERY / ABILITY_POWER_SPOT / ABILITY_TELEPATHY / ABILITY_AROMA_VEIL / ABILITY_FLOWER_VEIL
 
