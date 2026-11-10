@@ -3225,13 +3225,75 @@ static bool32 IsSlotInheritingBattleForm(enum FormChanges method)
         || method == FORM_CHANGE_BATTLE_ULTRA_BURST;
 }
 
+// An ability that inverts stat changes applied to its holder. Contrary is the only one in the game
+// today; the array exists so a future addition is one line rather than a rewritten test.
+static const enum Ability sStatInvertingAbilities[] =
+{
+    ABILITY_CONTRARY,
+};
+
+// Implemented innates whose whole effect is raising the HOLDER'S OWN stat stages. An inverting
+// chosen ability turns each of these from the boon the innate row intended into a penalty, so the
+// two may never sit on the same species. Abilities that move a *foe's* stats (Intimidate) are not
+// listed: Contrary sits on the holder, so it never touches them.
+static const enum Ability sSelfStatRaisingInnates[] =
+{
+    ABILITY_MOXIE, ABILITY_BEAST_BOOST, ABILITY_SOUL_HEART,
+    ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_BERSERK,
+    ABILITY_DEFIANT, ABILITY_COMPETITIVE, ABILITY_ANGER_POINT,
+    ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION,
+    ABILITY_RATTLED, ABILITY_STEADFAST, ABILITY_STEAM_ENGINE,
+    ABILITY_THERMAL_EXCHANGE, ABILITY_DOWNLOAD,
+    ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
+};
+
+static bool32 IsStatInvertingAbility(enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sStatInvertingAbilities); i++)
+    {
+        if (ability == sStatInvertingAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static bool32 IsSelfStatRaisingInnate(enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sSelfStatRaisingInnates); i++)
+    {
+        if (ability == sSelfStatRaisingInnates[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// A Mega whose own vanilla ability inverts stat changes (Mega Staraptor's Contrary) keeps that
+// ability, so a self-boosting base innate would fire backwards on it and is dropped instead.
+static bool32 MegaHasStatInvertingAbility(u16 mega)
+{
+    u32 slot;
+
+    for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+    {
+        if (IsStatInvertingAbility(gSpeciesInfo[mega].abilities[slot]))
+            return TRUE;
+    }
+    return FALSE;
+}
+
 // Megas are a pure boon: a Mega keeps every innate its base form carries. Rows are keyed by form
 // exactly, so a Mega row that does not mirror its base silently drops the trait the moment the
 // creature Mega Evolves (Mega Darkrai's Pressure, Mega Baxcalibur's Sharpness and Slush Rush,
 // Mega Glimmora's Clear Body, Mega Froslass' Shadow Tag, Mega Scovillain's Anger Point and
-// Harvest, the Mega Tatsugiris' Friend Guard). The one ability a Mega may drop is Levitate,
+// Harvest, the Mega Tatsugiris' Friend Guard). One ability a Mega may drop is Levitate,
 // because Mega Evolution can plant a floater on the ground (Mega Gengar, Mega Mewtwo X); which
 // Megas must not float is pinned by "grounded Megas do not gain innate Levitate" above.
+// The other is a self-boosting innate on a Mega whose own ability is stat-inverting: Mega Staraptor
+// keeps its vanilla Contrary, so it drops the line's Moxie rather than have it fire backwards.
 TEST("Innate abilities: every Mega carries its base form's innates")
 {
     u32 species, f, i;
@@ -3260,6 +3322,8 @@ TEST("Innate abilities: every Mega carries its base form's innates")
             for (i = 0; (innate = GetSpeciesInnate(species, i)) != ABILITY_NONE; i++)
             {
                 if (innate == ABILITY_LEVITATE || SpeciesHasInnate(mega, innate))
+                    continue;
+                if (IsSelfStatRaisingInnate(innate) && MegaHasStatInvertingAbility(mega))
                     continue;
                 offenders++;
                 // gSpeciesInfo names carry no "Mega" prefix, so print the species id too.
@@ -11532,7 +11596,7 @@ static const enum Ability sLowValueAbilities[] =
 {
     ABILITY_RUN_AWAY,     // fleeing wild battles
     ABILITY_HONEY_GATHER, // overworld item pickup
-    ABILITY_RIVALRY,      // a gender coin flip: as often a nerf as a boost
+    ABILITY_RIVALRY,      // deterministic: +25% vs a shared-type foe, -25% otherwise -- usually a nerf
     ABILITY_PLUS,         // needs a Plus/Minus partner the draft never guarantees
     ABILITY_MINUS,
     ABILITY_COSTAR,       // copies an ally's boosts, so doubles-only and partner-dependent
@@ -11540,6 +11604,8 @@ static const enum Ability sLowValueAbilities[] =
     ABILITY_SCREEN_CLEANER, // only clears screens on entry
     ABILITY_KLUTZ,        // a drawback: disables the holder's own item
     ABILITY_STALL,        // a drawback: always moves last
+    ABILITY_TRUANT,       // a drawback: loafs every other turn
+    ABILITY_COMMANDER,    // needs a Dondozo ally the draft never guarantees
 };
 
 static bool32 IsLowValueAbility(enum Ability ability)
@@ -11602,6 +11668,122 @@ TEST("Innate abilities: no frontier set runs an override over its species' own u
     EXPECT_EQ(offenders, 0);
 }
 
+// The override-row half of the coverage gates. An override replaces a vanilla slot, so a row is
+// only legal when what it replaces is not lost: the slot was empty, the replaced ability is one the
+// species carries innately, it survives in another slot, or it is on sLowValueAbilities[] (or sOverrideReplacementExemptions[]). Runs over
+// every enabled species, battle forms included, because a Mega's override rows are where a whole
+// species' slots get repointed at once.
+// Overrides that deliberately replace a useful-looking vanilla ability. Each entry needs a reason
+// the ability is worthless on that species specifically, so a generic sLowValueAbilities[] entry
+// would be wrong.
+static const struct InnateCoverageExemption sOverrideReplacementExemptions[] =
+{
+    // Aura Guard is unimplemented upstream; retire this entry once it does something.
+    { SPECIES_LUCARIO_MEGA_Z, ABILITY_AURA_GUARD },
+};
+
+static bool32 IsOverrideReplacementExempt(u16 species, enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sOverrideReplacementExemptions); i++)
+    {
+        if (sOverrideReplacementExemptions[i].species == species && sOverrideReplacementExemptions[i].ability == ability)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+TEST("Innate abilities: no ability override replaces a useful vanilla ability")
+{
+    u32 species, slot, other;
+    u32 overridden = 0;
+    u32 offenders = 0;
+
+    // GetSpeciesAbility only folds the override table in while the feature is on.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    // A stale exemption is a lie in the table: the species must still have that vanilla ability.
+    for (slot = 0; slot < ARRAY_COUNT(sOverrideReplacementExemptions); slot++)
+        EXPECT(SpeciesHasVanillaAbility(sOverrideReplacementExemptions[slot].species, sOverrideReplacementExemptions[slot].ability));
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (!IsSpeciesEnabled(species))
+            continue;
+
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability vanilla = gSpeciesInfo[species].abilities[slot];
+            bool32 survives = FALSE;
+
+            if (GetSpeciesAbility(species, slot) == vanilla)
+                continue;
+            overridden++;
+            if (vanilla == ABILITY_NONE || SpeciesHasInnate(species, vanilla) || IsLowValueAbility(vanilla)
+             || IsOverrideReplacementExempt(species, vanilla))
+                continue;
+            for (other = 0; other < NUM_ABILITY_SLOTS; other++)
+            {
+                if (GetSpeciesAbility(species, other) == vanilla)
+                    survives = TRUE;
+            }
+            if (survives)
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("lost ability: an override replaces %S's vanilla slot %d (%S), which is not innate, not in another slot and not low-value -- move the override to an empty or redundant slot, give the species the innate, or add the ability to sLowValueAbilities[]",
+                            gSpeciesInfo[species].speciesName, slot, gAbilitiesInfo[vanilla].name);
+        }
+    }
+
+    EXPECT_GT(overridden, 300); // guard against a vacuous pass if the override hook goes inert
+    EXPECT_EQ(offenders, 0);
+}
+
+// The roster half. A useful vanilla ability that is still selectable but that no set runs never
+// shows up in the Factory, so the species' own canon pick is invisible. "Useful" is the same test
+// the override gate above uses (IsUsableVanillaAbility): real, never-an-innate, not this species'
+// innate, and not on sLowValueAbilities[]. Fix a hit by adding a set that runs it.
+TEST("Innate abilities: every roster species has a set running each useful vanilla ability")
+{
+    u32 species, slot, i;
+    u32 checked = 0;
+    u32 missing = 0;
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (!IsSpeciesEnabled(species))
+            continue;
+        if (!RosterBuildsSpecies(species))
+            continue;
+
+        checked++;
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability vanilla = gSpeciesInfo[species].abilities[slot];
+            bool32 run = FALSE;
+
+            if (!IsUsableVanillaAbility(species, vanilla))
+                continue;
+            for (i = 0; i < gFrontierExtendedMonsCount; i++)
+            {
+                if (gFrontierExtendedMons[i].species == species && gFrontierExtendedMons[i].ability == vanilla)
+                    run = TRUE;
+            }
+            if (run)
+                continue;
+
+            missing++;
+            Test_MgbaPrintf("unrun ability: %S (species %d) has useful %S in vanilla slot %d but no frontier set runs it -- add a set with .ability = %S, or add it to sLowValueAbilities[] if it is worthless in the Factory",
+                            gSpeciesInfo[species].speciesName, species, gAbilitiesInfo[vanilla].name, slot, gAbilitiesInfo[vanilla].name);
+        }
+    }
+
+    EXPECT_GT(checked, 200);
+    EXPECT_EQ(missing, 0);
+}
+
 // A species needs at least one ability slot that can hold its *observable* ability -- one
 // whose post-override value is never-an-innate. When every real slot is innate-capable, no set can
 // legally name an ability for that species at all, because a set's chosen ability may not be one of
@@ -11653,57 +11835,31 @@ TEST("Innate abilities: every species the roster drafts has a legal observable s
     EXPECT_EQ(offenders, 0);
 }
 
-// Mega Staraptor regression. Its upstream ability is CONTRARY, which inverts every stat
-// change applied to the holder -- so the innate Moxie the Starly line carries read as Attack -1 on
-// a KO instead of +1, and the transformation actively punished the trait the base form is built
-// around. Contrary is never-an-innate (double-edged, fork-docs/INNATE_ABILITIES.md), so it cannot be
-// re-homed on the innate row; the fix is the override half of the Venusaur pattern -- every real
-// slot of the Mega points at the base form's chosen Hustle (src/fork/species_ability_overrides.c).
-SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mega Staraptor's innate Moxie raises Attack on a KO")
+// Mega Staraptor keeps its vanilla Contrary. The Starly line's innate Moxie is dropped on the Mega
+// (it would fire backwards under Contrary), and no override row repoints its slots.
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Mega Staraptor keeps Contrary and drops the line's Moxie")
 {
     GIVEN {
-        ASSUME(SpeciesHasInnate(SPECIES_STARAPTOR_MEGA, ABILITY_MOXIE));
+        ASSUME(SpeciesHasInnate(SPECIES_STARAPTOR, ABILITY_MOXIE));
+        ASSUME(!SpeciesHasInnate(SPECIES_STARAPTOR_MEGA, ABILITY_MOXIE));
         WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
-        PLAYER(SPECIES_STARAPTOR_MEGA) { Ability(ABILITY_HUSTLE); Moves(MOVE_TACKLE); } // chosen Hustle, Moxie only as innate
-        OPPONENT(SPECIES_WOBBUFFET) { HP(1); }
-        OPPONENT(SPECIES_ZIGZAGOON); // a second foe, so KOing the first doesn't end the battle
+        ASSUME(GetSpeciesAbility(SPECIES_STARAPTOR_MEGA, 0) == ABILITY_CONTRARY);
+        PLAYER(SPECIES_STARAPTOR_MEGA) { Ability(ABILITY_CONTRARY); Moves(MOVE_CLOSE_COMBAT); }
+        OPPONENT(SPECIES_WOBBUFFET);
     } WHEN {
-        TURN { MOVE(player, MOVE_TACKLE); SEND_OUT(opponent, 1); } // KOs the first foe; the second replaces it
-    } SCENE {
-        ABILITY_POPUP(player, ABILITY_MOXIE);
+        TURN { MOVE(player, MOVE_CLOSE_COMBAT); }
     } THEN {
-        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1); // +1, NOT the -1 a chosen Contrary would have made of it
+        EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE + 1);
+        EXPECT_EQ(player->statStages[STAT_SPDEF], DEFAULT_STAT_STAGE + 1);
     }
 }
-
-// An ability that inverts stat changes applied to its holder. Contrary is the only one in the game
-// today; the array exists so a future addition is one line rather than a rewritten test.
-static const enum Ability sStatInvertingAbilities[] =
-{
-    ABILITY_CONTRARY,
-};
-
-// Implemented innates whose whole effect is raising the HOLDER'S OWN stat stages. An inverting
-// chosen ability turns each of these from the boon the innate row intended into a penalty, so the
-// two may never sit on the same species. Abilities that move a *foe's* stats (Intimidate) are not
-// listed: Contrary sits on the holder, so it never touches them.
-static const enum Ability sSelfStatRaisingInnates[] =
-{
-    ABILITY_MOXIE, ABILITY_BEAST_BOOST, ABILITY_SOUL_HEART,
-    ABILITY_CHILLING_NEIGH, ABILITY_GRIM_NEIGH, ABILITY_BERSERK,
-    ABILITY_DEFIANT, ABILITY_COMPETITIVE, ABILITY_ANGER_POINT,
-    ABILITY_JUSTIFIED, ABILITY_STAMINA, ABILITY_WATER_COMPACTION,
-    ABILITY_RATTLED, ABILITY_STEADFAST, ABILITY_STEAM_ENGINE,
-    ABILITY_THERMAL_EXCHANGE, ABILITY_DOWNLOAD,
-    ABILITY_INTREPID_SWORD, ABILITY_DAUNTLESS_SHIELD,
-};
 
 // The gate the Mega Staraptor bug slipped through. Every other data check on this file asks
 // whether an innate is *wired*, *declared* or *selectable*; none asked whether the species' own
 // observable ability CONTRADICTS it. A stat-inverting chosen ability does exactly that, silently --
 // nothing is missing, nothing is duplicated, the innate simply fires backwards. Forms are covered
 // with everything else, which is what matters here: the conflict was introduced by a Mega whose
-// slots were left at upstream's value while the base form carried a clean override.
+// upstream Contrary met the line's innate Moxie (resolved by dropping Moxie from that Mega).
 TEST("Innate abilities: no species' chosen ability inverts its own stat-raising innates")
 {
     u32 species;
