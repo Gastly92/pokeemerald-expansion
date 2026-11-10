@@ -369,7 +369,10 @@ static void GenerateOpponentMons(void)
     // FillFactoryBrainParty, so this seeded team is discarded there.)
     if (battleNum == FRONTIER_STAGES_PER_CHALLENGE - 1)
         ReserveForcedTierSlot(slotTiers, TIER_LEGENDARY);
-    // FORK: no pseudo on an opponent until after the first boss battle (see helper).
+    // FORK: no pseudo on an opponent until after the first boss battle; the rule is
+    // GetFactoryOpponentStartingPseudoCount (src/fork/frontier_draft.c). It needs
+    // winStreak and must run before the draft loop below; on conflict keep it here.
+    // Test: "Frontier draft: Factory rentals hold exactly one pseudo, early opponents none".
     pseudoCount = GetFactoryOpponentStartingPseudoCount(winStreak);
 #endif
 
@@ -595,7 +598,7 @@ static void GenerateInitialRentalMons(void)
     u16 monIds[PARTY_SIZE];
     enum Item heldItems[PARTY_SIZE];
 #if B_FRONTIER_EXTENDED_MONS
-    u32 pseudoCount = 0; // FORK: tier quota — exactly one pseudo on the team
+    u32 pseudoCount = 0; // FORK: tier quota; set by ReserveFactoryRentalPseudoSlot below
     enum SpeciesTier slotTiers[PARTY_SIZE] = {TIER_NORMAL}; // per-slot draft rule
 #endif
 
@@ -628,7 +631,10 @@ static void GenerateInitialRentalMons(void)
     rentalRank = GetNumPastRentalsRank(factoryBattleMode, factoryLvlMode);
 
 #if B_FRONTIER_EXTENDED_MONS
-    // FORK: the player's initial rentals hold exactly one pseudo, at a random slot.
+    // FORK: the player's initial rentals hold exactly one pseudo, at a random slot
+    // (ReserveFactoryRentalPseudoSlot, src/fork/frontier_draft.c). Must run before the
+    // draft loop, which reads slotTiers[i]; on conflict keep it here.
+    // Test: "Frontier draft: Factory rentals hold exactly one pseudo, early opponents none".
     pseudoCount = ReserveFactoryRentalPseudoSlot(slotTiers);
 #endif
     currSpecies = SPECIES_NONE;
