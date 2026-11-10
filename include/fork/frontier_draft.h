@@ -23,6 +23,13 @@ bool32 FactoryRentalsHaveDexNum(enum Species species);
 bool32 TeamHasGimmickItemConflict(const u16 *heldItems, u32 count, u16 newItem);
 bool32 TierRejectsCandidate(enum SpeciesTier slotTier, enum SpeciesTier candTier, u32 pseudoCount);
 void ReserveForcedTierSlot(enum SpeciesTier *slotTiers, enum SpeciesTier tier);
+void ReserveForcedTierSlotInParty(enum SpeciesTier *slotTiers, u32 partySize, enum SpeciesTier tier);
+// Battle Factory pseudo rules: the initial rentals hold exactly one pseudo (reserves a
+// TIER_PSEUDO slot in a PARTY_SIZE slotTiers[] and returns the draft's starting pseudo
+// count), and opponents field none before the first boss battle (returns the starting
+// pseudo count for an opponent at `winStreak`).
+u32 ReserveFactoryRentalPseudoSlot(enum SpeciesTier *slotTiers);
+u32 GetFactoryOpponentStartingPseudoCount(u32 winStreak);
 // Reject an Illusion-ability candidate from the team's last party slot (where the
 // disguise can't form); harmless for non-Illusion mons / non-last slots.
 bool32 IllusionMonRejectsSlot(u32 slot, u32 partySize, const struct TrainerMon *fmon);

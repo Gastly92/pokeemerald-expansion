@@ -8,6 +8,7 @@
 #include "random.h"
 #include "fork/species_tiers.h"
 #include "constants/abilities.h"
+#include "constants/battle_frontier.h"
 #include "constants/form_change_types.h"
 #include "constants/hold_effects.h"
 
@@ -101,12 +102,39 @@ bool32 TierRejectsCandidate(enum SpeciesTier slotTier, enum SpeciesTier candTier
 // different tiers yields two distinct slots.
 void ReserveForcedTierSlot(enum SpeciesTier *slotTiers, enum SpeciesTier tier)
 {
+    ReserveForcedTierSlotInParty(slotTiers, FRONTIER_PARTY_SIZE, tier);
+}
+
+// As ReserveForcedTierSlot, for a draft of `partySize` slots (the Factory's rental
+// draft is PARTY_SIZE long even when the battle team is FRONTIER_PARTY_SIZE).
+void ReserveForcedTierSlotInParty(enum SpeciesTier *slotTiers, u32 partySize, enum SpeciesTier tier)
+{
     u32 slot;
 
     do
-        slot = Random() % FRONTIER_PARTY_SIZE;
+        slot = Random() % partySize;
     while (slotTiers[slot] != TIER_NORMAL);
     slotTiers[slot] = tier;
+}
+
+// The Battle Factory's initial rentals hold exactly one pseudo. A random slot of the
+// PARTY_SIZE rental draft is reserved for TIER_PSEUDO, and the returned pseudo count
+// (the draft's starting value) already counts it, so every normal slot rejects a
+// second pseudo no matter which slot is drawn first.
+u32 ReserveFactoryRentalPseudoSlot(enum SpeciesTier *slotTiers)
+{
+    ReserveForcedTierSlotInParty(slotTiers, PARTY_SIZE, TIER_PSEUDO);
+    return 1;
+}
+
+// The pseudo count a Battle Factory opponent's draft starts from. Before the first
+// boss battle (the last battle of the first set, which also brings the first seeded
+// legendary) the opponent may field no pseudo, so the count starts at the full quota
+// of one; from that boss on it starts at zero and the normal at-most-one rule applies.
+// Keyed on the win streak, so a lost challenge starts over pseudo-free.
+u32 GetFactoryOpponentStartingPseudoCount(u32 winStreak)
+{
+    return (winStreak < FRONTIER_STAGES_PER_CHALLENGE - 1) ? 1 : 0;
 }
 
 // Illusion (Zoroark, and this fork's Eon duo) disguises its holder as the team's
