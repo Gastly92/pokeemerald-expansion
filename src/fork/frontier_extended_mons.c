@@ -2158,6 +2158,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_PSYCHIC,
     },
+    {
+        .species = SPECIES_GOLDUCK,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_TERRAIN_EXTENDER,
+        .moves =
+        {
+            MOVE_PSYCHIC_TERRAIN,
+            MOVE_EXPANDING_FORCE,
+            MOVE_MUDDY_WATER,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_PSYCHIC_AFFINITY,
+        .nature = NATURE(SPE_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 4,
+            .spa = 252,
+            .spe = 252
+        ),
+        .teraType = TYPE_PSYCHIC,
+    },
 
     // 0059
     {

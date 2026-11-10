@@ -230,6 +230,10 @@ static const struct SpeciesAbilityOverride sSpeciesAbilityOverrides[] =
         SPECIES_PERSIAN_ALOLA, 2,
         ABILITY_RIVALRY
     },
+    { // 0055
+        SPECIES_GOLDUCK, 2,
+        ABILITY_PSYCHIC_AFFINITY
+    },
     { // 0071
         SPECIES_VICTREEBEL, 1,
         ABILITY_POISON_TOUCH
