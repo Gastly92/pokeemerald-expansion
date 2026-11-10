@@ -858,7 +858,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_FOREWARN,
             ABILITY_SWIFT_SWIM,
             ABILITY_TELEPATHY,
-            ABILITY_MINDS_EYE // evolving clears Psyduck's daze: the glowing gem "sees clearly" (Psyduck keeps Unaware)
+            ABILITY_MINDS_EYE
         )
     },
     { // 0056
