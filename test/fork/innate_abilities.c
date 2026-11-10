@@ -11541,6 +11541,7 @@ static const enum Ability sLowValueAbilities[] =
     ABILITY_KLUTZ,        // a drawback: disables the holder's own item
     ABILITY_STALL,        // a drawback: always moves last
     ABILITY_TRUANT,       // a drawback: loafs every other turn
+    ABILITY_COMMANDER,    // needs a Dondozo ally the draft never guarantees
 };
 
 static bool32 IsLowValueAbility(enum Ability ability)
@@ -11605,9 +11606,32 @@ TEST("Innate abilities: no frontier set runs an override over its species' own u
 
 // The override-row half of the coverage gates. An override replaces a vanilla slot, so a row is
 // only legal when what it replaces is not lost: the slot was empty, the replaced ability is one the
-// species carries innately, it survives in another slot, or it is on sLowValueAbilities[]. Runs over
+// species carries innately, it survives in another slot, or it is on sLowValueAbilities[] (or sOverrideReplacementExemptions[]). Runs over
 // every enabled species, battle forms included, because a Mega's override rows are where a whole
 // species' slots get repointed at once.
+// Overrides that deliberately replace a useful-looking vanilla ability. Each entry needs a reason
+// the ability is worthless on that species specifically, so a generic sLowValueAbilities[] entry
+// would be wrong.
+static const struct InnateCoverageExemption sOverrideReplacementExemptions[] =
+{
+    // Contrary inverts the line's innate Moxie (the Mega Staraptor regression test above).
+    { SPECIES_STARAPTOR_MEGA, ABILITY_CONTRARY },
+    // Aura Guard is unimplemented upstream; retire this entry once it does something.
+    { SPECIES_LUCARIO_MEGA_Z, ABILITY_AURA_GUARD },
+};
+
+static bool32 IsOverrideReplacementExempt(u16 species, enum Ability ability)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sOverrideReplacementExemptions); i++)
+    {
+        if (sOverrideReplacementExemptions[i].species == species && sOverrideReplacementExemptions[i].ability == ability)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 TEST("Innate abilities: no ability override replaces a useful vanilla ability")
 {
     u32 species, slot, other;
@@ -11616,6 +11640,10 @@ TEST("Innate abilities: no ability override replaces a useful vanilla ability")
 
     // GetSpeciesAbility only folds the override table in while the feature is on.
     SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    // A stale exemption is a lie in the table: the species must still have that vanilla ability.
+    for (slot = 0; slot < ARRAY_COUNT(sOverrideReplacementExemptions); slot++)
+        EXPECT(SpeciesHasVanillaAbility(sOverrideReplacementExemptions[slot].species, sOverrideReplacementExemptions[slot].ability));
 
     for (species = 1; species < NUM_SPECIES; species++)
     {
@@ -11630,7 +11658,8 @@ TEST("Innate abilities: no ability override replaces a useful vanilla ability")
             if (GetSpeciesAbility(species, slot) == vanilla)
                 continue;
             overridden++;
-            if (vanilla == ABILITY_NONE || SpeciesHasInnate(species, vanilla) || IsLowValueAbility(vanilla))
+            if (vanilla == ABILITY_NONE || SpeciesHasInnate(species, vanilla) || IsLowValueAbility(vanilla)
+             || IsOverrideReplacementExempt(species, vanilla))
                 continue;
             for (other = 0; other < NUM_ABILITY_SLOTS; other++)
             {
