@@ -32039,7 +32039,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_MAGNET,
         .moves =
         {
-            MOVE_DISCHARGE,
+            MOVE_ELECTROWEB,
             MOVE_ACID_SPRAY,
             MOVE_RECOVER,
             MOVE_PROTECT
