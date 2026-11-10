@@ -304,3 +304,74 @@ TEST("Frontier draft: each slot weighs every dex number it accepts equally")
     if (checkWeights)
         EXPECT_GT(mixedDraws * slotDexNums * 100, draws * mixedDexNums * 85);
 }
+
+// The Factory's pseudo rules: the player's initial rentals hold exactly one pseudo, and an
+// opponent fields none up to and including the first boss battle (the last of the first
+// set); from the battle after it the usual at-most-one rule applies.
+TEST("Frontier draft: an opponent may field a pseudo only after the first boss battle")
+{
+    EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(0), 1);
+    EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE - 2), 1);
+    EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE - 1), 1); // the boss
+    EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE), 0);
+    EXPECT_EQ(GetFactoryOpponentStartingPseudoCount(FRONTIER_STAGES_PER_CHALLENGE * 5), 0);
+}
+
+static u32 CountPseudos(const u16 *monIds, u32 count)
+{
+    u32 i, n = 0;
+    for (i = 0; i < count; i++)
+    {
+        if (GetSpeciesTier(gFrontierExtendedMons[monIds[i]].species) == TIER_PSEUDO)
+            n++;
+    }
+    return n;
+}
+
+TEST("Frontier draft: Factory rentals hold exactly one pseudo, early opponents none")
+{
+    u32 run, i, winStreak;
+    u16 rentals[PARTY_SIZE];
+    u32 maxPseudosAfterBoss = 0;
+
+    PARAMETRIZE { winStreak = 0; }
+    PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE - 2; }
+    PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE - 1; } // the first boss
+    PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE; }
+    PARAMETRIZE { winStreak = FRONTIER_STAGES_PER_CHALLENGE + 3; }
+
+    gSaveBlock2Ptr->frontier.lvlMode = FRONTIER_LVL_50;
+    VarSet(VAR_FRONTIER_FACILITY, FRONTIER_FACILITY_FACTORY);
+    VarSet(VAR_FRONTIER_BATTLE_MODE, FRONTIER_MODE_SINGLES);
+    gFacilityTrainerMons = gFrontierExtendedMons;
+    gSaveBlock2Ptr->frontier.factoryWinStreaks[FRONTIER_MODE_SINGLES][FRONTIER_LVL_50] = winStreak;
+    gSaveBlock2Ptr->frontier.curChallengeBattleNum = winStreak % FRONTIER_STAGES_PER_CHALLENGE;
+
+    for (run = 0; run < 100; run++)
+    {
+        gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_GENERATE_RENTAL_MONS;
+        CallBattleFactoryFunction();
+        for (i = 0; i < PARTY_SIZE; i++)
+            rentals[i] = gSaveBlock2Ptr->frontier.rentalMons[i].monId;
+    #if B_FRONTIER_EXTENDED_MONS
+        EXPECT_EQ(CountPseudos(rentals, PARTY_SIZE), 1);
+    #endif
+
+        gSpecialVar_0x8004 = BATTLE_FACTORY_FUNC_GENERATE_OPPONENT_MONS;
+        CallBattleFactoryFunction();
+    #if B_FRONTIER_EXTENDED_MONS
+        if (winStreak < FRONTIER_STAGES_PER_CHALLENGE)
+            EXPECT_EQ(CountPseudos(gFrontierTempParty, FRONTIER_PARTY_SIZE), 0);
+        else
+            EXPECT_LE(CountPseudos(gFrontierTempParty, FRONTIER_PARTY_SIZE), 1);
+        maxPseudosAfterBoss = max(maxPseudosAfterBoss, CountPseudos(gFrontierTempParty, FRONTIER_PARTY_SIZE));
+    #endif
+    }
+#if B_FRONTIER_EXTENDED_MONS
+    // Control: once past the first boss, a pseudo does turn up on some opponent.
+    if (winStreak >= FRONTIER_STAGES_PER_CHALLENGE)
+        EXPECT_EQ(maxPseudosAfterBoss, 1);
+#else
+    (void)maxPseudosAfterBoss;
+#endif
+}

@@ -369,6 +369,11 @@ static void GenerateOpponentMons(void)
     // FillFactoryBrainParty, so this seeded team is discarded there.)
     if (battleNum == FRONTIER_STAGES_PER_CHALLENGE - 1)
         ReserveForcedTierSlot(slotTiers, TIER_LEGENDARY);
+    // FORK: no pseudo on an opponent until after the first boss battle; the rule is
+    // GetFactoryOpponentStartingPseudoCount (src/fork/frontier_draft.c). It needs
+    // winStreak and must run before the draft loop below; on conflict keep it here.
+    // Test: "Frontier draft: Factory rentals hold exactly one pseudo, early opponents none".
+    pseudoCount = GetFactoryOpponentStartingPseudoCount(winStreak);
 #endif
 
     i = 0;
@@ -593,7 +598,8 @@ static void GenerateInitialRentalMons(void)
     u16 monIds[PARTY_SIZE];
     enum Item heldItems[PARTY_SIZE];
 #if B_FRONTIER_EXTENDED_MONS
-    u32 pseudoCount = 0; // FORK: tier quota — at most one pseudo on the team
+    u32 pseudoCount = 0; // FORK: tier quota; set by ReserveFactoryRentalPseudoSlot below
+    enum SpeciesTier slotTiers[PARTY_SIZE] = {TIER_NORMAL}; // per-slot draft rule
 #endif
 
     gFacilityTrainers = gBattleFrontierTrainers;
@@ -624,6 +630,13 @@ static void GenerateInitialRentalMons(void)
     }
     rentalRank = GetNumPastRentalsRank(factoryBattleMode, factoryLvlMode);
 
+#if B_FRONTIER_EXTENDED_MONS
+    // FORK: the player's initial rentals hold exactly one pseudo, at a random slot
+    // (ReserveFactoryRentalPseudoSlot, src/fork/frontier_draft.c). Must run before the
+    // draft loop, which reads slotTiers[i]; on conflict keep it here.
+    // Test: "Frontier draft: Factory rentals hold exactly one pseudo, early opponents none".
+    pseudoCount = ReserveFactoryRentalPseudoSlot(slotTiers);
+#endif
     currSpecies = SPECIES_NONE;
     i = 0;
     while (i != PARTY_SIZE)
@@ -632,7 +645,7 @@ static void GenerateInitialRentalMons(void)
         // FORK: draw only among sets the tier quota accepts; see GenerateOpponentMons.
         // The rentalRank "better range" only meant something on the vanilla tiered list.
         (void)rentalRank, (void)challengeNum;
-        monId = GetRandomFrontierExtendedMonIdForSlot(TIER_NORMAL, pseudoCount);
+        monId = GetRandomFrontierExtendedMonIdForSlot(slotTiers[i], pseudoCount);
     #else
         if (i < rentalRank) // The more times the player has rented, the more initial rentals are generated from a better set of Pokémon
             monId = GetFactoryMonId(factoryLvlMode, challengeNum, TRUE);
@@ -690,8 +703,8 @@ static void GenerateInitialRentalMons(void)
             continue;
 
         // Tier quota: the player's initial team carries no legendaries or
-        // mythicals and at most one pseudo (every slot is a normal slot here).
-        if (TierRejectsCandidate(TIER_NORMAL, GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
+        // mythicals and exactly one pseudo, in the slot reserved above.
+        if (TierRejectsCandidate(slotTiers[i], GetSpeciesTier(gFacilityTrainerMons[monId].species), pseudoCount))
             continue;
 
         // Keep Illusion mons out of the last slot, where the disguise can't form
