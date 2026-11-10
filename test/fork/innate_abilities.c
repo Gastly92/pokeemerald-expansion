@@ -11540,6 +11540,7 @@ static const enum Ability sLowValueAbilities[] =
     ABILITY_SCREEN_CLEANER, // only clears screens on entry
     ABILITY_KLUTZ,        // a drawback: disables the holder's own item
     ABILITY_STALL,        // a drawback: always moves last
+    ABILITY_TRUANT,       // a drawback: loafs every other turn
 };
 
 static bool32 IsLowValueAbility(enum Ability ability)
@@ -11600,6 +11601,96 @@ TEST("Innate abilities: no frontier set runs an override over its species' own u
     // Guard against a vacuous pass: the roster leans on override rows heavily.
     EXPECT_GT(overrideSets, 100);
     EXPECT_EQ(offenders, 0);
+}
+
+// The override-row half of the coverage gates. An override replaces a vanilla slot, so a row is
+// only legal when what it replaces is not lost: the slot was empty, the replaced ability is one the
+// species carries innately, it survives in another slot, or it is on sLowValueAbilities[]. Runs over
+// every enabled species, battle forms included, because a Mega's override rows are where a whole
+// species' slots get repointed at once.
+TEST("Innate abilities: no ability override replaces a useful vanilla ability")
+{
+    u32 species, slot, other;
+    u32 overridden = 0;
+    u32 offenders = 0;
+
+    // GetSpeciesAbility only folds the override table in while the feature is on.
+    SetConfig(CONFIG_FEATURE_INNATE_ABILITIES, TRUE);
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (!IsSpeciesEnabled(species))
+            continue;
+
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability vanilla = gSpeciesInfo[species].abilities[slot];
+            bool32 survives = FALSE;
+
+            if (GetSpeciesAbility(species, slot) == vanilla)
+                continue;
+            overridden++;
+            if (vanilla == ABILITY_NONE || SpeciesHasInnate(species, vanilla) || IsLowValueAbility(vanilla))
+                continue;
+            for (other = 0; other < NUM_ABILITY_SLOTS; other++)
+            {
+                if (GetSpeciesAbility(species, other) == vanilla)
+                    survives = TRUE;
+            }
+            if (survives)
+                continue;
+
+            offenders++;
+            Test_MgbaPrintf("lost ability: an override replaces %S's vanilla slot %d (%S), which is not innate, not in another slot and not low-value -- move the override to an empty or redundant slot, give the species the innate, or add the ability to sLowValueAbilities[]",
+                            gSpeciesInfo[species].speciesName, slot, gAbilitiesInfo[vanilla].name);
+        }
+    }
+
+    EXPECT_GT(overridden, 300); // guard against a vacuous pass if the override hook goes inert
+    EXPECT_EQ(offenders, 0);
+}
+
+// The roster half. A useful vanilla ability that is still selectable but that no set runs never
+// shows up in the Factory, so the species' own canon pick is invisible. "Useful" is the same test
+// the override gate above uses (IsUsableVanillaAbility): real, never-an-innate, not this species'
+// innate, and not on sLowValueAbilities[]. Fix a hit by adding a set that runs it.
+TEST("Innate abilities: every roster species has a set running each useful vanilla ability")
+{
+    u32 species, slot, i;
+    u32 checked = 0;
+    u32 missing = 0;
+
+    for (species = 1; species < NUM_SPECIES; species++)
+    {
+        if (!IsSpeciesEnabled(species))
+            continue;
+        if (!RosterBuildsSpecies(species))
+            continue;
+
+        checked++;
+        for (slot = 0; slot < NUM_ABILITY_SLOTS; slot++)
+        {
+            enum Ability vanilla = gSpeciesInfo[species].abilities[slot];
+            bool32 run = FALSE;
+
+            if (!IsUsableVanillaAbility(species, vanilla))
+                continue;
+            for (i = 0; i < gFrontierExtendedMonsCount; i++)
+            {
+                if (gFrontierExtendedMons[i].species == species && gFrontierExtendedMons[i].ability == vanilla)
+                    run = TRUE;
+            }
+            if (run)
+                continue;
+
+            missing++;
+            Test_MgbaPrintf("unrun ability: %S (species %d) has useful %S in vanilla slot %d but no frontier set runs it -- add a set with .ability = %S, or add it to sLowValueAbilities[] if it is worthless in the Factory",
+                            gSpeciesInfo[species].speciesName, species, gAbilitiesInfo[vanilla].name, slot, gAbilitiesInfo[vanilla].name);
+        }
+    }
+
+    EXPECT_GT(checked, 200);
+    EXPECT_EQ(missing, 0);
 }
 
 // A species needs at least one ability slot that can hold its *observable* ability -- one
