@@ -832,10 +832,11 @@ static void DrawFoePage(u8 windowId, u32 foeIndex)
 
     PrintLine(windowId, COMPOUND_STRING("Moves:"), 0, y);
     y += LINE_H;
-    // Only the move slots the foe has *actually used* (tracked in gBattleStruct),
-    // read straight from its real moveset. PP shows current / max-with-PP-Ups, so
-    // it stays correct under B_FRONTIER_MAX_PP.
-    u32 usedMask = gBattleStruct->infoUsedMoves[B_SIDE_OPPONENT][foeIndex];
+    // Only the move slots the foe has *actually used* or Forewarn has revealed (tracked in
+    // gBattleStruct), read straight from its real moveset. PP shows current / max-with-PP-Ups,
+    // so it stays correct under B_FRONTIER_MAX_PP.
+    u32 usedMask = gBattleStruct->infoUsedMoves[B_SIDE_OPPONENT][foeIndex]
+                 | gBattleStruct->infoForewarnedMoves[B_SIDE_OPPONENT][foeIndex];
     u8 ppBonuses = GetMonData(&foeParty[foeIndex], MON_DATA_PP_BONUSES, NULL);
     for (u32 i = 0; i < MAX_MON_MOVES; i++)
     {

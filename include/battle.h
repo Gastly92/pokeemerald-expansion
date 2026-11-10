@@ -767,6 +767,10 @@ struct BattleStruct
     // seen". Set in battle_move_resolution.c; read in src/frontier_battle_info.c.
     // Zeroed each battle (gBattleStruct is AllocZeroed).
     u8 infoUsedMoves[NUM_BATTLE_SIDES][PARTY_SIZE];
+    // FORK: the move slots Forewarn has revealed, shown in the viewer's move list beside
+    // infoUsedMoves. Separate because the Zoom Lens reads infoUsedMoves as "has acted".
+    // Set in src/fork/forewarn.c.
+    u8 infoForewarnedMoves[NUM_BATTLE_SIDES][PARTY_SIZE];
     // FORK: per-party-slot bitmasks of which battlers have had their ability /
     // held-item *revealed* in battle, for the B_FRONTIER_BATTLE_INFO viewer.
     // gAiPartyData pre-fills these under AI_FLAG_OMNISCIENT, so it can't say what

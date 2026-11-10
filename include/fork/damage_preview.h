@@ -15,6 +15,13 @@
 // battle state changed.
 // `ko` says whether the hit KOs from the defender's *current* HP: at every corner of the range,
 // at some, or not at all (also when a known Sturdy / Focus Sash / Disguise would hold on).
+// One end of an unknown spread, mirroring CalculateMonStats() (src/pokemon.c). `nature` is a
+// percentage: NATURE_HINDERING, 100 or NATURE_BOOSTING.
+#define NATURE_HINDERING 90
+#define NATURE_BOOSTING  110
+u32 DamagePreviewHpBound(enum Species species, u32 level, u32 iv, u32 ev);
+u32 DamagePreviewStatBound(u32 base, u32 level, u32 iv, u32 ev, u32 nature);
+
 enum DamagePreviewKO
 {
     DAMAGE_PREVIEW_NO_KO,

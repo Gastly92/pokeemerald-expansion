@@ -17,6 +17,7 @@
 #include "fork/rekindle.h" // FORK: Rekindle (heal on KO)
 #include "fork/willpower.h" // FORK: Willpower (Sp. Def twin of Stamina)
 #include "fork/pacify.h" // FORK: Pacify (Sp. Atk twin of Intimidate)
+#include "fork/forewarn.h" // FORK: FEATURE_FOREWARN_MATCHUP + INFO viewer reveal
 #include "fork/mythical.h" // FORK: Mythical (doubled max HP while on the field)
 #include "fork/deterministic_moves.h" // FORK: DeterministicAdditionalEffectApplies (high-crit crit gate)
 #include "fork/buff_no_guard.h" // FORK: BUFF_NO_GUARD (No Guard "wild swings" power)
@@ -2171,7 +2172,16 @@ static void ForewarnChooseMove(enum BattlerId battler)
         enum Move moveId;
     };
     u32 i, j, bestId, count;
-    struct Forewarn *data = Alloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_MON_MOVES);
+    struct Forewarn *data;
+
+    // FORK: FEATURE_FOREWARN_MATCHUP ranks by damage against the Forewarn user instead of base
+    // power (src/fork/forewarn.c). On conflict keep this early-out ahead of upstream's scan.
+    if (GetConfig(FEATURE_FOREWARN_MATCHUP))
+    {
+        ForewarnChooseMoveByMatchup(battler);
+        return;
+    }
+    data = Alloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_MON_MOVES);
 
     // Put all moves
     for (count = 0, i = 0; i < MAX_BATTLERS_COUNT; i++)
@@ -2252,6 +2262,7 @@ static void ForewarnChooseMove(enum BattlerId battler)
     gEffectBattler = data[bestId].battler;
     PREPARE_MOVE_BUFFER(gBattleTextBuff1, data[bestId].moveId)
     RecordKnownMove(data[bestId].battler, data[bestId].moveId);
+    RecordForewarnedMove(data[bestId].battler, data[bestId].moveId); // FORK: INFO viewer move list (src/fork/forewarn.c)
 
     Free(data);
 }

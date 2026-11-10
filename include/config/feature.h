@@ -129,4 +129,13 @@
 // ABILITY_WIND_POWER case of src/battle_util.c.
 #define FEATURE_NO_DUPLICATE_CHARGE TRUE
 
+// When TRUE, Forewarn reveals the opposing move that could hurt the Forewarn user most (the top of
+// its damage range: type matchup, STAB, weather, the user's own bulk) instead of the one with the
+// highest base power. The ranking uses only what the user's side could know: the foe's spread is
+// bounded at its strongest and its unrevealed ability / item count as absent, so the reveal is one
+// move name and nothing more. Counter-style moves score half the user's max HP. When nothing can
+// damage the user, the first move of the first foe is revealed. Ties go to the earlier foe and
+// slot, so no RNG is drawn. See src/fork/forewarn.c.
+#define FEATURE_FOREWARN_MATCHUP TRUE
+
 #endif // GUARD_CONFIG_FEATURE_H
