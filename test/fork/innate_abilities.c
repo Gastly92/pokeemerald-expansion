@@ -7298,6 +7298,26 @@ SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cud Chew re-eats a Berry th
     }
 }
 
+// The end-turn countdown must not run while the timer is idle: cudChewTimer is a 2-bit field, so an
+// unguarded decrement wraps 0 -> 3 and fires a Berry-less Cud Chew every fourth turn (upstream #11059).
+SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Cud Chew does not activate when no Berry was eaten")
+{
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_TAUROS_PALDEA_COMBAT, ABILITY_CUD_CHEW));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        PLAYER(SPECIES_TAUROS_PALDEA_COMBAT) { Ability(ABILITY_INTIMIDATE); Item(ITEM_NONE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN {}
+        TURN {}
+        TURN {}
+        TURN {}
+        TURN {}
+    } SCENE {
+        NONE_OF { ABILITY_POPUP(player, ABILITY_CUD_CHEW); }
+    }
+}
+
 // ----- Pickup (grabs an item consumed this turn) -----
 // Run under DETERMINISTIC_ABILITIES (the shipping default), which selects the pickup target by a
 // fixed preference order rather than at random; in singles the sole valid target is the foe either way.
