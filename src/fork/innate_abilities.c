@@ -856,9 +856,9 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_GOLDUCK,
         INNATES(
             ABILITY_FOREWARN,
+            ABILITY_MINDS_EYE,
             ABILITY_SWIFT_SWIM,
-            ABILITY_TELEPATHY,
-            ABILITY_MINDS_EYE
+            ABILITY_TELEPATHY
         )
     },
     { // 0056
