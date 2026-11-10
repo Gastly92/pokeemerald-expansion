@@ -13,6 +13,7 @@
 #include "fork/battle_ai_gimmick.h" // FORK: AI_GetGimmickExecutedMove
 #include "fork/battle_ai_zmove.h" // FORK: AI_FLAG_SMART_Z_MOVE
 #include "fork/damage_preview.h" // FORK: IsDamagePreviewCrit
+#include "fork/multi_hit_pp.h" // FORK: FEATURE_MULTI_HIT_PP_PER_HIT
 #include "battle_stat_change.h"
 #include "battle_controllers.h"
 #include "battle_factory.h"
@@ -859,6 +860,19 @@ static inline void CalcDynamicMoveDamage(struct DamageContext *ctx, struct Simul
         random  += random  / (B_PARENTAL_BOND_DMG >= GEN_7 ? 4 : 2);
     }
 
+    // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- price only the strikes the attacker can pay for.
+    // simDamage still holds one strike's damage here, and every branch above multiplied by a
+    // strike count, so capping each figure at (one strike x affordable strikes) is exact.
+    // Triple Kick is summed per strike by AI_CalcDamage and capped there instead.
+    if (IsPerHitPPMove(ctx->move) && effect != EFFECT_TRIPLE_KICK)
+    {
+        u32 affordable = GetMultiHitPPCappedHits(ctx->battlerAtk, ctx->battlerDef, ctx->move, MAX_PER_HIT_PP_STRIKES);
+        median  = min(median,  simDamage->median  * affordable);
+        minimum = min(minimum, simDamage->minimum * affordable);
+        maximum = min(maximum, simDamage->maximum * affordable);
+        random  = min(random,  simDamage->random  * affordable);
+    }
+
     if (median == 0)
         median = 1;
     if (minimum == 0)
@@ -1091,9 +1105,13 @@ struct SimulatedDamage AI_CalcDamage(struct AiCalcValues *aiCalc, enum BattlerId
         // On conflict: keep the !convertedByGimmick guard on whatever upstream's loop becomes.
         else if (moveEffect == EFFECT_TRIPLE_KICK && !convertedByGimmick)
         {
+            u32 tripleKickHits = GetMultiHitPPCappedHits(battlerAtk, battlerDef, move, GetMoveStrikeCount(move)); // FORK: FEATURE_MULTI_HIT_PP_PER_HIT
             for (gMultiHitCounter = GetMoveStrikeCount(move); gMultiHitCounter > 0; gMultiHitCounter--) // The global is used to simulate actual damage done
             {
                 s32 damageByRollType = 0;
+
+                if (GetMoveStrikeCount(move) - gMultiHitCounter >= tripleKickHits) // FORK: FEATURE_MULTI_HIT_PP_PER_HIT -- a strike it cannot pay for is not thrown
+                    continue; // not break: the loop must still run gMultiHitCounter down to 0
 
                 s32 oneTripleKickHit = CalculateMoveDamageVars(&ctx);
 

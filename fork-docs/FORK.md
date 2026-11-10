@@ -29,6 +29,7 @@ doc below. A row records only what neither of those can — status, and the poin
 | [`BATTLE_INFO.md`](BATTLE_INFO.md) | The in-battle INFO viewer and its reveal-gating rules |
 | [`DAMAGE_PREVIEW.md`](DAMAGE_PREVIEW.md) | The move menu's damage-range readout (what the range spans and what it hides) and its status-move "Fails" readout |
 | [`HEALTHBOX_HP_PERCENT.md`](HEALTHBOX_HP_PERCENT.md) | The healthbox HP % that replaces the level: rounding, the empty full-HP slot, fitting beside gimmick icons |
+| [`MULTI_HIT_PP.md`](MULTI_HIT_PP.md) | Per-strike PP for multi-hit moves: what pays, when, and what the menu, preview and AI project |
 | [`LINE_REVIEW.md`](LINE_REVIEW.md) | The per-species-line review playbook (innates, overrides, Factory sets) |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
@@ -143,6 +144,7 @@ CI tracker are in [`HELD_ITEMS.md`](HELD_ITEMS.md).
 | Cursed Body ignores Z-Moves | `FEATURE_CURSED_BODY_IGNORES_Z_MOVES` | `config/feature.h`, `src/battle_util.c` | ✅ | Cursed Body no longer shows a pop-up and a "was disabled!" message for a damaging Z-Move, a disable that did nothing anyway. A status Z-Move's base move is still disabled. `test/fork/cursed_body_z_moves.c` |
 | No Charge on faint | `FEATURE_NO_CHARGE_ON_FAINT` | `config/feature.h`, `src/battle_util.c` | ✅ | Electromorphosis and Wind Power (chosen or innate) show no pop-up or "charged with power!" message when the triggering hit knocks the holder out, since the Charge would be lost anyway. `test/fork/no_charge_on_faint.c` |
 | No duplicate Charge | `FEATURE_NO_DUPLICATE_CHARGE` | `config/feature.h`, `src/battle_util.c` | ✅ | A Pokémon with both Wind Power and Electromorphosis (chosen or innate) shows one pop-up and one "charged with power!" message when hit by a damaging wind move, not two; Tailwind still triggers Wind Power. `test/fork/no_duplicate_charge.c` |
+| Multi-hit moves pay per strike | `FEATURE_MULTI_HIT_PP_PER_HIT` | `config/feature.h`, `src/fork/multi_hit_pp.c` | ✅ | Every strike of a multi-hit move costs PP, with every PP tax applied per strike, and a strike the move cannot afford is not thrown. [Details](MULTI_HIT_PP.md) · `test/fork/multi_hit_pp.c` |
 | Sand Spit weather animation fix | _(fix; no new flag)_ | `src/battle_util.c`, `src/battle_script_commands.c` | ✅ | Sand Spit no longer plays a garbage animation that could hang the battle. `test/fork/weather_ability_animation.c` |
 | Illusion survives a form-change gfx reload | _(fix; no new flag)_ | `src/battle_gfx_sfx_util.c` | ✅ | A disguised battler's sprite is no longer repainted as its true species when Dynamax ends. `test/fork/illusion_dynamax.c` |
 

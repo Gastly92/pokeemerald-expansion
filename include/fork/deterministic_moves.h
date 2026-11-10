@@ -83,7 +83,9 @@ u32 GetAccuracyItemRelief(enum BattlerId battlerAtk, enum BattlerId battlerDef);
 // include/battle_util.h with their definitions (src/fork/deterministic_moves.c).
 s32 GetAccEvasionStageDelta(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability atkAbility, enum Ability defAbility, bool32 ignorePenalties); // DETERMINISTIC_ACCURACY_EVASION PP economy
 u32 GetDeterministicMoveTargetPPTax(enum BattlerId battlerAtk, enum BattlerId battlerDef, enum Move move, enum Ability defAbility, enum HoldEffect defHoldEffect); // DETERMINISTIC_ACCURACY_EVASION PP economy
-s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move); // DETERMINISTIC_ACCURACY_EVASION move-info PP cost
+s32 GetProjectedMovePPCost(enum BattlerId battlerAtk, enum Move move, u32 strikes); // DETERMINISTIC_ACCURACY_EVASION move-info PP cost (strikes: FEATURE_MULTI_HIT_PP_PER_HIT)
+enum BattlerId GetProjectedMoveTarget(enum BattlerId battlerAtk); // the foe a move-select-time projection prices against
+void GetProjectedMovePPCostParts(enum BattlerId battlerAtk, enum BattlerId primaryDef, enum Move move, s32 *cost, s32 *refundPerHit, s32 *oneTimeRefund); // one use's PP cost, split
 
 // DETERMINISTIC_MOVE_RESULTS speed ties (moved from include/battle_main.h).
 s32 DeterministicSpeedTieWins(enum BattlerId battlerAtk, enum BattlerId battlerDef); // DETERMINISTIC_MOVE_RESULTS
