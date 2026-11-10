@@ -2172,8 +2172,6 @@ static void ForewarnChooseMove(enum BattlerId battler)
         enum Move moveId;
     };
     u32 i, j, bestId, count;
-    struct Forewarn *data;
-
     // FORK: FEATURE_FOREWARN_MATCHUP ranks by damage against the Forewarn user instead of base
     // power (src/fork/forewarn.c). On conflict keep this early-out ahead of upstream's scan.
     if (GetConfig(FEATURE_FOREWARN_MATCHUP))
@@ -2181,7 +2179,7 @@ static void ForewarnChooseMove(enum BattlerId battler)
         ForewarnChooseMoveByMatchup(battler);
         return;
     }
-    data = Alloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_MON_MOVES);
+    struct Forewarn *data = Alloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_MON_MOVES);
 
     // Put all moves
     for (count = 0, i = 0; i < MAX_BATTLERS_COUNT; i++)
