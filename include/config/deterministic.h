@@ -281,7 +281,7 @@
 //     src/battle_main.c.
 //   - Moody *sets* all seven stat stages (accuracy and evasion included, ignoring
 //     B_MOODY_ACC_EVASION) at each end of turn, stepping through a fixed swing:
-//     +1, -1, +2, -2, +3, -3, +6, -6, then alternating +6/-6. One pop-up and one
+//     -1, +1, -2, +2, -3, +3, -6, +6, then alternating -6/+6. One pop-up and one
 //     message per turn. It is a direct set (like Haze), so Contrary/Simple and
 //     stat-change reactions don't apply. The step restarts when the holder switches
 //     in. See src/fork/deterministic_moody.c.

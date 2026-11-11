@@ -208,17 +208,17 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Moody sets every stat, accuracy and
 {
     u32 turns;
     s32 stage;
-    PARAMETRIZE { turns = 1;  stage = +1; }
-    PARAMETRIZE { turns = 2;  stage = -1; }
-    PARAMETRIZE { turns = 3;  stage = +2; }
-    PARAMETRIZE { turns = 4;  stage = -2; }
-    PARAMETRIZE { turns = 5;  stage = +3; }
-    PARAMETRIZE { turns = 6;  stage = -3; }
-    PARAMETRIZE { turns = 7;  stage = +6; }
-    PARAMETRIZE { turns = 8;  stage = -6; }
-    PARAMETRIZE { turns = 9;  stage = +6; }
-    PARAMETRIZE { turns = 10; stage = -6; }
-    PARAMETRIZE { turns = 11; stage = +6; }
+    PARAMETRIZE { turns = 1;  stage = -1; }
+    PARAMETRIZE { turns = 2;  stage = +1; }
+    PARAMETRIZE { turns = 3;  stage = -2; }
+    PARAMETRIZE { turns = 4;  stage = +2; }
+    PARAMETRIZE { turns = 5;  stage = -3; }
+    PARAMETRIZE { turns = 6;  stage = +3; }
+    PARAMETRIZE { turns = 7;  stage = -6; }
+    PARAMETRIZE { turns = 8;  stage = +6; }
+    PARAMETRIZE { turns = 9;  stage = -6; }
+    PARAMETRIZE { turns = 10; stage = +6; }
+    PARAMETRIZE { turns = 11; stage = -6; }
 
     GIVEN {
         WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
@@ -245,16 +245,16 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Moody announces each step of its sw
     } SCENE {
         ABILITY_POPUP(player, ABILITY_MOODY);
         ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player);
-        MESSAGE("Wobbuffet increased all its stats!");
         MESSAGE("Wobbuffet decreased all its stats!");
-        MESSAGE("Wobbuffet sharply increased all its stats!");
+        MESSAGE("Wobbuffet increased all its stats!");
         MESSAGE("Wobbuffet sharply decreased all its stats!");
-        MESSAGE("Wobbuffet drastically increased all its stats!");
+        MESSAGE("Wobbuffet sharply increased all its stats!");
         MESSAGE("Wobbuffet drastically decreased all its stats!");
-        MESSAGE("Wobbuffet maximized all its stats!");
+        MESSAGE("Wobbuffet drastically increased all its stats!");
         MESSAGE("Wobbuffet minimized all its stats!");
         MESSAGE("Wobbuffet maximized all its stats!");
         MESSAGE("Wobbuffet minimized all its stats!");
+        MESSAGE("Wobbuffet maximized all its stats!");
     }
 }
 
@@ -272,11 +272,11 @@ SINGLE_BATTLE_TEST("DETERMINISTIC_ABILITIES: Moody's swing restarts when the hol
         TURN { SWITCH(player, 1); }
         TURN { SWITCH(player, 0); }
     } SCENE {
-        MESSAGE("Wobbuffet sharply increased all its stats!");
-        MESSAGE("Wobbuffet increased all its stats!");
+        MESSAGE("Wobbuffet sharply decreased all its stats!");
+        MESSAGE("Wobbuffet decreased all its stats!");
     } THEN {
-        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE + 1);
-        EXPECT_EQ(player->statStages[STAT_EVASION], DEFAULT_STAT_STAGE + 1);
+        EXPECT_EQ(player->statStages[STAT_ATK], DEFAULT_STAT_STAGE - 1);
+        EXPECT_EQ(player->statStages[STAT_EVASION], DEFAULT_STAT_STAGE - 1);
     }
 }
 
