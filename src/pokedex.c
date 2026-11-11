@@ -2210,6 +2210,20 @@ void CreatePokedexList(u8 dexMode, u8 order)
         break;
     }
 
+#if START_WITH_NATIONAL_POKEDEX
+    // FORK: a new game has the Pokédex with nothing seen, and the START menu no longer
+    // blocks opening it (src/start_menu.c). The list screens assume at least one entry
+    // (pokemonListCount - 1 cursor bounds), so pad an empty list with one unseen row.
+    // On conflict, keep this block after upstream's switch. Test: test/fork/pokedex_empty.c.
+    if (sPokedexView->pokemonListCount == 0)
+    {
+        sPokedexView->pokedexList[0].dexNum = temp_isHoennDex ? RegionalToNationalOrder(1) : 1;
+        sPokedexView->pokedexList[0].seen = FALSE;
+        sPokedexView->pokedexList[0].owned = FALSE;
+        sPokedexView->pokemonListCount = 1;
+    }
+#endif
+
     for (i = sPokedexView->pokemonListCount; i < NATIONAL_DEX_COUNT; i++)
     {
         sPokedexView->pokedexList[i].dexNum = 0xFFFF;
