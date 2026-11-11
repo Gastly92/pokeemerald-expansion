@@ -643,7 +643,8 @@ static bool8 HandleStartMenuInput(void)
         PlaySE(SE_SELECT);
         if (sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void == StartMenuPokedexCallback)
         {
-            if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0)
+            if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0
+             && !START_WITH_NATIONAL_POKEDEX) // FORK: a new game has the dex with nothing seen; CreatePokedexList() pads the empty list
                 return FALSE;
         }
         if (sCurrentStartMenuActions[sStartMenuCursorPos] == MENU_ACTION_DEXNAV
