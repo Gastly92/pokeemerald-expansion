@@ -3,6 +3,8 @@
 #include "fork/damage_preview.h"
 #include "fork/innate_abilities.h"
 #include "fork/status_preview.h"
+#include "string_util.h"
+#include "constants/characters.h"
 
 // B_MOVE_STATUS_PREVIEW. The move menu says "<Type> Fails" (or "<Type> Bounces", for a visible
 // Magic Bounce) for a status move the player can already tell will fail on the foe -- and never for one that only fails because of something
@@ -260,5 +262,90 @@ DOUBLE_BATTLE_TEST("Status preview: a hazard reads as bouncing when either foe h
         EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_STEALTH_ROCK), STATUS_PREVIEW_BOUNCES);
         // A targeted move only bounces off its own target.
         EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_TOXIC), STATUS_PREVIEW_NONE);
+    }
+}
+
+// The menu text itself, minus the font code PrependFontIdToFit may put in front.
+static bool32 MoveTypeRowReads(const u8 *expected)
+{
+    const u8 *s = gDisplayedStringBattle;
+    if (s[0] == EXT_CTRL_CODE_BEGIN && s[1] == EXT_CTRL_CODE_FONT)
+        s += 3;
+    return StringCompare(s, expected) == 0;
+}
+
+SINGLE_BATTLE_TEST("Status preview: Spore into an innate Overcoat reads 'Grass Fails', and the Spore really fails")
+{
+    bool32 enabled;
+    PARAMETRIZE { enabled = TRUE; }
+    PARAMETRIZE { enabled = FALSE; }
+    GIVEN {
+        ASSUME(IsPowderMove(MOVE_SPORE));
+        ASSUME(GetMoveType(MOVE_SPORE) == TYPE_GRASS);
+        ASSUME(SpeciesHasInnate(SPECIES_KOMMO_O, ABILITY_OVERCOAT));
+        ASSUME(GetSpeciesType(SPECIES_KOMMO_O, 0) != TYPE_GRASS && GetSpeciesType(SPECIES_KOMMO_O, 1) != TYPE_GRASS);
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, enabled);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE, MOVE_CELEBRATE); }
+        // The chosen ability is not Overcoat, so only the innate can block.
+        OPPONENT(SPECIES_KOMMO_O) { Ability(ABILITY_BULLETPROOF); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_SPORE); }
+    } SCENE {
+        MESSAGE("Wobbuffet used Spore!");
+        if (enabled)
+            NONE_OF { STATUS_ICON(opponent, sleep: TRUE); }
+        else
+            STATUS_ICON(opponent, sleep: TRUE);
+    } THEN {
+        if (enabled)
+        {
+            EXPECT_EQ(opponent->status1 & STATUS1_SLEEP, 0);
+            // The chosen Bulletproof stays unseen; the innate alone is enough.
+            gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] &= ~1u;
+            EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_SPORE), STATUS_PREVIEW_FAILS);
+            EXPECT(TryPrintStatusMovePreview(B_BATTLER_0, MOVE_SPORE, TYPE_GRASS));
+            EXPECT(MoveTypeRowReads(COMPOUND_STRING("Grass Fails")));
+        }
+        else
+        {
+            // Asleep now, so clear it: the question is only whether Overcoat would be flagged.
+            opponent->status1 = 0;
+            EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_SPORE), STATUS_PREVIEW_NONE);
+        }
+    }
+}
+
+SINGLE_BATTLE_TEST("Status preview: Sap Sipper revealed by absorbing a Spore reads 'Grass Fails' on the next turn")
+{
+    enum Move firstMove;
+    PARAMETRIZE { firstMove = MOVE_CELEBRATE; } // nothing reveals it
+    PARAMETRIZE { firstMove = MOVE_SPORE; }     // Sap Sipper triggers and shows its pop-up
+    GIVEN {
+        ASSUME(GetMoveType(MOVE_SPORE) == TYPE_GRASS);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_SPORE, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_GOODRA) { Ability(ABILITY_SAP_SIPPER); Moves(MOVE_CELEBRATE); }
+    } WHEN {
+        TURN { MOVE(player, firstMove); }
+    } SCENE {
+        if (firstMove == MOVE_SPORE)
+        {
+            ABILITY_POPUP(opponent, ABILITY_SAP_SIPPER);
+            NONE_OF { STATUS_ICON(opponent, sleep: TRUE); }
+        }
+    } THEN {
+        EXPECT_EQ(opponent->status1 & STATUS1_SLEEP, 0);
+        if (firstMove == MOVE_SPORE)
+        {
+            EXPECT(gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & 1u);
+            EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_SPORE), STATUS_PREVIEW_FAILS);
+            EXPECT(TryPrintStatusMovePreview(B_BATTLER_0, MOVE_SPORE, TYPE_GRASS));
+            EXPECT(MoveTypeRowReads(COMPOUND_STRING("Grass Fails")));
+        }
+        else
+        {
+            EXPECT_EQ(gBattleStruct->infoAbilityRevealed[B_SIDE_OPPONENT] & 1u, 0);
+            EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_SPORE), STATUS_PREVIEW_NONE);
+            EXPECT(!TryPrintStatusMovePreview(B_BATTLER_0, MOVE_SPORE, TYPE_GRASS));
+        }
     }
 }
