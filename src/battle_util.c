@@ -4009,7 +4009,7 @@ u32 AbilityBattleEffects(enum AbilityEffect caseID, enum BattlerId battler, enum
                 if (GetConfig(DETERMINISTIC_ABILITIES))
                 {
                     // FORK: deterministic Moody sets every stat stage (acc/evasion included)
-                    // to a fixed +1/-1/+2/-2/+3/-3/+6/-6 swing; logic lives in
+                    // to a fixed -1/+1/-2/+2/-3/+3/-6/+6 swing; logic lives in
                     // src/fork/deterministic_moody.c. Keep this hook on conflict.
                     ApplyDeterministicMoody(battler);
                     effect++;

@@ -312,7 +312,7 @@ in sun, also heals 1/16 max HP (`BattleScript_HarvestActivatesSunHeal` + new
 out (`IsBattlersFirstTurn`, `src/battle_main.c`) — the attacker-ability mirror of
 Quick Claw. **Moody** *sets* all seven stat stages (acc/evasion **included**, ignoring
 `B_MOODY_ACC_EVASION`) each end of turn to the next step of a fixed swing —
-+1, −1, +2, −2, +3, −3, +6, −6, then alternating +6/−6 — with one pop-up and one
+−1, +1, −2, +2, −3, +3, −6, +6, then alternating −6/+6 — with one pop-up and one
 "…increased/decreased all its stats!" message (`src/fork/deterministic_moody.c`).
 It is a direct set like Haze, so Contrary/Simple and stat-change reactions don't
 apply, and the step (the `moodyPhase` volatile) restarts on switch-in. The holder
