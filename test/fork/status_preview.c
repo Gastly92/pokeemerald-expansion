@@ -349,3 +349,40 @@ SINGLE_BATTLE_TEST("Status preview: Sap Sipper revealed by absorbing a Spore rea
         }
     }
 }
+
+// The setup reported from Frontier play: Smeargle (innate Prankster) using Spore on a Hippowdon
+// (innate Overcoat, chosen Sand Stream), with the real AI driving the foe.
+AI_SINGLE_BATTLE_TEST("Status preview: Smeargle's Spore into a Frontier Hippowdon reads 'Grass Fails'")
+{
+    enum Ability smeargleAbility;
+    enum Move firstMove;
+    PARAMETRIZE { smeargleAbility = ABILITY_OWN_TEMPO;  firstMove = MOVE_CELEBRATE; }
+    PARAMETRIZE { smeargleAbility = ABILITY_TECHNICIAN; firstMove = MOVE_CELEBRATE; }
+    PARAMETRIZE { smeargleAbility = ABILITY_MOODY;      firstMove = MOVE_CELEBRATE; }
+    PARAMETRIZE { smeargleAbility = ABILITY_OWN_TEMPO;  firstMove = MOVE_SPORE; }
+    PARAMETRIZE { smeargleAbility = ABILITY_TECHNICIAN; firstMove = MOVE_SPORE; }
+    PARAMETRIZE { smeargleAbility = ABILITY_MOODY;      firstMove = MOVE_SPORE; }
+    GIVEN {
+        ASSUME(SpeciesHasInnate(SPECIES_SMEARGLE, ABILITY_PRANKSTER));
+        ASSUME(SpeciesHasInnate(SPECIES_HIPPOWDON, ABILITY_OVERCOAT));
+        WITH_CONFIG(FEATURE_INNATE_ABILITIES, TRUE);
+        AI_FLAGS(AI_FLAG_BASIC_TRAINER);
+        PLAYER(SPECIES_SMEARGLE) { Ability(smeargleAbility); Moves(MOVE_SPORE, MOVE_CELEBRATE); }
+        OPPONENT(SPECIES_HIPPOWDON) { Ability(ABILITY_SAND_STREAM); Item(ITEM_LEFTOVERS); Moves(MOVE_SLACK_OFF); }
+    } WHEN {
+        TURN { MOVE(player, firstMove); }
+    } SCENE {
+        if (firstMove == MOVE_SPORE)
+        {
+            MESSAGE("Smeargle used Spore!");
+            NONE_OF { STATUS_ICON(opponent, sleep: TRUE); }
+        }
+    } THEN {
+        EXPECT_EQ(opponent->status1 & STATUS1_SLEEP, 0);
+        EXPECT_EQ(GetDamagePreviewTarget(B_BATTLER_0), B_BATTLER_1);
+        EXPECT_EQ(GetStatusMovePreviewResult(B_BATTLER_0, B_BATTLER_1, MOVE_SPORE), STATUS_PREVIEW_FAILS);
+        // The move menu's own entry point (MoveSelectionDisplayMoveType calls it).
+        EXPECT(TryPrintMoveDamagePreview(B_BATTLER_0, MOVE_SPORE, TYPE_GRASS));
+        EXPECT(MoveTypeRowReads(COMPOUND_STRING("Grass Fails")));
+    }
+}
