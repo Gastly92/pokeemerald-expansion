@@ -31,6 +31,7 @@ doc below. A row records only what neither of those can — status, and the poin
 | [`HEALTHBOX_HP_PERCENT.md`](HEALTHBOX_HP_PERCENT.md) | The healthbox HP % that replaces the level: rounding, the empty full-HP slot, fitting beside gimmick icons |
 | [`MULTI_HIT_PP.md`](MULTI_HIT_PP.md) | Per-strike PP for multi-hit moves: what pays, when, and what the menu, preview and AI project |
 | [`LINE_REVIEW.md`](LINE_REVIEW.md) | The per-species-line review playbook (innates, overrides, Factory sets) |
+| [`innate_flavor/`](innate_flavor/) | The innate flavor sweep: one record per extended-roster species, a yes/no for every implemented innate |
 
 Legend: ✅ done · ⚠️ partial / has known limitations.
 
