@@ -58,16 +58,16 @@ VENUSAUR,Hospitality,No,No,No,No,"Offering travellers fruit with a vine (AG163) 
 VENUSAUR,Huge Power,No,No,No,No,"A family of small creatures with outsized strength (Azurill line, Diggersby); Venusaur is big and strong for its size, not deceptively so",,2026-11-14
 VENUSAUR,Hydration,No,No,No,No,"A water-dwelling family that is refreshed by rain; Venusaur is called an amphibian but is a sun-loving grassland creature, and rain only strengthens its scent",,2026-11-14
 VENUSAUR,Hyper Cutter,No,No,No,No,"A pincers-and-mandibles family (Kingler, Pinsir, Gligar, Haxorus); Venusaur has no claws or pincers to speak of",,2026-11-14
-VENUSAUR,Ice Body,No,No,No,No,"An ice-and-snow family; Venusaur is a summer-loving plant with no cold trait",,2026-11-14
-VENUSAUR,Ice Scales,No,No,No,No,"Frosmoth's icy wing scales (plus icy Articuno and Bergmite); Venusaur has no scales and nothing icy",,2026-11-14
+VENUSAUR,Ice Body,No,No,No,No,An ice-and-snow family; Venusaur is a summer-loving plant with no cold trait,,2026-11-14
+VENUSAUR,Ice Scales,No,No,No,No,Frosmoth's icy wing scales (plus icy Articuno and Bergmite); Venusaur has no scales and nothing icy,,2026-11-14
 VENUSAUR,Illuminate,No,No,No,No,"A family that glows (Chinchou, Volbeat, Morelull, Staryu); Venusaur catches sunlight and fires beams, but its body gives off no light",,2026-11-14
 VENUSAUR,Immunity,No,No,No,No,"A family that shrugs off poison it should not resist (Snorlax's iron stomach, Zangoose against Seviper); Venusaur resists poison simply by being Poison-type",,2026-11-14
 VENUSAUR,Infiltrator,No,No,No,No,"A family of sneaks and drifters that slip past defences (ghosts, ninjas, bats, floating seeds); Venusaur is a big, slow plant, and a ninja trainer's Venusaur hiding in Petal Blizzard once is not stealth of its own",,2026-11-14
-VENUSAUR,Innards Out,No,No,No,No,"Pyukumuku and Mega Victreebel spew their insides at the attacker; nothing like that for Venusaur",,2026-11-14
+VENUSAUR,Innards Out,No,No,No,No,Pyukumuku and Mega Victreebel spew their insides at the attacker; nothing like that for Venusaur,,2026-11-14
 VENUSAUR,Inner Focus,No,No,No,No,"A family of disciplined fighters, meditators and psychics; Venusaur shows no trained composure and even panics at a Double Team (AG164)",,2026-11-14
 VENUSAUR,Insomnia,No,No,No,No,"A family of night creatures and sleepless watchers (owls, crows, ghosts, Drowzee); Venusaur is a daytime sun-lover that sleeps, per Pokémon Sleep",,2026-11-14
 VENUSAUR,Intimidate,No,No,No,No,"A family of menacing presences that cow foes on sight (Gyarados, Salamence, Arcanine); Venusaur commands respect but its presence calms rather than frightens",,2026-11-14
-VENUSAUR,Intrepid Sword,No,No,No,No,"Zacian's legendary-sword signature; nothing bladed or heroic-legend about Venusaur",,2026-11-14
+VENUSAUR,Intrepid Sword,No,No,No,No,Zacian's legendary-sword signature; nothing bladed or heroic-legend about Venusaur,,2026-11-14
 VENUSAUR,Iron Barbs,No,No,No,No,"A family whose own body is spiked (Ferrothorn, Togedemaru, Cacturne, Chesnaught); Venusaur's brambles and thorny roots are things it summons, not a barbed body that hurts on contact",,2026-11-14
 VENUSAUR,Iron Fist,No,No,No,No,"A punching family (boxers, brawlers, Golurk, Machamp); Venusaur is a quadruped that fights with vines, never fists",,2026-11-14
 VENUSAUR,Justified,No,No,No,No,"A family of righteous knights and heroes with a strong sense of justice (Swords of Justice, Gallade, Lucario); Venusaur defends its own forest and town, but no source frames it as a crusader against evil",,2026-11-14
@@ -86,18 +86,19 @@ VENUSAUR,Magma Armor,No,No,No,No,"A family of molten and fiery bodies (Magcargo,
 VENUSAUR,Magnet Pull,No,No,No,No,"A magnetic family (Magnemite line, Nosepass, Alolan Geodude); Venusaur has no magnetism",,2026-11-14
 VENUSAUR,Marvel Scale,No,No,No,No,"A family of beautiful, shimmering-scaled serpents and sea dragons (Milotic, Dratini, Kingdra); Venusaur has bumpy skin, not scales",,2026-11-14
 VENUSAUR,Mega Launcher,No,No,No,No,"A family with built-in cannons (Clawitzer, Mega Blastoise, Octillery, Magmortar); Venusaur fires Solar Beam from its flower, but it has no launcher",,2026-11-14
-VENUSAUR,Mega Sol,No,No,No,No,"Mega Meganium carries its own sun; Venusaur draws on real sunlight and in AG164 its Solar Beam fails when clouds cover the sun",,2026-11-14
+VENUSAUR,Mega Sol,No,No,No,No,Mega Meganium carries its own sun; Venusaur draws on real sunlight and in AG164 its Solar Beam fails when clouds cover the sun,,2026-11-14
 VENUSAUR,Merciless,No,No,No,No,"A family of ruthless venomous predators (Toxapex, Beedrill, Scolipede, Toxicroak); Venusaur's poison is incidental and it shows mercy, calling off attacks",,2026-11-14
-VENUSAUR,Mind's Eye,No,No,No,No,"Bloodmoon Ursaluna's keen-sense signature (plus psychic Golduck); Venusaur has no heightened perception",,2026-11-14
-VENUSAUR,Mirror Armor,No,No,No,No,"Corviknight's polished steel-armor signature; Venusaur has no armor or reflective body",,2026-11-14
+VENUSAUR,Mind's Eye,No,No,No,No,Bloodmoon Ursaluna's keen-sense signature (plus psychic Golduck); Venusaur has no heightened perception,,2026-11-14
+VENUSAUR,Mirror Armor,No,No,No,No,Corviknight's polished steel-armor signature; Venusaur has no armor or reflective body,,2026-11-14
 VENUSAUR,Mold Breaker,No,No,No,No,"A family that smashes straight through defences with drills, axes, hammers, horns and skulls; Venusaur's power is sun and vines, and only the G-Max vines are said to topple buildings",,2026-11-14
 VENUSAUR,Moxie,No,No,No,No,"A family of swaggering predators who grow bolder with every win (Krookodile, Gyarados, Honchkrow, Pyroar); Venusaur is a calm leader, not a braggart",,2026-11-14
 VENUSAUR,Multiscale,No,No,No,No,"A family of sleek-scaled sky guardians (Dragonite, Lugia, Cresselia); Venusaur has no scales and does not fly",,2026-11-14
-VENUSAUR,Mythical,No,No,No,No,"The fork's ability for mythical Pokémon; Venusaur is a common starter species",,2026-11-14
+VENUSAUR,Mythical,No,No,No,No,The fork's ability for mythical Pokémon; Venusaur is a common starter species,,2026-11-14
 VENUSAUR,Natural Cure,No,No,No,No,"Joins the purifying healers (Shaymin, Celebi, Roselia, Chansey, Corsola) only on its plant nature; nothing shows Venusaur purging an ailment, and its self-renewal is already Regenerator",,2026-11-14
-VENUSAUR,Neuroforce,No,No,No,No,"Ultra Necrozma's blinding-light signature; nothing about Venusaur matches it",,2026-11-14
+VENUSAUR,Neuroforce,No,No,No,No,Ultra Necrozma's blinding-light signature; nothing about Venusaur matches it,,2026-11-14
 VENUSAUR,Oblivious,No,No,No,No,"A family of dim, dozy or self-absorbed creatures (Slowpoke, Wailord, Numel, Snorlax); Venusaur is an aware, attentive leader",,2026-11-14
-VENUSAUR,Opportunist,No,No,No,No,"Espathra's copycat signature (plus trickster Hoopa); Venusaur never mimics or seizes on others' gains",,2026-11-14
+VENUSAUR,Opportunist,No,No,No,No,Espathra's copycat signature (plus trickster Hoopa); Venusaur never mimics or seizes on others' gains,,2026-11-14
 VENUSAUR,Overcoat,No,No,No,No,"A family wrapped in a protective covering (Burmy's cloak, Sewaddle's leaf wrap, shells, scales, caps); Venusaur has bare bumpy skin and gives off powder rather than shrugging it off",,2026-11-14
 VENUSAUR,Overgrow,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-14
-VENUSAUR,Own Tempo,No,No,No,Pending,"A family of carefree creatures that march to their own beat (Slowpoke, Spinda, Ludicolo, Smeargle); Venusaur leads others rather than ignoring them, and it panics when confused by Double Team (AG164)",,
+VENUSAUR,Own Tempo,No,No,No,No,"A family of carefree creatures that march to their own beat (Slowpoke, Spinda, Ludicolo, Smeargle); Venusaur leads and attends to others rather than ignoring them",,2026-11-14
+VENUSAUR,Pacify,No,No,Yes,Pending,"Calming a foe's will to fight is Venusaur's defining trait: the dex says its aroma soothes emotions, and in AG163 its Sweet Scent calms an attacking Beedrill swarm",dex+biology+anime,
