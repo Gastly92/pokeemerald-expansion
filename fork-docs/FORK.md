@@ -3,7 +3,8 @@
 This is a fork of [RHH's `pokeemerald-expansion`](https://github.com/rh-hideout/pokeemerald-expansion).
 It tracks upstream and layers custom features on top to build a **standalone
 single-player romhack** centered on quality-of-life improvements to the Battle
-Frontier. See [`CLAUDE.md`](../CLAUDE.md) for the conventions and the upstream-sync
+Frontier. It is played against the computer only, so **flavor and fun come before
+competitive balance**. See [`CLAUDE.md`](../CLAUDE.md) for the conventions and the upstream-sync
 process.
 
 **This file is an index, not a spec.** Each row is one line: what the feature does,
