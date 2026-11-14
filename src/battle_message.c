@@ -929,6 +929,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_MOODYSTATSMAXED]                      = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} maximized all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
     [STRINGID_MOODYSTATSMINIMIZED]                  = COMPOUND_STRING("{B_EFF_NAME_WITH_PREFIX} minimized all its stats!"), // FORK: DETERMINISTIC_ABILITIES Moody
     [STRINGID_ESCALATEDBATTLE]                      = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX} raised the battle's intensity!"), // FORK: Escalate ability
+    [STRINGID_MICLEBERRYMIRACLE]                    = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX}'s {B_LAST_ITEM} worked a miracle!"), // FORK: BUFF_MICLE_BERRY
 };
 
 const u16 gTrainerUsedItemStringIds[] =

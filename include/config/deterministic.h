@@ -222,7 +222,8 @@
 //     STATUS moves; Hustle adds 1 PP to the user's physical moves. Micle Berry (the old
 //     accuracy berry) instead makes its next move ignore the user's accuracy drops and
 //     the foe's evasion increases — so it is never taxed by them, though it still recovers
-//     PP from boosts/evasion drops — and refunds a flat 1 PP.
+//     PP from boosts/evasion drops — and refunds a flat 1 PP. (With BUFF_MICLE_BERRY on,
+//     the default, the Berry revives a fainted ally instead and none of this applies.)
 //   - OHKO moves (Fissure etc.) become always-hitting attacks that deal
 //     DETERMINISTIC_OHKO_MAX_HP_PERCENT of the target's max HP instead of a full KO, but
 //     keep the OHKO immunities: Sturdy, Dynamax, a higher-level target and type immunity

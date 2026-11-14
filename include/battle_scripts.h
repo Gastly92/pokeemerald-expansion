@@ -383,6 +383,7 @@ extern const u8 BattleScript_QuickClawActivation[];
 extern const u8 BattleScript_QuickDrawActivation[];
 extern const u8 BattleScript_CustapBerryActivation[];
 extern const u8 BattleScript_MicleBerryActivate[];
+extern const u8 BattleScript_MicleBerryRevive[]; // FORK: BUFF_MICLE_BERRY
 extern const u8 BattleScript_JabocaRowapBerryActivates[];
 extern const u8 BattleScript_NotAffectedAbilityPopUp[];
 extern const u8 BattleScript_BattlerShookOffTaunt[];

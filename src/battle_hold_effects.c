@@ -15,6 +15,7 @@
 #include "constants/berry.h"
 #include "fork/innate_abilities.h" // FORK: innate ability predicates
 #include "fork/buff_berries.h" // FORK: BUFF_PINCH_BERRIES, BUFF_RETALIATION_BERRIES, BUFF_DAMAGED_STAT_BERRIES
+#include "fork/buff_micle_berry.h" // FORK: BUFF_MICLE_BERRY
 
 bool32 IsOnSwitchInActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].onSwitchIn; }
 bool32 IsMirrorHerbActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].mirrorHerb; }
@@ -1139,6 +1140,20 @@ static enum ItemEffect RandomStatRaiseBerry(enum BattlerId battler, enum Item it
 static enum ItemEffect TrySetMicleBerry(enum BattlerId battler, enum Item itemId)
 {
     enum ItemEffect effect = ITEM_NO_EFFECT;
+
+    // FORK: BUFF_MICLE_BERRY -- revive the most recently fainted ally instead of the accuracy
+    // boost. With no fainted ally the Berry waits (no effect, not consumed). The revive runs in
+    // BS_MicleBerryRevive; see src/fork/buff_micle_berry.c. Tests: test/fork/buff_micle_berry.c.
+    if (GetConfig(BUFF_MICLE_BERRY))
+    {
+        if (HasEnoughHpToEatBerry(battler, GetBattlerAbility(battler), 4, itemId)
+         && MicleBerry_GetReviveTarget(battler) != PARTY_SIZE)
+        {
+            BattleScriptCall(BattleScript_MicleBerryRevive);
+            effect = ITEM_EFFECT_OTHER;
+        }
+        return effect;
+    }
 
     if (HasEnoughHpToEatBerry(battler, GetBattlerAbility(battler), 4, itemId))
     {

@@ -4,6 +4,17 @@ This is a **fork** of [rh-hideout/pokeemerald-expansion](https://github.com/rh-h
 (a GBA decompilation-based romhacking base). We layer our own custom features on
 top of upstream.
 
+## Design priorities: flavor and fun over balance
+
+The romhack is **played against the computer, never against other people**: no link
+battles, no online play. So competitive balance is a secondary concern. **Flavor and
+fun come first** in every design call: buffs, new abilities, innates, frontier sets,
+item reworks. When an idea is strong but flavorful and fun, lean toward doing it, and
+raise the balance concern in a sentence rather than steering away from it. The balance
+that *does* matter is the player's experience against the AI: a fight should be winnable
+and interesting. So flag anything that would make a common AI opponent feel unbeatable
+or tedious, and things the player can abuse are a much smaller worry.
+
 ## Navigating efficiently (token budget)
 
 This is a huge tree (~30k files, ~1.5M lines) with large auto-generated data

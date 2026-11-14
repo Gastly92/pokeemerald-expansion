@@ -809,6 +809,12 @@ struct BattleStruct
     // FORK: the Escalate ability's running bonus to DETERMINISTIC_DAMAGE_PERCENT, in percent.
     // Only ever grows; zero-allocated per battle. See include/fork/escalate.h.
     u16 escalateDamageBonus;
+    // FORK: BUFF_MICLE_BERRY -- the order the party mons fainted in, so the Micle Berry revives the
+    // most recent. 0 = never fainted this battle; otherwise micleFaintSequence at the time of the
+    // faint. Recorded in SetValuesOnFaint(). See include/fork/buff_micle_berry.h.
+    u8 micleFaintOrder[MAX_BATTLE_TRAINERS][PARTY_SIZE];
+    u8 micleFaintSequence;
+    u8 micleHolder; // FORK: BUFF_MICLE_BERRY -- the holder, restored to gBattleScripting.battler after a send-out
 };
 
 struct AiBattleData

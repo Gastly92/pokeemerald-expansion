@@ -13,6 +13,12 @@ out of battles. It's a personal fork of
 itself built on [pret's `pokeemerald`](https://github.com/pret/pokeemerald)
 decompilation, and it regularly merges in upstream updates.
 
+**It is built for playing against the computer, not against other people.** There is
+no link or online play to keep fair, so balance matters less than **flavor and fun**.
+A change that's strong but flavorful and fun to play with or against is welcome. The
+balance that does matter is the player's experience against the AI: a fight should
+feel winnable and interesting, not frustrating.
+
 ## What this fork changes
 
 - **[`FORK.md`](fork-docs/FORK.md)**: every feature the fork adds, with its flag,
