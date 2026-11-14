@@ -256,7 +256,7 @@ Cloak, Tangled Feet add 1 PP to offensive moves; Wonder Skin adds 1 to status
 moves; Hustle adds 1 to the user's physical moves; Micle Berry (the old accuracy
 berry) makes its next move ignore the user's accuracy drops and the foe's evasion
 increases (never taxed by them, still recovers from boosts/drops) plus a flat 1
-PP. **No Guard** goes furthest: its 100% accuracy applies for *and against* its
+PP (only with `BUFF_MICLE_BERRY` off; by default the Berry revives a fainted ally instead). **No Guard** goes furthest: its 100% accuracy applies for *and against* its
 holder and overrides every source on this axis, so a move used by or against a No
 Guard battler pays no stage tax and no flat tax at all — it takes the same
 pure-boon shape as Micle Berry, still recovering PP from the user's accuracy

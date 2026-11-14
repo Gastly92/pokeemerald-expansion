@@ -5941,6 +5941,40 @@ BattleScript_MicleBerryActivateRet_Anim:
 	waitabilitypopup
 	return
 
+@ FORK: BUFF_MICLE_BERRY (src/fork/buff_micle_berry.c) - the Berry revives the holder's most
+@ recently fainted ally at 50% HP (Ripen: full) instead of boosting accuracy.
+BattleScript_MicleBerryRevive::
+	call BattleScript_ItemPopUp_Scripting
+	jumpifability BS_SCRIPTING, ABILITY_RIPEN, BattleScript_MicleBerryRevive_Ripen
+	goto BattleScript_MicleBerryRevive_Anim
+BattleScript_MicleBerryRevive_Ripen:
+	waitabilitypopup
+	call BattleScript_AbilityPopUpScripting
+BattleScript_MicleBerryRevive_Anim:
+	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_BERRY
+	printstring STRINGID_MICLEBERRYMIRACLE
+	waitmessage B_WAIT_TIME_LONG
+	removeitem BS_SCRIPTING
+	waitabilitypopup
+	miclerevive BattleScript_MicleBerryRevive_SendOut
+	waitstate
+	printstring STRINGID_PKMNREVIVEDREADYTOFIGHT
+	waitmessage B_WAIT_TIME_LONG
+	return
+BattleScript_MicleBerryRevive_SendOut:
+	waitstate
+	printstring STRINGID_PKMNREVIVEDREADYTOFIGHT
+	waitmessage B_WAIT_TIME_LONG
+	getswitchedmondata BS_SCRIPTING
+	switchindataupdate BS_SCRIPTING
+	hpthresholds BS_SCRIPTING
+	switchinanim BS_SCRIPTING, FALSE, FALSE
+	waitstate
+	switchineffects BS_SCRIPTING
+	switchinevents
+	miclerestorebattler
+	return
+
 BattleScript_JabocaRowapBerryActivates::
 	call BattleScript_ItemPopUp_Scripting
 	jumpifability BS_TARGET, ABILITY_RIPEN, BattleScript_JabocaRowapBerryActivate_Ripen

@@ -523,4 +523,27 @@
 // CalcDefenseStat(), src/battle_util.c.
 #define BUFF_GIMMICK_MOVES_IGNORE_DEF_BOOSTS TRUE
 
+// When TRUE, Micle Berry ("miracle") stops boosting accuracy and instead revives the holder's most
+// recently fainted ally at BUFF_MICLE_BERRY_REVIVE_PERCENT of its max HP (50% by default). Ripen,
+// as the ability or an innate, doubles it, to full HP. It still fires at 1/4 max HP (1/2 with
+// Gluttony), but only once an ally has fainted. Until then the Berry waits rather than being
+// wasted, and fires on the holder's next switch-in or the next time its HP is checked after a hit.
+// The revived mon goes back to the bench, or, in doubles, onto the field when it fainted there
+// and its slot is still empty, exactly like Revival Blessing.
+//
+// Why: under DETERMINISTIC_ACCURACY_EVASION every move already hits, which left the Berry with
+// nothing but a 1 PP refund and a skipped evasion tax, on a mon with one action left. A revive is
+// a real reward for reaching 1/4 HP. 50% (Revival Blessing's figure) pays for the holder not
+// getting to choose who comes back and having to drop to 1/4 first.
+//
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the magnitude
+// lives in the plain constant below. See include/fork/buff_micle_berry.h, its faint record in
+// SetValuesOnFaint() (src/battle_util.c), its trigger in TrySetMicleBerry()
+// (src/battle_hold_effects.c) and BS_MicleBerryRevive() (src/battle_script_commands.c).
+#define BUFF_MICLE_BERRY TRUE
+
+// Percent of the revived ally's max HP restored when BUFF_MICLE_BERRY is on (Ripen doubles it,
+// capped at 100). Ignored when BUFF_MICLE_BERRY is FALSE.
+#define BUFF_MICLE_BERRY_REVIVE_PERCENT 50
+
 #endif // GUARD_CONFIG_BUFF_H

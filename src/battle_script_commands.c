@@ -83,6 +83,7 @@
 #include "fork/buff_adrenaline_orb.h" // FORK: BUFF_ADRENALINE_ORB
 #include "fork/mythical.h" // FORK: Mythical HP boost undone on switch-out
 #include "fork/ability_failure_popup.h" // FORK: FEATURE_ANNOUNCE_ABILITY_FAILURES
+#include "fork/buff_micle_berry.h" // FORK: BUFF_MICLE_BERRY
 
 // Helper for accessing command arguments and advancing gBattlescriptCurrInstr.
 //
@@ -10172,6 +10173,47 @@ void BS_TryRevivalBlessing(void)
         BtlController_EmitChoosePokemon(gBattlerAttacker, B_COMM_TO_CONTROLLER, PARTY_ACTION_CHOOSE_FAINTED_MON, PARTY_SIZE, ABILITY_NONE, 0, gBattleStruct->battlerPartyOrders[gBattlerAttacker]);
         MarkBattlerForControllerExec(gBattlerAttacker);
     }
+}
+
+// FORK: BUFF_MICLE_BERRY -- Micle Berry's revive, modelled on BS_TryRevivalBlessing above (kept
+// here for NATIVE_ARGS). Revives the holder's (gBattleScripting.battler) most recently fainted
+// ally and buffers its name. When that ally fainted on the field in doubles and its slot is still
+// empty, points gBattleScripting.battler at the slot and jumps to sendOutInstr to send it back in.
+// See src/fork/buff_micle_berry.c; tests in test/fork/buff_micle_berry.c.
+void BS_MicleBerryRevive(void)
+{
+    NATIVE_ARGS(const u8 *sendOutInstr);
+    enum BattlerId holder = gBattleScripting.battler;
+    u32 index = MicleBerry_GetReviveTarget(holder);
+
+    gBattlescriptCurrInstr = cmd->nextInstr;
+    if (index == PARTY_SIZE)
+        return;
+
+    struct Pokemon *party = GetBattlerParty(holder);
+    u16 hp = MicleBerry_GetReviveHp(holder, index);
+    BtlController_EmitSetMonData(holder, B_COMM_TO_CONTROLLER, REQUEST_HP_BATTLE, 1u << index, sizeof(hp), &hp);
+    MarkBattlerForControllerExec(holder);
+    PREPARE_SPECIES_BUFFER(gBattleTextBuff1, GetMonData(&party[index], MON_DATA_SPECIES));
+
+    if (IsDoubleBattle() && gBattlerPartyIndexes[GetPartnerBattler(holder)] == index)
+    {
+        enum BattlerId partner = GetPartnerBattler(holder);
+        gAbsentBattlerFlags &= ~(1u << partner);
+        gBattleStruct->monToSwitchIntoId[partner] = index;
+        gBattleStruct->micleHolder = holder;
+        gBattleScripting.battler = partner;
+        gBattlescriptCurrInstr = cmd->sendOutInstr;
+    }
+}
+
+// FORK: BUFF_MICLE_BERRY -- after the send-out above, point gBattleScripting.battler back at the
+// holder, since the item activation that called the Berry's script expects it unchanged.
+void BS_MicleBerryRestoreBattler(void)
+{
+    NATIVE_ARGS();
+    gBattleScripting.battler = gBattleStruct->micleHolder;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 void BS_JumpIfCommanderActive(void)

@@ -20,3 +20,16 @@
 	callnative BS_JumpIfNotDeterministicHoldEffects
 	.4byte \ptr
 	.endm
+
+	@ BUFF_MICLE_BERRY — revive the scripting battler's most recently fainted ally.
+	@ Jumps to \sendOutPtr (with the scripting battler now the revived slot) when the
+	@ ally has to be sent back onto the field.
+	.macro miclerevive sendOutPtr:req
+	callnative BS_MicleBerryRevive
+	.4byte \sendOutPtr
+	.endm
+
+	@ BUFF_MICLE_BERRY — restore the scripting battler to the holder after a send-out.
+	.macro miclerestorebattler
+	callnative BS_MicleBerryRestoreBattler
+	.endm

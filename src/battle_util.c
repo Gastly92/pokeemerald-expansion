@@ -25,6 +25,7 @@
 #include "fork/dynamax_sleep.h" // FORK: DETERMINISTIC_STATUS Dynamax resists sleep
 #include "fork/buff_gimmick_moves.h" // FORK: BUFF_GIMMICK_MOVES_IGNORE_DEF_BOOSTS
 #include "fork/deterministic_moody.h" // FORK: DETERMINISTIC_ABILITIES Moody
+#include "fork/buff_micle_berry.h" // FORK: BUFF_MICLE_BERRY
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -12819,6 +12820,7 @@ void SetValuesOnFaint(enum BattlerId battler)
 
     if (gBattleStruct->faintCounter[GetBattlerTrainer(battler)] < 255)
         gBattleStruct->faintCounter[GetBattlerTrainer(battler)]++;
+    MicleBerry_RecordFaint(battler); // FORK: BUFF_MICLE_BERRY -- faint order for the revive (src/fork/buff_micle_berry.c)
 
     if (IsOnPlayerSide(battler))
     {
