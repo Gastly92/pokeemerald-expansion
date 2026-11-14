@@ -31,7 +31,7 @@ SINGLE_BATTLE_TEST("BUFF_MICLE_BERRY: at 1/4 HP the Berry revives a fainted ally
         MESSAGE("Wynaut was revived and is ready to fight again!");
         NOT MESSAGE("Wobbuffet boosted the accuracy of its next move using Micle Berry!");
     } THEN {
-        EXPECT_EQ(GetMonData(&gPlayerParty[0], MON_DATA_HP), 50);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), 50);
         EXPECT_EQ(player->item, ITEM_NONE);
     }
 }
@@ -52,7 +52,7 @@ SINGLE_BATTLE_TEST("BUFF_MICLE_BERRY: Ripen revives the ally at full HP")
         MESSAGE("Applin's Micle Berry worked a miracle!");
         MESSAGE("Wynaut was revived and is ready to fight again!");
     } THEN {
-        EXPECT_EQ(GetMonData(&gPlayerParty[0], MON_DATA_HP), 100);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), 100);
     }
 }
 
@@ -74,8 +74,8 @@ SINGLE_BATTLE_TEST("BUFF_MICLE_BERRY: the Berry revives the most recently fainte
         MESSAGE("Wobbuffet's Micle Berry worked a miracle!");
         MESSAGE("Zigzagoon was revived and is ready to fight again!");
     } THEN {
-        EXPECT_EQ(GetMonData(&gPlayerParty[0], MON_DATA_HP), 0);
-        EXPECT_EQ(GetMonData(&gPlayerParty[2], MON_DATA_HP), 50);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), 0);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][2], MON_DATA_HP), 50);
     }
 }
 
@@ -96,7 +96,7 @@ SINGLE_BATTLE_TEST("BUFF_MICLE_BERRY: with no fainted ally the Berry waits, then
         MESSAGE("Wobbuffet's Micle Berry worked a miracle!");
         MESSAGE("Wynaut was revived and is ready to fight again!");
     } THEN {
-        EXPECT_EQ(GetMonData(&gPlayerParty[1], MON_DATA_HP), 50);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][1], MON_DATA_HP), 50);
     }
 }
 
@@ -114,7 +114,7 @@ SINGLE_BATTLE_TEST("BUFF_MICLE_BERRY: works for an opposing holder too")
         MESSAGE("The opposing Wobbuffet's Micle Berry worked a miracle!");
         MESSAGE("Wynaut was revived and is ready to fight again!");
     } THEN {
-        EXPECT_EQ(GetMonData(&gEnemyParty[0], MON_DATA_HP), 50);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_HP), 50);
     }
 }
 
@@ -132,7 +132,7 @@ SINGLE_BATTLE_TEST("BUFF_MICLE_BERRY: flag off keeps the stock accuracy boost")
         MESSAGE("Wobbuffet boosted the accuracy of its next move using Micle Berry!");
         NOT MESSAGE("Wynaut was revived and is ready to fight again!");
     } THEN {
-        EXPECT_EQ(GetMonData(&gPlayerParty[0], MON_DATA_HP), 0);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), 0);
     }
 }
 
