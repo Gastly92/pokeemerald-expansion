@@ -158,3 +158,52 @@ DOUBLE_BATTLE_TEST("BUFF_MICLE_BERRY: in doubles a partner that fainted on the f
         EXPECT_EQ(playerLeft->item, ITEM_NONE);
     }
 }
+
+SINGLE_BATTLE_TEST("BUFF_MICLE_BERRY: Stuff Cheeks eats the Berry at any HP to revive, and Cheek Pouch heals the holder")
+{
+    GIVEN {
+        WITH_CONFIG(BUFF_MICLE_BERRY, TRUE);
+        ASSUME(GetMoveEffect(MOVE_STUFF_CHEEKS) == EFFECT_STUFF_CHEEKS);
+        PLAYER(SPECIES_WYNAUT) { HP(1); MaxHP(100); }
+        PLAYER(SPECIES_GREEDENT) { Ability(ABILITY_CHEEK_POUCH); MaxHP(300); HP(250); Item(ITEM_MICLE_BERRY); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SCRATCH); SEND_OUT(player, 1); }
+        TURN { MOVE(player, MOVE_STUFF_CHEEKS); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_STUFF_CHEEKS, player);
+        MESSAGE("Greedent's Micle Berry worked a miracle!");
+        ABILITY_POPUP(player, ABILITY_CHEEK_POUCH);
+        MESSAGE("Wynaut was revived and is ready to fight again!");
+    } THEN {
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP), 50);
+        EXPECT_EQ(player->statStages[STAT_DEF], DEFAULT_STAT_STAGE + 2);
+        EXPECT_EQ(player->hp, 300);
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_MICLE_BERRY: a Harvested Berry revives a second ally")
+{
+    GIVEN {
+        WITH_CONFIG(BUFF_MICLE_BERRY, TRUE);
+        WITH_CONFIG(DETERMINISTIC_ABILITIES, TRUE);
+        ASSUME(GetMoveEffect(MOVE_SONIC_BOOM) == EFFECT_FIXED_HP_DAMAGE);
+        ASSUME(GetMoveFixedHPDamage(MOVE_SONIC_BOOM) == 20);
+        PLAYER(SPECIES_EXEGGUTOR) { Ability(ABILITY_HARVEST); MaxHP(160); HP(60); Item(ITEM_MICLE_BERRY); }
+        PLAYER(SPECIES_WYNAUT) { HP(0); MaxHP(100); }
+        PLAYER(SPECIES_ZIGZAGOON) { HP(0); MaxHP(100); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(opponent, MOVE_SONIC_BOOM); }
+        TURN { MOVE(opponent, MOVE_SONIC_BOOM); }
+    } SCENE {
+        MESSAGE("Exeggutor's Micle Berry worked a miracle!");
+        MESSAGE("Wynaut was revived and is ready to fight again!");
+        MESSAGE("Exeggutor harvested its Micle Berry!");
+        MESSAGE("Exeggutor's Micle Berry worked a miracle!");
+        MESSAGE("Zigzagoon was revived and is ready to fight again!");
+    } THEN {
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][1], MON_DATA_HP), 50);
+        EXPECT_EQ(GetMonData(&gParties[B_TRAINER_PLAYER][2], MON_DATA_HP), 50);
+    }
+}

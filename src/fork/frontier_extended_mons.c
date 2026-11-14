@@ -932,10 +932,10 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_MICLE_BERRY,
         .moves =
         {
-            MOVE_THUNDER,
-            MOVE_PSYCHIC,
-            MOVE_FOCUS_BLAST,
-            MOVE_VOLT_SWITCH
+            MOVE_SUBSTITUTE,
+            MOVE_NASTY_PLOT,
+            MOVE_THUNDERBOLT,
+            MOVE_PSYCHIC
         },
         .ability = ABILITY_LIGHTNING_ROD,
         .nature = NATURE(SPE_UP, ATK_DOWN),
@@ -944,7 +944,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .spd = 4,
             .spe = 252
         ),
-        .teraType = TYPE_ELECTRIC,
+        .teraType = TYPE_FAIRY,
     },
     {
         .species = SPECIES_RAICHU_ALOLA,
@@ -19464,15 +19464,15 @@ const struct TrainerMon gFrontierExtendedMons[] =
         .heldItem = ITEM_MICLE_BERRY,
         .moves =
         {
-            MOVE_NASTY_PLOT,
-            MOVE_ENERGY_BALL,
-            MOVE_FOCUS_BLAST,
-            MOVE_KNOCK_OFF
+            MOVE_SUBSTITUTE,
+            MOVE_LEECH_SEED,
+            MOVE_GIGA_DRAIN,
+            MOVE_FOCUS_BLAST
         },
         .ability = ABILITY_GRASSY_SURGE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
         .ev = EVS(
-            .def = 4,
+            .hp = 4,
             .spa = 252,
             .spe = 252
         ),
@@ -30445,6 +30445,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
         ),
         .teraType = TYPE_STEEL,
     },
+    {
+        .species = SPECIES_GREEDENT,
+        .tags = FORMAT_BOTH,
+        .heldItem = ITEM_MICLE_BERRY,
+        .moves =
+        {
+            MOVE_STUFF_CHEEKS,
+            MOVE_BODY_PRESS,
+            MOVE_KNOCK_OFF,
+            MOVE_PROTECT
+        },
+        .ability = ABILITY_FLUFFY,
+        .nature = NATURE(DEF_UP, SPA_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 252,
+            .spd = 4
+        ),
+        .teraType = TYPE_GHOST,
+    },
 
     // 0823
     {
@@ -31045,6 +31065,26 @@ const struct TrainerMon gFrontierExtendedMons[] =
             .hp = 252,
             .def = 252,
             .spd = 4
+        ),
+        .teraType = TYPE_STEEL,
+    },
+    {
+        .species = SPECIES_APPLETUN,
+        .tags = FORMAT_DOUBLES,
+        .heldItem = ITEM_MICLE_BERRY,
+        .moves =
+        {
+            MOVE_FOLLOW_ME,
+            MOVE_RECOVER,
+            MOVE_APPLE_ACID,
+            MOVE_DRAGON_PULSE
+        },
+        .ability = ABILITY_WELL_BAKED_BODY,
+        .nature = NATURE(SPD_UP, ATK_DOWN),
+        .ev = EVS(
+            .hp = 252,
+            .def = 4,
+            .spd = 252
         ),
         .teraType = TYPE_STEEL,
     },
