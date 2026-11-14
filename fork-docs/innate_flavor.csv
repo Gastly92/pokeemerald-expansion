@@ -1,17 +1,20 @@
-species,innate,canon,had,fit,reason,source,decided
-VENUSAUR,Adaptability,No,No,No,"No adapting or mastery trait in dex or media; its sun-to-energy biology is already Chlorophyll's job",,2026-11-14
-VENUSAUR,Aftermath,No,No,No,"Nothing explodes or bursts on defeat; the G-Max pollen eruption is a form-only attack, not a death throe",,2026-11-14
-VENUSAUR,Analytic,No,No,No,"No calculating or observe-then-strike trait; it soothes and attracts rather than studies",,2026-11-14
-VENUSAUR,Anger Point,No,No,No,"Its defining trait is calming others; nothing shows it enraged",,2026-11-14
-VENUSAUR,Anticipation,No,No,No,"Only evidence is a one-line minor movie scene (The Power of One) where Pokémon everywhere sensed the disturbance; no sensing trait of its own",,2026-11-14
-VENUSAUR,Arena Trap,No,No,No,"Doesn't dig or trap; its vines and brambles are for attacking and healing, not holding foes in place",,2026-11-14
-VENUSAUR,Armor Tail,No,No,No,"Farigiraf's signature, tied to its armored tail-head; Venusaur has no comparable tail, and the G-Max petal shield is form-only",,2026-11-14
-VENUSAUR,Aroma Veil,No,Yes,Yes,"Dex and Biology both describe a soothing aroma that calms emotions, which is what Aroma Veil protects",dex+biology+anime,2026-11-14
-VENUSAUR,Bad Dreams,No,No,No,"Puts foes to sleep (Sleep Powder) and soothes them; nothing torments sleepers, and this is Darkrai's nightmare signature",,2026-11-14
-VENUSAUR,Battery,No,No,No,"Electrical family; Venusaur stores sunlight for itself and never powers up allies",,2026-11-14
-VENUSAUR,Battle Armor,No,No,No,"Bumpy skin, not armor; Mega's sturdiness and the G-Max petal shield are form-only bulk, not plating",,2026-11-14
-VENUSAUR,Beast Boost,No,No,No,"An Ultra Space ability; Venusaur is a native grassland Pokémon with no Ultra Beast link",,2026-11-14
-VENUSAUR,Berserk,No,No,No,"No wounded-rage trait anywhere; its temperament is calming, the opposite of berserk",,2026-11-14
-VENUSAUR,Big Pecks,No,No,No,"A bird-only family; Venusaur is a four-legged plant amphibian",,2026-11-14
-VENUSAUR,Blaze,No,No,No,"The Fire starters' pinch ability; Venusaur's own counterpart is Overgrow",,2026-11-14
-VENUSAUR,Cheek Pouch,No,No,No,"A cheek-stuffing rodent family; Venusaur's nutrition feeds its flower, it doesn't hoard food",,2026-11-14
+species,innate,canon,had,proposed,fit,reason,source,decided
+VENUSAUR,Adaptability,No,No,No,No,No adapting or mastery trait in dex or media; its sun-to-energy biology is already Chlorophyll's job,,2026-11-14
+VENUSAUR,Aftermath,No,No,No,No,"Nothing explodes or bursts on defeat; the G-Max pollen eruption is a form-only attack, not a death throe",,2026-11-14
+VENUSAUR,Analytic,No,No,No,No,No calculating or observe-then-strike trait; it soothes and attracts rather than studies,,2026-11-14
+VENUSAUR,Anger Point,No,No,No,No,Its defining trait is calming others; nothing shows it enraged,,2026-11-14
+VENUSAUR,Anticipation,No,No,No,No,Only evidence is a one-line minor movie scene (The Power of One) where Pokémon everywhere sensed the disturbance; no sensing trait of its own,,2026-11-14
+VENUSAUR,Arena Trap,No,No,No,No,"Doesn't dig or trap; its vines and brambles are for attacking and healing, not holding foes in place",,2026-11-14
+VENUSAUR,Armor Tail,No,No,No,No,"Farigiraf's signature, tied to its armored tail-head; Venusaur has no comparable tail, and the G-Max petal shield is form-only",,2026-11-14
+VENUSAUR,Aroma Veil,No,Yes,Yes,Yes,"Dex and Biology both describe a soothing aroma that calms emotions, which is what Aroma Veil protects",dex+biology+anime,2026-11-14
+VENUSAUR,Bad Dreams,No,No,No,No,"Puts foes to sleep (Sleep Powder) and soothes them; nothing torments sleepers, and this is Darkrai's nightmare signature",,2026-11-14
+VENUSAUR,Battery,No,No,No,No,Electrical family; Venusaur stores sunlight for itself and never powers up allies,,2026-11-14
+VENUSAUR,Battle Armor,No,No,No,No,"Bumpy skin, not armor; Mega's sturdiness and the G-Max petal shield are form-only bulk, not plating",,2026-11-14
+VENUSAUR,Beast Boost,No,No,No,No,An Ultra Space ability; Venusaur is a native grassland Pokémon with no Ultra Beast link,,2026-11-14
+VENUSAUR,Berserk,No,No,No,No,"No wounded-rage trait anywhere; its temperament is calming, the opposite of berserk",,2026-11-14
+VENUSAUR,Big Pecks,No,No,No,No,A bird-only family; Venusaur is a four-legged plant amphibian,,2026-11-14
+VENUSAUR,Blaze,No,No,No,No,The Fire starters' pinch ability; Venusaur's own counterpart is Overgrow,,2026-11-14
+VENUSAUR,Cheek Pouch,No,No,No,No,"A cheek-stuffing rodent family; Venusaur's nutrition feeds its flower, it doesn't hoard food",,2026-11-14
+VENUSAUR,Chilling Neigh,No,No,No,No,"Glastrier's signature, an icy horse's neigh; nothing equine or icy about Venusaur",,2026-11-14
+VENUSAUR,Chlorophyll,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-14
+VENUSAUR,Clear Body,No,No,No,Pending,"A constructs-and-crystals family (golems, gears, stones, jellyfish); Mega's sturdiness is bulk, not an unalterable body",,
