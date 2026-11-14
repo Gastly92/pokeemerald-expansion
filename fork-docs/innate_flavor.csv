@@ -18,20 +18,21 @@ VENUSAUR,Cheek Pouch,No,No,No,No,"A cheek-stuffing rodent family; Venusaur's nut
 VENUSAUR,Chilling Neigh,No,No,No,No,"Glastrier's signature, an icy horse's neigh; nothing equine or icy about Venusaur",,2026-11-14
 VENUSAUR,Chlorophyll,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-14
 VENUSAUR,Clear Body,No,No,No,No,"A constructs-and-crystals family (golems, gears, stones, jellyfish); Mega's sturdiness is bulk, not an unalterable body",,2026-11-14
-VENUSAUR,Comatose,No,No,No,No,"Komala and Snorlax are defined by never waking; Venusaur sleeps like anything else and is active by day in the sun",,2026-11-14
+VENUSAUR,Comatose,No,No,No,No,Komala and Snorlax are defined by never waking; Venusaur sleeps like anything else and is active by day in the sun,,2026-11-14
 VENUSAUR,Competitive,No,No,No,No,"A proud, vain or spiteful family; Venusaur is a calm, soothing leader, and its battles show no pride stung into fury",,2026-11-14
 VENUSAUR,Compound Eyes,No,No,No,No,"An insect family with faceted eyes; Venusaur has small, circular eyes and no keen-sight trait",,2026-11-14
 VENUSAUR,Corrosion,No,No,No,No,"A caustic family (acid, toxic gas, corrosive slime); Venusaur's only poison is the Mega form's attack circle, nothing that eats through metal",,2026-11-14
 VENUSAUR,Cud Chew,No,No,No,No,"A grazing-ruminant family (cattle, sheep, deer, giraffes); Venusaur draws energy from sunlight and is not a grazer",,2026-11-14
 VENUSAUR,Cursed Body,No,No,No,No,"A ghosts-and-curses family; Venusaur has no curse, haunting or spirit link",,2026-11-14
 VENUSAUR,Cute Charm,No,No,No,No,"A cute-and-lovable family; Venusaur's scent draws Pokémon in to calm them, not to infatuate, and it is a squat, toothy amphibian",,2026-11-14
-VENUSAUR,Dancer,No,No,No,No,"A dancing family; Venusaur leads Evolution ceremonies but nothing sourced shows it dancing",,2026-11-14
-VENUSAUR,Dauntless Shield,No,No,No,No,"Zamazenta's legendary-shield signature; the town-guardian legend is a manga one-off and the petal shield is G-Max only",,2026-11-14
+VENUSAUR,Dancer,No,No,No,No,A dancing family; Venusaur leads Evolution ceremonies but nothing sourced shows it dancing,,2026-11-14
+VENUSAUR,Dauntless Shield,No,No,No,No,Zamazenta's legendary-shield signature; the town-guardian legend is a manga one-off and the petal shield is G-Max only,,2026-11-14
 VENUSAUR,Dazzling,No,No,No,No,"Bruxish's signature, a startling flash of colour that stuns attackers; Venusaur's vivid flower is a sign of health that soothes and attracts, not one that startles",,2026-11-14
 VENUSAUR,Defiant,No,No,No,No,"A combative, rebellious family; Venusaur is a calm, soothing leader with no streak of defiance",,2026-11-14
 VENUSAUR,Download,No,No,No,No,"A digital and machine family (Porygon, Genesect); Venusaur is a living plant",,2026-11-14
 VENUSAUR,Dragon's Maw,No,No,No,No,"Regidrago's signature, a dragon's-head body; nothing draconic about Venusaur",,2026-11-14
 VENUSAUR,Early Bird,No,No,No,No,"The sun-plant holders (Sunflora, Seedot, Smoliv) are about waking with the sunrise; Venusaur is sun-powered but nothing shows it rising early or shaking off sleep",,2026-11-14
-VENUSAUR,Effect Spore,No,Yes,Yes,Yes,"A powder-and-pollen family (Vileplume, Gloom, Jumpluff); G-Max pollen causes sneezing and fainting and the anime shows it using Sleep Powder",biology+anime,2026-11-14
-VENUSAUR,Electromorphosis,No,No,No,No,"An electric family that charges up when struck; Venusaur has no electrical trait",,2026-11-14
-VENUSAUR,Filter,No,No,No,Pending,"A barrier-and-shield family (Mr. Mime's walls, Bastiodon's shield face, the Regis); Venusaur's toughness is Mega bulk and a G-Max petal shield, both form-only",,
+VENUSAUR,Effect Spore,No,Yes,Yes,Yes,"A powder-and-pollen family (Vileplume, Gloom, Jumpluff); G-Max pollen causes uncontrollable sneezing, which fits the fork's accuracy drop on contact attackers",biology,2026-11-14
+VENUSAUR,Electromorphosis,No,No,No,No,An electric family that charges up when struck; Venusaur has no electrical trait,,2026-11-14
+VENUSAUR,Filter,No,No,No,No,"A barrier-and-shield family (Mr. Mime's walls, Bastiodon's shield face, the Regis); Venusaur's toughness is Mega bulk and a G-Max petal shield, both form-only",,2026-11-14
+VENUSAUR,Flare Boost,No,No,No,Pending,"Drifblim's fire-filled balloon; a burn would wither Venusaur's flower, not power it",,
