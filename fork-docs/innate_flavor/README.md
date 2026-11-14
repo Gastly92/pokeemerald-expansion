@@ -13,14 +13,3 @@ them), `fit` (the maintainer's decision; `Pending` until made), `reason`, `sourc
 against the dex text and Bulbapedia's Biology, anime and manga sections; `source`
 names the sections that support a Yes and is blank for a No.
 
-## Rulings that carry across species
-
-Decisions on one species that set how an innate is read everywhere. Apply them when
-the innate comes up again, and revisit existing holders when their species is reached.
-
-- **Flower Veil** — the canon holders *are* flowers (Floette, Comfey). Bearing a
-  flower (Venusaur) matches the name, not the flavor.
-- **Friend Guard** — a passive aura, like Magic Guard, from small, happy creatures
-  like the canon holders (Clefairy, Jigglypuff, Happiny, Maushold). Guardians who
-  actively protect allies (with vines, shells, bodies) are not this. Many current
-  holders came in on the guardian reading; correct them as their species come up.
