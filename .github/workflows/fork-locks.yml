@@ -1,0 +1,27 @@
+name: Fork locks
+
+# Fork-owned checks that guard reviewed fork data against unreviewed edits. Each lock is
+# one step: a script that prints what is wrong and exits non-zero. They read files only,
+# so the job needs no toolchain and finishes in seconds. Kept out of build.yml, which
+# upstream also edits, so adding a lock never conflicts on an upstream sync.
+#
+# To add a lock, add a step below. To make a failing lock block merging, the job's
+# check ("Fork locks / locks") must be a required status check on master.
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  locks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # fork-docs/innate_flavor/README.md, "The lock": a species whose innate flavor
+      # sweep is complete must match its logged decisions and have one for every innate.
+      - name: Innate flavor lock
+        run: python3 -I .claude/skills/innate-flavor/tools/next.py --check

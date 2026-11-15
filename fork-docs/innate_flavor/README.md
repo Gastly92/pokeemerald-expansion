@@ -99,6 +99,9 @@ conversation can pick it up from this page alone.
 - the pool has an innate the species has no decision for, for example one wired after
   its review. Assess that innate for the species and the check passes again.
 
+CI runs it on every pull request and every push to `master`, in the fork-owned
+`.github/workflows/fork-locks.yml`.
+
 ## Excluded innates
 
 `excluded.csv` lists innates that need no per-species decision because a CI gate already
