@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      # fork-docs/innate_flavor/README.md, "The lock": a species whose innate flavor
+      # .claude/skills/innate-flavor/reference.md, "The lock": a species whose innate flavor
       # sweep is complete must match its logged decisions and have one for every innate.
       - name: Innate flavor lock
         run: python3 -I .claude/skills/innate-flavor/tools/next.py --check
