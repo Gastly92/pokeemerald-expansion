@@ -105,23 +105,24 @@ VENUSAUR,Pacify,No,No,Yes,No,Pacify is calming by mere presence on entry; Venusa
 VENUSAUR,Pastel Veil,No,No,No,No,"Galarian Ponyta's pastel healing-mane signature (plus Shaymin, which purifies toxins); Venusaur is itself Poison-type and nothing shows it cleansing poison",,2026-11-14
 VENUSAUR,Pickpocket,No,No,No,No,"A family of thieves and pilferers (Sneasel, Meowth, Murkrow, Nickit, Impidimp); Venusaur never steals",,2026-11-15
 VENUSAUR,Pickup,No,No,No,No,"A family of scavengers and foragers that pick things up (Zigzagoon, Meowth, Teddiursa, Munchlax); nothing shows Venusaur collecting items",,2026-11-15
-VENUSAUR,Piercing Drill,No,No,No,No,"Mega Excadrill's drill signature (plus drill-tailed Dunsparce); Venusaur has no drill",,2026-11-15
+VENUSAUR,Piercing Drill,No,No,No,No,Mega Excadrill's drill signature (plus drill-tailed Dunsparce); Venusaur has no drill,,2026-11-15
 VENUSAUR,Poison Heal,No,No,No,No,"A mushroom family that feeds on toxins (Shroomish, Breloom, Paras) plus Gliscor; Venusaur is a flowering plant, and as a Poison type it cannot normally be poisoned at all",,2026-11-15
 VENUSAUR,Power Spot,No,No,No,No,"Stonjourner's standing-stone signature, a site that empowers those beside it; Venusaur leads Evolution ceremonies in a sacred garden, but the power is the garden's and the ritual's, not its own presence",,2026-11-15
 VENUSAUR,Prankster,No,No,No,No,"A family of mischievous tricksters (Whimsicott, Sableye, Murkrow, Impidimp, Klefki); Venusaur is a dignified leader, not a prankster",,2026-11-15
 VENUSAUR,Pressure,No,No,No,No,"A family of overwhelming, oppressive presences (legendaries, Absol, Dusknoir, Kingambit); Venusaur halts the forest Pokémon by command as their leader in AG073, not by a weight that wears foes down",,2026-11-15
-VENUSAUR,Prism Armor,No,No,No,No,"Necrozma's prismatic crystal-armor signature; Venusaur has no armor or crystal",,2026-11-15
-VENUSAUR,Propeller Tail,No,No,No,No,"Barraskewda's propeller-tailed fish signature; Venusaur is a land creature with no such tail",,2026-11-15
+VENUSAUR,Prism Armor,No,No,No,No,Necrozma's prismatic crystal-armor signature; Venusaur has no armor or crystal,,2026-11-15
+VENUSAUR,Propeller Tail,No,No,No,No,Barraskewda's propeller-tailed fish signature; Venusaur is a land creature with no such tail,,2026-11-15
 VENUSAUR,Protosynthesis,No,No,No,No,"The ancient Paradox Pokémon's ability; Venusaur is strongest in summer sun, but it has no Paradox form and its sun power is already Chlorophyll",,2026-11-15
 VENUSAUR,Psybubble,No,No,No,No,"A family of psychic barriers, cocoons and protective membranes (Solosis line, Mr. Mime, Cosmoem, Dottler); Venusaur has no psychic shell",,2026-11-15
 VENUSAUR,Punk Rock,No,No,No,No,"A family of musicians and singers (Toxtricity, Primarina, Kricketune, Chatot, Kommo-o); Venusaur roars to lead a ritual in EP051, but it is no performer",,2026-11-15
 VENUSAUR,Pure Power,No,No,No,No,"Meditite and Medicham's meditation-honed signature; Venusaur's strength comes from sunlight, not mental discipline",,2026-11-15
-VENUSAUR,Purifying Salt,No,No,No,No,"The Nacli line's rock-salt signature; Venusaur has no salt",,2026-11-15
-VENUSAUR,Quark Drive,No,No,No,No,"The future Paradox Pokémon's ability; Venusaur has no Paradox form and nothing robotic or electric",,2026-11-15
+VENUSAUR,Purifying Salt,No,No,No,No,The Nacli line's rock-salt signature; Venusaur has no salt,,2026-11-15
+VENUSAUR,Quark Drive,No,No,No,No,The future Paradox Pokémon's ability; Venusaur has no Paradox form and nothing robotic or electric,,2026-11-15
 VENUSAUR,Queenly Majesty,No,No,No,No,"A family of regal queens whose majesty awes foes (Tsareena, Vespiquen); Venusaur leads the forest's Grass Pokémon in AG073, but as a guardian elder, not a queen",,2026-11-15
-VENUSAUR,Quick Draw,No,No,No,No,"Galarian Slowbro's shell-gun gunslinger signature; Venusaur is slow and has nothing to draw",,2026-11-15
+VENUSAUR,Quick Draw,No,No,No,No,Galarian Slowbro's shell-gun gunslinger signature; Venusaur is slow and has nothing to draw,,2026-11-15
 VENUSAUR,Quick Feet,No,No,No,No,"A family of fast runners that bolt when in trouble (Zigzagoon, Mightyena, Jolteon, Electrike); Venusaur is squat, heavy and slow",,2026-11-15
 VENUSAUR,Rain Dish,No,No,No,No,"A family refreshed by rain (Lotad's lily pad, Squirtle line, Wingull, rain-loving fungi); for Venusaur rain only strengthens its scent, and its power comes from sun",,2026-11-15
 VENUSAUR,Rattled,No,No,No,No,"A family of timid, skittish creatures that scramble when scared (Magikarp, Whismur, Sobble, Wimpod); Venusaur is a composed leader, and one flustered moment against Double Team (AG164) is not timidity",,2026-11-15
 VENUSAUR,Reckless,No,No,No,No,"A family of headlong chargers that hurl themselves at foes (Rhyhorn line, Tauros, Staraptor, Bouffalant); Venusaur fights from a planted stance with vines and beams",,2026-11-15
-VENUSAUR,Regenerator,No,Yes,Yes,Pending,"Joins the regrowing plants (Tangrowth, Eldegoss, Amoonguss, Hydrapple): Mega Venusaur's brambles heal it, and its pollen makes plants grow and bloom (biology, EP051, JN003)",biology+anime,
+VENUSAUR,Regenerator,No,Yes,Yes,Yes,"Joins the regrowing plants (Tangrowth, Eldegoss, Amoonguss, Hydrapple): Mega Venusaur's brambles heal it and its pollen makes plants grow (biology, EP051, JN003); for the maintainer the flavor comes from Super Smash Bros., where Ivysaur heals itself",biology+anime+smash,2026-11-15
+VENUSAUR,Rekindle,No,No,No,Pending,"A family of fiery fighting spirits that flare up with each knockout (Fire starters, Arcanine, Ho-Oh); Venusaur is calm and draws strength from the sun, not from victories",,
