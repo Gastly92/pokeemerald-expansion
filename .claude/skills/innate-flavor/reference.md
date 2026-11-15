@@ -6,7 +6,6 @@
 | --- | --- |
 | `fork-docs/innate_flavor.csv` | The decision log, one row per species and innate. |
 | `fork-docs/innate_flavor/excluded.csv` | Innates the sweep skips, each with the CI gate that already covers it. |
-| `fork-docs/innate_flavor/FOLLOWUPS.md` | Open questions to settle after a species. |
 | `tools/next.py` | Progress, the next species and innate, and the lock check. |
 | `tools/episodes.py` | Plot paragraphs from a species' major anime episodes and movies. |
 

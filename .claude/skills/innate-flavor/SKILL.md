@@ -53,7 +53,7 @@ Log columns, the exclusion list and the lock are described in [reference.md](ref
 1. `next.py <SPECIES>` shows 0 left.
 2. Apply changed decisions to `src/fork/innate_abilities.c` with
    `python3 .claude/skills/line-review/tools/inn.py`. Writing a decision to pre-evolutions or forms
-   is the maintainer's call; note open questions in `fork-docs/innate_flavor/FOLLOWUPS.md`.
+   is the maintainer's call; raise it in the summary.
 3. Run `next.py --check` and `make check TESTS="Innate"`.
 4. Summarize: what the species keeps, gains and loses, every disagreement with both sides, and any
-   follow-ups.
+   open questions for the maintainer.
