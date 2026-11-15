@@ -124,7 +124,7 @@ VENUSAUR,Quick Feet,No,No,No,No,"A family of fast runners that bolt when in trou
 VENUSAUR,Rain Dish,No,No,No,No,"A family refreshed by rain (Lotad's lily pad, Squirtle line, Wingull, rain-loving fungi); for Venusaur rain only strengthens its scent, and its power comes from sun",,2026-11-15
 VENUSAUR,Rattled,No,No,No,No,"A family of timid, skittish creatures that scramble when scared (Magikarp, Whismur, Sobble, Wimpod); Venusaur is a composed leader, and one flustered moment against Double Team (AG164) is not timidity",,2026-11-15
 VENUSAUR,Reckless,No,No,No,No,"A family of headlong chargers that hurl themselves at foes (Rhyhorn line, Tauros, Staraptor, Bouffalant); Venusaur fights from a planted stance with vines and beams",,2026-11-15
-VENUSAUR,Regenerator,No,Yes,Yes,Yes,"Joins the regrowing plants (Tangrowth, Eldegoss, Amoonguss, Hydrapple): Mega Venusaur's brambles heal it and its pollen makes plants grow (biology, EP051, JN003); for the maintainer the flavor comes from Super Smash Bros., where Ivysaur heals itself",biology+anime+smash,2026-11-15
+VENUSAUR,Regenerator,No,Yes,Yes,Yes,"Joins the regrowing plants (Tangrowth, Eldegoss, Amoonguss, Hydrapple): Mega Venusaur's brambles heal it and its pollen makes plants grow (biology, EP051, JN003); for the maintainer the flavor comes from Super Smash Bros., where Ivysaur heals itself, so Ivysaur carries it too",biology+anime+smash,2026-11-15
 VENUSAUR,Rekindle,No,No,No,No,"A family of fiery fighting spirits that flare up with each knockout (Fire starters, Arcanine, Ho-Oh); Venusaur is calm and draws strength from the sun, not from victories",,2026-11-15
 VENUSAUR,Ripen,No,No,No,No,"A family of ripening fruit and berry fermenters (the Applin lines, Shuckle); Venusaur bears a flower, not fruit",,2026-11-15
 VENUSAUR,Rock Head,No,No,No,No,"A family of rock-hard skulls and stony bodies (Geodude, Onix, Aron, Bagon, Cubone's helmet); Venusaur's head is ordinary skin",,2026-11-15
@@ -175,21 +175,21 @@ VENUSAUR,Teravolt,No,No,No,No,Zekrom's (and Black Kyurem's) bursting-aura signat
 VENUSAUR,Thermal Exchange,No,No,No,No,"Frigibax's line absorbs heat into its dorsal fin (plus steam-powered Volcanion); Venusaur turns sunlight into energy, but nothing shows it absorbing fire",,2026-11-15
 VENUSAUR,Thick Fat,No,No,No,No,"Stays on Mega Venusaur only, where it is the canon ability; base Venusaur is not described as fat",,2026-11-15
 VENUSAUR,Tinted Lens,No,No,No,No,"A family with special eyes or lenses that find a way through (Venomoth, Butterfree, Noctowl, Yanmega, Sigilyph); Venusaur has small, ordinary eyes",,2026-11-15
-VENUSAUR,Torrent,No,No,No,No,"The Water starters' pinch ability; Venusaur's own counterpart is Overgrow",,2026-11-15
+VENUSAUR,Torrent,No,No,No,No,The Water starters' pinch ability; Venusaur's own counterpart is Overgrow,,2026-11-15
 VENUSAUR,Tough Claws,No,No,No,No,"A family that fights with hard claws (Mega Charizard X, Barbaracle, Perrserker, Dusk Lycanroc); Venusaur has clawed toes but fights with vines and beams",,2026-11-15
 VENUSAUR,Toxic Boost,No,No,No,No,"Zangoose's signature, venom feeding its fury against Seviper; Venusaur is Poison-type and cannot normally be poisoned at all",,2026-11-15
 VENUSAUR,Toxic Chain,No,No,No,No,"The Loyal Three's signature, the toxic chains Pecharunt binds them with; Venusaur has no such chain",,2026-11-15
-VENUSAUR,Transistor,No,No,No,No,"Regieleki's electric-circuit signature (plus Zapdos); nothing electric about Venusaur",,2026-11-15
+VENUSAUR,Transistor,No,No,No,No,Regieleki's electric-circuit signature (plus Zapdos); nothing electric about Venusaur,,2026-11-15
 VENUSAUR,Triage,No,No,No,No,"Comfey's signature, a nurse that rushes healing flowers to the wounded; Mega Venusaur's brambles heal itself, but nothing shows urgent first aid",,2026-11-15
-VENUSAUR,Turboblaze,No,No,No,No,"Reshiram's (and White Kyurem's) blazing-aura signature; nothing like it on Venusaur",,2026-11-15
+VENUSAUR,Turboblaze,No,No,No,No,Reshiram's (and White Kyurem's) blazing-aura signature; nothing like it on Venusaur,,2026-11-15
 VENUSAUR,Unaware,No,No,No,No,"A family of placid, simple or oblivious creatures who ignore a foe's power-ups (Quagsire, Bibarel, Dondozo, Pyukumuku, Clefable); Venusaur is attentive and aware",,2026-11-15
 VENUSAUR,Unburden,No,No,No,No,"A family of light, nimble creatures that get faster once unencumbered (Sceptile, Hawlucha, Liepard, Accelgor shedding its shell); Venusaur carries its heavy flower for good",,2026-11-15
 VENUSAUR,Unnerve,No,No,No,No,"A family of unsettling predators whose presence puts foes off their food (Tyranitar, Houndoom, Haxorus, Ursaring, Mewtwo); Venusaur's presence soothes rather than unnerves",,2026-11-15
-VENUSAUR,Unseen Fist,No,No,No,No,"Urshifu's martial-arts signature (plus Mega Golurk); Venusaur throws no punches",,2026-11-15
-VENUSAUR,Victory Star,No,No,No,No,"Victini's victory-bringing signature; Venusaur is not a bringer of victory",,2026-11-15
+VENUSAUR,Unseen Fist,No,No,No,No,Urshifu's martial-arts signature (plus Mega Golurk); Venusaur throws no punches,,2026-11-15
+VENUSAUR,Victory Star,No,No,No,No,Victini's victory-bringing signature; Venusaur is not a bringer of victory,,2026-11-15
 VENUSAUR,Vital Spirit,No,No,No,No,"A family of restless, hyperactive creatures that never settle down (Vigoroth, Mankey, Elekid, Magby, Lillipup); Venusaur is calm and sleeps peacefully",,2026-11-15
-VENUSAUR,Water Bubble,No,No,No,No,"Dewpider's and Araquanid's water-bubble-helmet signature; Venusaur wears no bubble",,2026-11-15
-VENUSAUR,Water Compaction,No,No,No,No,"Sandygast's and Palossand's wet-sandcastle signature; Venusaur is not made of sand",,2026-11-15
+VENUSAUR,Water Bubble,No,No,No,No,Dewpider's and Araquanid's water-bubble-helmet signature; Venusaur wears no bubble,,2026-11-15
+VENUSAUR,Water Compaction,No,No,No,No,Sandygast's and Palossand's wet-sandcastle signature; Venusaur is not made of sand,,2026-11-15
 VENUSAUR,Water Veil,No,No,No,No,"A family of sea creatures sheathed in water that cannot be burned (Wailord, Seaking, Floatzel, Mantine); Venusaur is a land plant with no water coating",,2026-11-15
 VENUSAUR,White Smoke,No,No,No,No,"A family of fire creatures that belch screening smoke (Torkoal, Heatmor, Centiskorch); Venusaur's pollen clouds are pollen, not smoke",,2026-11-15
 VENUSAUR,Willpower,No,No,No,No,"For species whose dex is about a strong will (Azelf, Meditite, Hitmonchan, Regigigas); nothing in Venusaur's dex or media is about mental resolve",,2026-11-15
