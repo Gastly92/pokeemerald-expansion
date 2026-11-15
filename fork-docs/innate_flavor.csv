@@ -135,7 +135,7 @@ VENUSAUR,Sand Rush,No,No,No,No,"A family of desert runners and diggers that spee
 VENUSAUR,Sand Veil,No,No,No,No,"A family of desert dwellers that vanish into blowing sand (Cacturne, Garchomp, Sandaconda, Sandygast); Venusaur is a large grassland plant",,2026-11-15
 VENUSAUR,Scrappy,No,No,No,No,"A family of feisty scrappers who will fight anything, ghosts included (Kangaskhan, Pangoro, Sirfetch'd, Zangoose); Venusaur is a calm leader, not a brawler",,2026-11-15
 VENUSAUR,Serene Grace,No,No,No,No,"A family of blessing and good-fortune bringers (Togekiss, Chansey, Jirachi, Shaymin, Deerling); Venusaur soothes, but nothing shows it bringing luck or blessings",,2026-11-15
-VENUSAUR,Shadow Shield,No,No,No,No,"Lunala's moonlit-shadow signature (plus Dawn Wings Necrozma); nothing shadowy or lunar about Venusaur",,2026-11-15
+VENUSAUR,Shadow Shield,No,No,No,No,Lunala's moonlit-shadow signature (plus Dawn Wings Necrozma); nothing shadowy or lunar about Venusaur,,2026-11-15
 VENUSAUR,Shadow Tag,No,No,No,No,"A family of ghosts and psychics that pin a foe by its shadow (Wobbuffet, Gothitelle, Chandelure, Froslass); the Mysterious Garden's vine barrier in EP051 is a sealed place, not a hold on anyone's shadow",,2026-11-15
 VENUSAUR,Sharpness,No,No,No,No,"A family whose own body carries blades (Gallade, Scyther, Kleavor, the Lurantis and Leavanny leaf-blades, swords); Venusaur throws razor-sharp leaves in the anime, but has no blade of its own",,2026-11-15
 VENUSAUR,Shed Skin,No,No,No,No,"A family that sheds or molts (snakes, cocoons, Scraggy's skin, Tangela's vines); Venusaur keeps its skin and its flower",,2026-11-15
@@ -146,19 +146,20 @@ VENUSAUR,Slush Rush,No,No,No,No,"A family of ice-and-snow creatures that speed u
 VENUSAUR,Sniper,No,No,No,No,"A family of marksmen that strike weak points with precision (Inteleon, Kingdra, Octillery, Beedrill's stingers); Venusaur relies on raw power, not pinpoint aim",,2026-11-15
 VENUSAUR,Snow Cloak,No,No,No,No,"A family of snow creatures that vanish into falling snow (Froslass, Glaceon, Articuno, Alolan Ninetales); Venusaur is a summer plant",,2026-11-15
 VENUSAUR,Solid Rock,No,No,No,No,"A family of stony bodies and rock shells (Rhyperior, Carracosta, the fossils, Torterra's earthen shell); Venusaur has no rock in it",,2026-11-15
-VENUSAUR,Soul-Heart,No,No,No,No,"Magearna's artificial-soul signature (plus soul-gathering Duskull line and Spiritomb); Venusaur has no soul-collecting trait",,2026-11-15
+VENUSAUR,Soul-Heart,No,No,No,No,Magearna's artificial-soul signature (plus soul-gathering Duskull line and Spiritomb); Venusaur has no soul-collecting trait,,2026-11-15
 VENUSAUR,Speed Boost,No,No,No,No,"A family of speedsters that keep accelerating (Ninjask, Yanmega, Blaziken, Sharpedo, Ponyta); Venusaur is squat, heavy and slow",,2026-11-15
 VENUSAUR,Stakeout,No,No,No,No,"A family of lurking ambushers that pounce on newcomers (Gumshoos, Spidops, Ariados, Victreebel's lure); Venusaur's scent attracts Pokémon to calm them, not to ambush them",,2026-11-15
 VENUSAUR,Stalwart,No,No,No,No,"A family of steel towers and armored birds that hold their course (Duraludon, Archaludon, Mega Skarmory); Venusaur has nothing metallic or tower-like",,2026-11-15
 VENUSAUR,Stamina,No,No,No,No,"A family of tireless laborers and hardy bodies that toughen with each blow (Mudsdale, Copperajah, the Timburr line, the Regis); Venusaur carrying Spenser in AG163 and Mega's sturdier legs are not endurance that grows under attack",,2026-11-15
 VENUSAUR,Steadfast,No,No,No,No,"A family of steadfast warriors and martial artists who fight on when shaken (Machamp, Lucario, Gallade, Scyther, Sirfetch'd); Venusaur is no warrior of that kind",,2026-11-15
 VENUSAUR,Steam Engine,No,No,No,No,"A family of coal furnaces, engines and steam-venting bodies (Coalossal, Torkoal, Varoom, Volcanion); Venusaur has no engine or steam",,2026-11-15
-VENUSAUR,Steelworker,No,No,No,No,"Dhelmise's anchor-wielding signature; Venusaur wields nothing of steel",,2026-11-15
-VENUSAUR,Steely Spirit,No,No,No,No,"Perrserker's iron-hard Viking spirit signature; nothing steely about Venusaur",,2026-11-15
+VENUSAUR,Steelworker,No,No,No,No,Dhelmise's anchor-wielding signature; Venusaur wields nothing of steel,,2026-11-15
+VENUSAUR,Steely Spirit,No,No,No,No,Perrserker's iron-hard Viking spirit signature; nothing steely about Venusaur,,2026-11-15
 VENUSAUR,Stench,No,No,No,No,"A family of foul smells (Gloom's and Vileplume's stinking flowers, Muk, Skuntank, Garbodor); Venusaur's flower smells soothing and sweet, never foul",,2026-11-15
 VENUSAUR,Sticky Hold,No,No,No,No,"A family of sticky, slimy bodies and clingers that never let go of what they hold (Muk, Gastrodon, Dipplin's syrup, Komala's log, Klefki's keys); Venusaur is neither sticky nor a clinger",,2026-11-15
 VENUSAUR,Strong Jaw,No,No,No,No,"A family of powerful biters (Tyrantrum, Drednaw, Mega Sharpedo, Gumshoos); Venusaur has a wide toothed mouth, but it never fights by biting",,2026-11-15
 VENUSAUR,Sturdy,No,No,No,No,"A family of rock, steel and shelled bodies that cannot be felled in one blow (Geodude, Onix, Skarmory, Shuckle); only Mega Venusaur is described as withstanding almost any attack",,2026-11-15
 VENUSAUR,Suction Cups,No,No,No,No,"A family that anchors itself with suckers, roots or claws (Octillery, Cradily, Carnivine, Ferrothorn); Venusaur is not anchored and gets sent flying by Tauros in EP112",,2026-11-15
 VENUSAUR,Super Luck,No,No,No,No,"A family of luck and omen birds and charms (Togekiss, Absol, Murkrow, Pidove, Victini); nothing ties Venusaur to luck",,2026-11-15
-VENUSAUR,Supersweet Syrup,No,No,Yes,Pending,"Its flower gives off a scent that attracts Pokémon (biology), the same lure as the Sweet Scent it uses in AG163; Supersweet Syrup is that sweet lure released on entry",biology+anime,
+VENUSAUR,Supersweet Syrup,No,No,Yes,No,Maintainer: No (reason to be added),,2026-11-15
+VENUSAUR,Supreme Overlord,No,No,No,Pending,"Kingambit's warlord signature, avenging fallen subordinates; Venusaur leads the forest's Grass Pokémon in AG073, but as a protector, not a commander of fallen troops",,
