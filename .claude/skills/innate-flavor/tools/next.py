@@ -6,7 +6,7 @@
     python3 -I .claude/skills/innate-flavor/tools/next.py --check    # lock check; exits 1 on a problem
 
 The pool is sImplementedInnates[] (test/fork/innate_abilities.c) minus
-fork-docs/innate_flavor/excluded.csv, in alphabetical order of in-game name. Species
+.claude/skills/innate-flavor/excluded.csv, in alphabetical order of in-game name. Species
 come from the extended roster (src/fork/frontier_extended_mons.c) in the order their
 .species first appear. The log is fork-docs/innate_flavor.csv.
 
@@ -19,7 +19,7 @@ come from the extended roster (src/fork/frontier_extended_mons.c) in the order t
 import csv, re, sys
 
 LOG = 'fork-docs/innate_flavor.csv'
-EXCLUDED = 'fork-docs/innate_flavor/excluded.csv'
+EXCLUDED = '.claude/skills/innate-flavor/excluded.csv'
 
 
 def ab(x): return x.replace('ABILITY_', '')
