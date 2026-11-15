@@ -113,16 +113,21 @@ def clean(w):
     return w.strip()
 
 
-for arg in sys.argv[1:]:
-    name = species_name(arg)
-    print('== %s (Bulbapedia: %s)' % (arg, name))
-    wiki = load(name)
-    if not wiki:
-        continue
-    for title in SECTIONS:
-        text = section(wiki, title)
-        for sub in DROP.get(title, ()):
-            text = drop(text, sub)
-        text = clean(text)
-        print('--- %s' % title)
-        print(text or '  (no %s section)' % title)
+def main():
+    for arg in sys.argv[1:]:
+        name = species_name(arg)
+        print('== %s (Bulbapedia: %s)' % (arg, name))
+        wiki = load(name)
+        if not wiki:
+            continue
+        for title in SECTIONS:
+            text = section(wiki, title)
+            for sub in DROP.get(title, ()):
+                text = drop(text, sub)
+            text = clean(text)
+            print('--- %s' % title)
+            print(text or '  (no %s section)' % title)
+
+
+if __name__ == '__main__':
+    main()
