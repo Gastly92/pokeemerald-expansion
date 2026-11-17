@@ -220,7 +220,7 @@ CHARIZARD,Cud Chew,No,No,No,No,"A family of grazing ruminants (Tauros, Miltank, 
 CHARIZARD,Cursed Body,No,No,No,No,"A family of ghosts, haunted objects and cursed relics (Gengar, Banette, Cofagrigus, Chandelure, Sinistea, Ninetales); Charizard is a living fire dragon with no curse or haunting",,2026-11-17
 CHARIZARD,Cute Charm,No,No,No,No,"A family of cute, charming and lovestruck creatures (Clefairy, Jigglypuff, Skitty, Lopunny, Sylveon, Luvdisc); Charizard is fearsome, not cute, and one anime romance (Charla) is not a charm trait",,2026-11-17
 CHARIZARD,Dancer,No,No,No,No,"A family of dancers and performers (Oricorio, Clefairy, Ludicolo, Bellossom, Lilligant, Meloetta, Quaquaval); Charizard is a brawler, not a performer, and Dragon Dance in its moveset is not dancing in its lore",,2026-11-17
-CHARIZARD,Dauntless Shield,No,No,No,No,"The legendary shield-wolf Zamazenta (and Pecharunt as a catch-all); Charizard carries no shield and has no defensive lore",,2026-11-17
+CHARIZARD,Dauntless Shield,No,No,No,No,The legendary shield-wolf Zamazenta (and Pecharunt as a catch-all); Charizard carries no shield and has no defensive lore,,2026-11-17
 CHARIZARD,Dazzling,No,No,No,No,"A gaudy, eye-catching fish whose look stuns attackers (Bruxish only); Charizard's orange hide is not dazzling, and nothing describes it daunting foes into hesitation",,2026-11-17
 CHARIZARD,Defiant,No,Yes,Yes,Yes,"A family of proud fighters who refuse to yield (Bisharp, Braviary, Passimian, Primeape, Obstagoon); Charizard seeks out strong foes and will not back down when beaten, and Mega X turns it into a physical brawler",dex; anime,2026-11-17
 CHARIZARD,Download,No,No,No,No,"A family of digital and cybernetic beings (Porygon line, Genesect); Charizard is a flesh-and-blood dragon with no data or machine trait",,2026-11-17
@@ -238,7 +238,7 @@ CHARIZARD,Full Metal Body,No,No,No,No,"The metal-bodied sun lion (Solgaleo, Dusk
 CHARIZARD,Fur Coat,No,No,No,No,"A family of thickly furred, pampered creatures (Alolan Persian, Furfrou); Charizard is a bare-skinned reptile with no fur",,2026-11-17
 CHARIZARD,Gale Wings,No,No,No,No,"A family of fire birds that strike first in a dive (Fletchling, Fletchinder, Talonflame); Charizard is a power flier known for altitude and stamina rather than first-strike speed; only Mega Y is called faster than a jet",,2026-11-17
 CHARIZARD,Gluttony,No,No,No,No,"A family of big eaters and greedy foragers (Snorlax, Munchlax, Swalot, Greedent, Zigzagoon, Emboar); nothing describes Charizard as a glutton",,2026-11-17
-CHARIZARD,Good as Gold,No,No,No,No,"The gold-coin body Gholdengo only; Charizard has no gold or treasure tie",,2026-11-17
+CHARIZARD,Good as Gold,No,No,No,No,The gold-coin body Gholdengo only; Charizard has no gold or treasure tie,,2026-11-17
 CHARIZARD,Gooey,No,No,No,No,"A family of slimy, slippery-skinned creatures (Goomy line, Grimer, Lickitung, Poliwhirl, Wiglett); Charizard has dry, hot skin",,2026-11-17
 CHARIZARD,Grass Pelt,No,No,No,No,"A family of grazers and creatures with a living coat of grass (Skiddo, Gogoat, Tapu Bulu); Charizard has no plant growth on it and sets grass alight",,2026-11-17
 CHARIZARD,Grim Neigh,No,No,No,No,"A spectral steed whose terrifying neigh saps foes (Spectrier; Pecharunt as a catch-all); Charizard is no ghost horse, and its victory roar is a separate ability's flavour",,2026-11-17
@@ -246,7 +246,7 @@ CHARIZARD,Guard Dog,No,No,No,No,"A family of dogs (Growlithe, Arcanine, Stoutlan
 CHARIZARD,Guts,No,No,No,No,"A family of gritty brawlers and fighters that power through ailments (Machamp, Conkeldurr, Hariyama, Heracross, Ursaring, Swellow); Charizard's refusal to quit is already Defiant, and nothing shows it fighting harder while sick, poisoned or paralysed",,2026-11-17
 CHARIZARD,Harvest,No,No,No,No,"A family of fruit-bearing plants and growers (Exeggutor, Tropius, Arboliva, Torterra, Applin line, Phantump); Charizard grows nothing and burns crops rather than tending them",,2026-11-17
 CHARIZARD,Healer,No,No,No,No,"A family of nurses and soothing caretakers (Chansey, Blissey, Audino, Alomomola, Hatenna, Comfey); Charizard is a fighter with no healing nature",,2026-11-17
-CHARIZARD,Heatproof,No,No,Yes,No,Maintainer: (reason requested),,2026-11-17
+CHARIZARD,Heatproof,No,No,Yes,No,"Maintainer: Charizard is not heatproof like Bronzong, it's just a Fire species",,2026-11-17
 CHARIZARD,Heavy Metal,No,No,No,No,"A family of massive metal bodies (Aggron, Bronzong, Copperajah, Celesteela, Archaludon); Charizard is a flesh-and-blood flier with no metal in it",,2026-11-17
 CHARIZARD,Hospitality,No,No,No,No,"A family of tea-serving hosts and gift-givers (Sinistcha, Polteageist, Delibird, Jirachi); Charizard is no host, though it does carry riders",,2026-11-17
 CHARIZARD,Huge Power,No,No,No,No,"A family of small creatures with freakish strength for their size (Azumarill, Mawile, Diggersby, Tinkaton); Charizard is big and strong in the ordinary way, and doubling its Attack would make a common opponent overwhelming",,2026-11-17
@@ -261,4 +261,5 @@ CHARIZARD,Innards Out,No,No,No,No,"A family of creatures that spew out their ins
 CHARIZARD,Inner Focus,No,No,No,No,"A family of disciplined martial artists, meditators and steady minds (Lucario, Medicham, Hitmonchan, Mienshao, Alakazam, Dragonite); Charizard is proud and hot-headed rather than calm and centred, and Intimidate immunity would cancel its Defiant and Competitive triggers",,2026-11-17
 CHARIZARD,Insomnia,No,No,No,No,"A family of nocturnal watchers, sleepless ghosts and dream-eaters (Noctowl, Murkrow, Banette, Hypno, Rayquaza); Charizard is a deep, contented sleeper",,2026-11-17
 CHARIZARD,Intimidate,No,No,Yes,No,Maintainer: it doesn't have the face for Intimidate,,2026-11-17
-CHARIZARD,Intrepid Sword,No,No,No,Pending,"The legendary sword-wolf Zacian; Charizard carries no blade",,
+CHARIZARD,Intrepid Sword,No,No,No,No,The legendary sword-wolf Zacian; Charizard carries no blade,,2026-11-17
+CHARIZARD,Iron Barbs,No,No,No,Pending,"A family of spiked, thorned and quilled bodies (Ferrothorn, Chesnaught, Cacturne, Turtonator, Togedemaru, Iron Thorns); Charizard has no spines, only Mega X's shoulder spikes",,
