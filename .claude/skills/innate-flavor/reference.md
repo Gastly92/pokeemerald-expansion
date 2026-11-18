@@ -34,7 +34,7 @@
 ## Exclusions
 
 `excluded.csv` lists innates that need no per-species decision because a test already decides
-who carries them (currently Legendary and Mythical). Excluded innates get no rows. Add one only
+who carries them (currently Chilling Neigh, Grim Neigh, Legendary and Mythical). Excluded innates get no rows. Add one only
 when a test enforces exactly who carries it.
 
 ## The lock

@@ -9567,6 +9567,26 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate A
 // pop-up shows the innate, not the (different) chosen ability. Glastrier / Spectrier are sole-ability legends,
 // so a forced non-slot chosen ability isolates the innate; the feature-off leg proves the effect is innate-only.
 
+// The innate flavor sweep excludes both Neighs (.claude/skills/innate-flavor/excluded.csv): each is its
+// horse's signature, so this test, not a per-species decision, fixes who carries them.
+TEST("FEATURE_INNATE_ABILITIES: only Glastrier carries Chilling Neigh and only Spectrier carries Grim Neigh")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 chilling = SpeciesHasInnate(species, ABILITY_CHILLING_NEIGH);
+        bool32 grim = SpeciesHasInnate(species, ABILITY_GRIM_NEIGH);
+
+        if (chilling != (species == SPECIES_GLASTRIER) || grim != (species == SPECIES_SPECTRIER))
+        {
+            DebugPrintf("%S has the wrong Neigh innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;
