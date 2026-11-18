@@ -201,7 +201,7 @@ CHARIZARD,Anticipation,No,No,No,No,"A family of sensitive animals that feel dang
 CHARIZARD,Arena Trap,No,No,No,No,"A family of burrowers and pit-trappers that hold prey in the ground (Diglett, Dugtrio, Trapinch, Arbok); Charizard is a flier with no trapping or burrowing trait",,2026-11-16
 CHARIZARD,Armor Tail,No,No,No,No,"Only Farigiraf, whose armoured tail-head wards off attacks; Charizard's tail is a flame it must protect, not a shield",,2026-11-16
 CHARIZARD,Aroma Veil,No,No,No,No,"A family of fragrant flowers, perfumes and sweets (Aromatisse, Alcremie, Roserade, Meganium, Oinkologne); Charizard gives off no calming scent",,2026-11-16
-CHARIZARD,Bad Dreams,No,No,No,No,"A family of nightmare-bringers and dream-eaters (Darkrai, Munna, Musharna, Pecharunt); Charizard has no tie to sleep or dreams beyond sleeping soundly itself",,2026-11-16
+CHARIZARD,Bad Dreams,No,No,No,No,"A family of nightmare-bringers and dream-eaters (Darkrai, Munna, Musharna); Charizard has no tie to sleep or dreams beyond sleeping soundly itself",,2026-11-16
 CHARIZARD,Battery,No,No,No,No,"A family of living batteries and power cells (Charjabug, Vikavolt, Chinchou, Lanturn, Pachirisu); Charizard stores and shares no electricity",,2026-11-16
 CHARIZARD,Battle Armor,No,No,No,No,"A family of armoured creatures with plates, shells or carapaces (Sandslash, Kabutops, Aggron, Armaldo, Heracross, Drapion, Durant); Charizard has soft skin and no armour",,2026-11-16
 CHARIZARD,Beast Boost,No,No,No,No,"A family of Ultra Beasts and their kin from other worlds (Nihilego, Buzzwole, Guzzlord, Naganadel, Necrozma); Charizard is an ordinary native creature, and its growth through battle is better told by other KO or experience abilities",,2026-11-16
@@ -209,7 +209,7 @@ CHARIZARD,Berserk,No,No,No,No,"A family of placid dragons and dark birds that sn
 CHARIZARD,Big Pecks,No,No,No,No,"A family of birds with puffed-out, sturdy breasts (Pidove, Ducklett, Fletchling, Vullaby, Rufflet); Charizard is a winged dragon, not a bird, and no source mentions its chest",,2026-11-16
 CHARIZARD,Blaze,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-16
 CHARIZARD,Cheek Pouch,No,No,No,No,"A family of cheek-stuffing rodents and hoarders (Pikachu line, Skwovet, Dedenne, Bunnelby, Pachirisu, Morpeko); Charizard has no cheek pouches or food-hoarding habit",,2026-11-16
-CHARIZARD,Chilling Neigh,No,No,No,No,An icy steed whose whinny freezes the air (Glastrier; Pecharunt as a catch-all); Charizard is a fire dragon with no tie to ice or neighing,,2026-11-16
+CHARIZARD,Chilling Neigh,No,No,No,No,An icy steed whose whinny freezes the air (Glastrier only); Charizard is a fire dragon with no tie to ice or neighing,,2026-11-16
 CHARIZARD,Chlorophyll,No,No,No,No,"A family of photosynthetic plants and sun-basking leaf creatures (Venusaur, Sunflora, Sceptile, Leafeon, Heliolisk); Charizard is not a plant, and its sun tie is already Solar Power, its canon ability",,2026-11-16
 CHARIZARD,Clear Body,No,No,No,No,"A family of golems, machines, crystals and jellies (Regis, Metagross, Klinklang, Golurk, Carbink, Tentacruel, Dreepy); Charizard is flesh and blood with a hot temper, and it already turns stat drops against foes via Defiant and Competitive",,2026-11-16
 CHARIZARD,Comatose,No,No,No,No,"A family of perpetual sleepers (Komala, Snorlax); Charizard sleeps deeply and confidently, but it spends its waking life hunting strong foes, not in a permanent doze",,2026-11-16
@@ -220,7 +220,7 @@ CHARIZARD,Cud Chew,No,No,No,No,"A family of grazing ruminants (Tauros, Miltank, 
 CHARIZARD,Cursed Body,No,No,No,No,"A family of ghosts, haunted objects and cursed relics (Gengar, Banette, Cofagrigus, Chandelure, Sinistea, Ninetales); Charizard is a living fire dragon with no curse or haunting",,2026-11-17
 CHARIZARD,Cute Charm,No,No,No,No,"A family of cute, charming and lovestruck creatures (Clefairy, Jigglypuff, Skitty, Lopunny, Sylveon, Luvdisc); Charizard is fearsome, not cute, and one anime romance (Charla) is not a charm trait",,2026-11-17
 CHARIZARD,Dancer,No,No,No,No,"A family of dancers and performers (Oricorio, Clefairy, Ludicolo, Bellossom, Lilligant, Meloetta, Quaquaval); Charizard is a brawler, not a performer, and Dragon Dance in its moveset is not dancing in its lore",,2026-11-17
-CHARIZARD,Dauntless Shield,No,No,No,No,The legendary shield-wolf Zamazenta (and Pecharunt as a catch-all); Charizard carries no shield and has no defensive lore,,2026-11-17
+CHARIZARD,Dauntless Shield,No,No,No,No,The legendary shield-wolf Zamazenta; Charizard carries no shield and has no defensive lore,,2026-11-17
 CHARIZARD,Dazzling,No,No,No,No,"A gaudy, eye-catching fish whose look stuns attackers (Bruxish only); Charizard's orange hide is not dazzling, and nothing describes it daunting foes into hesitation",,2026-11-17
 CHARIZARD,Defiant,No,Yes,Yes,Yes,"A family of proud fighters who refuse to yield (Bisharp, Braviary, Passimian, Primeape, Obstagoon); Charizard seeks out strong foes and will not back down when beaten, and Mega X turns it into a physical brawler",dex; anime,2026-11-17
 CHARIZARD,Download,No,No,No,No,"A family of digital and cybernetic beings (Porygon line, Genesect); Charizard is a flesh-and-blood dragon with no data or machine trait",,2026-11-17
@@ -241,7 +241,7 @@ CHARIZARD,Gluttony,No,No,No,No,"A family of big eaters and greedy foragers (Snor
 CHARIZARD,Good as Gold,No,No,No,No,The gold-coin body Gholdengo only; Charizard has no gold or treasure tie,,2026-11-17
 CHARIZARD,Gooey,No,No,No,No,"A family of slimy, slippery-skinned creatures (Goomy line, Grimer, Lickitung, Poliwhirl, Wiglett); Charizard has dry, hot skin",,2026-11-17
 CHARIZARD,Grass Pelt,No,No,No,No,"A family of grazers and creatures with a living coat of grass (Skiddo, Gogoat, Tapu Bulu); Charizard has no plant growth on it and sets grass alight",,2026-11-17
-CHARIZARD,Grim Neigh,No,No,No,No,"A spectral steed whose terrifying neigh saps foes (Spectrier; Pecharunt as a catch-all); Charizard is no ghost horse, and its victory roar is a separate ability's flavour",,2026-11-17
+CHARIZARD,Grim Neigh,No,No,No,No,"A spectral steed whose terrifying neigh saps foes (Spectrier only); Charizard is no ghost horse, and its victory roar is a separate ability's flavour",,2026-11-17
 CHARIZARD,Guard Dog,No,No,No,No,"A family of dogs (Growlithe, Arcanine, Stoutland, Boltund, Mabosstiff, Okidogi); Charizard is not a dog or a watchful guardian",,2026-11-17
 CHARIZARD,Guts,No,No,No,No,"A family of gritty brawlers and fighters that power through ailments (Machamp, Conkeldurr, Hariyama, Heracross, Ursaring, Swellow); Charizard's refusal to quit is already Defiant, and nothing shows it fighting harder while sick, poisoned or paralysed",,2026-11-17
 CHARIZARD,Harvest,No,No,No,No,"A family of fruit-bearing plants and growers (Exeggutor, Tropius, Arboliva, Torterra, Applin line, Phantump); Charizard grows nothing and burns crops rather than tending them",,2026-11-17
@@ -257,7 +257,7 @@ CHARIZARD,Ice Scales,No,No,No,No,"A family of frost-scaled and ice-plated creatu
 CHARIZARD,Illuminate,No,No,No,No,"A family of glowing lure-lights and bioluminescent creatures (Lanturn, Lumineon, Ampharos, Starmie, Volbeat, Shiinotic); Charizard's tail flame burns as a sign of its life and mood, not as a light that reveals foes",,2026-11-17
 CHARIZARD,Immunity,No,No,No,No,"A family of tough-stomached eaters and toxin-proof creatures (Snorlax, Zangoose, Gligar, Whiscash); nothing describes Charizard as resistant to poison",,2026-11-17
 CHARIZARD,Infiltrator,No,No,No,No,"A family of stealthy ghosts, ninjas, bats and sneaks (Gengar, Crobat, Greninja, Zoroark, Dragapult, Ninjask); Charizard is a loud, open challenger, not a sneak",,2026-11-17
-CHARIZARD,Innards Out,No,No,No,No,"A family of creatures that spew out their insides when they fall (Pyukumuku, Mega Victreebel, Pecharunt); Charizard has no such death trait",,2026-11-17
+CHARIZARD,Innards Out,No,No,No,No,"A family of creatures that spew out their insides when they fall (Pyukumuku, Mega Victreebel); Charizard has no such death trait",,2026-11-17
 CHARIZARD,Inner Focus,No,No,No,No,"A family of disciplined martial artists, meditators and steady minds (Lucario, Medicham, Hitmonchan, Mienshao, Alakazam, Dragonite); Charizard is proud and hot-headed rather than calm and centred, and Intimidate immunity would cancel its Defiant and Competitive triggers",,2026-11-17
 CHARIZARD,Insomnia,No,No,No,No,"A family of nocturnal watchers, sleepless ghosts and dream-eaters (Noctowl, Murkrow, Banette, Hypno, Rayquaza); Charizard is a deep, contented sleeper",,2026-11-17
 CHARIZARD,Intimidate,No,No,Yes,No,Maintainer: it doesn't have the face for Intimidate,,2026-11-17
@@ -353,6 +353,7 @@ CHARIZARD,Strong Jaw,No,No,No,No,"A family of big-jawed biters (Feraligatr, Gyar
 CHARIZARD,Sturdy,No,No,No,No,"A family of rock-solid, unbreakable bodies (Geodude line, Onix, Steelix, Skarmory, Shuckle, Sudowoodo, Metapod); Charizard has no hard body and one Ice Beam freezes it nearly solid in EP105",,2026-11-18
 CHARIZARD,Suction Cups,No,No,No,No,"A family of suckered octopi, squid and clinging sea life (Octillery, Cradily, Malamar, Grapploct, Eelektross, Heatran, Toxapex); Charizard has no suckers",,2026-11-18
 CHARIZARD,Super Luck,No,No,No,No,"A family of luck-omen birds and fortune-bringers (Togekiss, Murkrow, Honchkrow, Absol, Victini, Unfezant); Charizard has no tie to luck",,2026-11-18
-CHARIZARD,Supersweet Syrup,No,No,No,No,"A family of syrup-filled candy apples (Dipplin, Hydrapple, Pecharunt); Charizard gives off no sweet scent",,2026-11-18
-CHARIZARD,Supreme Overlord,No,No,No,No,"A family of warlords who draw strength from fallen followers (Kingambit, Pecharunt); Charizard is a lone challenger with no followers",,2026-11-18
-CHARIZARD,Surge Surfer,No,No,No,Pending,"The surfing mouse Alolan Raichu only; Charizard has no electric tie and is not that fast",,
+CHARIZARD,Supersweet Syrup,No,No,No,No,"A family of syrup-filled candy apples (Dipplin, Hydrapple); Charizard gives off no sweet scent",,2026-11-18
+CHARIZARD,Supreme Overlord,No,No,No,No,"A warlord who draws strength from fallen followers (Kingambit only); Charizard is a lone challenger with no followers",,2026-11-18
+CHARIZARD,Surge Surfer,No,No,No,No,"The surfing mouse Alolan Raichu only; Charizard has no electric tie and is not that fast",,2026-11-18
+CHARIZARD,Swarm,No,No,No,Pending,"A family of bugs whose power surges in a pinch (Beedrill, Scizor, Heracross, Leavanny, Scolipede, Galvantula); Charizard is not a bug, and its pinch ability is Blaze",,
