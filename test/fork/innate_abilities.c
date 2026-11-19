@@ -9567,6 +9567,153 @@ DOUBLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: Gastro Acid suppresses an innate A
 // pop-up shows the innate, not the (different) chosen ability. Glastrier / Spectrier are sole-ability legends,
 // so a forced non-slot chosen ability isolates the innate; the feature-off leg proves the effect is innate-only.
 
+// The innate flavor sweep excludes both Neighs (.claude/skills/innate-flavor/excluded.csv): each is its
+// horse's signature, so this test, not a per-species decision, fixes who carries them.
+TEST("FEATURE_INNATE_ABILITIES: only Glastrier carries Chilling Neigh and only Spectrier carries Grim Neigh")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 chilling = SpeciesHasInnate(species, ABILITY_CHILLING_NEIGH);
+        bool32 grim = SpeciesHasInnate(species, ABILITY_GRIM_NEIGH);
+
+        if (chilling != (species == SPECIES_GLASTRIER) || grim != (species == SPECIES_SPECTRIER))
+        {
+            DebugPrintf("%S has the wrong Neigh innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Same arrangement for the heroes' signatures: the sweep excludes them, so this fixes their holders.
+TEST("FEATURE_INNATE_ABILITIES: only Zacian carries Intrepid Sword and only Zamazenta carries Dauntless Shield")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 isZacian = (species == SPECIES_ZACIAN || species == SPECIES_ZACIAN_CROWNED);
+        bool32 isZamazenta = (species == SPECIES_ZAMAZENTA || species == SPECIES_ZAMAZENTA_CROWNED);
+
+        if (SpeciesHasInnate(species, ABILITY_INTREPID_SWORD) != isZacian
+         || SpeciesHasInnate(species, ABILITY_DAUNTLESS_SHIELD) != isZamazenta)
+        {
+            DebugPrintf("%S has the wrong sword or shield innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Same arrangement for the Tao dragons' auras: the sweep excludes them, so this fixes their holders.
+TEST("FEATURE_INNATE_ABILITIES: only Zekrom and Black Kyurem carry Teravolt and only Reshiram and White Kyurem carry Turboblaze")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 isZekrom = (species == SPECIES_ZEKROM || species == SPECIES_KYUREM_BLACK);
+        bool32 isReshiram = (species == SPECIES_RESHIRAM || species == SPECIES_KYUREM_WHITE);
+
+        if (SpeciesHasInnate(species, ABILITY_TERAVOLT) != isZekrom
+         || SpeciesHasInnate(species, ABILITY_TURBOBLAZE) != isReshiram)
+        {
+            DebugPrintf("%S has the wrong Teravolt or Turboblaze innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Same arrangement for the Paradox boosts and the Loyal Three's chains: the sweep excludes them, so
+// this fixes their holders.
+static const enum Species sAncientParadoxes[] =
+{
+    SPECIES_GREAT_TUSK, SPECIES_SCREAM_TAIL, SPECIES_BRUTE_BONNET, SPECIES_FLUTTER_MANE, SPECIES_SLITHER_WING,
+    SPECIES_SANDY_SHOCKS, SPECIES_ROARING_MOON, SPECIES_WALKING_WAKE, SPECIES_GOUGING_FIRE, SPECIES_RAGING_BOLT,
+};
+
+static const enum Species sFutureParadoxes[] =
+{
+    SPECIES_IRON_TREADS, SPECIES_IRON_BUNDLE, SPECIES_IRON_HANDS, SPECIES_IRON_JUGULIS, SPECIES_IRON_MOTH,
+    SPECIES_IRON_THORNS, SPECIES_IRON_VALIANT, SPECIES_IRON_LEAVES, SPECIES_IRON_BOULDER, SPECIES_IRON_CROWN,
+};
+
+static const enum Species sLoyalThree[] = { SPECIES_OKIDOGI, SPECIES_MUNKIDORI, SPECIES_FEZANDIPITI };
+
+static bool32 IsSpeciesInList(enum Species species, const enum Species *list, u32 count)
+{
+    for (u32 i = 0; i < count; i++)
+    {
+        if (list[i] == species)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+TEST("FEATURE_INNATE_ABILITIES: only the Paradox Pokemon carry Protosynthesis and Quark Drive, and only the Loyal Three carry Toxic Chain")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 ancient = IsSpeciesInList(species, sAncientParadoxes, ARRAY_COUNT(sAncientParadoxes));
+        bool32 future = IsSpeciesInList(species, sFutureParadoxes, ARRAY_COUNT(sFutureParadoxes));
+        bool32 loyal = IsSpeciesInList(species, sLoyalThree, ARRAY_COUNT(sLoyalThree));
+
+        if (SpeciesHasInnate(species, ABILITY_PROTOSYNTHESIS) != ancient
+         || SpeciesHasInnate(species, ABILITY_QUARK_DRIVE) != future
+         || SpeciesHasInnate(species, ABILITY_TOXIC_CHAIN) != loyal)
+        {
+            DebugPrintf("%S has the wrong Paradox or Toxic Chain innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+TEST("FEATURE_INNATE_ABILITIES: only the Alola legends and the Regis carry their signature innates")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 solgaleo = (species == SPECIES_SOLGALEO || species == SPECIES_NECROZMA_DUSK_MANE);
+        bool32 lunala = (species == SPECIES_LUNALA || species == SPECIES_NECROZMA_DAWN_WINGS);
+        bool32 necrozma = (species == SPECIES_NECROZMA || species == SPECIES_NECROZMA_DUSK_MANE
+                        || species == SPECIES_NECROZMA_DAWN_WINGS || species == SPECIES_NECROZMA_ULTRA);
+
+        if (SpeciesHasInnate(species, ABILITY_FULL_METAL_BODY) != solgaleo
+         || SpeciesHasInnate(species, ABILITY_SHADOW_SHIELD) != lunala
+         || SpeciesHasInnate(species, ABILITY_PRISM_ARMOR) != necrozma
+         || SpeciesHasInnate(species, ABILITY_NEUROFORCE) != (species == SPECIES_NECROZMA_ULTRA)
+         || SpeciesHasInnate(species, ABILITY_DRAGONS_MAW) != (species == SPECIES_REGIDRAGO)
+         || SpeciesHasInnate(species, ABILITY_TRANSISTOR) != (species == SPECIES_REGIELEKI))
+        {
+            DebugPrintf("%S has the wrong legendary signature innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+TEST("FEATURE_INNATE_ABILITIES: only Victini carries Victory Star")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_VICTORY_STAR) != (species == SPECIES_VICTINI))
+        {
+            DebugPrintf("%S has the wrong Victory Star innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;
