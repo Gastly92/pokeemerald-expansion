@@ -398,4 +398,5 @@ BLASTOISE,Guts,No,No,No,No,"Nothing shows it fighting harder while poisoned, bur
 BLASTOISE,Harvest,No,No,No,No,"A fruit-growing or berry-gathering trait; Blastoise grows nothing on its shell (unlike Torterra) and has no foraging lore",,2026-11-19
 BLASTOISE,Healer,No,No,No,No,"No healing touch or curative aura; its rescues (Golem, Cissy) and firefighting are physical help, not mending an ally's ailments",,2026-11-19
 BLASTOISE,Heatproof,No,No,No,No,"Its firefighting is dousing flames with water, not a heat-resistant body; it already resists Fire as a Water-type",,2026-11-19
-BLASTOISE,Heavy Metal,No,No,Yes,Pending,"Biology says it deliberately makes itself heavy to withstand its blasts and crush foes, which is the effect almost verbatim, despite the metal name",biology,
+BLASTOISE,Heavy Metal,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes on the makes-itself-heavy biology),,2026-11-19
+BLASTOISE,Hospitality,No,No,No,Pending,"A host or gift-giver trait (tea, presents, wishes); Blastoise serves nothing to its allies",,
