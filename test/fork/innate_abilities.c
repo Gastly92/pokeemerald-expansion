@@ -9714,6 +9714,25 @@ TEST("FEATURE_INNATE_ABILITIES: only Victini carries Victory Star")
     EXPECT_EQ(wrong, 0);
 }
 
+// Beast Boost is the Ultra Beasts' signature, so the sweep excludes it and this fixes its holders: every
+// species flagged isUltraBeast, plus base Necrozma, the Ultra Space creature that shares their world.
+TEST("FEATURE_INNATE_ABILITIES: only the Ultra Beasts and Necrozma carry Beast Boost")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 expected = gSpeciesInfo[species].isUltraBeast || species == SPECIES_NECROZMA;
+
+        if (SpeciesHasInnate(species, ABILITY_BEAST_BOOST) != expected)
+        {
+            DebugPrintf("%S has the wrong Beast Boost innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;
