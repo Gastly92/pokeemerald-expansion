@@ -397,4 +397,5 @@ BLASTOISE,Guard Dog,No,No,No,No,"A dog trait (all holders are canines); Blastois
 BLASTOISE,Guts,No,No,No,No,"Nothing shows it fighting harder while poisoned, burned or hurt; its Ring Masters sumo bout is raw strength, and it lost",,2026-11-19
 BLASTOISE,Harvest,No,No,No,No,"A fruit-growing or berry-gathering trait; Blastoise grows nothing on its shell (unlike Torterra) and has no foraging lore",,2026-11-19
 BLASTOISE,Healer,No,No,No,No,"No healing touch or curative aura; its rescues (Golem, Cissy) and firefighting are physical help, not mending an ally's ailments",,2026-11-19
-BLASTOISE,Heatproof,No,No,No,Pending,"Its firefighting is dousing flames with water, not a heat-resistant body; it already resists Fire as a Water-type",,
+BLASTOISE,Heatproof,No,No,No,No,"Its firefighting is dousing flames with water, not a heat-resistant body; it already resists Fire as a Water-type",,2026-11-19
+BLASTOISE,Heavy Metal,No,No,Yes,Pending,"Biology says it deliberately makes itself heavy to withstand its blasts and crush foes, which is the effect almost verbatim, despite the metal name",biology,
