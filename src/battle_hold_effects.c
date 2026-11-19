@@ -16,6 +16,7 @@
 #include "fork/innate_abilities.h" // FORK: innate ability predicates
 #include "fork/buff_berries.h" // FORK: BUFF_PINCH_BERRIES, BUFF_RETALIATION_BERRIES, BUFF_DAMAGED_STAT_BERRIES
 #include "fork/buff_micle_berry.h" // FORK: BUFF_MICLE_BERRY
+#include "fork/buff_type_hit_items.h" // FORK: BUFF_TYPE_HIT_STAT_ITEMS
 
 bool32 IsOnSwitchInActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].onSwitchIn; }
 bool32 IsMirrorHerbActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].mirrorHerb; }
@@ -314,7 +315,7 @@ static enum ItemEffect TrySnowball(enum BattlerId battlerDef)
     if (IsBattlerTurnDamaged(battlerDef, EXCLUDING_SUBSTITUTES)
      && GetBattleMoveType(gCurrentMove) == TYPE_ICE)
     {
-        SetStatChange(battlerDef, STAT_ATK, 1);
+        SetStatChange(battlerDef, STAT_ATK, GetTypeHitStatItemStages()); // FORK: BUFF_TYPE_HIT_STAT_ITEMS (stock: 1)
         BattleScriptCall(BattleScript_ItemStatChange);
         effect = ITEM_STATS_CHANGE;
     }
@@ -329,7 +330,7 @@ static enum ItemEffect TryLuminousMoss(enum BattlerId battlerDef)
     if (IsBattlerTurnDamaged(battlerDef, EXCLUDING_SUBSTITUTES)
      && GetBattleMoveType(gCurrentMove) == TYPE_WATER)
     {
-        SetStatChange(battlerDef, STAT_SPDEF, 1);
+        SetStatChange(battlerDef, STAT_SPDEF, GetTypeHitStatItemStages()); // FORK: BUFF_TYPE_HIT_STAT_ITEMS (stock: 1)
         BattleScriptCall(BattleScript_ItemStatChange);
         effect = ITEM_STATS_CHANGE;
     }
@@ -344,7 +345,7 @@ static enum ItemEffect TryCellBattery(enum BattlerId battlerDef)
     if (IsBattlerTurnDamaged(battlerDef, EXCLUDING_SUBSTITUTES)
      && GetBattleMoveType(gCurrentMove) == TYPE_ELECTRIC)
     {
-        SetStatChange(battlerDef, STAT_ATK, 1);
+        SetStatChange(battlerDef, STAT_ATK, GetTypeHitStatItemStages()); // FORK: BUFF_TYPE_HIT_STAT_ITEMS (stock: 1)
         BattleScriptCall(BattleScript_ItemStatChange);
         effect = ITEM_STATS_CHANGE;
     }
@@ -359,7 +360,7 @@ static enum ItemEffect TryAbsorbBulb(enum BattlerId battlerDef)
     if (IsBattlerTurnDamaged(battlerDef, EXCLUDING_SUBSTITUTES)
      && GetBattleMoveType(gCurrentMove) == TYPE_WATER)
     {
-        SetStatChange(battlerDef, STAT_SPATK, 1);
+        SetStatChange(battlerDef, STAT_SPATK, GetTypeHitStatItemStages()); // FORK: BUFF_TYPE_HIT_STAT_ITEMS (stock: 1)
         BattleScriptCall(BattleScript_ItemStatChange);
         effect = ITEM_STATS_CHANGE;
     }
