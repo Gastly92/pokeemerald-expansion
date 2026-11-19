@@ -9674,6 +9674,21 @@ TEST("FEATURE_INNATE_ABILITIES: only the Paradox Pokemon carry Protosynthesis an
     EXPECT_EQ(wrong, 0);
 }
 
+TEST("FEATURE_INNATE_ABILITIES: only Victini carries Victory Star")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_VICTORY_STAR) != (species == SPECIES_VICTINI))
+        {
+            DebugPrintf("%S has the wrong Victory Star innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;
