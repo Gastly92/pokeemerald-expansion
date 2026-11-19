@@ -510,6 +510,28 @@
 // applies). Stock behavior (flag off) is 1. Ignored when BUFF_ADRENALINE_ORB is FALSE.
 #define BUFF_ADRENALINE_ORB_STAGES 2
 
+// When TRUE, the four items that fire once when the holder is hit by one move type -- Cell
+// Battery (Electric: +Atk), Absorb Bulb (Water: +Sp. Atk), Snowball (Ice: +Atk) and Luminous
+// Moss (Water: +Sp. Def) -- raise their stat by BUFF_TYPE_HIT_STAT_ITEM_STAGES (+2 by default)
+// instead of the stock +1. Nothing else changes: the item still fires once, on the first damaging
+// hit of its type, and is consumed. Simple and Contrary still apply on top.
+//
+// Why: the same complaint BUFF_DAMAGED_STAT_BERRIES answered for Kee and Maranga Berry -- +1 once,
+// after the hit has already landed, rarely changes the next exchange. These trigger on one type
+// rather than a whole damage category, so they fire less often than Kee/Maranga, and a 3-mon
+// Frontier team may never carry the type at all. They get +2 rather than the pinch Berries' +3
+// because, like Kee/Maranga, they fire at any HP. Not Berries, so Ripen does not apply.
+//
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the magnitude
+// lives in the plain constant below. See GetTypeHitStatItemStages() in
+// include/fork/buff_type_hit_items.h and its call sites in TrySnowball(), TryLuminousMoss(),
+// TryCellBattery() and TryAbsorbBulb(), src/battle_hold_effects.c.
+#define BUFF_TYPE_HIT_STAT_ITEMS TRUE
+
+// Stat stages the four items above raise when BUFF_TYPE_HIT_STAT_ITEMS is on (the stat stage cap
+// still applies). Stock behavior (flag off) is 1. Ignored when BUFF_TYPE_HIT_STAT_ITEMS is FALSE.
+#define BUFF_TYPE_HIT_STAT_ITEM_STAGES 2
+
 // When TRUE, Z-Moves and Max Moves ignore the target's positive Defense / Sp. Def stat stages
 // when dealing damage, exactly as a critical hit does. Drops still count, and nothing else about
 // a crit carries over (no 1.5x, screens still apply, the attacker's own stages are untouched).
