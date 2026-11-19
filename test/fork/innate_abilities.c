@@ -9607,6 +9607,26 @@ TEST("FEATURE_INNATE_ABILITIES: only Zacian carries Intrepid Sword and only Zama
     EXPECT_EQ(wrong, 0);
 }
 
+// Same arrangement for the Tao dragons' auras: the sweep excludes them, so this fixes their holders.
+TEST("FEATURE_INNATE_ABILITIES: only Zekrom and Black Kyurem carry Teravolt and only Reshiram and White Kyurem carry Turboblaze")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 isZekrom = (species == SPECIES_ZEKROM || species == SPECIES_KYUREM_BLACK);
+        bool32 isReshiram = (species == SPECIES_RESHIRAM || species == SPECIES_KYUREM_WHITE);
+
+        if (SpeciesHasInnate(species, ABILITY_TERAVOLT) != isZekrom
+         || SpeciesHasInnate(species, ABILITY_TURBOBLAZE) != isReshiram)
+        {
+            DebugPrintf("%S has the wrong Teravolt or Turboblaze innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;
