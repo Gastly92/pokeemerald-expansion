@@ -1,5 +1,7 @@
 innate,reason
 Chilling Neigh,Only Glastrier may carry it (test/fork/innate_abilities.c)
+Dauntless Shield,Only Zamazenta may carry it (test/fork/innate_abilities.c)
 Grim Neigh,Only Spectrier may carry it (test/fork/innate_abilities.c)
+Intrepid Sword,Only Zacian may carry it (test/fork/innate_abilities.c)
 Legendary,Every TIER_LEGENDARY species must carry it (test/fork/legendary.c)
 Mythical,Every TIER_MYTHICAL species must carry it (test/fork/mythical.c)

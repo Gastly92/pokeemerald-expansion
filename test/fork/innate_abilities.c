@@ -9587,6 +9587,26 @@ TEST("FEATURE_INNATE_ABILITIES: only Glastrier carries Chilling Neigh and only S
     EXPECT_EQ(wrong, 0);
 }
 
+// Same arrangement for the heroes' signatures: the sweep excludes them, so this fixes their holders.
+TEST("FEATURE_INNATE_ABILITIES: only Zacian carries Intrepid Sword and only Zamazenta carries Dauntless Shield")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 isZacian = (species == SPECIES_ZACIAN || species == SPECIES_ZACIAN_CROWNED);
+        bool32 isZamazenta = (species == SPECIES_ZAMAZENTA || species == SPECIES_ZAMAZENTA_CROWNED);
+
+        if (SpeciesHasInnate(species, ABILITY_INTREPID_SWORD) != isZacian
+         || SpeciesHasInnate(species, ABILITY_DAUNTLESS_SHIELD) != isZamazenta)
+        {
+            DebugPrintf("%S has the wrong sword or shield innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;

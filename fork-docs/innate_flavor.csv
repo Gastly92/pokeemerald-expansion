@@ -25,7 +25,6 @@ VENUSAUR,Cud Chew,No,No,No,No,"A grazing-ruminant family (cattle, sheep, deer, g
 VENUSAUR,Cursed Body,No,No,No,No,"A ghosts-and-curses family; Venusaur has no curse, haunting or spirit link",,2026-11-14
 VENUSAUR,Cute Charm,No,No,No,No,"A cute-and-lovable family; Venusaur's scent draws Pokémon in to calm them, not to infatuate, and it is a squat, toothy amphibian",,2026-11-14
 VENUSAUR,Dancer,No,No,No,No,A dancing family; Venusaur leads Evolution ceremonies but nothing sourced shows it dancing,,2026-11-14
-VENUSAUR,Dauntless Shield,No,No,No,No,Zamazenta's legendary-shield signature; the town-guardian legend is a manga one-off and the petal shield is G-Max only,,2026-11-14
 VENUSAUR,Dazzling,No,No,No,No,"Bruxish's signature, a startling flash of colour that stuns attackers; Venusaur's vivid flower is a sign of health that soothes and attracts, not one that startles",,2026-11-14
 VENUSAUR,Defiant,No,No,No,No,"A combative, rebellious family; Venusaur is a calm, soothing leader with no streak of defiance",,2026-11-14
 VENUSAUR,Download,No,No,No,No,"A digital and machine family (Porygon, Genesect); Venusaur is a living plant",,2026-11-14
@@ -65,7 +64,6 @@ VENUSAUR,Innards Out,No,No,No,No,Pyukumuku and Mega Victreebel spew their inside
 VENUSAUR,Inner Focus,No,No,No,No,"A family of disciplined fighters, meditators and psychics; Venusaur shows no trained composure and even panics at a Double Team (AG164)",,2026-11-14
 VENUSAUR,Insomnia,No,No,No,No,"A family of night creatures and sleepless watchers (owls, crows, ghosts, Drowzee); Venusaur is a daytime sun-lover that sleeps, per Pokémon Sleep",,2026-11-14
 VENUSAUR,Intimidate,No,No,No,No,"A family of menacing presences that cow foes on sight (Gyarados, Salamence, Arcanine); Venusaur commands respect but its presence calms rather than frightens",,2026-11-14
-VENUSAUR,Intrepid Sword,No,No,No,No,Zacian's legendary-sword signature; nothing bladed or heroic-legend about Venusaur,,2026-11-14
 VENUSAUR,Iron Barbs,No,No,No,No,"A family whose own body is spiked (Ferrothorn, Togedemaru, Cacturne, Chesnaught); Venusaur's brambles and thorny roots are things it summons, not a barbed body that hurts on contact",,2026-11-14
 VENUSAUR,Iron Fist,No,No,No,No,"A punching family (boxers, brawlers, Golurk, Machamp); Venusaur is a quadruped that fights with vines, never fists",,2026-11-14
 VENUSAUR,Justified,No,No,No,No,"A family of righteous knights and heroes with a strong sense of justice (Swords of Justice, Gallade, Lucario); Venusaur defends its own forest and town, but no source frames it as a crusader against evil",,2026-11-14
@@ -217,7 +215,6 @@ CHARIZARD,Cud Chew,No,No,No,No,"A family of grazing ruminants (Tauros, Miltank, 
 CHARIZARD,Cursed Body,No,No,No,No,"A family of ghosts, haunted objects and cursed relics (Gengar, Banette, Cofagrigus, Chandelure, Sinistea, Ninetales); Charizard is a living fire dragon with no curse or haunting",,2026-11-17
 CHARIZARD,Cute Charm,No,No,No,No,"A family of cute, charming and lovestruck creatures (Clefairy, Jigglypuff, Skitty, Lopunny, Sylveon, Luvdisc); Charizard is fearsome, not cute, and one anime romance (Charla) is not a charm trait",,2026-11-17
 CHARIZARD,Dancer,No,No,No,No,"A family of dancers and performers (Oricorio, Clefairy, Ludicolo, Bellossom, Lilligant, Meloetta, Quaquaval); Charizard is a brawler, not a performer, and Dragon Dance in its moveset is not dancing in its lore",,2026-11-17
-CHARIZARD,Dauntless Shield,No,No,No,No,The legendary shield-wolf Zamazenta; Charizard carries no shield and has no defensive lore,,2026-11-17
 CHARIZARD,Dazzling,No,No,No,No,"A gaudy, eye-catching fish whose look stuns attackers (Bruxish only); Charizard's orange hide is not dazzling, and nothing describes it daunting foes into hesitation",,2026-11-17
 CHARIZARD,Defiant,No,Yes,Yes,Yes,"A family of proud fighters who refuse to yield (Bisharp, Braviary, Passimian, Primeape, Obstagoon); Charizard seeks out strong foes and will not back down when beaten, and Mega X turns it into a physical brawler",dex; anime,2026-11-17
 CHARIZARD,Download,No,No,No,No,"A family of digital and cybernetic beings (Porygon line, Genesect); Charizard is a flesh-and-blood dragon with no data or machine trait",,2026-11-17
@@ -257,7 +254,6 @@ CHARIZARD,Innards Out,No,No,No,No,"A family of creatures that spew out their ins
 CHARIZARD,Inner Focus,No,No,No,No,"A family of disciplined martial artists, meditators and steady minds (Lucario, Medicham, Hitmonchan, Mienshao, Alakazam, Dragonite); Charizard is proud and hot-headed rather than calm and centred, and Intimidate immunity would cancel its Defiant and Competitive triggers",,2026-11-17
 CHARIZARD,Insomnia,No,No,No,No,"A family of nocturnal watchers, sleepless ghosts and dream-eaters (Noctowl, Murkrow, Banette, Hypno, Rayquaza); Charizard is a deep, contented sleeper",,2026-11-17
 CHARIZARD,Intimidate,No,No,Yes,No,Maintainer: it doesn't have the face for Intimidate,,2026-11-17
-CHARIZARD,Intrepid Sword,No,No,No,No,The legendary sword-wolf Zacian; Charizard carries no blade,,2026-11-17
 CHARIZARD,Iron Barbs,No,No,No,No,"A family of spiked, thorned and quilled bodies (Ferrothorn, Chesnaught, Cacturne, Turtonator, Togedemaru, Iron Thorns); Charizard has no spines, only Mega X's shoulder spikes",,2026-11-17
 CHARIZARD,Iron Fist,No,No,No,No,"A family of boxers and brawlers with big fists (Hitmonchan, Machamp, Conkeldurr, Infernape, Blaziken, Pangoro); Charizard has short, skinny arms and fights with breath, claws and wings, though it does throw the odd Fire or Thunder Punch",,2026-11-17
 CHARIZARD,Justified,No,No,Yes,No,Maintainer: Charizard isn't a champion against darkness,,2026-11-17
@@ -356,4 +352,5 @@ CHARIZARD,Swarm,No,No,No,No,"A family of bugs whose power surges in a pinch (Bee
 CHARIZARD,Sweet Veil,No,No,No,No,"A family of sweet-scented sleep-guarders (Swirlix, Slurpuff, Alcremie, Bounsweet line, Cutiefly line, Meganium, Appletun); Charizard gives off no sweet veil",,2026-11-18
 CHARIZARD,Swift Swim,No,No,No,No,"A family of fish and water creatures that speed up in rain (Kingdra, Ludicolo, Kabutops, Floatzel, Barraskewda); rain threatens Charizard's tail flame",,2026-11-18
 CHARIZARD,Tangled Feet,No,No,No,No,"A family of stumbling, dizzy-footed birds and dancers (Spinda, Doduo, Dodrio, Pidgey line, Chatot, Mr. Rime, Flamigo) that are hard to pin down when confused; nothing describes Charizard reeling or stumbling",,2026-11-18
-CHARIZARD,Tangling Hair,No,No,No,Pending,"A family of hairy, tangling and tendrilled creatures (Alolan Dugtrio, Tangrowth, Slurpuff, Grimmsnarl); Charizard has no hair or tendrils",,
+CHARIZARD,Tangling Hair,No,No,No,No,"A family of hairy, tangling and tendrilled creatures (Alolan Dugtrio, Tangrowth, Slurpuff, Grimmsnarl); Charizard has no hair or tendrils",,2026-11-19
+CHARIZARD,Technician,No,No,No,Pending,"A family of skilled technicians, mimes and martial artists who make weak moves count (Scizor, Breloom, Hitmontop, Smeargle, Ambipom, Cinccino, Mienshao); Charizard relies on raw power, not finesse",,
