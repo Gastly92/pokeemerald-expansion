@@ -9627,6 +9627,53 @@ TEST("FEATURE_INNATE_ABILITIES: only Zekrom and Black Kyurem carry Teravolt and 
     EXPECT_EQ(wrong, 0);
 }
 
+// Same arrangement for the Paradox boosts and the Loyal Three's chains: the sweep excludes them, so
+// this fixes their holders.
+static const enum Species sAncientParadoxes[] =
+{
+    SPECIES_GREAT_TUSK, SPECIES_SCREAM_TAIL, SPECIES_BRUTE_BONNET, SPECIES_FLUTTER_MANE, SPECIES_SLITHER_WING,
+    SPECIES_SANDY_SHOCKS, SPECIES_ROARING_MOON, SPECIES_WALKING_WAKE, SPECIES_GOUGING_FIRE, SPECIES_RAGING_BOLT,
+};
+
+static const enum Species sFutureParadoxes[] =
+{
+    SPECIES_IRON_TREADS, SPECIES_IRON_BUNDLE, SPECIES_IRON_HANDS, SPECIES_IRON_JUGULIS, SPECIES_IRON_MOTH,
+    SPECIES_IRON_THORNS, SPECIES_IRON_VALIANT, SPECIES_IRON_LEAVES, SPECIES_IRON_BOULDER, SPECIES_IRON_CROWN,
+};
+
+static const enum Species sLoyalThree[] = { SPECIES_OKIDOGI, SPECIES_MUNKIDORI, SPECIES_FEZANDIPITI };
+
+static bool32 IsSpeciesInList(enum Species species, const enum Species *list, u32 count)
+{
+    for (u32 i = 0; i < count; i++)
+    {
+        if (list[i] == species)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+TEST("FEATURE_INNATE_ABILITIES: only the Paradox Pokemon carry Protosynthesis and Quark Drive, and only the Loyal Three carry Toxic Chain")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 ancient = IsSpeciesInList(species, sAncientParadoxes, ARRAY_COUNT(sAncientParadoxes));
+        bool32 future = IsSpeciesInList(species, sFutureParadoxes, ARRAY_COUNT(sFutureParadoxes));
+        bool32 loyal = IsSpeciesInList(species, sLoyalThree, ARRAY_COUNT(sLoyalThree));
+
+        if (SpeciesHasInnate(species, ABILITY_PROTOSYNTHESIS) != ancient
+         || SpeciesHasInnate(species, ABILITY_QUARK_DRIVE) != future
+         || SpeciesHasInnate(species, ABILITY_TOXIC_CHAIN) != loyal)
+        {
+            DebugPrintf("%S has the wrong Paradox or Toxic Chain innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;
