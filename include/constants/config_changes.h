@@ -318,6 +318,8 @@
     F(BUFF_DAMAGED_STAT_BERRIES, buffDamagedStatBerries, (u32, TRUE)) \
     F(BUFF_ADRENALINE_ORB, buffAdrenalineOrb, (u32, TRUE)) \
     F(BUFF_TYPE_HIT_STAT_ITEMS, buffTypeHitStatItems, (u32, TRUE)) \
+    F(BUFF_FIELD_STAT_ITEMS, buffFieldStatItems, (u32, TRUE)) \
+    F(BUFF_BROAD_BOOST_ITEMS, buffBroadBoostItems, (u32, TRUE)) \
     F(BUFF_REBURN, buffReburn, (u32, TRUE)) \
     F(BUFF_REPOISON, buffRepoison, (u32, TRUE)) \
     F(BUFF_REPARALYZE, buffReparalyze, (u32, TRUE)) \

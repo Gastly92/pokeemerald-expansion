@@ -26,6 +26,7 @@
 #include "fork/buff_gimmick_moves.h" // FORK: BUFF_GIMMICK_MOVES_IGNORE_DEF_BOOSTS
 #include "fork/deterministic_moody.h" // FORK: DETERMINISTIC_ABILITIES Moody
 #include "fork/buff_micle_berry.h" // FORK: BUFF_MICLE_BERRY
+#include "fork/buff_broad_boost_items.h" // FORK: BUFF_BROAD_BOOST_ITEMS
 #include "battle_interface.h"
 #include "battle_setup.h"
 #include "battle_z_move.h"
@@ -7564,11 +7565,11 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
     {
     case HOLD_EFFECT_MUSCLE_BAND:
         if (IsBattleMovePhysical(move))
-            modifier = uq4_12_multiply(modifier, uq4_12_add(UQ_4_12(1.0), PercentToUQ4_12_Floored(holdEffectParamAtk)));
+            modifier = uq4_12_multiply(modifier, GetBroadBoostItemModifier(uq4_12_add(UQ_4_12(1.0), PercentToUQ4_12_Floored(holdEffectParamAtk)))); // FORK: BUFF_BROAD_BOOST_ITEMS
         break;
     case HOLD_EFFECT_WISE_GLASSES:
         if (IsBattleMoveSpecial(move))
-            modifier = uq4_12_multiply(modifier, uq4_12_add(UQ_4_12(1.0), PercentToUQ4_12_Floored(holdEffectParamAtk)));
+            modifier = uq4_12_multiply(modifier, GetBroadBoostItemModifier(uq4_12_add(UQ_4_12(1.0), PercentToUQ4_12_Floored(holdEffectParamAtk)))); // FORK: BUFF_BROAD_BOOST_ITEMS
         break;
     case HOLD_EFFECT_LUSTROUS_ORB:
         if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PALKIA && (moveType == TYPE_WATER || moveType == TYPE_DRAGON))
@@ -7613,7 +7614,7 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageContext *ctx)
         break;
     case HOLD_EFFECT_PUNCHING_GLOVE:
         if (IsPunchingMove(move))
-           modifier = uq4_12_multiply(modifier, UQ_4_12(1.1));
+           modifier = uq4_12_multiply(modifier, GetBroadBoostItemModifier(UQ_4_12(1.1))); // FORK: BUFF_BROAD_BOOST_ITEMS
         break;
     case HOLD_EFFECT_OGERPON_MASK:
         if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_OGERPON)
