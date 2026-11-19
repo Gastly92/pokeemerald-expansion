@@ -357,4 +357,5 @@ CHARIZARD,Thermal Exchange,No,No,No,No,"A family of ice dragons and a steam cann
 CHARIZARD,Thick Fat,No,No,No,No,"A family of blubbery, fat-layered creatures (Snorlax, Walrein, Wailord, Hariyama, Mamoswine, Emboar, Ursaring); Charizard has a robust belly but no insulating fat, and cold nearly finishes it (EP105)",,2026-11-19
 CHARIZARD,Tinted Lens,No,No,No,No,"A family of creatures with tinted, many-faceted or special eyes (Butterfree, Venomoth, Noctowl, Yanmega, Sigilyph, Lokix); Charizard has small, ordinary eyes",,2026-11-19
 CHARIZARD,Torrent,No,No,No,No,"A family of Water starters whose currents surge in a pinch (Blastoise, Feraligatr, Swampert, Empoleon, Greninja); Charizard is a Fire starter whose pinch ability is Blaze",,2026-11-19
-CHARIZARD,Tough Claws,No,No,Yes,Pending,"A family of clawed hunters and talon-bearers (Mega Charizard X, Sneasel, Weavile, Luxray, Braviary, Druddigon, Gouging Fire); Charizard's own Mega X carries it canonically, and its claws and Dragon Claw feature in its headline battles",biology; anime,
+CHARIZARD,Tough Claws,No,No,Yes,No,Maintainer: keep it on Mega Charizard X only,,2026-11-19
+CHARIZARD,Toxic Boost,No,No,No,Pending,"Zangoose only, a snake-hunting mongoose that fights harder when poisoned; Charizard has no tie to poison",,
