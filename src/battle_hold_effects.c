@@ -16,7 +16,7 @@
 #include "fork/innate_abilities.h" // FORK: innate ability predicates
 #include "fork/buff_berries.h" // FORK: BUFF_PINCH_BERRIES, BUFF_RETALIATION_BERRIES, BUFF_DAMAGED_STAT_BERRIES
 #include "fork/buff_micle_berry.h" // FORK: BUFF_MICLE_BERRY
-#include "fork/buff_type_hit_items.h" // FORK: BUFF_TYPE_HIT_STAT_ITEMS
+#include "fork/buff_type_hit_items.h" // FORK: BUFF_TYPE_HIT_STAT_ITEMS, BUFF_FIELD_STAT_ITEMS
 
 bool32 IsOnSwitchInActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].onSwitchIn; }
 bool32 IsMirrorHerbActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].mirrorHerb; }
@@ -91,7 +91,7 @@ static enum ItemEffect TryRoomService(enum BattlerId battler)
     {
         gEffectBattler = gBattleScripting.battler = battler;
         gLastUsedItem = gBattleMons[battler].item;
-        SetStatChange(battler, STAT_SPEED, -1);
+        SetStatChange(battler, STAT_SPEED, -(s32)GetFieldStatItemStages()); // FORK: BUFF_FIELD_STAT_ITEMS (stock: -1)
         BattleScriptCall(BattleScript_ConsumableItemStatRaise);
         return ITEM_STATS_CHANGE;
     }
@@ -107,7 +107,7 @@ static enum ItemEffect TryTerrainSeeds(enum BattlerId battler, enum Item item)
      && CompareStat(battler, battleTerrain.seedStat, MAX_STAT_STAGE, CMP_LESS_THAN, GetBattlerAbility(battler)))
     {
         gEffectBattler = gBattleScripting.battler = battler;
-        SetStatChange(battler, battleTerrain.seedStat, 1);
+        SetStatChange(battler, battleTerrain.seedStat, GetFieldStatItemStages()); // FORK: BUFF_FIELD_STAT_ITEMS (stock: 1)
         BattleScriptCall(BattleScript_ConsumableItemStatRaise);
         return ITEM_STATS_CHANGE;
     }

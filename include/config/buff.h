@@ -532,6 +532,46 @@
 // still applies). Stock behavior (flag off) is 1. Ignored when BUFF_TYPE_HIT_STAT_ITEMS is FALSE.
 #define BUFF_TYPE_HIT_STAT_ITEM_STAGES 2
 
+// When TRUE, the terrain seeds (Electric / Grassy Seed: +Def, Misty / Psychic Seed: +Sp. Def,
+// when their terrain is up) and Room Service (-Speed under Trick Room) change their stat by
+// BUFF_FIELD_STAT_ITEM_STAGES (2 by default) instead of the stock 1. Nothing else changes: the
+// item still fires once, when its field condition is up, and is consumed.
+//
+// Why: the same one-stage, one-shot shape BUFF_DAMAGED_STAT_BERRIES and BUFF_TYPE_HIT_STAT_ITEMS
+// answered. These fire more reliably than those -- the roster places seeds on holders that set
+// their own terrain and Room Service on Trick Room sets -- but a single stage is still rarely
+// the difference in the next exchange: -1 Speed seldom flips a Trick Room speed order, and +1
+// Def is one hit's worth of bulk. Kept at +2 to match the other once-only stat items.
+//
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the magnitude
+// lives in the plain constant below. See GetFieldStatItemStages() in
+// include/fork/buff_type_hit_items.h and its call sites in TryRoomService() and
+// TryTerrainSeeds(), src/battle_hold_effects.c.
+#define BUFF_FIELD_STAT_ITEMS TRUE
+
+// Stat stages the items above change when BUFF_FIELD_STAT_ITEMS is on (the stat stage cap
+// still applies). Stock behavior (flag off) is 1. Ignored when BUFF_FIELD_STAT_ITEMS is FALSE.
+#define BUFF_FIELD_STAT_ITEM_STAGES 2
+
+// When TRUE, Muscle Band (physical moves), Wise Glasses (special moves) and Punching Glove
+// (punching moves) boost by BUFF_BROAD_BOOST_ITEM_PERCENT (+20% by default) instead of the
+// stock +10%. Punching Glove keeps its contact removal.
+//
+// Why: collateral of BUFF_TYPE_BOOST_ITEMS. In stock, +10% on a whole category was a fair trade
+// against a type item's +20% on one type. With type items at +40% and Life Orb at +30%, +10% is
+// dominated by both. +20% -- half a type item, no drawback -- restores the stock ratio and
+// stays clearly under Life Orb. Punching Glove moves with them so it matches Iron Fist (1.2x).
+//
+// The toggle is registered in the runtime config system (BUFF_CONFIG_DEFINITIONS); the magnitude
+// lives in the plain constant below. See GetBroadBoostItemModifier() in
+// include/fork/buff_broad_boost_items.h and its call sites in the attacker hold-effect switch,
+// src/battle_util.c.
+#define BUFF_BROAD_BOOST_ITEMS TRUE
+
+// Percent boost the three items above give when BUFF_BROAD_BOOST_ITEMS is on. Stock behavior
+// (flag off) is 10. Ignored when BUFF_BROAD_BOOST_ITEMS is FALSE.
+#define BUFF_BROAD_BOOST_ITEM_PERCENT 20
+
 // When TRUE, Z-Moves and Max Moves ignore the target's positive Defense / Sp. Def stat stages
 // when dealing damage, exactly as a critical hit does. Drops still count, and nothing else about
 // a crit carries over (no 1.5x, screens still apply, the attacker's own stages are untouched).

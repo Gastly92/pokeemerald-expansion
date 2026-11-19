@@ -74,3 +74,63 @@ SINGLE_BATTLE_TEST("BUFF_TYPE_HIT_STAT_ITEMS: Simple doubles and Contrary invert
         EXPECT_EQ(player->item, ITEM_NONE);
     }
 }
+
+// BUFF_FIELD_STAT_ITEMS (config/buff.h): the terrain seeds and Room Service change their stat
+// by 2 instead of 1. Stock behavior is also covered by test/battle/hold_effect/terrain_seed.c
+// and room_service.c.
+
+SINGLE_BATTLE_TEST("BUFF_FIELD_STAT_ITEMS: the terrain seeds raise their stat by 2")
+{
+    u32 config;
+    enum Item item;
+    enum Species species;
+    enum Ability ability;
+    enum Stat stat;
+
+    PARAMETRIZE { config = TRUE;  item = ITEM_ELECTRIC_SEED; species = SPECIES_TAPU_KOKO; ability = ABILITY_ELECTRIC_SURGE; stat = STAT_DEF; }
+    PARAMETRIZE { config = TRUE;  item = ITEM_GRASSY_SEED;   species = SPECIES_TAPU_BULU; ability = ABILITY_GRASSY_SURGE;   stat = STAT_DEF; }
+    PARAMETRIZE { config = TRUE;  item = ITEM_MISTY_SEED;    species = SPECIES_TAPU_FINI; ability = ABILITY_MISTY_SURGE;    stat = STAT_SPDEF; }
+    PARAMETRIZE { config = TRUE;  item = ITEM_PSYCHIC_SEED;  species = SPECIES_TAPU_LELE; ability = ABILITY_PSYCHIC_SURGE;  stat = STAT_SPDEF; }
+    PARAMETRIZE { config = FALSE; item = ITEM_ELECTRIC_SEED; species = SPECIES_TAPU_KOKO; ability = ABILITY_ELECTRIC_SURGE; stat = STAT_DEF; }
+    PARAMETRIZE { config = FALSE; item = ITEM_GRASSY_SEED;   species = SPECIES_TAPU_BULU; ability = ABILITY_GRASSY_SURGE;   stat = STAT_DEF; }
+    PARAMETRIZE { config = FALSE; item = ITEM_MISTY_SEED;    species = SPECIES_TAPU_FINI; ability = ABILITY_MISTY_SURGE;    stat = STAT_SPDEF; }
+    PARAMETRIZE { config = FALSE; item = ITEM_PSYCHIC_SEED;  species = SPECIES_TAPU_LELE; ability = ABILITY_PSYCHIC_SURGE;  stat = STAT_SPDEF; }
+
+    GIVEN {
+        WITH_CONFIG(BUFF_FIELD_STAT_ITEMS, config);
+        PLAYER(SPECIES_WOBBUFFET) { Item(item); }
+        OPPONENT(species) { Ability(ability); }
+    } WHEN {
+        TURN { }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player);
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+        EXPECT_EQ(player->statStages[stat], DEFAULT_STAT_STAGE + (config ? 2 : 1));
+    }
+}
+
+SINGLE_BATTLE_TEST("BUFF_FIELD_STAT_ITEMS: Room Service lowers Speed by 2 under Trick Room")
+{
+    u32 config;
+
+    PARAMETRIZE { config = TRUE; }
+    PARAMETRIZE { config = FALSE; }
+
+    GIVEN {
+        ASSUME(GetItemHoldEffect(ITEM_ROOM_SERVICE) == HOLD_EFFECT_ROOM_SERVICE);
+        ASSUME(GetMoveEffect(MOVE_TRICK_ROOM) == EFFECT_TRICK_ROOM);
+        WITH_CONFIG(BUFF_FIELD_STAT_ITEMS, config);
+        PLAYER(SPECIES_WOBBUFFET) { Item(ITEM_ROOM_SERVICE); }
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_TRICK_ROOM); }
+    } SCENE {
+        ANIMATION(ANIM_TYPE_MOVE, MOVE_TRICK_ROOM, player);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_HELD_ITEM_EFFECT, player);
+        ANIMATION(ANIM_TYPE_GENERAL, B_ANIM_STATS_CHANGE, player);
+    } THEN {
+        EXPECT_EQ(player->item, ITEM_NONE);
+        EXPECT_EQ(player->statStages[STAT_SPEED], DEFAULT_STAT_STAGE - (config ? 2 : 1));
+    }
+}
