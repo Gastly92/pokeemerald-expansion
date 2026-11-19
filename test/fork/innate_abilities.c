@@ -9674,6 +9674,31 @@ TEST("FEATURE_INNATE_ABILITIES: only the Paradox Pokemon carry Protosynthesis an
     EXPECT_EQ(wrong, 0);
 }
 
+TEST("FEATURE_INNATE_ABILITIES: only the Alola legends and the Regis carry their signature innates")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 solgaleo = (species == SPECIES_SOLGALEO || species == SPECIES_NECROZMA_DUSK_MANE);
+        bool32 lunala = (species == SPECIES_LUNALA || species == SPECIES_NECROZMA_DAWN_WINGS);
+        bool32 necrozma = (species == SPECIES_NECROZMA || species == SPECIES_NECROZMA_DUSK_MANE
+                        || species == SPECIES_NECROZMA_DAWN_WINGS || species == SPECIES_NECROZMA_ULTRA);
+
+        if (SpeciesHasInnate(species, ABILITY_FULL_METAL_BODY) != solgaleo
+         || SpeciesHasInnate(species, ABILITY_SHADOW_SHIELD) != lunala
+         || SpeciesHasInnate(species, ABILITY_PRISM_ARMOR) != necrozma
+         || SpeciesHasInnate(species, ABILITY_NEUROFORCE) != (species == SPECIES_NECROZMA_ULTRA)
+         || SpeciesHasInnate(species, ABILITY_DRAGONS_MAW) != (species == SPECIES_REGIDRAGO)
+         || SpeciesHasInnate(species, ABILITY_TRANSISTOR) != (species == SPECIES_REGIELEKI))
+        {
+            DebugPrintf("%S has the wrong legendary signature innates", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 TEST("FEATURE_INNATE_ABILITIES: only Victini carries Victory Star")
 {
     u32 wrong = 0;

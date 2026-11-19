@@ -2029,7 +2029,6 @@ static const struct SpeciesInnates sSpeciesInnates[] =
             ABILITY_ELECTROMORPHOSIS,
             ABILITY_LEGENDARY,
             ABILITY_PRESSURE,
-            ABILITY_TRANSISTOR,
             ABILITY_WIND_POWER
         )
     },

@@ -34,7 +34,7 @@
 ## Exclusions
 
 `excluded.csv` lists innates that need no per-species decision because a test already decides
-who carries them (currently Chilling Neigh, Dauntless Shield, Grim Neigh, Intrepid Sword, Legendary, Mythical, Protosynthesis, Quark Drive, Teravolt, Toxic Chain, Turboblaze and Victory Star). Excluded innates get no rows. Add one only
+who carries them: legendary signatures and single-group abilities, each with its test named in the file. Excluded innates get no rows. Add one only
 when a test enforces exactly who carries it.
 
 ## The lock

@@ -2918,7 +2918,7 @@ entries in `src/data/abilities.h`), and the boost lives in the shared damage cal
 real battler, so on-field damage prediction is innate-aware automatically. **Suppression parity** holds via
 `IsInnateActive()`; neither is `breakable`, so Mold Breaker never touches them.
 
-**Species:** the sole canon carriers, Regieleki and Regidrago, plus one flavor pick: Transistor → Zapdos.
+**Species:** the sole canon carriers, Regieleki and Regidrago. Both are excluded from the innate flavor sweep, with their holders fixed by a test in `test/fork/innate_abilities.c`.
 
 ### ABILITY_PRISM_ARMOR / ABILITY_SHADOW_SHIELD / ABILITY_NEUROFORCE / ABILITY_SUPREME_OVERLORD
 
