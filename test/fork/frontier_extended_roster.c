@@ -2004,6 +2004,22 @@ TEST("Frontier extended roster: every Paradox species has at least one Booster E
 // inflict one (Spore + Toxic, Thunder Wave + Toxic) has a dead slot: once the target is
 // asleep or paralysed, the second status move just fails. Amoonguss and Furfrou both
 // shipped like that; this keeps it from coming back.
+// Yawn and Dark Void inflict sleep through their own effects rather than
+// EFFECT_NON_VOLATILE_STATUS, so they are counted too (a Meowstic set slipped through
+// with Yawn + Thunder Wave when only EFFECT_NON_VOLATILE_STATUS was checked).
+static bool32 IsPureNonVolatileStatusMove(enum Move move)
+{
+    switch (GetMoveEffect(move))
+    {
+    case EFFECT_NON_VOLATILE_STATUS:
+    case EFFECT_YAWN:
+    case EFFECT_DARK_VOID:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 TEST("Frontier extended roster: no set carries two non-volatile status moves")
 {
     u32 i, j;
@@ -2016,7 +2032,7 @@ TEST("Frontier extended roster: no set carries two non-volatile status moves")
 
         for (j = 0; j < MAX_MON_MOVES; j++)
         {
-            if (GetMoveEffect(set->moves[j]) != EFFECT_NON_VOLATILE_STATUS)
+            if (!IsPureNonVolatileStatusMove(set->moves[j]))
                 continue;
             if (first == MOVE_NONE)
             {
