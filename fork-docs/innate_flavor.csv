@@ -12,7 +12,6 @@ VENUSAUR,Battery,No,No,No,No,Electrical family; Venusaur stores sunlight for its
 VENUSAUR,Battle Armor,No,No,No,No,"Bumpy skin, not armor; Mega's sturdiness and the G-Max petal shield are form-only bulk, not plating",,2026-11-14
 VENUSAUR,Berserk,No,No,No,No,"Its anger in EP051 is at defiance, not a reaction to being wounded; its temperament is otherwise calming",,2026-11-14
 VENUSAUR,Big Pecks,No,No,No,No,A bird-only family; Venusaur is a four-legged plant amphibian,,2026-11-14
-VENUSAUR,Blaze,No,No,No,No,The Fire starters' pinch ability; Venusaur's own counterpart is Overgrow,,2026-11-14
 VENUSAUR,Cheek Pouch,No,No,No,No,"A cheek-stuffing rodent family; Venusaur's nutrition feeds its flower, it doesn't hoard food",,2026-11-14
 VENUSAUR,Chlorophyll,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-14
 VENUSAUR,Clear Body,No,No,No,No,"A constructs-and-crystals family (golems, gears, stones, jellyfish); Mega's sturdiness is bulk, not an unalterable body",,2026-11-14
@@ -158,7 +157,6 @@ VENUSAUR,Telepathy,No,No,No,No,"A family of psychics and mind-readers who sense 
 VENUSAUR,Thermal Exchange,No,No,No,No,"Frigibax's line absorbs heat into its dorsal fin (plus steam-powered Volcanion); Venusaur turns sunlight into energy, but nothing shows it absorbing fire",,2026-11-15
 VENUSAUR,Thick Fat,No,No,No,No,"Stays on Mega Venusaur only, where it is the canon ability; base Venusaur is not described as fat",,2026-11-15
 VENUSAUR,Tinted Lens,No,No,No,No,"A family with special eyes or lenses that find a way through (Venomoth, Butterfree, Noctowl, Yanmega, Sigilyph); Venusaur has small, ordinary eyes",,2026-11-15
-VENUSAUR,Torrent,No,No,No,No,The Water starters' pinch ability; Venusaur's own counterpart is Overgrow,,2026-11-15
 VENUSAUR,Tough Claws,No,No,No,No,"A family that fights with hard claws (Mega Charizard X, Barbaracle, Perrserker, Dusk Lycanroc); Venusaur has clawed toes but fights with vines and beams",,2026-11-15
 VENUSAUR,Toxic Boost,No,No,No,No,"Zangoose's signature, venom feeding its fury against Seviper; Venusaur is Poison-type and cannot normally be poisoned at all",,2026-11-15
 VENUSAUR,Triage,No,No,No,No,"Comfey's signature, a nurse that rushes healing flowers to the wounded; Mega Venusaur's brambles heal itself, but nothing shows urgent first aid",,2026-11-15
@@ -187,7 +185,6 @@ CHARIZARD,Battery,No,No,No,No,"A family of living batteries and power cells (Cha
 CHARIZARD,Battle Armor,No,No,No,No,"A family of armoured creatures with plates, shells or carapaces (Sandslash, Kabutops, Aggron, Armaldo, Heracross, Drapion, Durant); Charizard has soft skin and no armour",,2026-11-16
 CHARIZARD,Berserk,No,No,No,No,"A family of placid dragons and dark birds that snap when wounded (Drampa, Galarian Moltres, Necrozma); Charizard's temper is real, but its flare-up when badly hurt is already Blaze, its canon ability",,2026-11-16
 CHARIZARD,Big Pecks,No,No,No,No,"A family of birds with puffed-out, sturdy breasts (Pidove, Ducklett, Fletchling, Vullaby, Rufflet); Charizard is a winged dragon, not a bird, and no source mentions its chest",,2026-11-16
-CHARIZARD,Blaze,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-16
 CHARIZARD,Cheek Pouch,No,No,No,No,"A family of cheek-stuffing rodents and hoarders (Pikachu line, Skwovet, Dedenne, Bunnelby, Pachirisu, Morpeko); Charizard has no cheek pouches or food-hoarding habit",,2026-11-16
 CHARIZARD,Chlorophyll,No,No,No,No,"A family of photosynthetic plants and sun-basking leaf creatures (Venusaur, Sunflora, Sceptile, Leafeon, Heliolisk); Charizard is not a plant, and its sun tie is already Solar Power, its canon ability",,2026-11-16
 CHARIZARD,Clear Body,No,No,No,No,"A family of golems, machines, crystals and jellies (Regis, Metagross, Klinklang, Golurk, Carbink, Tentacruel, Dreepy); Charizard is flesh and blood with a hot temper, and it already turns stat drops against foes via Defiant and Competitive",,2026-11-16
@@ -333,7 +330,6 @@ CHARIZARD,Telepathy,No,No,No,No,"A family of psychics and mind-linked partners w
 CHARIZARD,Thermal Exchange,No,No,No,No,"A family of ice dragons and a steam cannon that turn absorbed heat into power (Frigibax line, Volcanion); Charizard makes its own fire, and its burn immunity is already its Fire type",,2026-11-19
 CHARIZARD,Thick Fat,No,No,No,No,"A family of blubbery, fat-layered creatures (Snorlax, Walrein, Wailord, Hariyama, Mamoswine, Emboar, Ursaring); Charizard has a robust belly but no insulating fat, and cold nearly finishes it (EP105)",,2026-11-19
 CHARIZARD,Tinted Lens,No,No,No,No,"A family of creatures with tinted, many-faceted or special eyes (Butterfree, Venomoth, Noctowl, Yanmega, Sigilyph, Lokix); Charizard has small, ordinary eyes",,2026-11-19
-CHARIZARD,Torrent,No,No,No,No,"A family of Water starters whose currents surge in a pinch (Blastoise, Feraligatr, Swampert, Empoleon, Greninja); Charizard is a Fire starter whose pinch ability is Blaze",,2026-11-19
 CHARIZARD,Tough Claws,No,No,Yes,No,Maintainer: keep it on Mega Charizard X only,,2026-11-19
 CHARIZARD,Toxic Boost,No,No,No,No,"Zangoose only, a snake-hunting mongoose that fights harder when poisoned; Charizard has no tie to poison",,2026-11-19
 CHARIZARD,Triage,No,No,No,No,"A pair of forest healers who rush to tend the hurt (Comfey, Celebi); Charizard is no healer",,2026-11-19
@@ -362,7 +358,6 @@ BLASTOISE,Battery,No,No,No,No,"No electricity or power-sharing; its Pokémon Wat
 BLASTOISE,Battle Armor,No,No,No,No,"Its tough shell is real, but Shell Armor already carries it with the identical crit-immunity effect, so this would be a redundant duplicate",,2026-11-19
 BLASTOISE,Berserk,No,No,No,No,"Hardened shell defender that withdraws when hit, not one that flies into a rage when wounded; Mega aggression is strength-driven, not pain-driven",,2026-11-19
 BLASTOISE,Big Pecks,No,No,No,No,"A bird-chest ability; Blastoise has no beak or puffed breast, and its unyielding defence is the shell, already Shell Armor and Stamina",,2026-11-19
-BLASTOISE,Blaze,No,No,No,No,"A fire-starter pinch boost; Blastoise is a Water-type that puts fires out, and its own pinch power is Torrent",,2026-11-19
 BLASTOISE,Cheek Pouch,No,No,No,No,"A cheek-stuffing rodent/food-hoarder trait; Blastoise has no cheek pouches and no food-storing behaviour",,2026-11-19
 BLASTOISE,Chlorophyll,No,No,No,No,"A sunlight-powered plant trait; Blastoise has no plant parts and nothing ties it to sun",,2026-11-19
 BLASTOISE,Clear Body,No,No,No,No,"A golem/crystal/machine trait for bodies that cannot be weakened; Blastoise is a flesh-and-shell turtle, not a construct or mineral",,2026-11-19
@@ -438,4 +433,4 @@ BLASTOISE,Natural Cure,No,No,No,No,"A self-healing/regrowth trait for plants, co
 BLASTOISE,Oblivious,No,No,No,No,"A dim, dozy trait for slowpokes and lumbering blubbery beasts; Blastoise is an alert, precise marksman and leader, and its Beach Blank-Out kidnapping slept through was Jigglypuff's song",,2026-11-20
 BLASTOISE,Opportunist,No,No,No,No,"A copycat/opportunist trait (Espathra, Hoopa); Blastoise has no mimicry or opportunism lore",,2026-11-20
 BLASTOISE,Overcoat,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes as a sealed shell),,2026-11-20
-BLASTOISE,Own Tempo,No,No,No,Pending,"A carefree, marches-to-its-own-beat trait (Slowpoke, Spinda, Ludicolo); Blastoise is a steady leader, but nothing shows it shrugging off confusion or being unflappable by temperament",,
+BLASTOISE,Own Tempo,No,No,No,No,"A carefree, marches-to-its-own-beat trait (Slowpoke, Spinda, Ludicolo); Blastoise is a steady leader, but nothing shows it shrugging off confusion or being unflappable by temperament",,2026-11-20

@@ -1,5 +1,6 @@
 innate,reason
 Beast Boost,Only the Ultra Beasts and Necrozma may carry it (test/fork/innate_abilities.c)
+Blaze,Only the Fire starter lines and its other canon users (Pansear and Simisear) may carry it (test/fork/innate_abilities.c)
 Chilling Neigh,Only Glastrier may carry it (test/fork/innate_abilities.c)
 Dauntless Shield,Only Zamazenta may carry it (test/fork/innate_abilities.c)
 Dragon's Maw,Only Regidrago may carry it (test/fork/innate_abilities.c)
@@ -16,6 +17,7 @@ Protosynthesis,Only the ten ancient Paradox Pokemon may carry it (test/fork/inna
 Quark Drive,Only the ten future Paradox Pokemon may carry it (test/fork/innate_abilities.c)
 Shadow Shield,Only Lunala and Dawn Wings Necrozma may carry it (test/fork/innate_abilities.c)
 Teravolt,Only Zekrom and Black Kyurem may carry it (test/fork/innate_abilities.c)
+Torrent,Only the Water starter lines and its other canon users (Panpour and Simipour) may carry it (test/fork/innate_abilities.c)
 Toxic Chain,Only the Loyal Three may carry it (test/fork/innate_abilities.c)
 Transistor,Only Regieleki may carry it (test/fork/innate_abilities.c)
 Turboblaze,Only Reshiram and White Kyurem may carry it (test/fork/innate_abilities.c)
