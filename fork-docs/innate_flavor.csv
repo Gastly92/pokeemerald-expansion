@@ -428,4 +428,5 @@ BLASTOISE,Magician,No,No,No,No,"A trickster/stage-magic item-snatching trait; Bl
 BLASTOISE,Magma Armor,No,No,No,No,"A molten/hot-bodied trait for Fire-types; Blastoise is a cool freshwater turtle with no magma or body heat",,2026-11-20
 BLASTOISE,Magnet Pull,No,No,No,No,"A magnetic-body trait; Blastoise has no magnetism",,2026-11-20
 BLASTOISE,Marvel Scale,No,No,No,No,"A shimmering-scales trait for serpentine dragons and Milotic; Blastoise's defence is its shell, not marvellous scales, and nothing ties it to status",,2026-11-20
-BLASTOISE,Mega Launcher,No,No,Yes,Pending,"Its whole identity is shell-mounted water cannons, which dex and biology describe on the base form too, and Mega Launcher is the cannon ability its own Mega and Clawitzer carry","dex, biology",
+BLASTOISE,Mega Launcher,No,No,Yes,No,Maintainer: keep Mega Launcher on Mega Blastoise only,,2026-11-20
+BLASTOISE,Mega Sol,No,No,No,Pending,"A personal-sunshine trait (Mega Meganium only); Blastoise is a Water-type whose moves would be weakened by sun, and it has no sun lore",,
