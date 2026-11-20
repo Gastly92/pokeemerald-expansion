@@ -9750,6 +9750,24 @@ TEST("FEATURE_INNATE_ABILITIES: only Gholdengo carries Good as Gold")
     EXPECT_EQ(wrong, 0);
 }
 
+// Purifying Salt is the Nacli line's rock-salt signature, so the sweep excludes it and this fixes its holders.
+TEST("FEATURE_INNATE_ABILITIES: only the Nacli line carries Purifying Salt")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 expected = (species == SPECIES_NACLI || species == SPECIES_NACLSTACK || species == SPECIES_GARGANACL);
+
+        if (SpeciesHasInnate(species, ABILITY_PURIFYING_SALT) != expected)
+        {
+            DebugPrintf("%S has the wrong Purifying Salt innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 // Overgrow, Blaze and Torrent are the starters' pinch abilities, so the sweep excludes them and these
 // fix their holders: every species with the ability in vanilla (the starter lines, plus the elemental
 // monkeys, which keep it because it is canon for them) and the starters' battle forms that inherit it
