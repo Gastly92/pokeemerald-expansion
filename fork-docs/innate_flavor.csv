@@ -421,5 +421,6 @@ BLASTOISE,Levitate,No,No,No,No,"It can jet into the air on water thrust, but it 
 BLASTOISE,Light Metal,No,No,No,No,"A metal-body trait, and its lore is the opposite: it deliberately makes itself heavy",,2026-11-20
 BLASTOISE,Limber,No,No,No,No,"A flexible-body trait for cats, snakes, octopi and acrobats; Blastoise is a stiff, heavy, shell-bound tank",,2026-11-20
 BLASTOISE,Liquid Ooze,No,No,No,No,"A toxic-ooze trait for sludge, jellyfish and poison sacs; Blastoise's fluids are clean water, nothing harmful to drain",,2026-11-20
-BLASTOISE,Long Reach,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes as a long-range gunner),,2026-11-20
-BLASTOISE,Magic Bounce,No,No,No,Pending,"A psychic/mystic reflection trait; Blastoise has no magic, and its shell blocks hits rather than turning tricks back",,
+BLASTOISE,Long Reach,No,No,Yes,No,"Maintainer: Long Reach is for species with very long limbs; Blastoise fires from its cannons but otherwise makes contact",,2026-11-20
+BLASTOISE,Magic Bounce,No,No,No,No,"A psychic/mystic reflection trait; Blastoise has no magic, and its shell blocks hits rather than turning tricks back",,2026-11-20
+BLASTOISE,Magic Guard,No,No,No,Pending,"A magical/psychic ward against indirect harm (Abra, Clefairy, Unown); Blastoise has no magic, and it even braces against its own recoil rather than being spared it",,
