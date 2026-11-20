@@ -454,4 +454,5 @@ BLASTOISE,Reckless,No,No,No,No,"It does make rocket-speed charges, but it braces
 BLASTOISE,Regenerator,No,No,No,No,"A tissue-regrowth trait (starfish, axolotls, cells, plants, fungi); turtles do not regrow, and nothing shows Blastoise healing when it retreats",,2026-11-20
 BLASTOISE,Rekindle,No,No,No,No,"A fighting-spirit-renewed-by-victory trait whose holders are nearly all fiery creatures; Blastoise already heals through Rain Dish, and nothing shows it drawing vigour from defeating foes",,2026-11-20
 BLASTOISE,Ripen,No,No,No,No,"A fruit-ripening trait (apple dragons, berry-fermenting Shuckle); Blastoise has no berry or fruit lore",,2026-11-20
-BLASTOISE,Rock Head,No,No,Yes,Pending,"Biology twice says it is built to withstand recoil (it makes itself heavy for it; Mega strengthened its legs and back for it), which is the effect, and it signature-headbutts with Skull Bash",biology,
+BLASTOISE,Rock Head,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes on the withstands-recoil biology),,2026-11-20
+BLASTOISE,Rocky Payload,No,No,No,Pending,"A rock-carrying/rock-hurling trait (Bombirdier, Rhyperior's palm cannons); Blastoise fires water, not stones",,
