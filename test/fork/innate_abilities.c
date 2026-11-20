@@ -9750,6 +9750,31 @@ TEST("FEATURE_INNATE_ABILITIES: only Gholdengo carries Good as Gold")
     EXPECT_EQ(wrong, 0);
 }
 
+// Overgrow is the Grass starters' pinch ability, so the sweep excludes it and this fixes its holders:
+// every species with Overgrow in vanilla (the Grass starter lines, plus Pansage and Simisage, which
+// keep it because it is canon for them) and the Grass starters' Megas, which inherit it from the base.
+TEST("FEATURE_INNATE_ABILITIES: only the Grass starters and their canon kin carry Overgrow")
+{
+    static const enum Species sGrassStarterMegas[] =
+    {
+        SPECIES_VENUSAUR_MEGA, SPECIES_SCEPTILE_MEGA, SPECIES_MEGANIUM_MEGA, SPECIES_CHESNAUGHT_MEGA,
+    };
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 expected = SpeciesHasVanillaAbility(species, ABILITY_OVERGROW)
+                       || IsSpeciesInList(species, sGrassStarterMegas, ARRAY_COUNT(sGrassStarterMegas));
+
+        if (SpeciesHasInnate(species, ABILITY_OVERGROW) != expected)
+        {
+            DebugPrintf("%S has the wrong Overgrow innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;

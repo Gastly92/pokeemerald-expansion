@@ -88,7 +88,6 @@ VENUSAUR,Natural Cure,No,No,No,No,"Joins the purifying healers (Shaymin, Celebi,
 VENUSAUR,Oblivious,No,No,No,No,"A family of dim, dozy or self-absorbed creatures (Slowpoke, Wailord, Numel, Snorlax); Venusaur is an aware, attentive leader",,2026-11-14
 VENUSAUR,Opportunist,No,No,No,No,Espathra's copycat signature (plus trickster Hoopa); Venusaur never mimics or seizes on others' gains,,2026-11-14
 VENUSAUR,Overcoat,No,No,No,No,"A family wrapped in a protective covering (Burmy's cloak, Sewaddle's leaf wrap, shells, scales, caps); Venusaur has bare bumpy skin and gives off powder rather than shrugging it off",,2026-11-14
-VENUSAUR,Overgrow,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-14
 VENUSAUR,Own Tempo,No,No,No,No,"A family of carefree creatures that march to their own beat (Slowpoke, Spinda, Ludicolo, Smeargle); Venusaur leads and attends to others rather than ignoring them",,2026-11-14
 VENUSAUR,Pacify,No,No,Yes,No,Pacify is calming by mere presence on entry; Venusaur has to use its scent on purpose (Sweet Scent in AG163) to calm a foe,,2026-11-14
 VENUSAUR,Pastel Veil,No,No,No,No,"Galarian Ponyta's pastel healing-mane signature (plus Shaymin, which purifies toxins); Venusaur is itself Poison-type and nothing shows it cleansing poison",,2026-11-14
@@ -264,7 +263,6 @@ CHARIZARD,Natural Cure,No,No,No,No,"A family of healers, purifiers and self-mend
 CHARIZARD,Oblivious,No,No,No,No,"A family of dim, slow or self-absorbed creatures that miss what goes on around them (Slowpoke, Wailord, Lickitung, Swinub, Snorlax); Charizard takes every taunt to heart, and Intimidate immunity would cancel its Defiant and Competitive",,2026-11-18
 CHARIZARD,Opportunist,No,No,No,No,"A family of copycats and mischief-makers that steal a foe's boosts (Espathra, Hoopa); Charizard earns its strength and copies nobody",,2026-11-18
 CHARIZARD,Overcoat,No,No,No,No,"A family of shells, cocoons, cloaks and protective coverings (Cloyster, Forretress, Shelgon, Wormadam, Leavanny, Escavalier, Kommo-o); Charizard wears no coat or shell",,2026-11-18
-CHARIZARD,Overgrow,No,No,No,No,"A family of Grass starters and plants whose growth surges in a pinch (Venusaur, Sceptile, Torterra, Decidueye); Charizard is a Fire starter, whose pinch ability is Blaze",,2026-11-18
 CHARIZARD,Own Tempo,No,No,No,No,"A family of carefree, easygoing creatures that go at their own pace (Slowpoke, Spinda, Ludicolo, Smeargle, Mudsdale, Numel); Charizard's disobedience in the anime is defiance, already Defiant, and Intimidate immunity would cancel Defiant and Competitive",,2026-11-18
 CHARIZARD,Pacify,No,No,No,No,"A family of soothing, calming presences that drain a foe's will to fight (Sylveon, Meganium, Mega Audino, Galarian Moltres); Charizard stokes battle rather than calming it",,2026-11-18
 CHARIZARD,Pastel Veil,No,No,No,No,"A family of pastel-maned fairy horses and gentle purifiers (Galarian Ponyta and Rapidash, Shaymin); Charizard has no pastel glow or purifying aura",,2026-11-18
@@ -440,4 +438,3 @@ BLASTOISE,Natural Cure,No,No,No,No,"A self-healing/regrowth trait for plants, co
 BLASTOISE,Oblivious,No,No,No,No,"A dim, dozy trait for slowpokes and lumbering blubbery beasts; Blastoise is an alert, precise marksman and leader, and its Beach Blank-Out kidnapping slept through was Jigglypuff's song",,2026-11-20
 BLASTOISE,Opportunist,No,No,No,No,"A copycat/opportunist trait (Espathra, Hoopa); Blastoise has no mimicry or opportunism lore",,2026-11-20
 BLASTOISE,Overcoat,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes as a sealed shell),,2026-11-20
-BLASTOISE,Overgrow,No,No,No,No,"The Grass-starter pinch boost; Blastoise is a Water starter whose own pinch power is Torrent",,2026-11-20
