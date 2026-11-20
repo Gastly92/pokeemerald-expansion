@@ -411,4 +411,5 @@ BLASTOISE,Infiltrator,No,No,No,No,"A stealth trait for ghosts, ninjas and night 
 BLASTOISE,Innards Out,No,No,No,No,"A sea-cucumber gut-ejection trait; Blastoise does nothing when it falls",,2026-11-20
 BLASTOISE,Inner Focus,No,No,No,No,"A trained-discipline trait for martial artists, psychics and stoic warriors; Blastoise's steadiness is physical (weight, shell), not mental focus",,2026-11-20
 BLASTOISE,Insomnia,No,No,No,No,"The opposite of its lore: it sleeps soundly in its shell, even belly-up when fully at ease",,2026-11-20
-BLASTOISE,Intimidate,No,No,Yes,Pending,"An imposing armoured tank with levelled cannons: a Gastly conjured a Blastoise specifically to frighten Squirtle, Mega gains an aggressive disposition and a tank-gun cannon, and crowds single it out for its size","anime, biology",
+BLASTOISE,Intimidate,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes as an imposing armoured tank),,2026-11-20
+BLASTOISE,Iron Barbs,No,No,No,Pending,"A spikes-and-thorns trait (cacti, chestnut armour, Turtonator's spiked shell); Blastoise's shell is smooth with no barbs to hurt attackers",,
