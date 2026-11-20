@@ -439,4 +439,5 @@ BLASTOISE,Multiscale,No,No,No,No,"A layered-scales trait for the sky dragons and
 BLASTOISE,Natural Cure,No,No,No,No,"A self-healing/regrowth trait for plants, coral and healers; nothing shows Blastoise shedding ailments by withdrawing",,2026-11-20
 BLASTOISE,Oblivious,No,No,No,No,"A dim, dozy trait for slowpokes and lumbering blubbery beasts; Blastoise is an alert, precise marksman and leader, and its Beach Blank-Out kidnapping slept through was Jigglypuff's song",,2026-11-20
 BLASTOISE,Opportunist,No,No,No,No,"A copycat/opportunist trait (Espathra, Hoopa); Blastoise has no mimicry or opportunism lore",,2026-11-20
-BLASTOISE,Overcoat,No,No,Yes,Pending,"Its tough shell hides almost its whole body and it shelters inside it, and Overcoat already goes to the shelled family (Shellder/Cloyster, Shelmet, Escavalier, Shelgon, Pineco/Forretress); sealing out sand, hail and powder is a natural shell trait",biology,
+BLASTOISE,Overcoat,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes as a sealed shell),,2026-11-20
+BLASTOISE,Overgrow,No,No,No,Pending,"The Grass-starter pinch boost; Blastoise is a Water starter whose own pinch power is Torrent",,
