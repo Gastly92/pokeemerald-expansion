@@ -181,6 +181,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0009
         SPECIES_BLASTOISE,
         INNATES(
+            ABILITY_HYDRATION,
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
             ABILITY_SNIPER,
@@ -193,6 +194,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0009
         SPECIES_BLASTOISE_MEGA,
         INNATES(
+            ABILITY_HYDRATION,
             ABILITY_MEGA_LAUNCHER,
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
