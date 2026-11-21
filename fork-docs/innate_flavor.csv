@@ -484,4 +484,5 @@ BLASTOISE,Steely Spirit,No,No,No,No,"A steel-hearted Viking-cat trait (Perrserke
 BLASTOISE,Stench,No,No,No,No,"A foul-odour trait (skunks, garbage, sludge, Rafflesia); Blastoise gives off no smell",,2026-11-21
 BLASTOISE,Sticky Hold,No,No,No,No,"A sticky/slimy-body or tight-grip trait (sludge, slugs, Komala's log, Klefki's keys); Blastoise has a dry shell and clings to nothing",,2026-11-21
 BLASTOISE,Strong Jaw,No,No,No,No,"A biter trait; the turtles that carry it are snappers (Drednaw, Carracosta), while Blastoise has a small jaw and never bites in its lore",,2026-11-21
-BLASTOISE,Sturdy,No,No,Yes,Pending,"A shelled tank built to take a hit: its tough shell hides almost its whole body, and the other armoured turtles and shell-dwellers carry Sturdy (Carracosta, Avalugg, Shuckle, Pineco, Crustle)",biology,
+BLASTOISE,Sturdy,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes as a hard-shelled tank),,2026-11-21
+BLASTOISE,Suction Cups,No,No,No,Pending,"A suckers/rooting/clinging trait (octopi, sea lilies, burrs, eels); Blastoise stays put by weight, and Mega's Ice Beam anchor in Pokkén is a move, not a grip",,
