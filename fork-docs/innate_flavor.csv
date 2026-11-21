@@ -450,7 +450,7 @@ BLASTOISE,Reckless,No,No,No,No,"It does make rocket-speed charges, but it braces
 BLASTOISE,Regenerator,No,No,No,No,"A tissue-regrowth trait (starfish, axolotls, cells, plants, fungi); turtles do not regrow, and nothing shows Blastoise healing when it retreats",,2026-11-20
 BLASTOISE,Rekindle,No,No,No,No,"A fighting-spirit-renewed-by-victory trait whose holders are nearly all fiery creatures; Blastoise already heals through Rain Dish, and nothing shows it drawing vigour from defeating foes",,2026-11-20
 BLASTOISE,Ripen,No,No,No,No,"A fruit-ripening trait (apple dragons, berry-fermenting Shuckle); Blastoise has no berry or fruit lore",,2026-11-20
-BLASTOISE,Rock Head,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes on the withstands-recoil biology),,2026-11-20
+BLASTOISE,Rock Head,No,No,Yes,No,Maintainer: Blastoise's head is not rock,,2026-11-20
 BLASTOISE,Rocky Payload,No,No,No,No,"A rock-carrying/rock-hurling trait (Bombirdier, Rhyperior's palm cannons); Blastoise fires water, not stones",,2026-11-20
 BLASTOISE,Rough Skin,No,No,No,No,"A sharkskin/spiny-hide trait (sharks, Garchomp, urchins, Nidos); Blastoise has smooth skin and a smooth shell",,2026-11-20
 BLASTOISE,Sand Force,No,No,No,No,"A desert/burrowing sand trait; Blastoise lives in freshwater ponds and has no sand ties",,2026-11-20
@@ -480,8 +480,9 @@ BLASTOISE,Steely Spirit,No,No,No,No,"A steel-hearted Viking-cat trait (Perrserke
 BLASTOISE,Stench,No,No,No,No,"A foul-odour trait (skunks, garbage, sludge, Rafflesia); Blastoise gives off no smell",,2026-11-21
 BLASTOISE,Sticky Hold,No,No,No,No,"A sticky/slimy-body or tight-grip trait (sludge, slugs, Komala's log, Klefki's keys); Blastoise has a dry shell and clings to nothing",,2026-11-21
 BLASTOISE,Strong Jaw,No,No,No,No,"A biter trait; the turtles that carry it are snappers (Drednaw, Carracosta), while Blastoise has a small jaw and never bites in its lore",,2026-11-21
-BLASTOISE,Sturdy,No,No,Yes,No,Maintainer: reason pending (Claude proposed Yes as a hard-shelled tank),,2026-11-21
+BLASTOISE,Sturdy,No,No,Yes,No,Maintainer: it isn't sturdy like the other Sturdy species,,2026-11-21
 BLASTOISE,Suction Cups,No,No,No,No,"A suckers/rooting/clinging trait (octopi, sea lilies, burrs, eels); Blastoise stays put by weight, and Mega's Ice Beam anchor in Pokkén is a move, not a grip",,2026-11-21
 BLASTOISE,Super Luck,No,No,No,No,"A luck/omen trait (lucky birds, Togekiss, disaster-omen Absol, Murkrow); Blastoise's hits come from aim, not fortune",,2026-11-21
 BLASTOISE,Supersweet Syrup,No,No,No,No,"A candy-apple syrup trait (Dipplin line only); Blastoise has no syrup or sweet scent",,2026-11-21
-BLASTOISE,Swarm,No,No,No,Pending,"The Bug-type pinch boost; Blastoise is a Water-type with no bug moves or swarming lore",,
+BLASTOISE,Swarm,No,No,No,No,"The Bug-type pinch boost; Blastoise is a Water-type with no bug moves or swarming lore",,2026-11-21
+BLASTOISE,Sweet Veil,No,No,No,Pending,"A sweet-scent/candy trait that keeps allies awake (Swirlix, Alcremie, Combee); Blastoise gives off no sweetness",,
