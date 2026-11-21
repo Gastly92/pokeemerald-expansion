@@ -9714,6 +9714,129 @@ TEST("FEATURE_INNATE_ABILITIES: only Victini carries Victory Star")
     EXPECT_EQ(wrong, 0);
 }
 
+// Beast Boost is the Ultra Beasts' signature, so the sweep excludes it and this fixes its holders: every
+// species flagged isUltraBeast, plus base Necrozma, the Ultra Space creature that shares their world.
+TEST("FEATURE_INNATE_ABILITIES: only the Ultra Beasts and Necrozma carry Beast Boost")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 expected = gSpeciesInfo[species].isUltraBeast || species == SPECIES_NECROZMA;
+
+        if (SpeciesHasInnate(species, ABILITY_BEAST_BOOST) != expected)
+        {
+            DebugPrintf("%S has the wrong Beast Boost innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Good as Gold is Gholdengo's living-gold signature (not even Gimmighoul has it in canon), so the sweep
+// excludes it and this fixes its holder.
+TEST("FEATURE_INNATE_ABILITIES: only Gholdengo carries Good as Gold")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_GOOD_AS_GOLD) != (species == SPECIES_GHOLDENGO))
+        {
+            DebugPrintf("%S has the wrong Good as Gold innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Supreme Overlord (Kingambit's warlord signature) and Surge Surfer (Alolan Raichu's) fit no other species,
+// so the sweep excludes them and this fixes their holders.
+TEST("FEATURE_INNATE_ABILITIES: only Kingambit carries Supreme Overlord and only Alolan Raichu carries Surge Surfer")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_SUPREME_OVERLORD) != (species == SPECIES_KINGAMBIT)
+         || SpeciesHasInnate(species, ABILITY_SURGE_SURFER) != (species == SPECIES_RAICHU_ALOLA))
+        {
+            DebugPrintf("%S has the wrong Supreme Overlord or Surge Surfer innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Purifying Salt is the Nacli line's rock-salt signature, so the sweep excludes it and this fixes its holders.
+TEST("FEATURE_INNATE_ABILITIES: only the Nacli line carries Purifying Salt")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 expected = (species == SPECIES_NACLI || species == SPECIES_NACLSTACK || species == SPECIES_GARGANACL);
+
+        if (SpeciesHasInnate(species, ABILITY_PURIFYING_SALT) != expected)
+        {
+            DebugPrintf("%S has the wrong Purifying Salt innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Overgrow, Blaze and Torrent are the starters' pinch abilities, so the sweep excludes them and these
+// fix their holders: every species with the ability in vanilla (the starter lines, plus the elemental
+// monkeys, which keep it because it is canon for them) and the starters' battle forms that inherit it
+// from the base (Megas, and Greninja's Battle Bond forms for Torrent).
+static u32 CountWrongPinchHolders(enum Ability ability, const enum Species *inherited, u32 inheritedCount)
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 expected = SpeciesHasVanillaAbility(species, ability)
+                       || IsSpeciesInList(species, inherited, inheritedCount);
+
+        if (SpeciesHasInnate(species, ability) != expected)
+        {
+            DebugPrintf("%S has the wrong %S innate", GetSpeciesName(species), gAbilitiesInfo[ability].name);
+            wrong++;
+        }
+    }
+    return wrong;
+}
+
+TEST("FEATURE_INNATE_ABILITIES: only the Grass starters and their canon kin carry Overgrow")
+{
+    static const enum Species sInherited[] =
+    {
+        SPECIES_VENUSAUR_MEGA, SPECIES_SCEPTILE_MEGA, SPECIES_MEGANIUM_MEGA, SPECIES_CHESNAUGHT_MEGA,
+    };
+    EXPECT_EQ(CountWrongPinchHolders(ABILITY_OVERGROW, sInherited, ARRAY_COUNT(sInherited)), 0);
+}
+
+TEST("FEATURE_INNATE_ABILITIES: only the Fire starters and their canon kin carry Blaze")
+{
+    static const enum Species sInherited[] =
+    {
+        SPECIES_CHARIZARD_MEGA_X, SPECIES_CHARIZARD_MEGA_Y, SPECIES_BLAZIKEN_MEGA, SPECIES_EMBOAR_MEGA,
+        SPECIES_DELPHOX_MEGA,
+    };
+    EXPECT_EQ(CountWrongPinchHolders(ABILITY_BLAZE, sInherited, ARRAY_COUNT(sInherited)), 0);
+}
+
+TEST("FEATURE_INNATE_ABILITIES: only the Water starters and their canon kin carry Torrent")
+{
+    static const enum Species sInherited[] =
+    {
+        SPECIES_BLASTOISE_MEGA, SPECIES_FERALIGATR_MEGA, SPECIES_SWAMPERT_MEGA, SPECIES_GRENINJA_MEGA,
+        SPECIES_GRENINJA_BATTLE_BOND, SPECIES_GRENINJA_ASH,
+    };
+    EXPECT_EQ(CountWrongPinchHolders(ABILITY_TORRENT, sInherited, ARRAY_COUNT(sInherited)), 0);
+}
+
 SINGLE_BATTLE_TEST("FEATURE_INNATE_ABILITIES: innate Chilling Neigh raises Attack when the holder knocks out a foe")
 {
     bool32 enabled;

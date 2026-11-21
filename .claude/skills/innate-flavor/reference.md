@@ -41,7 +41,8 @@ when a test enforces exactly who carries it.
 
 `next.py --check` treats every species whose sweep is complete as locked, and fails when:
 
-- its row in `src/fork/innate_abilities.c` differs from its `fit = Yes` decisions. To change a
+- its row in `src/fork/innate_abilities.c` differs from its `fit = Yes` decisions, ignoring
+  excluded innates, which their holder tests decide. To change a
   locked row, change the log first; or
 - the pool has an innate it has no decision for, such as one wired after its review. Assessing
   that innate for the species makes the check pass again.
