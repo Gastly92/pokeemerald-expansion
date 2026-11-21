@@ -9750,6 +9750,24 @@ TEST("FEATURE_INNATE_ABILITIES: only Gholdengo carries Good as Gold")
     EXPECT_EQ(wrong, 0);
 }
 
+// Supreme Overlord (Kingambit's warlord signature) and Surge Surfer (Alolan Raichu's) fit no other species,
+// so the sweep excludes them and this fixes their holders.
+TEST("FEATURE_INNATE_ABILITIES: only Kingambit carries Supreme Overlord and only Alolan Raichu carries Surge Surfer")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_SUPREME_OVERLORD) != (species == SPECIES_KINGAMBIT)
+         || SpeciesHasInnate(species, ABILITY_SURGE_SURFER) != (species == SPECIES_RAICHU_ALOLA))
+        {
+            DebugPrintf("%S has the wrong Supreme Overlord or Surge Surfer innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 // Purifying Salt is the Nacli line's rock-salt signature, so the sweep excludes it and this fixes its holders.
 TEST("FEATURE_INNATE_ABILITIES: only the Nacli line carries Purifying Salt")
 {
