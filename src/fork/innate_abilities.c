@@ -160,6 +160,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0007
         SPECIES_SQUIRTLE,
         INNATES(
+            ABILITY_HYDRATION,
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
             ABILITY_SWIFT_SWIM,
@@ -170,6 +171,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0008
         SPECIES_WARTORTLE,
         INNATES(
+            ABILITY_HYDRATION,
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
             ABILITY_STAMINA,
@@ -208,6 +210,7 @@ static const struct SpeciesInnates sSpeciesInnates[] =
     { // 0009
         SPECIES_BLASTOISE_GMAX,
         INNATES(
+            ABILITY_HYDRATION,
             ABILITY_RAIN_DISH,
             ABILITY_SHELL_ARMOR,
             ABILITY_SKILL_LINK,
