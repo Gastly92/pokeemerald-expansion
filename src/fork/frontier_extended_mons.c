@@ -5919,7 +5919,7 @@ const struct TrainerMon gFrontierExtendedMons[] =
             MOVE_CALM_MIND,
             MOVE_PSYSTRIKE,
             MOVE_AURA_SPHERE,
-            MOVE_RECOVER
+            MOVE_FIRE_BLAST
         },
         .ability = ABILITY_SYNCHRONIZE,
         .nature = NATURE(SPE_UP, ATK_DOWN),
