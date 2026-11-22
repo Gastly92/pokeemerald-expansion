@@ -223,6 +223,8 @@ plain `#if` compile-time flags, not registered.
   (`UPSTREAM:` in `CancelerAccuracyCheck`, test `test/fork/zmax_absorb_animation.c`).
   Upstream's "Max Moves don't bypass absorbing abilities" test can't catch it: it asserts
   the animation before the ability pop-up, and the stray animation played after it.
+- **Autotomize's "became nimble!" naming the wrong battler (upstream)** is fixed here
+  (`UPSTREAM:` in `SetAdditionalEffectsOnStatChange`, test `test/fork/autotomize_message.c`).
 
 ## CI / infrastructure
 

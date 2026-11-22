@@ -1224,6 +1224,9 @@ static void SetAdditionalEffectsOnStatChange(struct BattleCalcValues *cv, struct
          && GetBattlerWeight(cv->battlerDef, cv->abilities[cv->battlerDef], cv->holdEffects[cv->battlerDef]) > 1)
         {
             gBattleMons[cv->battlerDef].volatiles.autotomizeCount++;
+            // UPSTREAM: STRINGID_BECAMENIMBLE prints {B_EFF_NAME_WITH_PREFIX}, which nothing on this path set,
+            // so it named whichever battler an earlier effect left in gEffectBattler. Test: test/fork/autotomize_message.c.
+            gEffectBattler = cv->battlerDef;
             st->moveScript = BattleScript_AutotomizeMessage;
         }
         break;
