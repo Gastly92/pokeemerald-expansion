@@ -12,6 +12,9 @@
 //
 // The trainer-battle + Z-Move + AI combination is what makes it fire, which is why it only ever
 // turned up in Frontier play -- hence AI_SINGLE_BATTLE_TEST rather than a scripted opponent.
+//
+// The fork fixed this as an UPSTREAM: patch (PR #548); upstream made the same fix in #11092, so
+// trainer_slide.c is upstream's code again. This test stays as the guard against a regression.
 
 AI_SINGLE_BATTLE_TEST("Battle Bond's boosts are announced for Greninja after a Z-Move KO in a trainer battle")
 {
