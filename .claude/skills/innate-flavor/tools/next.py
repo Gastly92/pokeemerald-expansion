@@ -78,8 +78,10 @@ def main():
                 if decided and not pending and missing:
                     bad.append('%s: reviewed, but not yet assessed for %s' % (sp, ', '.join(missing)))
                 continue
-            want = {ids[n] for n, r in done.items() if r['fit'] == 'Yes' and n in ids}
-            have = rows.get(sp, set())
+            # excluded innates are left out of both sides: a holder test, not the log, decides them
+            pool_ids = {i for _, i in p}
+            want = {ids[n] for n, r in done.items() if r['fit'] == 'Yes' and n in ids} & pool_ids
+            have = rows.get(sp, set()) & pool_ids
             if want != have:
                 extra = sorted(ab(x) for x in have - want)
                 lost = sorted(ab(x) for x in want - have)
