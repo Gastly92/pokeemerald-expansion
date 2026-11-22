@@ -5,7 +5,6 @@ VENUSAUR,Analytic,No,No,No,No,No calculating or observe-then-strike trait; it so
 VENUSAUR,Anger Point,No,No,No,No,"It gets enraged at a defiant Bulbasaur (EP051), but never from being struck in a weak point; its usual trait is calming others",,2026-11-14
 VENUSAUR,Anticipation,No,No,No,No,Only evidence is a one-line minor movie scene (The Power of One) where Pokémon everywhere sensed the disturbance; no sensing trait of its own,,2026-11-14
 VENUSAUR,Arena Trap,No,No,No,No,"Its traps are vines and its flower closing on a foe (SM142), not a pit or ground that stops escape",,2026-11-14
-VENUSAUR,Armor Tail,No,No,No,No,"Farigiraf's signature, tied to its armored tail-head; Venusaur has no comparable tail, and the G-Max petal shield is form-only",,2026-11-14
 VENUSAUR,Aroma Veil,No,Yes,Yes,Yes,"Dex and Biology both describe a soothing aroma that calms emotions, which is what Aroma Veil protects",dex+biology+anime,2026-11-14
 VENUSAUR,Bad Dreams,No,No,No,No,"Puts foes to sleep (Sleep Powder) and soothes them; nothing torments sleepers, and this is Darkrai's nightmare signature",,2026-11-14
 VENUSAUR,Battery,No,No,No,No,Electrical family; Venusaur stores sunlight for itself and never powers up allies,,2026-11-14
@@ -175,7 +174,6 @@ CHARIZARD,Analytic,No,No,No,No,"A family of calculating minds and machines (Pory
 CHARIZARD,Anger Point,No,No,Yes,No,Maintainer: Charizard doesn't get that angry,,2026-11-17
 CHARIZARD,Anticipation,No,No,No,No,"A family of sensitive animals that feel danger coming (Whiscash, Croagunk, Hatenna, Audino, Seismitoad); Charizard flies toward danger looking for strong foes and has no sense for threats",,2026-11-15
 CHARIZARD,Arena Trap,No,No,No,No,"A family of burrowers and pit-trappers that hold prey in the ground (Diglett, Dugtrio, Trapinch, Arbok); Charizard is a flier with no trapping or burrowing trait",,2026-11-16
-CHARIZARD,Armor Tail,No,No,No,No,"Only Farigiraf, whose armoured tail-head wards off attacks; Charizard's tail is a flame it must protect, not a shield",,2026-11-16
 CHARIZARD,Aroma Veil,No,No,No,No,"A family of fragrant flowers, perfumes and sweets (Aromatisse, Alcremie, Roserade, Meganium, Oinkologne); Charizard gives off no calming scent",,2026-11-16
 CHARIZARD,Bad Dreams,No,No,No,No,"A family of nightmare-bringers and dream-eaters (Darkrai, Munna, Musharna); Charizard has no tie to sleep or dreams beyond sleeping soundly itself",,2026-11-16
 CHARIZARD,Battery,No,No,No,No,"A family of living batteries and power cells (Charjabug, Vikavolt, Chinchou, Lanturn, Pachirisu); Charizard stores and shares no electricity",,2026-11-16
@@ -345,7 +343,6 @@ BLASTOISE,Analytic,No,No,No,No,"Its precision is marksmanship (already Sniper), 
 BLASTOISE,Anger Point,No,No,No,No,"A calm shell-guarded leader, not a hothead; only Mega gains an aggressive disposition, and its Shell Armor blocks the crits that would trigger it anyway",,2026-11-19
 BLASTOISE,Anticipation,No,No,No,No,"No sixth sense or danger-sensing in dex or media; it relies on its shell and cannons, not on foreseeing threats (The Power of One sensing is a minor cameo shared by many species)",,2026-11-19
 BLASTOISE,Arena Trap,No,No,No,No,"No pits, sand traps or holding foes in place; it repels with blasts rather than ensnaring",,2026-11-19
-BLASTOISE,Armor Tail,No,No,No,No,"Its armour is the shell, already Shell Armor; its stubby tail does nothing, and nothing shows it shielding allies from quick strikes",,2026-11-19
 BLASTOISE,Aroma Veil,No,No,No,No,"No scent, fragrance or soothing aura anywhere in dex or media; that is a flower/sweets trait",,2026-11-19
 BLASTOISE,Bad Dreams,No,No,No,No,"No nightmare or dream link; the Beach Blank-Out sleep came from a Jigglypuff stuck in its cannon, not from Blastoise",,2026-11-19
 BLASTOISE,Battery,No,No,No,No,"No electricity or power-sharing; its Pokémon Water War support (propelling allies into a fire) is a physical launch, not boosting their special attacks",,2026-11-19
@@ -515,4 +512,3 @@ BUTTERFREE,Analytic,No,No,No,No,"No calculating or observe-then-strike trait; it
 BUTTERFREE,Anger Point,No,No,No,No,"No temper or rage-when-struck trait in dex or media; it fights for others, not out of anger",,2026-11-22
 BUTTERFREE,Anticipation,No,No,No,No,"Its sensitive antennae track flower scent, not danger; nothing shows it sensing a threat before it strikes",,2026-11-22
 BUTTERFREE,Arena Trap,No,No,No,No,"A flier with no burrowing, pit or ground-snare trait",,2026-11-22
-BUTTERFREE,Armor Tail,No,No,No,No,"No tail, let alone an armored head-tail; nothing blocks priority",,2026-11-22

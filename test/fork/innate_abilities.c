@@ -9768,6 +9768,22 @@ TEST("FEATURE_INNATE_ABILITIES: only Kingambit carries Supreme Overlord and only
     EXPECT_EQ(wrong, 0);
 }
 
+// Armor Tail is Farigiraf's armored tail-head signature, so the sweep excludes it and this fixes its holder.
+TEST("FEATURE_INNATE_ABILITIES: only Farigiraf carries Armor Tail")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_ARMOR_TAIL) != (species == SPECIES_FARIGIRAF))
+        {
+            DebugPrintf("%S has the wrong Armor Tail innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 // Purifying Salt is the Nacli line's rock-salt signature, so the sweep excludes it and this fixes its holders.
 TEST("FEATURE_INNATE_ABILITIES: only the Nacli line carries Purifying Salt")
 {
