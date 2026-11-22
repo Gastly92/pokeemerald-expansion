@@ -388,6 +388,22 @@ One from the Nov 2026 sync to upstream #11059 (12 commits, zero conflicts):
   `UPSTREAM:` tags in every file upstream touched and check whether upstream now has the same
   fix. If it does, take upstream's version, drop ours and its tag, and keep the fork test.**
 
+Two from the Nov 2026 sync to upstream #11115 (26 commits, 4 conflicted files):
+
+- **Upstream adopted a moved-line `UPSTREAM:` fix and the merge kept both copies.** #11092 made
+  the same `ShouldDoTrainerSlide` fix as the fork's #548. It moved the `gBattleScripting.battler`
+  assignment to the end of the function, as ours did, but put it after `SetTrainerSlideMessage`
+  rather than before `MarkTrainerSlideAsPlayed`, so both lines survived the merge.
+  `trainer_slide.c` is upstream's again, and `test/fork/battle_bond_message.c` stays as the guard.
+  This is the #756 lesson again: diff each `UPSTREAM:`-tagged file against `upstream/master`
+  after a sync.
+- **Upstream `KNOWN_FAILING` tests can pass on the fork and fail the run.** #11112 added
+  known-failing tests for bugs the fork had already fixed (Magic Bounce `targetsDone`, Z-Move
+  category). A `KNOWN_FAILING_PASS` makes `make check` exit non-zero. Confirm that the fork fix
+  is the reason it passes, then remove the marker and add a `FORK:` note naming the fix.
+  `ASSUMPTIONS_FAILED` alone does not fail the run. Upstream freeze tests skip that way because
+  `B_USE_FROSTBITE` is on.
+
 The general shape: a clean merge proves nothing about behaviour. Budget for a full
 `make check` plus a `UNUSED_ERROR=1 DEPRECATED_ERROR=1` build on every sync, and read
 the upstream commit behind any test that changed state.

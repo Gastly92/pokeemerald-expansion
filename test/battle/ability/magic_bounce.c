@@ -270,7 +270,8 @@ DOUBLE_BATTLE_TEST("Magic Bounce will trigger after all valid targets have been 
 
 SINGLE_BATTLE_TEST("Magic Bounce does not prevent damage after your move was bounced")
 {
-    KNOWN_FAILING;
+    // FORK: upstream marks this KNOWN_FAILING; it passes here because of the fork's UPSTREAM: targetsDone
+    // reset in MoveEndClearBits (test/fork/magic_bounce_followup.c). On conflict, keep it un-marked.
     GIVEN {
         ASSUME(GetMoveEffect(MOVE_SPORE) == EFFECT_NON_VOLATILE_STATUS);
         ASSUME(GetMoveNonVolatileStatus(MOVE_SPORE) == MOVE_EFFECT_SLEEP);

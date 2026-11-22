@@ -994,7 +994,8 @@ SINGLE_BATTLE_TEST("Z-Move: Z-Belch can be selected without eating a Berry")
 
 SINGLE_BATTLE_TEST("Z-Move: Z-Moves of special moves are special attacks")
 {
-    KNOWN_FAILING;
+    // FORK: upstream marks this KNOWN_FAILING; it passes here because the fork gives Z-Moves their base
+    // move's category. On conflict, keep it un-marked.
     GIVEN {
         ASSUME(GetMoveCategory(MOVE_FLAMETHROWER) == DAMAGE_CATEGORY_SPECIAL);
         PLAYER(SPECIES_ARCANINE) { Item(ITEM_FIRIUM_Z); Moves(MOVE_FLAMETHROWER, MOVE_FIRE_FANG); }
