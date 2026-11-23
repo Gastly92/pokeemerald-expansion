@@ -187,7 +187,7 @@
                                                    // In Gen9-, Encore allows the target to use the Encored move using the priority of the selected move
 #define B_RAGE_FIST                     GEN_LATEST // In Champions, Rage Fist stacks reset upon switching out or fainting
 #define B_MOVE_EFFECTS_BEFORE_MOVES     GEN_LATEST // In Champions, Beak Blast will work when Encored into from a different move
-                                                   // Additionally, the charging animation will occur 
+                                                   // Additionally, the charging animation will occur
 
 // Ability settings
 #define B_GALE_WINGS                    GEN_LATEST // In Gen7+, Gale Wings requires full HP to trigger.
@@ -196,6 +196,7 @@
 #define B_MOODY_ACC_EVASION             GEN_LATEST // In Gen8+, Moody can no longer raise accuracy and evasion.
 #define B_FLASH_FIRE_FROZEN             GEN_LATEST // In Gen5+, Flash Fire activates even when frozen.
 #define B_SYNCHRONIZE_TOXIC             GEN_LATEST // In Gen5+, if a Pokémon with Synchronize is badly poisoned, the opponent will also become badly poisoned. Previously, the opponent would be inflicted with regular poison.
+#define B_PRESSURE_ALLIES               GEN_LATEST // In Gen5+, Pressure no longer increases allies' PP usage.
 #define B_UPDATED_INTIMIDATE            GEN_LATEST // In Gen8+, Intimidate no longer works on opponents with the Inner Focus, Scrappy, Own Tempo or Oblivious Abilities. It also activates Rattled.
 #define B_OBLIVIOUS_TAUNT               GEN_LATEST // In Gen6+, Pokémon with Oblivious can no longer be taunted.
 #define B_STURDY                        GEN_LATEST // In Gen5+, Sturdy causes a Pokémon to have 1 HP remaining if another Pokémon's attack or confusion damage would have knocked it out from full HP.
