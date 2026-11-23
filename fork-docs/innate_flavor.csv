@@ -538,4 +538,5 @@ BUTTERFREE,Electromorphosis,No,No,No,No,"No electricity in its biology or media;
 BUTTERFREE,Filter,No,No,No,No,"Fragile powdery wings, no barrier, shield or armor to blunt super-effective hits",,2026-11-23
 BUTTERFREE,Flare Boost,No,No,No,No,"A Bug hurt by fire, nothing about heat or burns powering it up",,2026-11-23
 BUTTERFREE,Flower Veil,No,No,No,No,"It visits flowers for honey but is not a flower or flower-guardian; it is not Grass, so the shield would cover only Grass allies",,2026-11-23
-BUTTERFREE,Forewarn,No,No,No,Pending,"Uses Confusion and Psybeam in the anime, but nothing shows foresight or reading a foe's moves; its senses hunt flowers",,
+BUTTERFREE,Forewarn,No,No,No,No,"Uses Confusion and Psybeam in the anime, but nothing shows foresight or reading a foe's moves; its senses hunt flowers",,2026-11-23
+BUTTERFREE,Friend Guard,No,No,Yes,Pending,"It shields Caterpie from birds with its powder, and Ash's Butterfree tears the net to free its captured flock; a guardian of its own, like Leavanny",biology; anime,
