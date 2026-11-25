@@ -597,4 +597,5 @@ BUTTERFREE,Own Tempo,No,No,No,No,"It confuses others (Supersonic, Confusion) but
 BUTTERFREE,Pacify,No,No,No,No,"No calming aura or soothing scent; its powders knock foes out rather than soothe their hostility",,2026-11-25
 BUTTERFREE,Pastel Veil,No,No,No,No,"Its scales poison others rather than ward poison off itself and allies; no purifying veil",,2026-11-25
 BUTTERFREE,Pickpocket,No,No,No,No,"No thieving streak; it gathers nectar from flowers, it does not lift items off attackers",,2026-11-25
-BUTTERFREE,Pickup,No,No,Yes,Pending,"A forager that seeks, gathers and carries food home on its leg hairs, the same profile as the honey-gathering Combee that carries Pickup",dex; biology,
+BUTTERFREE,Pickup,No,No,Yes,Yes,"A forager that seeks, gathers and carries food home on its leg hairs, the same profile as the honey-gathering Combee that carries Pickup",dex; biology,2026-11-25
+BUTTERFREE,Piercing Drill,No,No,No,Pending,"No drill, horn or boring body part",,
