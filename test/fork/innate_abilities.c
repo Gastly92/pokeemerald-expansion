@@ -9784,6 +9784,22 @@ TEST("FEATURE_INNATE_ABILITIES: only Farigiraf carries Armor Tail")
     EXPECT_EQ(wrong, 0);
 }
 
+// Power Spot is Stonjourner's standing-stone signature, so the sweep excludes it and this fixes its holder.
+TEST("FEATURE_INNATE_ABILITIES: only Stonjourner carries Power Spot")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_POWER_SPOT) != (species == SPECIES_STONJOURNER))
+        {
+            DebugPrintf("%S has the wrong Power Spot innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 // Purifying Salt is the Nacli line's rock-salt signature, so the sweep excludes it and this fixes its holders.
 TEST("FEATURE_INNATE_ABILITIES: only the Nacli line carries Purifying Salt")
 {

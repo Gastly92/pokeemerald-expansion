@@ -93,7 +93,6 @@ VENUSAUR,Pickpocket,No,No,No,No,"A family of thieves and pilferers (Sneasel, Meo
 VENUSAUR,Pickup,No,No,No,No,"A family of scavengers and foragers that pick things up (Zigzagoon, Meowth, Teddiursa, Munchlax); nothing shows Venusaur collecting items",,2026-11-15
 VENUSAUR,Piercing Drill,No,No,No,No,Mega Excadrill's drill signature (plus drill-tailed Dunsparce); Venusaur has no drill,,2026-11-15
 VENUSAUR,Poison Heal,No,No,No,No,"A mushroom family that feeds on toxins (Shroomish, Breloom, Paras) plus Gliscor; Venusaur is a flowering plant, and as a Poison type it cannot normally be poisoned at all",,2026-11-15
-VENUSAUR,Power Spot,No,No,No,No,"Stonjourner's standing-stone signature, a site that empowers those beside it; Venusaur leads Evolution ceremonies in a sacred garden, but the power is the garden's and the ritual's, not its own presence",,2026-11-15
 VENUSAUR,Prankster,No,No,No,No,"A family of mischievous tricksters (Whimsicott, Sableye, Murkrow, Impidimp, Klefki); Venusaur is a dignified leader, not a prankster",,2026-11-15
 VENUSAUR,Pressure,No,No,No,No,"A family of overwhelming, oppressive presences (legendaries, Absol, Dusknoir, Kingambit); Venusaur halts the forest Pokémon by command as their leader in AG073, not by a weight that wears foes down",,2026-11-15
 VENUSAUR,Propeller Tail,No,No,No,No,Barraskewda's propeller-tailed fish signature; Venusaur is a land creature with no such tail,,2026-11-15
@@ -262,7 +261,6 @@ CHARIZARD,Pickpocket,No,No,No,No,"A family of sly thieves and light-fingered tri
 CHARIZARD,Pickup,No,No,No,No,"A family of scavengers and foragers that pick up stray items (Zigzagoon, Meowth, Munchlax, Lillipup, Aipom, Phanpy); Charizard is no scavenger",,2026-11-18
 CHARIZARD,Piercing Drill,No,No,No,No,"A family of drill-bodied burrowers (Mega Excadrill, Dunsparce, Dudunsparce); Charizard has no drill",,2026-11-18
 CHARIZARD,Poison Heal,No,No,No,No,"A family of toxin-feeding fungi and venomous creatures (Breloom, Shroomish, Gliscor); Charizard draws nothing from poison",,2026-11-18
-CHARIZARD,Power Spot,No,No,No,No,"Stonjourner only, a standing-stone circle that empowers whoever stands within it; Charizard empowers no partner",,2026-11-18
 CHARIZARD,Prankster,No,No,No,No,"A family of mischievous tricksters and imps (Sableye, Whimsicott, Murkrow, Klefki, Grimmsnarl, Thundurus); Charizard is a straightforward fighter, not a prankster",,2026-11-18
 CHARIZARD,Pressure,No,No,No,No,"A family of legendaries and overbearing presences that wear foes down (the birds and beasts, Mewtwo, Aerodactyl, Absol, Kingambit, Spiritomb); Charizard is a powerful but ordinary species, and no source describes its presence weighing on foes",,2026-11-18
 CHARIZARD,Propeller Tail,No,No,No,No,"A family of fast-swimming fish with propeller tails (Arrokuda, Barraskewda); Charizard's tail is a flame, not a propeller",,2026-11-18
@@ -431,7 +429,6 @@ BLASTOISE,Pickpocket,No,No,No,No,"A thief trait (Sneasel, Meowth, Murkrow, Nicki
 BLASTOISE,Pickup,No,No,No,No,"A scavenger/forager trait (raccoons, dogs, bears, squirrels); Blastoise does not pick things up or collect",,2026-11-20
 BLASTOISE,Piercing Drill,No,No,No,No,"A drill-body trait (Mega Excadrill, Dunsparce's drill tail); Blastoise has no drill, and the maintainer ruled it does not plow through things",,2026-11-20
 BLASTOISE,Poison Heal,No,No,No,No,"A toxin-feeding fungus/scorpion trait; Blastoise has no relationship with poison",,2026-11-20
-BLASTOISE,Power Spot,No,No,No,No,"A standing-stone power-site aura (Stonjourner only); Blastoise radiates no empowering aura for allies",,2026-11-20
 BLASTOISE,Prankster,No,No,No,No,"A trickster/mischief-maker trait; Blastoise is a serious, steady leader with no pranks in its lore",,2026-11-20
 BLASTOISE,Pressure,No,No,No,No,"An overwhelming-presence trait for legendaries and menacing apex beings; Blastoise is not scary-looking (per the Intimidate ruling) and has no aura that wears foes down",,2026-11-20
 BLASTOISE,Propeller Tail,No,No,No,No,"A spinning-tail-fin trait (Barraskewda only); Blastoise has a stubby tail, and its jet thrust comes from its cannons",,2026-11-20
@@ -600,5 +597,4 @@ BUTTERFREE,Pickpocket,No,No,No,No,"No thieving streak; it gathers nectar from fl
 BUTTERFREE,Pickup,No,No,Yes,Yes,"A forager that seeks, gathers and carries food home on its leg hairs, the same profile as the honey-gathering Combee that carries Pickup",dex; biology,2026-11-25
 BUTTERFREE,Piercing Drill,No,No,No,No,"No drill, horn or boring body part",,2026-11-25
 BUTTERFREE,Poison Heal,No,No,No,No,"It makes poison but is never shown feeding on it; the holders are fungi that thrive on toxins",,2026-11-25
-BUTTERFREE,Power Spot,No,No,No,No,"Not a site of power like the standing-stone Stonjourner; a combined Psybeam with Pikachu is teamwork, not empowering",,2026-11-25
-BUTTERFREE,Prankster,No,No,No,Pending,"A status-move user but not a mischief-maker; nothing playful or tricksy in its character, and priority Sleep Powder on an AI Butterfree would be oppressive",,
+BUTTERFREE,Prankster,No,No,No,No,"A status-move user but not a mischief-maker; nothing playful or tricksy in its character, and priority Sleep Powder on an AI Butterfree would be oppressive",,2026-11-25
