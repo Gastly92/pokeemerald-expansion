@@ -9817,6 +9817,22 @@ TEST("FEATURE_INNATE_ABILITIES: only the Meditite line carries Pure Power")
     EXPECT_EQ(wrong, 0);
 }
 
+// Quick Draw is Galarian Slowbro's gunslinger signature, so the sweep excludes it and this fixes its holder.
+TEST("FEATURE_INNATE_ABILITIES: only Galarian Slowbro carries Quick Draw")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_QUICK_DRAW) != (species == SPECIES_SLOWBRO_GALAR))
+        {
+            DebugPrintf("%S has the wrong Quick Draw innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 // Purifying Salt is the Nacli line's rock-salt signature, so the sweep excludes it and this fixes its holders.
 TEST("FEATURE_INNATE_ABILITIES: only the Nacli line carries Purifying Salt")
 {
