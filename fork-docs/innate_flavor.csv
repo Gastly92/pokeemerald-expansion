@@ -600,4 +600,5 @@ BUTTERFREE,Pickpocket,No,No,No,No,"No thieving streak; it gathers nectar from fl
 BUTTERFREE,Pickup,No,No,Yes,Yes,"A forager that seeks, gathers and carries food home on its leg hairs, the same profile as the honey-gathering Combee that carries Pickup",dex; biology,2026-11-25
 BUTTERFREE,Piercing Drill,No,No,No,No,"No drill, horn or boring body part",,2026-11-25
 BUTTERFREE,Poison Heal,No,No,No,No,"It makes poison but is never shown feeding on it; the holders are fungi that thrive on toxins",,2026-11-25
-BUTTERFREE,Power Spot,No,No,No,Pending,"Not a site of power like the standing-stone Stonjourner; a combined Psybeam with Pikachu is teamwork, not empowering",,
+BUTTERFREE,Power Spot,No,No,No,No,"Not a site of power like the standing-stone Stonjourner; a combined Psybeam with Pikachu is teamwork, not empowering",,2026-11-25
+BUTTERFREE,Prankster,No,No,No,Pending,"A status-move user but not a mischief-maker; nothing playful or tricksy in its character, and priority Sleep Powder on an AI Butterfree would be oppressive",,
