@@ -9800,6 +9800,23 @@ TEST("FEATURE_INNATE_ABILITIES: only Stonjourner carries Power Spot")
     EXPECT_EQ(wrong, 0);
 }
 
+// Pure Power is the Meditite line's yoga signature, so the sweep excludes it and this fixes its holders.
+TEST("FEATURE_INNATE_ABILITIES: only the Meditite line carries Pure Power")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 isHolder = (species == SPECIES_MEDITITE || species == SPECIES_MEDICHAM || species == SPECIES_MEDICHAM_MEGA);
+        if (SpeciesHasInnate(species, ABILITY_PURE_POWER) != isHolder)
+        {
+            DebugPrintf("%S has the wrong Pure Power innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 // Purifying Salt is the Nacli line's rock-salt signature, so the sweep excludes it and this fixes its holders.
 TEST("FEATURE_INNATE_ABILITIES: only the Nacli line carries Purifying Salt")
 {
