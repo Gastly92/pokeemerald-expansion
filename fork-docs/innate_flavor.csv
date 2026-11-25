@@ -596,4 +596,5 @@ BUTTERFREE,Overcoat,No,No,Yes,No,"The wing powder does not protect it from weath
 BUTTERFREE,Own Tempo,No,No,No,No,"It confuses others (Supersonic, Confusion) but is not shown as unflappable or marching to its own beat; it is swept up in the flock and its feelings",,2026-11-25
 BUTTERFREE,Pacify,No,No,No,No,"No calming aura or soothing scent; its powders knock foes out rather than soothe their hostility",,2026-11-25
 BUTTERFREE,Pastel Veil,No,No,No,No,"Its scales poison others rather than ward poison off itself and allies; no purifying veil",,2026-11-25
-BUTTERFREE,Pickpocket,No,No,No,Pending,"No thieving streak; it gathers nectar from flowers, it does not lift items off attackers",,
+BUTTERFREE,Pickpocket,No,No,No,No,"No thieving streak; it gathers nectar from flowers, it does not lift items off attackers",,2026-11-25
+BUTTERFREE,Pickup,No,No,Yes,Pending,"A forager that seeks, gathers and carries food home on its leg hairs, the same profile as the honey-gathering Combee that carries Pickup",dex; biology,
