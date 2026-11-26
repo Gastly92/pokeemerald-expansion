@@ -616,4 +616,5 @@ BUTTERFREE,Shadow Tag,No,No,No,No,"No shadow-binding or ghostly hold; the only t
 BUTTERFREE,Sharpness,No,No,No,No,"No blades, scythes or edged limbs; Air Slash is a gust from soft wings, not a cutting body",,2026-11-26
 BUTTERFREE,Shed Skin,No,No,No,No,"Molting is the cocoon stage's trait (Metapod, Kakuna, Spewpa carry it, their adults do not); shedding wing scales spreads poison rather than shedding an ailment",,2026-11-26
 BUTTERFREE,Shell Armor,No,No,No,No,"The shell was Metapod's, broken open at evolution; Butterfree itself is soft-winged",,2026-11-26
-BUTTERFREE,Shield Dust,No,Yes,Yes,Pending,"Its wings are coated in a shedding dust of scales, the lepidopteran dust coat Shield Dust names, held by Caterpie, Venomoth, Dustox and Vivillon alike",biology,
+BUTTERFREE,Shield Dust,No,Yes,Yes,Yes,"Its wings are coated in a shedding dust of scales, the lepidopteran dust coat Shield Dust names, held by Caterpie, Venomoth, Dustox and Vivillon alike",biology,2026-11-26
+BUTTERFREE,Skill Link,No,No,No,Pending,"No rapid-fire strikes or volleys; it attacks with single waves of powder, wind and psychic force",,
