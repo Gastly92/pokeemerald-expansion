@@ -9768,6 +9768,71 @@ TEST("FEATURE_INNATE_ABILITIES: only Kingambit carries Supreme Overlord and only
     EXPECT_EQ(wrong, 0);
 }
 
+// Armor Tail is Farigiraf's armored tail-head signature, so the sweep excludes it and this fixes its holder.
+TEST("FEATURE_INNATE_ABILITIES: only Farigiraf carries Armor Tail")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_ARMOR_TAIL) != (species == SPECIES_FARIGIRAF))
+        {
+            DebugPrintf("%S has the wrong Armor Tail innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Power Spot is Stonjourner's standing-stone signature, so the sweep excludes it and this fixes its holder.
+TEST("FEATURE_INNATE_ABILITIES: only Stonjourner carries Power Spot")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_POWER_SPOT) != (species == SPECIES_STONJOURNER))
+        {
+            DebugPrintf("%S has the wrong Power Spot innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Pure Power is the Meditite line's yoga signature, so the sweep excludes it and this fixes its holders.
+TEST("FEATURE_INNATE_ABILITIES: only the Meditite line carries Pure Power")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        bool32 isHolder = (species == SPECIES_MEDITITE || species == SPECIES_MEDICHAM || species == SPECIES_MEDICHAM_MEGA);
+        if (SpeciesHasInnate(species, ABILITY_PURE_POWER) != isHolder)
+        {
+            DebugPrintf("%S has the wrong Pure Power innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
+// Quick Draw is Galarian Slowbro's gunslinger signature, so the sweep excludes it and this fixes its holder.
+TEST("FEATURE_INNATE_ABILITIES: only Galarian Slowbro carries Quick Draw")
+{
+    u32 wrong = 0;
+
+    for (enum Species species = 1; species < NUM_SPECIES; species++)
+    {
+        if (SpeciesHasInnate(species, ABILITY_QUICK_DRAW) != (species == SPECIES_SLOWBRO_GALAR))
+        {
+            DebugPrintf("%S has the wrong Quick Draw innate", GetSpeciesName(species));
+            wrong++;
+        }
+    }
+    EXPECT_EQ(wrong, 0);
+}
+
 // Purifying Salt is the Nacli line's rock-salt signature, so the sweep excludes it and this fixes its holders.
 TEST("FEATURE_INNATE_ABILITIES: only the Nacli line carries Purifying Salt")
 {

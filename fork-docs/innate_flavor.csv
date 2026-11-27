@@ -5,7 +5,6 @@ VENUSAUR,Analytic,No,No,No,No,No calculating or observe-then-strike trait; it so
 VENUSAUR,Anger Point,No,No,No,No,"It gets enraged at a defiant Bulbasaur (EP051), but never from being struck in a weak point; its usual trait is calming others",,2026-11-14
 VENUSAUR,Anticipation,No,No,No,No,Only evidence is a one-line minor movie scene (The Power of One) where Pokémon everywhere sensed the disturbance; no sensing trait of its own,,2026-11-14
 VENUSAUR,Arena Trap,No,No,No,No,"Its traps are vines and its flower closing on a foe (SM142), not a pit or ground that stops escape",,2026-11-14
-VENUSAUR,Armor Tail,No,No,No,No,"Farigiraf's signature, tied to its armored tail-head; Venusaur has no comparable tail, and the G-Max petal shield is form-only",,2026-11-14
 VENUSAUR,Aroma Veil,No,Yes,Yes,Yes,"Dex and Biology both describe a soothing aroma that calms emotions, which is what Aroma Veil protects",dex+biology+anime,2026-11-14
 VENUSAUR,Bad Dreams,No,No,No,No,"Puts foes to sleep (Sleep Powder) and soothes them; nothing torments sleepers, and this is Darkrai's nightmare signature",,2026-11-14
 VENUSAUR,Battery,No,No,No,No,Electrical family; Venusaur stores sunlight for itself and never powers up allies,,2026-11-14
@@ -94,15 +93,12 @@ VENUSAUR,Pickpocket,No,No,No,No,"A family of thieves and pilferers (Sneasel, Meo
 VENUSAUR,Pickup,No,No,No,No,"A family of scavengers and foragers that pick things up (Zigzagoon, Meowth, Teddiursa, Munchlax); nothing shows Venusaur collecting items",,2026-11-15
 VENUSAUR,Piercing Drill,No,No,No,No,Mega Excadrill's drill signature (plus drill-tailed Dunsparce); Venusaur has no drill,,2026-11-15
 VENUSAUR,Poison Heal,No,No,No,No,"A mushroom family that feeds on toxins (Shroomish, Breloom, Paras) plus Gliscor; Venusaur is a flowering plant, and as a Poison type it cannot normally be poisoned at all",,2026-11-15
-VENUSAUR,Power Spot,No,No,No,No,"Stonjourner's standing-stone signature, a site that empowers those beside it; Venusaur leads Evolution ceremonies in a sacred garden, but the power is the garden's and the ritual's, not its own presence",,2026-11-15
 VENUSAUR,Prankster,No,No,No,No,"A family of mischievous tricksters (Whimsicott, Sableye, Murkrow, Impidimp, Klefki); Venusaur is a dignified leader, not a prankster",,2026-11-15
 VENUSAUR,Pressure,No,No,No,No,"A family of overwhelming, oppressive presences (legendaries, Absol, Dusknoir, Kingambit); Venusaur halts the forest Pokémon by command as their leader in AG073, not by a weight that wears foes down",,2026-11-15
 VENUSAUR,Propeller Tail,No,No,No,No,Barraskewda's propeller-tailed fish signature; Venusaur is a land creature with no such tail,,2026-11-15
 VENUSAUR,Psybubble,No,No,No,No,"A family of psychic barriers, cocoons and protective membranes (Solosis line, Mr. Mime, Cosmoem, Dottler); Venusaur has no psychic shell",,2026-11-15
 VENUSAUR,Punk Rock,No,No,No,No,"A family of musicians and singers (Toxtricity, Primarina, Kricketune, Chatot, Kommo-o); Venusaur roars to lead a ritual in EP051, but it is no performer",,2026-11-15
-VENUSAUR,Pure Power,No,No,No,No,"Meditite and Medicham's meditation-honed signature; Venusaur's strength comes from sunlight, not mental discipline",,2026-11-15
 VENUSAUR,Queenly Majesty,No,No,No,No,"A family of regal queens whose majesty awes foes (Tsareena, Vespiquen); Venusaur leads the forest's Grass Pokémon in AG073, but as a guardian elder, not a queen",,2026-11-15
-VENUSAUR,Quick Draw,No,No,No,No,Galarian Slowbro's shell-gun gunslinger signature; Venusaur is slow and has nothing to draw,,2026-11-15
 VENUSAUR,Quick Feet,No,No,No,No,"A family of fast runners that bolt when in trouble (Zigzagoon, Mightyena, Jolteon, Electrike); Venusaur is squat, heavy and slow",,2026-11-15
 VENUSAUR,Rain Dish,No,No,No,No,"A family refreshed by rain (Lotad's lily pad, Squirtle line, Wingull, rain-loving fungi); for Venusaur rain only strengthens its scent, and its power comes from sun",,2026-11-15
 VENUSAUR,Rattled,No,No,No,No,"A family of timid, skittish creatures that scramble when scared (Magikarp, Whismur, Sobble, Wimpod); Venusaur is a composed leader, and one flustered moment against Double Team (AG164) is not timidity",,2026-11-15
@@ -175,7 +171,6 @@ CHARIZARD,Analytic,No,No,No,No,"A family of calculating minds and machines (Pory
 CHARIZARD,Anger Point,No,No,Yes,No,Maintainer: Charizard doesn't get that angry,,2026-11-17
 CHARIZARD,Anticipation,No,No,No,No,"A family of sensitive animals that feel danger coming (Whiscash, Croagunk, Hatenna, Audino, Seismitoad); Charizard flies toward danger looking for strong foes and has no sense for threats",,2026-11-15
 CHARIZARD,Arena Trap,No,No,No,No,"A family of burrowers and pit-trappers that hold prey in the ground (Diglett, Dugtrio, Trapinch, Arbok); Charizard is a flier with no trapping or burrowing trait",,2026-11-16
-CHARIZARD,Armor Tail,No,No,No,No,"Only Farigiraf, whose armoured tail-head wards off attacks; Charizard's tail is a flame it must protect, not a shield",,2026-11-16
 CHARIZARD,Aroma Veil,No,No,No,No,"A family of fragrant flowers, perfumes and sweets (Aromatisse, Alcremie, Roserade, Meganium, Oinkologne); Charizard gives off no calming scent",,2026-11-16
 CHARIZARD,Bad Dreams,No,No,No,No,"A family of nightmare-bringers and dream-eaters (Darkrai, Munna, Musharna); Charizard has no tie to sleep or dreams beyond sleeping soundly itself",,2026-11-16
 CHARIZARD,Battery,No,No,No,No,"A family of living batteries and power cells (Charjabug, Vikavolt, Chinchou, Lanturn, Pachirisu); Charizard stores and shares no electricity",,2026-11-16
@@ -264,15 +259,12 @@ CHARIZARD,Pickpocket,No,No,No,No,"A family of sly thieves and light-fingered tri
 CHARIZARD,Pickup,No,No,No,No,"A family of scavengers and foragers that pick up stray items (Zigzagoon, Meowth, Munchlax, Lillipup, Aipom, Phanpy); Charizard is no scavenger",,2026-11-18
 CHARIZARD,Piercing Drill,No,No,No,No,"A family of drill-bodied burrowers (Mega Excadrill, Dunsparce, Dudunsparce); Charizard has no drill",,2026-11-18
 CHARIZARD,Poison Heal,No,No,No,No,"A family of toxin-feeding fungi and venomous creatures (Breloom, Shroomish, Gliscor); Charizard draws nothing from poison",,2026-11-18
-CHARIZARD,Power Spot,No,No,No,No,"Stonjourner only, a standing-stone circle that empowers whoever stands within it; Charizard empowers no partner",,2026-11-18
 CHARIZARD,Prankster,No,No,No,No,"A family of mischievous tricksters and imps (Sableye, Whimsicott, Murkrow, Klefki, Grimmsnarl, Thundurus); Charizard is a straightforward fighter, not a prankster",,2026-11-18
 CHARIZARD,Pressure,No,No,No,No,"A family of legendaries and overbearing presences that wear foes down (the birds and beasts, Mewtwo, Aerodactyl, Absol, Kingambit, Spiritomb); Charizard is a powerful but ordinary species, and no source describes its presence weighing on foes",,2026-11-18
 CHARIZARD,Propeller Tail,No,No,No,No,"A family of fast-swimming fish with propeller tails (Arrokuda, Barraskewda); Charizard's tail is a flame, not a propeller",,2026-11-18
 CHARIZARD,Psybubble,No,No,No,No,"A family of psychic beings and cell or cocoon creatures that arrive in a bubble (Mew, Jirachi, Mr. Mime, Reuniclus, Cosmoem, Rabsca); Charizard has no psychic power",,2026-11-18
 CHARIZARD,Punk Rock,No,No,No,No,"A family of singers and musicians (Toxtricity, Jigglypuff, Kricketune, Primarina, Chatot, Kommo-o); Charizard roars after a win but makes no music and uses no sound attacks in its lore",,2026-11-18
-CHARIZARD,Pure Power,No,No,No,No,"A family of meditators who draw raw strength from inner focus (Meditite, Medicham); Charizard does not meditate, and doubled Attack would make a common opponent overwhelming",,2026-11-18
 CHARIZARD,Queenly Majesty,No,No,No,No,"A pair of regal queens whose bearing forbids quick strikes (Tsareena, Vespiquen); Charizard is no royal",,2026-11-18
-CHARIZARD,Quick Draw,No,No,No,No,"Galarian Slowbro only, a gunslinger whose shell-arm fires first; Charizard is not fast on the draw",,2026-11-18
 CHARIZARD,Quick Feet,No,No,No,No,"A family of nimble runners that bolt when hurt (Jolteon, Linoone, Ursaring, Teddiursa, Shroomish); Charizard is not that fast, and it slows down when weakened",,2026-11-18
 CHARIZARD,Rain Dish,No,No,No,No,"A family of water and plant creatures restored by rain (Lotad line, Tentacool, Wingull, Squirtle line); rain threatens Charizard's tail flame",,2026-11-18
 CHARIZARD,Rattled,No,No,No,No,"A family of timid, easily frightened creatures (Magikarp, Wimpod, Sobble, Bonsly, Wishiwashi, Dunsparce); Charizard is fearless",,2026-11-18
@@ -345,7 +337,6 @@ BLASTOISE,Analytic,No,No,No,No,"Its precision is marksmanship (already Sniper), 
 BLASTOISE,Anger Point,No,No,No,No,"A calm shell-guarded leader, not a hothead; only Mega gains an aggressive disposition, and its Shell Armor blocks the crits that would trigger it anyway",,2026-11-19
 BLASTOISE,Anticipation,No,No,No,No,"No sixth sense or danger-sensing in dex or media; it relies on its shell and cannons, not on foreseeing threats (The Power of One sensing is a minor cameo shared by many species)",,2026-11-19
 BLASTOISE,Arena Trap,No,No,No,No,"No pits, sand traps or holding foes in place; it repels with blasts rather than ensnaring",,2026-11-19
-BLASTOISE,Armor Tail,No,No,No,No,"Its armour is the shell, already Shell Armor; its stubby tail does nothing, and nothing shows it shielding allies from quick strikes",,2026-11-19
 BLASTOISE,Aroma Veil,No,No,No,No,"No scent, fragrance or soothing aura anywhere in dex or media; that is a flower/sweets trait",,2026-11-19
 BLASTOISE,Bad Dreams,No,No,No,No,"No nightmare or dream link; the Beach Blank-Out sleep came from a Jigglypuff stuck in its cannon, not from Blastoise",,2026-11-19
 BLASTOISE,Battery,No,No,No,No,"No electricity or power-sharing; its Pokémon Water War support (propelling allies into a fire) is a physical launch, not boosting their special attacks",,2026-11-19
@@ -434,15 +425,12 @@ BLASTOISE,Pickpocket,No,No,No,No,"A thief trait (Sneasel, Meowth, Murkrow, Nicki
 BLASTOISE,Pickup,No,No,No,No,"A scavenger/forager trait (raccoons, dogs, bears, squirrels); Blastoise does not pick things up or collect",,2026-11-20
 BLASTOISE,Piercing Drill,No,No,No,No,"A drill-body trait (Mega Excadrill, Dunsparce's drill tail); Blastoise has no drill, and the maintainer ruled it does not plow through things",,2026-11-20
 BLASTOISE,Poison Heal,No,No,No,No,"A toxin-feeding fungus/scorpion trait; Blastoise has no relationship with poison",,2026-11-20
-BLASTOISE,Power Spot,No,No,No,No,"A standing-stone power-site aura (Stonjourner only); Blastoise radiates no empowering aura for allies",,2026-11-20
 BLASTOISE,Prankster,No,No,No,No,"A trickster/mischief-maker trait; Blastoise is a serious, steady leader with no pranks in its lore",,2026-11-20
 BLASTOISE,Pressure,No,No,No,No,"An overwhelming-presence trait for legendaries and menacing apex beings; Blastoise is not scary-looking (per the Intimidate ruling) and has no aura that wears foes down",,2026-11-20
 BLASTOISE,Propeller Tail,No,No,No,No,"A spinning-tail-fin trait (Barraskewda only); Blastoise has a stubby tail, and its jet thrust comes from its cannons",,2026-11-20
 BLASTOISE,Psybubble,No,No,No,No,"A psychic-bubble shield (Mew, Solosis, Mr. Mime); Blastoise has no psychic power and its only bubbles are the Bubble move",,2026-11-20
 BLASTOISE,Punk Rock,No,No,No,No,"A music/sound-performer trait; the one sound link is Jigglypuff singing from inside its cannon in Beach Blank-Out, which is Jigglypuff's song, not Blastoise's",,2026-11-20
-BLASTOISE,Pure Power,No,No,No,No,"A meditation-honed power trait (Meditite line only); Blastoise has no meditative discipline, and doubled Attack would be the same oppressiveness flagged for Huge Power",,2026-11-20
 BLASTOISE,Queenly Majesty,No,No,No,No,"A regal-queen presence (Tsareena, Vespiquen); Blastoise is the Squirtle colony's king, but nothing shows a majesty that stops foes acting first",,2026-11-20
-BLASTOISE,Quick Draw,No,No,No,No,"It is a gunner, but a heavy artillery tank (tank gun, battleship), not a fast-draw gunslinger like Galarian Slowbro; nothing shows it firing first",,2026-11-20
 BLASTOISE,Quick Feet,No,No,No,No,"A fleet-footed runner trait (hounds, zebras, raccoons); Blastoise is a heavy, slow-footed turtle whose bursts of speed come from water jets, not its feet",,2026-11-20
 BLASTOISE,Rain Dish,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-20
 BLASTOISE,Rattled,No,No,No,No,"A timid, easily-spooked trait; Blastoise is the calm, secure king of its colony that sleeps belly-up when at ease",,2026-11-20
@@ -509,3 +497,169 @@ BLASTOISE,White Smoke,No,No,No,No,"A smoke-screen trait for fiery creatures (Tor
 BLASTOISE,Willpower,No,No,No,No,"Reserved for species whose dex text is about a strong will (per its design note); Blastoise's dex is about marksmanship, and its toughness is the body (Stamina), not the mind",,2026-11-21
 BLASTOISE,Wind Power,No,No,No,No,"A wind-to-electricity trait (Wattrel, Thundurus, Zapdos); Blastoise has no electric or wind ties",,2026-11-21
 BLASTOISE,Wonder Skin,No,No,No,No,"A mysterious-skin trait that repels status (glyph bird, scaled moth, Bruxish, Skitty); Blastoise's body is an ordinary shell",,2026-11-21
+BUTTERFREE,Adaptability,No,No,No,No,"No adapting or type-mastery trait; its powder and honey-seeking are covered by other abilities",,2026-11-22
+BUTTERFREE,Aftermath,No,No,No,No,"Nothing bursts or lashes out when it faints; its toxic scales are a contact-defence and status trait, not a death throe",,2026-11-22
+BUTTERFREE,Analytic,No,No,No,No,"No calculating or observe-then-strike trait; its keen senses are for finding honey, not reading a foe",,2026-11-22
+BUTTERFREE,Anger Point,No,No,No,No,"No temper or rage-when-struck trait in dex or media; it fights for others, not out of anger",,2026-11-22
+BUTTERFREE,Anticipation,No,No,No,No,"Its sensitive antennae track flower scent, not danger; nothing shows it sensing a threat before it strikes",,2026-11-22
+BUTTERFREE,Arena Trap,No,No,No,No,"A flier with no burrowing, pit or ground-snare trait",,2026-11-22
+BUTTERFREE,Aroma Veil,No,No,No,No,"It seeks and carries honey but gives off no scent of its own; its powder is toxic, not a soothing aroma",,2026-11-22
+BUTTERFREE,Bad Dreams,No,No,No,No,"Sleep Powder puts foes to sleep but nothing gives them nightmares; the toxic dust it scatters in its own sleep is its sleep, not theirs",,2026-11-22
+BUTTERFREE,Battery,No,No,No,No,"No electricity anywhere in its biology or media",,2026-11-22
+BUTTERFREE,Battle Armor,No,No,No,No,"Soft-bodied with delicate, shedding wing scales; no armor or hard shell",,2026-11-22
+BUTTERFREE,Berserk,No,No,No,No,"No frenzy when wounded; its fiercest moment (Bye Bye Butterfree) is steady determination, not a rage at half HP",,2026-11-22
+BUTTERFREE,Big Pecks,No,No,No,No,"A butterfly, not a bird; it has a snout and small fangs, no beak or puffed chest",,2026-11-22
+BUTTERFREE,Cheek Pouch,No,No,No,No,"It carries honey on its leg hairs, not in cheeks; no stored-food-heals trait",,2026-11-22
+BUTTERFREE,Chlorophyll,No,No,No,No,"Not a plant and no sun-powered trait; its one weather note is flying in the rain",,2026-11-22
+BUTTERFREE,Clear Body,No,No,No,No,"Not a construct, mineral or translucent body; nothing makes it immune to stat drops",,2026-11-22
+BUTTERFREE,Comatose,No,No,No,No,"Not a perpetual sleeper; dozing mid-flight (Pokemon Sleep) is ordinary sleep, and the drowsy one in BW130 was a Metapod",,2026-11-23
+BUTTERFREE,Competitive,No,No,No,No,"No pride or rivalry trait; trying again after the pink Butterfree rejected it is courtship, not answering a foe weakening it",,2026-11-23
+BUTTERFREE,Compound Eyes,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-23
+BUTTERFREE,Corrosion,No,No,No,No,"Its scales are toxic, but nothing is acidic or eats through metal; poison that beats Steel and Poison types needs a corrosive body",,2026-11-23
+BUTTERFREE,Cud Chew,No,No,No,No,"An insect that sips nectar, not a ruminant; nothing re-eats its food",,2026-11-23
+BUTTERFREE,Cursed Body,No,No,No,No,"Not a ghost or cursed being; nothing seals a foe's move",,2026-11-23
+BUTTERFREE,Cute Charm,No,No,No,No,"Its love story is a mating ritual it had to work for, not a charm that disarms attackers; beauty is praised but never infatuates a foe",,2026-11-23
+BUTTERFREE,Dancer,No,No,Yes,Yes,"Bye Bye Butterfree turns on a courtship dance it joins; it learns and runs Quiver Dance, and fellow wing-dancer Volcarona carries it",anime,2026-11-23
+BUTTERFREE,Dazzling,No,No,No,No,"Its wings are called beautiful, but nothing about it stuns or freezes an attacker before a quick strike",,2026-11-23
+BUTTERFREE,Defiant,No,No,No,No,"Determined but not defiant; it pushes through setbacks without lashing back harder at a foe that weakens it, and it is a special attacker",,2026-11-23
+BUTTERFREE,Download,No,No,No,No,"A living insect, not a program or machine; nothing reads a foe's defenses",,2026-11-23
+BUTTERFREE,Early Bird,No,No,No,No,"The flock setting off at sunrise (BW130) is migration timing, not a quick waker; nothing shows it shaking off sleep fast",,2026-11-23
+BUTTERFREE,Effect Spore,No,Yes,Yes,Yes,"Its wings shed poisonous scales that cause status when inhaled, and the powder clouds attackers; the powder-moth fit is direct",dex; biology; anime,2026-11-23
+BUTTERFREE,Electromorphosis,No,No,No,No,"No electricity in its biology or media; nothing charges up when struck",,2026-11-23
+BUTTERFREE,Filter,No,No,No,No,"Fragile powdery wings, no barrier, shield or armor to blunt super-effective hits",,2026-11-23
+BUTTERFREE,Flare Boost,No,No,No,No,"A Bug hurt by fire, nothing about heat or burns powering it up",,2026-11-23
+BUTTERFREE,Flower Veil,No,No,No,No,"It visits flowers for honey but is not a flower or flower-guardian; it is not Grass, so the shield would cover only Grass allies",,2026-11-23
+BUTTERFREE,Forewarn,No,No,No,No,"Uses Confusion and Psybeam in the anime, but nothing shows foresight or reading a foe's moves; its senses hunt flowers",,2026-11-23
+BUTTERFREE,Friend Guard,No,No,Yes,No,"Friend Guard is an aura that protects allies, not physically defending them; Butterfree only guards by fighting",,2026-11-23
+BUTTERFREE,Frisk,No,Yes,Yes,Yes,"The dex centres on its superior ability to search out and extract what flowers hold, with antennae that sniff it out from six miles; a seeker that finds what others carry",dex; biology,2026-11-23
+BUTTERFREE,Fur Coat,No,No,No,No,"Leg hairs for carrying nectar are not a protective coat; G-Max has a fur-like ring but that is form-only",,2026-11-24
+BUTTERFREE,Gale Wings,No,No,No,No,"Its wings raise strong winds (Whirlwind, the G-Max tornado), but nothing shows blinding speed or striking first; it is a fluttering flier, not a falcon",,2026-11-24
+BUTTERFREE,Gluttony,No,Yes,No,No,"The ravenous eater is Caterpie; Butterfree sips nectar and in Poke Ball Peril refuses food for days, a picky eater rather than a glutton",,2026-11-24
+BUTTERFREE,Gooey,No,No,No,No,"Dry, powdery scales that repel water; nothing slimy or sticky slows an attacker",,2026-11-24
+BUTTERFREE,Grass Pelt,No,No,No,No,"No plant growth on its body; it lives among flowers but is not covered in grass",,2026-11-24
+BUTTERFREE,Guard Dog,No,No,No,No,"A butterfly, not a dog; nothing shows it standing firm against intimidation or being forced out",,2026-11-24
+BUTTERFREE,Guts,No,No,No,No,"Its grit in Bye Bye Butterfree is heart, not a brawler's fury under affliction; and Guts boosts physical Attack on a special attacker",,2026-11-24
+BUTTERFREE,Harvest,No,No,No,No,"It forages nectar from others' flowers rather than growing or restocking food; the holders are mostly fruit-bearers",,2026-11-24
+BUTTERFREE,Healer,No,No,No,No,"Its powders inflict status rather than cure it; no healing or soothing trait (its Safeguard in a Contest is a one-off move)",,2026-11-24
+BUTTERFREE,Heatproof,No,No,No,No,"Delicate scaled wings and weak to Fire; nothing resists heat",,2026-11-24
+BUTTERFREE,Heavy Metal,No,No,No,No,"A light, airborne insect with no metal; the opposite of heavy",,2026-11-24
+BUTTERFREE,Hospitality,No,No,No,No,"It carries honey home but nothing shows it serving or sharing food with allies; the holders are hosts and gift-givers",,2026-11-24
+BUTTERFREE,Huge Power,No,No,No,No,"Carrying a trainer in the manga is a lift, not hidden raw might; G-Max truck-lifting winds are form-only, and the boost is to physical Attack on a special attacker",,2026-11-24
+BUTTERFREE,Hydration,No,No,No,No,"Its powder repels rain so it can keep flying, the opposite of being refreshed by water",,2026-11-24
+BUTTERFREE,Hyper Cutter,No,No,No,No,"No pincers, claws or mandibles; two small fangs under a snout",,2026-11-24
+BUTTERFREE,Ice Body,No,No,No,No,"A temperate-forest insect with no tie to cold; the moth with this is Frosmoth, an ice-type",,2026-11-24
+BUTTERFREE,Ice Scales,No,No,No,No,"It has wing scales, but they are toxic and water-repelling, not icy, and nothing shows them blunting special attacks",,2026-11-24
+BUTTERFREE,Illuminate,No,No,No,No,"Does not give off light; only the G-Max eyes glow, and Compound Eyes already covers its keen sight",,2026-11-24
+BUTTERFREE,Immunity,No,No,No,No,"It makes poison but nothing says it shrugs poison off; the holders are iron-stomachs and venom-hunters",,2026-11-24
+BUTTERFREE,Infiltrator,No,No,No,No,"Its drifting powder is breathed in, but nothing shows it slipping past walls, screens or decoys; the holders are stealthy or ghostly",,2026-11-24
+BUTTERFREE,Innards Out,No,No,No,No,"Nothing spills or lashes back when it faints",,2026-11-24
+BUTTERFREE,Inner Focus,No,No,No,No,"No discipline or composure trait; it is emotional, weeping after rejection and at farewell, rather than unshakable",,2026-11-24
+BUTTERFREE,Insomnia,No,No,No,No,"It sleeps readily (Pokemon Sleep, the flock's slumber in BW130); the night-moth with this is Dustox, and Butterfree is diurnal",,2026-11-24
+BUTTERFREE,Intimidate,No,No,No,No,"It drives off birds with powder, not menace; no eyespot wings like Masquerain's and nothing shows foes cowering",,2026-11-24
+BUTTERFREE,Iron Barbs,No,No,No,No,"No spines, thorns or barbs; soft scaled wings",,2026-11-24
+BUTTERFREE,Iron Fist,No,No,No,No,"Small three-fingered hands but no punching; it fights with powder, wind and psychic moves",,2026-11-24
+BUTTERFREE,Justified,No,No,No,No,"Rescuing the netted flock is courage, not a righteous-knight identity; the holders are swordsmen and heroes, and it boosts physical Attack",,2026-11-24
+BUTTERFREE,Keen Eye,No,No,No,No,"Its big compound eyes are already its canon Compound Eyes, which in this fork gives the same evasion-ignore; Keen Eye would only repeat that sight theme",,2026-11-24
+BUTTERFREE,Leaf Guard,No,No,No,No,"No leaves on its body and no sun tie; the leaf-wrapped bugs with this (Swadloon, Leavanny) wear leaves, Butterfree does not",,2026-11-24
+BUTTERFREE,Levitate,No,No,No,No,"It flies, but its flight is already its Flying type; the bug holders (Beedrill, Venomoth) carry it because they fly without the type, and here it would only matter after Roost or a Tera change",,2026-11-24
+BUTTERFREE,Light Metal,No,No,No,No,"Light, but not metal; the holders are lightweight alloys",,2026-11-24
+BUTTERFREE,Limber,No,No,No,No,"Its stiff phase was Metapod; nothing about Butterfree's body is supple or acrobatic, and it uses Stun Spore rather than shrugging it off",,2026-11-24
+BUTTERFREE,Liquid Ooze,No,No,No,No,"Its poison is a dry powder on the wings, not toxic fluid in the body for a drainer to swallow",,2026-11-24
+BUTTERFREE,Long Reach,No,No,No,No,"It fights from range with powder, wind and psychic moves, but by its moves' nature, not a reach trait like an archer's; its few contact moves would barely use it",,2026-11-24
+BUTTERFREE,Magic Bounce,No,No,No,No,"No mystic reflection or psychic barrier trait; it throws status at foes, nothing shows it turning their tricks back",,2026-11-24
+BUTTERFREE,Magic Guard,No,No,No,No,"No magical or psychic shielding; nothing shows it untouched by poison, weather or recoil",,2026-11-24
+BUTTERFREE,Magician,No,No,No,No,"It takes nectar from flowers and sap Heracross leaves open, but does not rob other Pokemon the way Mothim raids Combee hives",,2026-11-24
+BUTTERFREE,Magma Armor,No,No,No,No,"No heat or fire in its body; the fiery moth with this is Volcarona",,2026-11-24
+BUTTERFREE,Magnet Pull,No,No,No,No,"No magnetism or metal anywhere in its biology",,2026-11-24
+BUTTERFREE,Marvel Scale,No,No,No,No,"Its wing scales shed loosely rather than toughen; the holders are serene scaled serpents, and nothing hardens it when afflicted",,2026-11-24
+BUTTERFREE,Mega Launcher,No,No,No,No,"No cannon or launcher body part; it scatters powder and wind rather than firing pulses",,2026-11-24
+BUTTERFREE,Mega Sol,No,No,No,No,"No sun-power trait; Mega Meganium's personal sunlight has nothing to do with a butterfly",,2026-11-24
+BUTTERFREE,Merciless,No,No,No,No,"Its poison is defensive powder; only the G-Max entry has it finishing trapped foes with scales, and the holders are venomous predators",,2026-11-25
+BUTTERFREE,Mind's Eye,No,No,No,No,"No inner sight or ghost-seeing trait; its keenness is smell and compound eyes, already Compound Eyes",,2026-11-25
+BUTTERFREE,Mirror Armor,No,No,No,No,"No reflective armor; soft powdery wings",,2026-11-25
+BUTTERFREE,Mold Breaker,No,No,No,No,"No horn, drill, axe-tusk or headbutting brawn; nothing shows it smashing through defenses",,2026-11-25
+BUTTERFREE,Moxie,No,No,No,No,"No swagger or bully streak; it was the rejected suitor, not a cocky victor, and Moxie feeds physical Attack",,2026-11-25
+BUTTERFREE,Multiscale,No,No,No,No,"Its wing scales are loose and shed constantly, a weapon rather than a protective layer; nothing shows it cushioning the first hit",,2026-11-25
+BUTTERFREE,Natural Cure,No,No,No,No,"No healing or purifying nature; its powder causes ailments rather than curing them",,2026-11-25
+BUTTERFREE,Oblivious,No,No,No,No,"The opposite of oblivious: it falls hard for the pink Butterfree and is crushed by rejection",,2026-11-25
+BUTTERFREE,Opportunist,No,No,Yes,No,"Drinking sap Heracross opened is a different thing from copying a foe's stat boosts",,2026-11-25
+BUTTERFREE,Overcoat,No,No,Yes,No,"The wing powder does not protect it from weather",,2026-11-25
+BUTTERFREE,Own Tempo,No,No,No,No,"It confuses others (Supersonic, Confusion) but is not shown as unflappable or marching to its own beat; it is swept up in the flock and its feelings",,2026-11-25
+BUTTERFREE,Pacify,No,No,No,No,"No calming aura or soothing scent; its powders knock foes out rather than soothe their hostility",,2026-11-25
+BUTTERFREE,Pastel Veil,No,No,No,No,"Its scales poison others rather than ward poison off itself and allies; no purifying veil",,2026-11-25
+BUTTERFREE,Pickpocket,No,No,No,No,"No thieving streak; it gathers nectar from flowers, it does not lift items off attackers",,2026-11-25
+BUTTERFREE,Pickup,No,No,Yes,Yes,"A forager that seeks, gathers and carries food home on its leg hairs, the same profile as the honey-gathering Combee that carries Pickup",dex; biology,2026-11-25
+BUTTERFREE,Piercing Drill,No,No,No,No,"No drill, horn or boring body part",,2026-11-25
+BUTTERFREE,Poison Heal,No,No,No,No,"It makes poison but is never shown feeding on it; the holders are fungi that thrive on toxins",,2026-11-25
+BUTTERFREE,Prankster,No,No,No,No,"A status-move user but not a mischief-maker; nothing playful or tricksy in its character, and priority Sleep Powder on an AI Butterfree would be oppressive",,2026-11-25
+BUTTERFREE,Pressure,No,No,No,No,"No overwhelming presence; the holders are legendaries, apex predators and a hive queen, and Butterfree is a gentle forager",,2026-11-25
+BUTTERFREE,Propeller Tail,No,No,No,No,"No propeller fin or tail; nothing lets it ignore redirection",,2026-11-25
+BUTTERFREE,Psybubble,No,No,No,No,"Uses psychic moves but has no bubble, shell or protective sphere; its shell was Metapod's and it leaves it behind",,2026-11-25
+BUTTERFREE,Punk Rock,No,No,No,No,"Bug Buzz is a sound move it uses, but nothing musical or loud in its character; the holders are singers and noisemakers",,2026-11-25
+BUTTERFREE,Queenly Majesty,No,No,No,No,"No regal bearing or rank; the holders are a queen and a hive queen",,2026-11-25
+BUTTERFREE,Quick Feet,No,No,No,No,"A flier, not a runner; its legs are for gripping and carrying nectar, and nothing shows it speeding up when afflicted",,2026-11-25
+BUTTERFREE,Rain Dish,No,No,No,No,"Rain is something it endures by repelling it, not a source of nourishment",,2026-11-25
+BUTTERFREE,Rattled,No,No,No,No,"Flying off in tears after rejection is heartbreak, not fright; it defends Caterpie from birds rather than fleeing threats",,2026-11-25
+BUTTERFREE,Reckless,No,No,No,No,"Ramming the net until exhausted is one rescue, not a headlong-charger nature; and it has no recoil moves to power",,2026-11-25
+BUTTERFREE,Regenerator,No,No,No,No,"Its scales shed constantly but nothing says it regrows or mends; its transformation was the Metapod stage, not ongoing regeneration",,2026-11-25
+BUTTERFREE,Rekindle,No,No,No,No,"A Fire-line signature of flames fed by victory; Butterfree has no fire and draws nothing from a knockout",,2026-11-25
+BUTTERFREE,Ripen,No,No,No,No,"Not a fruit and does not ferment or ripen food; Shuckle-style berry-aging has no echo in its nectar gathering",,2026-11-25
+BUTTERFREE,Rock Head,No,No,No,No,"A delicate head with antennae, not a hard skull or rock body",,2026-11-25
+BUTTERFREE,Rocky Payload,No,No,No,No,"It carries nectar and a bag, never rocks; no rock-hurling",,2026-11-25
+BUTTERFREE,Rough Skin,No,No,No,No,"Soft, powdery and smooth-winged; no sharkskin, spines or abrasive hide",,2026-11-25
+BUTTERFREE,Sand Force,No,No,No,No,"A forest and flower-field flier with no tie to sand or desert",,2026-11-25
+BUTTERFREE,Sand Rush,No,No,No,No,"No sand or desert tie, and nothing shows it speeding through a sandstorm",,2026-11-25
+BUTTERFREE,Sand Veil,No,No,No,No,"No sand or desert camouflage; it lives in forests and flower fields",,2026-11-26
+BUTTERFREE,Scrappy,No,No,No,No,"Not a scrapper or brawler; its few physical hits (Tackle) are not spoiling-for-a-fight grit",,2026-11-26
+BUTTERFREE,Serene Grace,No,No,No,No,"No good-luck, blessing or serene-grace aura in its lore; the holders are luck-bringers and blessed beings",,2026-11-26
+BUTTERFREE,Shadow Tag,No,No,No,No,"No shadow-binding or ghostly hold; the only trapping is the G-Max tornado, a form-only wind",,2026-11-26
+BUTTERFREE,Sharpness,No,No,No,No,"No blades, scythes or edged limbs; Air Slash is a gust from soft wings, not a cutting body",,2026-11-26
+BUTTERFREE,Shed Skin,No,No,No,No,"Molting is the cocoon stage's trait (Metapod, Kakuna, Spewpa carry it, their adults do not); shedding wing scales spreads poison rather than shedding an ailment",,2026-11-26
+BUTTERFREE,Shell Armor,No,No,No,No,"The shell was Metapod's, broken open at evolution; Butterfree itself is soft-winged",,2026-11-26
+BUTTERFREE,Shield Dust,No,Yes,Yes,Yes,"Its wings are coated in a shedding dust of scales, the lepidopteran dust coat Shield Dust names, held by Caterpie, Venomoth, Dustox and Vivillon alike",biology,2026-11-26
+BUTTERFREE,Skill Link,No,No,No,No,"No rapid-fire strikes or volleys; it attacks with single waves of powder, wind and psychic force",,2026-11-26
+BUTTERFREE,Slush Rush,No,No,No,No,"A temperate-forest insect with no tie to snow or ice",,2026-11-26
+BUTTERFREE,Sniper,No,No,No,No,"No precision-strike or marksman trait, and with crits nearly gone it would rarely fire; its keen sight is already Compound Eyes",,2026-11-26
+BUTTERFREE,Snow Cloak,No,No,No,No,"No tie to snow or ice and no camouflage there",,2026-11-26
+BUTTERFREE,Solid Rock,No,No,No,No,"No rock or fossil body; soft wings with nothing to blunt a super-effective hit",,2026-11-26
+BUTTERFREE,Soul-Heart,No,No,No,No,"No soul-gathering or artificial-heart trait; the holders are a soul-heart machine and soul-collecting ghosts",,2026-11-26
+BUTTERFREE,Speed Boost,No,No,No,No,"A fluttering flier, not one that accelerates; the holders are darting dragonflies, ninja cicadas and sprinters",,2026-11-26
+BUTTERFREE,Stakeout,No,No,No,No,"An ambush hunter's trait; Butterfree is a nectar-sipper, not a predator lying in wait",,2026-11-26
+BUTTERFREE,Stalwart,No,No,No,No,"Not an unyielding alloy body; nothing shows it holding its target against lures",,2026-11-26
+BUTTERFREE,Stamina,No,No,No,No,"Long migrations are flight endurance, not a body that toughens under blows; the holders are sturdy workhorses and walls",,2026-11-26
+BUTTERFREE,Steadfast,No,No,No,No,"No warrior's resolve that flares when struck; it flinches emotionally (tears, retreat) rather than steeling itself",,2026-11-26
+BUTTERFREE,Steam Engine,No,No,No,No,"No fire, water-heated boiler or engine body",,2026-11-26
+BUTTERFREE,Steelworker,No,No,No,No,"No metal or anchor to wield",,2026-11-26
+BUTTERFREE,Steely Spirit,No,No,No,No,"No steel body or iron will that rallies allies' Steel moves",,2026-11-26
+BUTTERFREE,Stench,No,No,No,No,"Its antennae smell scents rather than emit one; the foul-odor defence is Caterpie's, and Butterfree's defence is powder",,2026-11-26
+BUTTERFREE,Sticky Hold,No,No,No,No,"It carries nectar on leg hairs, but nothing sticky or clinging keeps hold of an item; the holders are slime, goo and clutchers",,2026-11-26
+BUTTERFREE,Strong Jaw,No,No,No,No,"Two small fangs under a nectar-sipping snout; no biting jaw",,2026-11-26
+BUTTERFREE,Sturdy,No,No,No,No,"Sturdiness is Metapod's hardened shell; the adult is a fragile, soft-winged flier",,2026-11-26
+BUTTERFREE,Suction Cups,No,No,No,No,"No suckers, roots or anchoring grip; a light flier blown about by wind",,2026-11-26
+BUTTERFREE,Super Luck,No,No,No,No,"No luck or omen lore; and with random crits gone a +1 stage rarely reaches a guaranteed crit",,2026-11-26
+BUTTERFREE,Supersweet Syrup,No,No,No,No,"It gathers and carries honey, but nothing shows it giving off a sweet lure that draws foes in; the holder is syrup-filled Dipplin",,2026-11-26
+BUTTERFREE,Swarm,No,No,Yes,Yes,"Butterfree gather and migrate in great flocks (Bye Bye Butterfree, Butterfree and Me!), and it is a Bug-type running Bug Buzz; the bug-swarm pinch ability fits",anime,2026-11-26
+BUTTERFREE,Sweet Veil,No,No,No,No,"It puts foes to sleep and sleeps readily itself; carried honey is not a sweet scent that keeps allies awake",,2026-11-26
+BUTTERFREE,Swift Swim,No,No,No,No,"Its powder lets it keep flying in rain, but nothing shows rain making it faster; the holders are swimmers",,2026-11-26
+BUTTERFREE,Tangled Feet,No,No,No,No,"It confuses others but is never shown stumbling into evasion while confused; the holders are wobbly walkers and dancers",,2026-11-26
+BUTTERFREE,Tangling Hair,No,No,No,No,"No hair, vines or fluff to snarl an attacker; only fine leg hairs for nectar",,2026-11-27
+BUTTERFREE,Technician,No,No,No,No,"Contest combos (Confusion plus Gust) are trainer choreography, not a craftsman's finesse in the species; the holders are martial artists, artists and duelists",,2026-11-27
+BUTTERFREE,Telepathy,No,No,No,No,"Uses psychic moves in the anime, but nothing shows mind-reading or anticipating an ally's attacks",,2026-11-27
+BUTTERFREE,Thermal Exchange,No,No,No,No,"No heat-absorbing or temperature trait",,2026-11-27
+BUTTERFREE,Thick Fat,No,No,No,No,"A slender, lightweight insect with no blubber, fat or insulating bulk",,2026-11-27
+BUTTERFREE,Tinted Lens,Yes,Yes,Yes,Yes,"Canon ability, required by the completeness test",,2026-11-27
+BUTTERFREE,Tough Claws,No,No,No,No,"No claws; small three-fingered hands and digit-less feet",,2026-11-27
+BUTTERFREE,Toxic Boost,No,No,No,No,"It makes poison but is never shown empowered by being poisoned; Zangoose's venom-fuelled fury, and it boosts physical moves",,2026-11-27
+BUTTERFREE,Triage,No,No,No,No,"No healing or first-aid nature; the holders are a flower-lei healer and a forest guardian",,2026-11-27
+BUTTERFREE,Unaware,No,No,No,No,"Emotionally attuned rather than oblivious to others; nothing shows it ignoring a foe's power-ups",,2026-11-27
+BUTTERFREE,Unburden,No,No,No,No,"It sheds nothing it carries to gain speed; dropping the Metapod shell was evolution, not a battle trick",,2026-11-27
+BUTTERFREE,Unnerve,No,No,No,No,"No menacing presence that makes foes too nervous to eat; the holders are predators and eyespot-scarers like Masquerain",,2026-11-27
+BUTTERFREE,Unseen Fist,No,No,No,No,"No martial-arts strike that slips past a guard; the holders are Urshifu and Mega Golurk",,2026-11-27
+BUTTERFREE,Vital Spirit,No,No,No,No,"It sleeps readily, even in flight; no restless, hyperactive energy that keeps it awake",,2026-11-27
+BUTTERFREE,Water Bubble,No,No,No,No,"It repels water rather than wearing a bubble of it; Dewpider's water-dome signature",,2026-11-27
+BUTTERFREE,Water Compaction,No,No,No,No,"Not a sand body that hardens when wet; its powder sheds water instead",,2026-11-27
+BUTTERFREE,Water Veil,No,No,No,No,"Not a water-coated sea creature; its powder repels water rather than wrapping it in a burn-proof layer",,2026-11-27
+BUTTERFREE,White Smoke,No,No,No,No,"It scatters powder, not smoke, and the powder attacks foes rather than screening its own stats; the holders are smoke-belching fire-breathers",,2026-11-27
+BUTTERFREE,Willpower,No,No,No,No,"Its persistence in Bye Bye Butterfree is anime-only; no dex text about a strong will, which this ability requires",,2026-11-27
+BUTTERFREE,Wind Power,No,No,No,No,"It makes wind (Gust, Whirlwind, the G-Max tornado) but has no electricity to charge from it; the holders are storm birds",,2026-11-27
+BUTTERFREE,Wonder Skin,No,No,No,No,"Venomoth's dusty wings carry it, but nothing shows Butterfree's scales turning aside status moves; Shield Dust already covers its dust-coat defence",,2026-11-27
