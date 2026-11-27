@@ -253,10 +253,12 @@ static const struct SpeciesInnates sSpeciesInnates[] =
         SPECIES_BUTTERFREE_GMAX,
         INNATES(
             ABILITY_COMPOUND_EYES,
+            ABILITY_DANCER,
             ABILITY_EFFECT_SPORE,
             ABILITY_FRISK,
-            ABILITY_GLUTTONY,
+            ABILITY_PICKUP,
             ABILITY_SHIELD_DUST,
+            ABILITY_SWARM,
             ABILITY_TINTED_LENS
         )
     },
